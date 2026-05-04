@@ -1,0 +1,67 @@
+<ion-header class="ion-no-border">
+  <ion-toolbar color="primary">
+    <ion-title>Register Eduvan</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content class="ion-padding">
+  <div class="register-container">
+    <div class="header ion-margin-bottom">
+      <h2>Buat Akun Baru</h2>
+      <p>Bergabunglah dengan ribuan siswa lainnya</p>
+    </div>
+
+    <form [formGroup]="registerForm">
+      <!-- Input Nama -->
+      <ion-item lines="full" class="ion-margin-bottom">
+        <ion-label position="stacked">Nama Lengkap</ion-label>
+        <ion-input type="text" formControlName="name" placeholder="Masukkan nama lengkap"></ion-input>
+      </ion-item>
+
+      <!-- Input Email -->
+      <ion-item lines="full" class="ion-margin-bottom">
+        <ion-label position="stacked">Email</ion-label>
+        <ion-input type="email" formControlName="email" placeholder="email@contoh.com"></ion-input>
+      </ion-item>
+
+      <!-- Input Password -->
+      <ion-item lines="full" class="ion-margin-bottom">
+        <ion-label position="stacked">Password</ion-label>
+        <ion-input [type]="showPassword ? 'text' : 'password'" formControlName="password" placeholder="Minimal 8 karakter"></ion-input>
+        <ion-icon 
+          slot="end" 
+          [name]="showPassword ? 'eye-off-outline' : 'eye-outline'" 
+          class="ion-align-self-end ion-margin-bottom"
+          (click)="togglePassword()" 
+          style="cursor: pointer;">
+        </ion-icon>
+      </ion-item>
+
+      <!-- Input Konfirmasi Password -->
+      <ion-item lines="full">
+        <ion-label position="stacked">Konfirmasi Password</ion-label>
+        <ion-input [type]="showConfirmPassword ? 'text' : 'password'" formControlName="confirmPassword" placeholder="Ulangi password"></ion-input>
+        <ion-icon 
+          slot="end" 
+          [name]="showConfirmPassword ? 'eye-off-outline' : 'eye-outline'" 
+          class="ion-align-self-end ion-margin-bottom"
+          (click)="toggleConfirmPassword()" 
+          style="cursor: pointer;">
+        </ion-icon>
+      </ion-item>
+      
+      <!-- Pesan Error Password Tidak Cocok -->
+      <ion-text color="danger" class="ion-padding-start" *ngIf="registerForm.get('confirmPassword')?.touched && registerForm.get('confirmPassword')?.hasError('mustMatch')">
+        <small>Password tidak cocok!</small>
+      </ion-text>
+
+      <ion-button expand="block" shape="round" color="primary" class="ion-margin-top" (click)="onRegister()" [disabled]="!registerForm.valid">
+        Daftar Sekarang
+      </ion-button>
+    </form>
+
+    <div class="footer ion-text-center ion-margin-top">
+      <p>Sudah punya akun? <a routerLink="/login">Login di sini</a></p>
+    </div>
+  </div>
+</ion-content>
