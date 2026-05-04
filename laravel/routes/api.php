@@ -1,0 +1,31 @@
+<?php
+
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\Api\CourseController;
+use App\Http\Controllers\Api\AuthController;
+use App\Http\Controllers\Api\EnrollmentController;
+use App\Http\Controllers\Api\ContentController;
+use App\Http\Controllers\Api\ProgressController;
+use App\Http\Controllers\Api\QuizController;
+
+// --- API Publik (Bisa diakses tanpa login) ---
+Route::get('/courses/{id}', [CourseController::class, 'index']);
+Route::get('/courses/{id}', [CourseController::class, 'show']);
+Route::post('/login', [AuthController::class, 'login']);
+Route::post('/register', [AuthController::class, 'register']);
+
+// --- API Privat (Wajib bawa Token / auth:sanctum) ---
+Route::middleware('auth:sanctum')->group(function () {
+    Route::get('/user', [AuthController::class, 'me']);    // Ambil data profil
+    Route::post('/logout', [AuthController::class, 'logout']); // Hapus token
+    Route::post('/enrollments', [EnrollmentController::class, 'store']);
+    Route::post('/enrollments', [EnrollmentController::class, 'store']); // Membeli
+    Route::get('/enrollments', [EnrollmentController::class, 'index']); // melihat
+    Route::middleware('auth:sanctum')->get('/courses/{course_id}/contents', [ContentController::class, 'index']);
+    Route::middleware('auth:sanctum')->post('/progress', [ProgressController::class, 'markAsCompleted']);
+    Route::middleware('auth:sanctum')->get('/courses/{course_id}/progress', [ProgressController::class, 'getProgress']);
+    Route::middleware('auth:sanctum')->get('/courses/{course_id}/quizzes', [QuizController::class, 'index']);
+    Route::post('/courses/{course_id}/quizzes/submit', [QuizController::class, 'submit']);
+    Route::middleware('auth:sanctum')->get('/courses/{course_id}/certificate', [EnrollmentController::class, 'getCertificate']);
+});
