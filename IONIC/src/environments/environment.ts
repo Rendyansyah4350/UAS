@@ -4,7 +4,7 @@
 
 export const environment = {
   production: false,
-  apiUrl: 'http://localhost:8000/api/v1' // Sesuaikan dengan port Laravel Anda
+  apiUrl: 'http://127.0.0.1:8000/api' // Hapus /v1 nya
 };
 
 /*
