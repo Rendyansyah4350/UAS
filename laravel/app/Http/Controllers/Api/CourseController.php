@@ -4,6 +4,8 @@ namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
 use App\Models\Course;
+use App\Models\User;
+use App\Models\Enrollment;
 use Illuminate\Http\Request;
 
 class CourseController extends Controller
@@ -34,6 +36,17 @@ class CourseController extends Controller
             'success' => true,
             'message' => 'Detail Data Kursus',
             'data'    => $course
+        ]);
+    }
+    public function dashboard()
+    {
+        return response()->json([
+            'success' => true,
+            'data' => [
+                'total_courses' => Course::count(),
+                'total_students' => User::where('role', 'student')->count(), // Pastikan ada kolom role
+                'total_revenue' => Enrollment::join('courses', 'enrollments.course_id', '=', 'courses.id')->sum('courses.price')
+            ]
         ]);
     }
 }

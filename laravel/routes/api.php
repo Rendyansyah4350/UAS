@@ -28,4 +28,10 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::middleware('auth:sanctum')->get('/courses/{course_id}/quizzes', [QuizController::class, 'index']);
     Route::post('/courses/{course_id}/quizzes/submit', [QuizController::class, 'submit']);
     Route::middleware('auth:sanctum')->get('/courses/{course_id}/certificate', [EnrollmentController::class, 'getCertificate']);
+    Route::post('/quizzes', [QuizController::class, 'store']);
+    Route::get('/courses/{course_id}/students', [EnrollmentController::class, 'getEnrolledStudents']);
+    Route::get('/courses/{course_id}/progress/{user_id}', [ProgressController::class, 'getStudentProgress']);
+    Route::get('/instructor/dashboard', [CourseController::class, 'dashboard']);
+    Route::middleware('auth:sanctum')->post('/contents', [ContentController::class, 'store']);
+    Route::post('/contents', [ContentController::class, 'store']);
 });

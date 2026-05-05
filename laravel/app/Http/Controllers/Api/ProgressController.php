@@ -55,4 +55,23 @@ class ProgressController extends Controller
             ]
         ]);
     }
+
+    public function getStudentProgress($course_id, $user_id)
+    {
+        $total = Content::where('course_id', $course_id)->count();
+        $completed = Progress::where('user_id', $user_id)
+            ->whereHas('content', function ($q) use ($course_id) {
+                $q->where('course_id', $course_id);
+            })->count();
+
+        $percentage = $total > 0 ? round(($completed / $total) * 100) : 0;
+
+        return response()->json([
+            'success' => true,
+            'data' => [
+                'user_id' => $user_id,
+                'persentase_selesai' => $percentage . '%'
+            ]
+        ]);
+    }
 }
