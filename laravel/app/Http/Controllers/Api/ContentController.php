@@ -29,4 +29,22 @@ class ContentController extends Controller
             'data' => $contents
         ]);
     }
+
+    public function store(Request $request)
+    {
+        $request->validate([
+            'course_id' => 'required|exists:courses,id',
+            'title' => 'required|string',
+            'content_url' => 'required|url',
+            'type' => 'required|in:video,pdf,text'
+        ]);
+
+        $content = \App\Models\Content::create($request->all());
+
+        return response()->json([
+            'success' => true,
+            'message' => 'Materi berhasil ditambahkan!',
+            'data' => $content
+        ], 201);
+    }
 }

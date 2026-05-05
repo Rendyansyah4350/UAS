@@ -79,4 +79,17 @@ class EnrollmentController extends Controller
             ]
         ]);
     }
+
+    public function getEnrolledStudents($course_id)
+    {
+        // Mengambil data enrollment beserta detail user-nya
+        $students = Enrollment::with('user')
+            ->where('course_id', $course_id)
+            ->get();
+
+        return response()->json([
+            'success' => true,
+            'data' => $students
+        ]);
+    }
 }

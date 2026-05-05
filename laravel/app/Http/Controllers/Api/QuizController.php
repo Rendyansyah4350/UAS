@@ -55,4 +55,24 @@ class QuizController extends Controller
             ]
         ]);
     }
+    public function store(Request $request)
+    {
+        $request->validate([
+            'course_id' => 'required|exists:courses,id',
+            'question' => 'required|string',
+            'option_a' => 'required|string',
+            'option_b' => 'required|string',
+            'option_c' => 'required|string',
+            'option_d' => 'required|string',
+            'answer' => 'required|in:a,b,c,d'
+        ]);
+
+        $quiz = \App\Models\Quiz::create($request->all());
+
+        return response()->json([
+            'success' => true,
+            'message' => 'Soal quiz berhasil ditambahkan!',
+            'data' => $quiz
+        ], 201);
+    }
 }
