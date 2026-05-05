@@ -1,8 +1,7 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, NgZone } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { AuthService } from '../../services/auth';
-import { Router } from '@angular/router';
-import { ToastController, LoadingController } from '@ionic/angular';
+import { NavController, ToastController, LoadingController } from '@ionic/angular';
 
 @Component({
   selector: 'app-login',
@@ -17,17 +16,18 @@ export class LoginPage implements OnInit {
   constructor(
     private fb: FormBuilder,
     private auth: AuthService,
-    private router: Router,
-    private loadingCtrl: LoadingController,
-    private toastCtrl: ToastController
+    private navCtrl: NavController,
+    private zone: NgZone, // Memastikan sinkronisasi URL di browser
+    private toastCtrl: ToastController,
+    private loadingCtrl: LoadingController
   ) {
     this.loginForm = this.fb.group({
       email: ['', [Validators.required, Validators.email]],
-      password: ['', [Validators.required]]
+      password: ['', [Validators.required, Validators.minLength(8)]]
     });
   }
 
-  ngOnInit() { }
+  ngOnInit() {}
 
   togglePassword() {
     this.showPassword = !this.showPassword;
@@ -35,31 +35,45 @@ export class LoginPage implements OnInit {
 
   async onLogin() {
     if (this.loginForm.valid) {
-      const loading = await this.loadingCtrl.create({ 
-        message: 'Sedang masuk...', 
-        spinner: 'crescent' 
+      const loading = await this.loadingCtrl.create({
+        message: 'Mohon tunggu...',
+        spinner: 'crescent'
       });
       await loading.present();
 
       this.auth.login(this.loginForm.value).subscribe({
-        next: (res) => {
-          loading.dismiss();
-          this.router.navigateByUrl('/login');
-        },
-        error: async (err) => {
-          loading.dismiss();
-          console.error('ERROR LOGIN:', err);
-          
-          // Mengambil pesan error dari Laravel (misal: "Kredensial salah")
-          const errorMessage = err.error?.message || 'Login Gagal. Cek kembali email & password.';
+        next: async (res) => {
+          await loading.dismiss();
           
           const toast = await this.toastCtrl.create({
-            message: errorMessage,
-            duration: 2500,
+            message: 'Selamat datang!',
+            duration: 2000,
+            color: 'success',
+            position: 'bottom'
+          });
+          await toast.present();
+
+          // Memaksa navigasi berjalan di dalam Zone Angular agar URL terupdate
+          this.zone.run(() => {
+            this.navCtrl.navigateRoot('/home');
+          });
+        },
+        error: async (err) => {
+          await loading.dismiss();
+          console.error('ERROR LOGIN:', err);
+
+          let msg = 'Gagal masuk. Periksa kembali email dan password Anda.';
+          if (err.status === 401) {
+            msg = 'Email atau Password salah.';
+          }
+
+          const toast = await this.toastCtrl.create({
+            message: msg,
+            duration: 3000,
             color: 'danger',
             position: 'bottom'
           });
-          toast.present();
+          await toast.present();
         }
       });
     } else {
