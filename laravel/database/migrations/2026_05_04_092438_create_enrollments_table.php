@@ -15,7 +15,8 @@ return new class extends Migration
             $table->id();
             $table->foreignId('user_id')->constrained()->onDelete('cascade');
             $table->foreignId('course_id')->constrained()->onDelete('cascade');
-            $table->string('status')->default('success'); // Misal: success, pending
+            $table->integer('price_bought'); // Harga saat dibeli (untuk laporan keuangan)
+            $table->enum('status', ['pending', 'success'])->default('success');
             $table->timestamps();
         });
     }
