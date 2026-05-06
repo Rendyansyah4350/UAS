@@ -18,12 +18,13 @@ class DashboardController extends Controller
             'total_purchases' => Enrollment::count(),
         ];
 
-        // Ambil 5 pembelian terbaru untuk ditampilkan di tabel dashboard
-        $recentEnrollments = Enrollment::with(['user', 'course'])
-                            ->latest()
-                            ->take(5)
-                            ->get();
-
-        return view('admin.dashboard', compact('stats', 'recentEnrollments'));
+        // Ambil student unik yang baru saja melakukan aktivitas/pembelian
+        $recentStudents = User::where('role', 'student')
+            ->has('enrollments') // Pastikan hanya student yang punya kursus
+            ->with(['enrollments.course']) // Eager load untuk keperluan modal
+            ->latest()
+            ->take(5)
+            ->get();
+    return view('admin.dashboard', compact('stats', 'recentStudents'));
     }
 }
