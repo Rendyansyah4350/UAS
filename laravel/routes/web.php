@@ -3,6 +3,7 @@
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Admin\DashboardController;
 use App\Http\Controllers\Admin\CourseController;
+use App\Http\Controllers\Admin\QuizProgressController;
 
 Route::get('/', function () {
     return view('welcome');
@@ -20,4 +21,6 @@ Route::prefix('admin')->group(function () {
     Route::post('/courses/{id}/content', [CourseController::class, 'storeContent'])->name('admin.courses.storeContent');
     Route::get('/courses/{id}/edit', [CourseController::class, 'edit'])->name('admin.courses.edit');
     Route::put('/courses/{id}', [CourseController::class, 'update'])->name('admin.courses.update');
+    Route::delete('/courses/{id}', [CourseController::class, 'destroy'])->name('admin.courses.destroy');
+    Route::get('/quiz-progress', [QuizProgressController::class, 'index'])->name('admin.quiz-progress.index');
 });
