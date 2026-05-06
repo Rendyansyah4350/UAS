@@ -13,7 +13,7 @@
             <!-- Judul Kursus -->
             <div>
                 <label class="block text-sm font-medium text-gray-700">Judul Kursus</label>
-                <input type="text" name="title" required class="mt-1 block w-full border-gray-300 rounded-md shadow-sm p-2 bg-gray-50 focus:ring-blue-500 focus:border-blue-500" placeholder="Contoh: Belajar Laravel Dasar">
+                <input type="text" name="title" required class="mt-1 block w-full border-gray-300 rounded-md shadow-sm p-2 bg-gray-50 focus:ring-blue-500 focus:border-blue-500">
             </div>
 
             <!-- Deskripsi -->
