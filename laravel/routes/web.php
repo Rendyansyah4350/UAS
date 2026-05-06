@@ -3,7 +3,8 @@
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Admin\DashboardController;
 use App\Http\Controllers\Admin\CourseController;
-use App\Http\Controllers\Admin\QuizProgressController;
+use App\Http\Controllers\Admin\StudentController;
+
 
 Route::get('/', function () {
     return view('welcome');
@@ -22,5 +23,7 @@ Route::prefix('admin')->group(function () {
     Route::get('/courses/{id}/edit', [CourseController::class, 'edit'])->name('admin.courses.edit');
     Route::put('/courses/{id}', [CourseController::class, 'update'])->name('admin.courses.update');
     Route::delete('/courses/{id}', [CourseController::class, 'destroy'])->name('admin.courses.destroy');
-    Route::get('/quiz-progress', [QuizProgressController::class, 'index'])->name('admin.quiz-progress.index');
+    Route::get('/admin/students', [StudentController::class, 'index'])->name('admin.students.index');
+    Route::get('/admin/students/{id}', [StudentController::class, 'show'])->name('admin.students.show');
+    Route::get('/api/students/{id}', [App\Http\Controllers\Admin\StudentController::class, 'apiShow'])->name('students.apiShow');
 });
