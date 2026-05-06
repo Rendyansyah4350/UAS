@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -7,6 +8,7 @@
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
 </head>
+
 <body class="bg-gray-100">
     <div class="flex h-screen overflow-hidden">
         <!-- Sidebar -->
@@ -15,19 +17,33 @@
                 Eduvan Admin
             </div>
             <nav class="flex-1 p-4 space-y-2">
-                <a href="{{ route('admin.dashboard') }}" class="block p-3 bg-blue-600 rounded">
+                <!-- Dashboard -->
+                <a href="{{ route('admin.dashboard') }}"
+                    class="block p-3 rounded transition {{ request()->is('admin/dashboard') ? 'bg-blue-600' : 'hover:bg-slate-700' }}">
                     <i class="fas fa-home mr-2"></i> Dashboard
                 </a>
-                <a href="{{ route('admin.courses.index') }}" class="block p-3 hover:bg-slate-700 rounded">
+
+                <!-- Kelola Course -->
+                <a href="{{ route('admin.courses.index') }}"
+                    class="block p-3 rounded transition {{ request()->is('admin/courses*') ? 'bg-blue-600' : 'hover:bg-slate-700' }}">
                     <i class="fas fa-book mr-2"></i> Kelola Course
                 </a>
-                <a href="#" class="block p-3 hover:bg-slate-700 rounded">
+
+                <!-- Student -->
+                <a href="#"
+                    class="block p-3 rounded transition {{ request()->is('admin/students*') ? 'bg-blue-600' : 'hover:bg-slate-700' }}">
                     <i class="fas fa-users mr-2"></i> Student
                 </a>
-                <a href="#" class="block p-3 hover:bg-slate-700 rounded">
+
+                <!-- Pembelian -->
+                <a href="#"
+                    class="block p-3 rounded transition {{ request()->is('admin/pembelian*') ? 'bg-blue-600' : 'hover:bg-slate-700' }}">
                     <i class="fas fa-shopping-cart mr-2"></i> Pembelian
                 </a>
-                <a href="#" class="block p-3 hover:bg-slate-700 rounded">
+
+                <!-- Quiz & Progress -->
+                <a href="#"
+                    class="block p-3 rounded transition {{ request()->is('admin/quiz*') ? 'bg-blue-600' : 'hover:bg-slate-700' }}">
                     <i class="fas fa-tasks mr-2"></i> Quiz & Progress
                 </a>
             </nav>
@@ -51,4 +67,5 @@
         </main>
     </div>
 </body>
+
 </html>

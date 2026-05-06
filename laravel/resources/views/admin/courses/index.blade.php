@@ -12,8 +12,10 @@
         <table class="w-full text-left border-collapse">
             <thead class="bg-gray-50">
                 <tr>
+                    <th class="p-4 border-b">No</th>
                     <th class="p-4 border-b">Gambar</th>
                     <th class="p-4 border-b">Judul Kursus</th>
+                    <th class="p-4 border-b">Deskripsi</th>
                     <th class="p-4 border-b">Harga</th>
                     <th class="p-4 border-b text-center">Aksi</th>
                 </tr>
@@ -21,6 +23,7 @@
             <tbody>
                 @forelse($courses as $course)
                     <tr class="hover:bg-gray-50">
+                        <td class="p-4 border-b text-center">{{ $loop->iteration }}</td>
                         <td class="p-4 border-b">
                             <img src="{{ $course->image ? asset('storage/' . $course->image) : 'https://via.placeholder.com/100' }}"
                                 class="w-16 h-10 object-cover rounded">
@@ -30,13 +33,22 @@
                                 {{ $course->title }}
                             </a>
                         </td>
+                        <td class="p-4 border-b">{{ $course->description }}</td>
                         <td class="p-4 border-b text-green-600 font-bold">Rp {{ number_format($course->price) }}</td>
                         <td class="p-4 border-b text-center">
                             <a href="{{ route('admin.courses.edit', $course->id) }}"
                                 class="text-blue-500 hover:text-blue-700 mr-3">
                                 <i class="fas fa-edit"></i>
                             </a>
-                            <button class="text-red-500 hover:text-red-700"><i class="fas fa-trash"></i></button>
+                            <form action="{{ route('admin.courses.destroy', $course->id) }}" method="POST"
+                                class="inline-block"
+                                onsubmit="return confirm('Apakah Anda yakin ingin menghapus kursus ini? Semua materi di dalamnya akan ikut terhapus.')">
+                                @csrf
+                                @method('DELETE')
+                                <button type="submit" class="text-red-500 hover:text-red-700">
+                                    <i class="fas fa-trash"></i>
+                                </button>
+                            </form>
                         </td>
                     </tr>
                 @empty

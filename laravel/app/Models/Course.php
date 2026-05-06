@@ -18,4 +18,8 @@ class Course extends Model
         // Mengurutkan materi berdasarkan kolom 'order' secara otomatis
         return $this->hasMany(Content::class)->orderBy('order', 'asc');
     }
+    public function quizzes()
+    {
+        return $this->hasMany(Quiz::class);
+    }
 }
