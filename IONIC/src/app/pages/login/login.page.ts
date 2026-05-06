@@ -88,4 +88,8 @@ export class LoginPage implements OnInit {
       this.loginForm.markAllAsTouched();
     }
   }
+
+  goToForgotPassword() {
+  this.router.navigate(['/forgot-password']);
+}
 }
