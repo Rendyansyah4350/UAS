@@ -145,4 +145,22 @@
       &:hover::after { transform: scaleX(1); }
     }
   }
+  .forgot-link-container {
+  display: flex;
+  justify-content: flex-end;
+  margin-top: 8px;
+  margin-bottom: 10px;
+
+  span {
+    color: var(--ion-color-primary, #00ffcc); /* Sesuaikan warna neon Anda */
+    font-size: 0.85rem;
+    font-weight: 500;
+    cursor: pointer;
+    transition: opacity 0.2s;
+
+    &:active {
+      opacity: 0.6;
+    }
+  }
+}
 }

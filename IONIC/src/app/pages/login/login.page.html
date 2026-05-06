@@ -12,14 +12,16 @@
     <span class="subtitle">Enter your credentials to continue learning</span>
 
     <form [formGroup]="loginForm" (ngSubmit)="onLogin()">
+      <!-- Email Group -->
       <div class="input-group">
         <ion-label class="input-label">Email Address</ion-label>
         <ion-item lines="none" class="input-item">
           <ion-icon name="mail-outline" slot="start"></ion-icon>
-          <ion-input type="email" formControlName="email" placeholder="BZs2M@example.com"></ion-input>
+          <ion-input type="email" formControlName="email" placeholder="example@gmail.com"></ion-input>
         </ion-item>
       </div>
 
+      <!-- Password Group -->
       <div class="input-group">
         <ion-label class="input-label">Password</ion-label>
         <ion-item lines="none" class="input-item">
@@ -30,6 +32,13 @@
                     (click)="togglePassword()" 
                     style="cursor: pointer;"></ion-icon>
         </ion-item>
+        
+        <!-- Link Forgot Password diletakkan di dalam input-group password agar rapi -->
+        <div class="forgot-link-container" style="display: flex; justify-content: flex-end; margin-top: 5px;">
+          <span (click)="goToForgotPassword()" style="color: var(--ion-color-primary); font-size: 0.8rem; cursor: pointer;">
+            Forgot Password?
+          </span>
+        </div>
       </div>
 
       <ion-button expand="block" type="submit" class="btn-primary" [disabled]="!loginForm.valid">
