@@ -2,6 +2,7 @@ import { Component, OnInit, NgZone } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { AuthService } from '../../services/auth';
 import { NavController, ToastController, LoadingController } from '@ionic/angular';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-login',
@@ -17,9 +18,10 @@ export class LoginPage implements OnInit {
     private fb: FormBuilder,
     private auth: AuthService,
     private navCtrl: NavController,
-    private zone: NgZone, // Memastikan sinkronisasi URL di browser
+    private zone: NgZone,
     private toastCtrl: ToastController,
-    private loadingCtrl: LoadingController
+    private loadingCtrl: LoadingController,
+    private router: Router
   ) {
     this.loginForm = this.fb.group({
       email: ['', [Validators.required, Validators.email]],
@@ -31,6 +33,13 @@ export class LoginPage implements OnInit {
 
   togglePassword() {
     this.showPassword = !this.showPassword;
+  }
+
+  // Navigasi ke halaman daftar
+  goToRegister() {
+    this.zone.run(() => {
+      this.router.navigate(['/register']);
+    });
   }
 
   async onLogin() {
@@ -46,14 +55,13 @@ export class LoginPage implements OnInit {
           await loading.dismiss();
           
           const toast = await this.toastCtrl.create({
-            message: 'Selamat datang!',
+            message: 'Selamat datang kembali!',
             duration: 2000,
             color: 'success',
             position: 'bottom'
           });
           await toast.present();
 
-          // Memaksa navigasi berjalan di dalam Zone Angular agar URL terupdate
           this.zone.run(() => {
             this.navCtrl.navigateRoot('/home');
           });

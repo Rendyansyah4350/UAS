@@ -1,0 +1,148 @@
+.login-container {
+  // Background dengan gradasi sangat halus
+  --background: radial-gradient(circle at top right, #ffffff, #f0f7ff);
+  
+  &::before {
+    content: '';
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    background-image: url('https://www.transparenttextures.com/patterns/cubes.png'); // Tekstur halus
+    opacity: 0.03;
+    pointer-events: none;
+  }
+
+  .top-decoration {
+    background: linear-gradient(135deg, #2563eb 0%, #1d4ed8 100%);
+    height: 38vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    border-bottom-left-radius: 50px;
+    border-bottom-right-radius: 50px;
+    box-shadow: 0 10px 30px rgba(37, 99, 235, 0.2);
+
+    .logo-circle {
+      width: 75px;
+      height: 75px;
+      background: rgba(255, 255, 255, 0.15);
+      border-radius: 22px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin-bottom: 15px;
+      backdrop-filter: blur(12px);
+      border: 1px solid rgba(255, 255, 255, 0.3);
+      
+      ion-icon { font-size: 38px; color: white; filter: drop-shadow(0 4px 6px rgba(0,0,0,0.1)); }
+    }
+
+    h1 { color: white; font-weight: 800; font-size: 2.5rem; margin: 0; letter-spacing: -1px; }
+    p { color: rgba(255, 255, 255, 0.9); font-size: 0.95rem; margin: 5px 0 0 0; font-weight: 300; }
+  }
+
+  .login-card {
+    position: relative;
+    z-index: 10;
+    margin: -60px 24px 24px 24px;
+    background: rgba(255, 255, 255, 0.95);
+    border-radius: 30px;
+    padding: 35px 28px;
+    backdrop-filter: blur(20px);
+    box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.1);
+    border: 1px solid rgba(255, 255, 255, 0.8);
+
+    h2 { color: #0f172a; font-weight: 800; font-size: 1.6rem; margin: 0; }
+    .subtitle { color: #64748b; font-size: 0.85rem; margin: 8px 0 30px 0; display: block; }
+
+    .input-group {
+      margin-bottom: 22px;
+      
+      .input-label { 
+        font-weight: 700; 
+        color: #334155; 
+        font-size: 0.8rem; 
+        margin-bottom: 10px; 
+        display: block;
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+      }
+
+     .input-item {
+  --background: #f1f5f9;
+  --border-radius: 12px;
+  --highlight-height: 0;
+  border: 1px solid #e2e8f0;
+  border-radius: 12px;
+
+  /* --- TAMBAHKAN INI UNTUK MEMPERJELAS PLACEHOLDER --- */
+  --placeholder-color: #64748b; /* Warna abu-abu yang lebih tegas */
+  --placeholder-opacity: 1;    /* Menghilangkan efek samar/transparan */
+  --placeholder-font-weight: 500;
+
+  ion-input {
+    --padding-top: 12px;
+    --padding-bottom: 12px;
+    font-size: 0.95rem;
+    color: #1e293b; /* Warna teks saat diketik juga harus jelas */
+  }
+  
+  ion-icon {
+    font-size: 18px;
+    color: #475569; /* Warna ikon disamakan agar kontras */
+    margin-right: 8px;
+  }
+}
+
+      .forgot-password {
+        color: #2563eb;
+        font-size: 0.9rem;
+        margin-top: 15px;
+        display: block;
+        text-align: right;
+      }
+    }
+  }
+
+  .btn-primary {
+    margin-top: 15px;
+    --border-radius: 16px;
+    --background: linear-gradient(to right, #2563eb, #3b82f6);
+    --box-shadow: 0 12px 24px -6px rgba(37, 99, 235, 0.4);
+    height: 60px;
+    font-weight: 800;
+    font-size: 1.1rem;
+    text-transform: none;
+    letter-spacing: 0.5px;
+    transition: transform 0.2s;
+
+    &:active { transform: scale(0.97); }
+  }
+
+  .footer-action {
+    text-align: center;
+    margin-top: 35px;
+    font-size: 0.95rem;
+    color: #64748b;
+    
+    strong { 
+      color: #2563eb; 
+      margin-left: 6px; 
+      cursor: pointer; 
+      font-weight: 800;
+      position: relative;
+      
+      &::after {
+        content: '';
+        position: absolute;
+        width: 100%; height: 2px;
+        bottom: -2px; left: 0;
+        background: #2563eb;
+        transform: scaleX(0);
+        transition: transform 0.3s;
+      }
+      &:hover::after { transform: scaleX(1); }
+    }
+  }
+}

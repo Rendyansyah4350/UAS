@@ -18,7 +18,7 @@ export class RegisterPage implements OnInit {
     private fb: FormBuilder,
     private auth: AuthService,
     private navCtrl: NavController,
-    private zone: NgZone, // Memastikan sinkronisasi URL di browser
+    private zone: NgZone,
     private toastCtrl: ToastController,
     private loadingCtrl: LoadingController
   ) {
@@ -38,10 +38,7 @@ export class RegisterPage implements OnInit {
     return (formGroup: FormGroup) => {
       const control = formGroup.controls[controlName];
       const matchingControl = formGroup.controls[matchingControlName];
-
-      if (matchingControl.errors && !matchingControl.errors['mustMatch']) {
-        return;
-      }
+      if (matchingControl.errors && !matchingControl.errors['mustMatch']) return;
 
       if (control.value !== matchingControl.value) {
         matchingControl.setErrors({ mustMatch: true });
@@ -51,12 +48,13 @@ export class RegisterPage implements OnInit {
     };
   }
 
-  togglePassword() {
-    this.showPassword = !this.showPassword;
-  }
+  togglePassword() { this.showPassword = !this.showPassword; }
+  toggleConfirmPassword() { this.showConfirmPassword = !this.showConfirmPassword; }
 
-  toggleConfirmPassword() {
-    this.showConfirmPassword = !this.showConfirmPassword;
+  goToLogin() {
+    this.zone.run(() => {
+      this.navCtrl.navigateBack('/login');
+    });
   }
 
   async onRegister() {
@@ -67,7 +65,6 @@ export class RegisterPage implements OnInit {
       });
       await loading.present();
 
-      // Menyesuaikan data agar sesuai dengan validasi Laravel
       const formVal = this.registerForm.value;
       const dataKeLaravel = {
         name: formVal.name,
@@ -79,7 +76,6 @@ export class RegisterPage implements OnInit {
       this.auth.register(dataKeLaravel).subscribe({
         next: async (res) => {
           await loading.dismiss();
-          
           const toast = await this.toastCtrl.create({
             message: 'Registrasi berhasil! Silakan masuk.',
             duration: 2000,
@@ -87,26 +83,13 @@ export class RegisterPage implements OnInit {
             position: 'bottom'
           });
           await toast.present();
-          
-          // Memaksa navigasi berjalan di dalam Zone Angular agar URL terupdate
-          this.zone.run(() => {
-            this.navCtrl.navigateForward('/login');
-          });
+          this.zone.run(() => { this.navCtrl.navigateRoot('/login'); });
         },
         error: async (err) => {
           await loading.dismiss();
-          console.error('ERROR REGISTER:', err);
-
-          let msg = 'Registrasi gagal. Silakan coba lagi.';
-          if (err.status === 422) {
-            msg = err.error.message || 'Data tidak valid atau email sudah terdaftar.';
-          }
-
           const toast = await this.toastCtrl.create({
-            message: msg,
-            duration: 2500,
-            color: 'danger',
-            position: 'bottom'
+            message: err.error?.message || 'Registrasi gagal. Coba lagi.',
+            duration: 2500, color: 'danger', position: 'bottom'
           });
           await toast.present();
         }

@@ -1,47 +1,45 @@
-<ion-header class="ion-no-border">
-  <ion-toolbar color="primary">
-    <ion-title>Login Eduvan</ion-title>
-  </ion-toolbar>
-</ion-header>
-
-<ion-content class="ion-padding">
-  <div class="register-container">
-    <div class="header ion-margin-bottom">
-      <h2>Buat Akun Baru</h2>
-      <p>Bergabunglah dengan ribuan siswa lainnya</p>
+<ion-content class="login-container" [fullscreen]="true">
+  <div class="top-decoration">
+    <div class="logo-circle">
+      <ion-icon name="rocket-sharp"></ion-icon>
     </div>
+    <h1>Eduvan</h1>
+    <p>Premium Learning Marketplace</p>
+  </div>
 
-<!-- Masukkan ini di dalam <div class="login-container"> -->
-<form [formGroup]="loginForm">
-  
-  <ion-item lines="full" class="ion-margin-bottom">
-    <ion-label position="stacked">Email</ion-label>
-    <ion-input type="email" formControlName="email" placeholder="email@contoh.com"></ion-input>
-  </ion-item>
+  <div class="login-card">
+    <h2>Welcome Back!</h2>
+    <span class="subtitle">Enter your credentials to continue learning</span>
 
-  <ion-item lines="full" class="ion-margin-bottom">
-    <ion-label position="stacked">Password</ion-label>
-    <!-- Tipe input berubah dinamis berdasarkan variabel showPassword -->
-    <ion-input [type]="showPassword ? 'text' : 'password'" formControlName="password" placeholder="******"></ion-input>
-    
-    <!-- Ikon Toggle -->
-    <ion-icon 
-      slot="end" 
-      [name]="showPassword ? 'eye-off-outline' : 'eye-outline'" 
-      class="ion-align-self-end ion-margin-bottom"
-      (click)="togglePassword()" 
-      style="cursor: pointer;">
-    </ion-icon>
-  </ion-item>
+    <form [formGroup]="loginForm" (ngSubmit)="onLogin()">
+      <div class="input-group">
+        <ion-label class="input-label">Email Address</ion-label>
+        <ion-item lines="none" class="input-item">
+          <ion-icon name="mail-outline" slot="start"></ion-icon>
+          <ion-input type="email" formControlName="email" placeholder="BZs2M@example.com"></ion-input>
+        </ion-item>
+      </div>
 
-  <ion-button expand="block" shape="round" color="primary" class="ion-margin-top" (click)="onLogin()">
-    Login
-  </ion-button>
+      <div class="input-group">
+        <ion-label class="input-label">Password</ion-label>
+        <ion-item lines="none" class="input-item">
+          <ion-icon name="lock-closed-outline" slot="start"></ion-icon>
+          <ion-input [type]="showPassword ? 'text' : 'password'" formControlName="password" placeholder="••••••••"></ion-input>
+          <ion-icon [name]="showPassword ? 'eye-off-outline' : 'eye-outline'" 
+                    slot="end" 
+                    (click)="togglePassword()" 
+                    style="cursor: pointer;"></ion-icon>
+        </ion-item>
+      </div>
 
-</form>
+      <ion-button expand="block" type="submit" class="btn-primary" [disabled]="!loginForm.valid">
+        Sign In
+      </ion-button>
+    </form>
 
-    <div class="footer ion-text-center ion-margin-top">
-      <p>Belum punya akun? <a routerLink="/register">Daftar sekarang</a></p>
+    <div class="footer-action">
+      Don't have an account? 
+      <strong (click)="goToRegister()">Join for Free</strong>
     </div>
   </div>
 </ion-content>
