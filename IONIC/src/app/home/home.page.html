@@ -1,20 +1,76 @@
-<ion-header [translucent]="true">
-  <ion-toolbar>
+<ion-header class="ion-no-border">
+  <ion-toolbar mode="ios" class="edu-header">
     <ion-title>
-      Blank
+      <div class="logo-text">Edu<span>Van</span></div>
     </ion-title>
+    <ion-buttons slot="end">
+      <ion-button color="dark">
+        <ion-icon name="notifications-outline"></ion-icon>
+      </ion-button>
+    </ion-buttons>
   </ion-toolbar>
 </ion-header>
 
-<ion-content [fullscreen]="true">
-  <ion-header collapse="condense">
-    <ion-toolbar>
-      <ion-title size="large">Blank</ion-title>
-    </ion-toolbar>
-  </ion-header>
+<ion-content>
+  <div class="search-section">
+    <ion-searchbar 
+      placeholder="Cari kursus, topik, atau instruktur..." 
+      class="edu-search"
+      mode="ios">
+    </ion-searchbar>
+  </div>
 
-  <div id="container">
-    <strong>Ready to create an app?</strong>
-    <p>Start with Ionic <a target="_blank" rel="noopener noreferrer" href="https://ionicframework.com/docs/components">UI Components</a></p>
+  <div class="banner-container">
+    <div class="banner-box">
+      <div class="banner-text">
+        <h3>Tingkatkan Skill,<br>Wujudkan Masa Depan</h3>
+        <p>Belajar kapan saja bersama EduVan.</p>
+        <ion-button mode="ios" class="btn-banner">Jelajahi Kursus</ion-button>
+      </div>
+      <img src="assets/imgs/student.png" class="student-img">
+    </div>
+  </div>
+
+  <div class="section-title">
+    <b>Kategori Populer</b>
+    <small>Lihat semua</small>
+  </div>
+
+  <div class="category-grid">
+    <div class="cat-item">
+      <div class="cat-icon coding"><ion-icon name="code-slash-outline"></ion-icon></div>
+      <span>Coding</span>
+    </div>
+    <div class="cat-item">
+      <div class="cat-icon design"><ion-icon name="brush-outline"></ion-icon></div>
+      <span>Design</span>
+    </div>
+    <div class="cat-item">
+      <div class="cat-icon business"><ion-icon name="business-outline"></ion-icon></div>
+      <span>Bisnis</span>
+    </div>
+    <div class="cat-item">
+      <div class="cat-icon marketing"><ion-icon name="megaphone-outline"></ion-icon></div>
+      <span>Marketing</span>
+    </div>
+  </div>
+
+  <div class="section-title">
+    <b>Kursus Populer</b>
+    <small>Lihat semua</small>
+  </div>
+
+  <div class="course-list">
+    <ion-card mode="ios" class="edu-course-card">
+      <div class="img-wrapper">
+        <img src="assets/imgs/course-web.jpg" />
+        <div class="badge">Bestseller</div>
+      </div>
+      <ion-card-content>
+        <h2 class="price">Rp 499.000</h2>
+        <h3 class="course-title">Complete Web Developer Bootcamp 2024</h3>
+        <p class="instructor">Andi Pratama</p>
+      </ion-card-content>
+    </ion-card>
   </div>
 </ion-content>

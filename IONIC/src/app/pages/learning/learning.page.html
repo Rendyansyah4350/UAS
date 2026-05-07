@@ -1,13 +1,41 @@
-<ion-header [translucent]="true">
-  <ion-toolbar>
-    <ion-title>learning</ion-title>
+<ion-header class="ion-no-border">
+  <ion-toolbar mode="ios">
+    <ion-title>My Learning</ion-title>
+    <ion-buttons slot="end">
+      <ion-button color="dark">
+        <ion-icon name="notifications-outline"></ion-icon>
+      </ion-button>
+    </ion-buttons>
+  </ion-toolbar>
+  
+  <ion-toolbar mode="ios" style="--padding-top: 0; --padding-bottom: 10px;">
+    <div style="display: flex; gap: 10px; padding: 0 16px;">
+      <ion-button mode="ios" size="small" fill="solid" style="--background: #6c5ce7; font-weight: 600;">Kursus Saya</ion-button>
+      <ion-button mode="ios" size="small" fill="clear" style="--color: #64748b; font-weight: 600;">Selesai</ion-button>
+    </div>
   </ion-toolbar>
 </ion-header>
 
-<ion-content [fullscreen]="true">
-  <ion-header collapse="condense">
-    <ion-toolbar>
-      <ion-title size="large">learning</ion-title>
-    </ion-toolbar>
-  </ion-header>
+<ion-content>
+  <div class="learn-card">
+    <div class="card-content">
+      <img src="assets/imgs/course-uiux.jpg" class="card-img" />
+      <div class="card-text">
+        <h3>UI/UX Design from Zero to Hero</h3>
+        <p>65% Selesai</p>
+        <ion-progress-bar value="0.65"></ion-progress-bar>
+      </div>
+    </div>
+  </div>
+
+  <div class="learn-card">
+    <div class="card-content">
+      <img src="assets/imgs/course-web.jpg" class="card-img" />
+      <div class="card-text">
+        <h3>Complete Web Developer Bootcamp</h3>
+        <p>30% Selesai</p>
+        <ion-progress-bar value="0.30"></ion-progress-bar>
+      </div>
+    </div>
+  </div>
 </ion-content>

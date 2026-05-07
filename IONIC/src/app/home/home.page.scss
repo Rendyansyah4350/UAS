@@ -1,27 +1,151 @@
-#container {
-  text-align: center;
+/* EDUVAN HOME PAGE STYLE - SAFE ZONE */
 
-  position: absolute;
-  left: 0;
-  right: 0;
-  top: 50%;
-  transform: translateY(-50%);
+// Fix Background & Header agar tidak transparan
+:host {
+  ion-content {
+    --background: #ffffff;
+  }
 }
 
-#container strong {
+.edu-header {
+  --background: #ffffff;
+  --border-width: 0;
+}
+
+.logo-text {
+  font-weight: 800;
   font-size: 20px;
-  line-height: 26px;
+  color: #1e293b;
+  span { color: #6c5ce7; }
 }
 
-#container p {
-  font-size: 16px;
-  line-height: 22px;
-
-  color: #8c8c8c;
-
-  margin: 0;
+// Perbaikan Search Section
+.search-section {
+  padding: 10px 16px;
 }
 
-#container a {
-  text-decoration: none;
+.edu-search {
+  --background: #f1f5f9;
+  --border-radius: 12px;
+  --box-shadow: none;
+  --placeholder-color: #94a3b8;
+  border: 1px solid #e2e8f0;
+}
+
+// Perbaikan Banner Section
+.banner-container {
+  padding: 10px 16px;
+}
+
+.banner-box {
+  background: linear-gradient(135deg, #6c5ce7 0%, #a29bfe 100%);
+  border-radius: 20px;
+  padding: 24px;
+  position: relative;
+  overflow: hidden;
+  min-height: 160px;
+  display: flex;
+  align-items: center;
+
+  .banner-text {
+    width: 60%;
+    z-index: 2;
+    h3 { font-size: 18px; font-weight: 700; color: white; margin: 0; line-height: 1.3; }
+    p { font-size: 11px; color: rgba(255,255,255,0.8); margin: 8px 0 15px; }
+  }
+
+  .btn-banner {
+    --background: white;
+    --color: #6c5ce7;
+    --border-radius: 8px;
+    font-weight: 700;
+    height: 36px;
+    margin: 0;
+  }
+
+  .student-img {
+    position: absolute;
+    right: -10px;
+    bottom: -10px;
+    width: 45%;
+    z-index: 1;
+    object-fit: cover;
+  }
+}
+
+// Perbaikan Kategori & Judul Section
+.section-title {
+  display: flex;
+  justify-content: space-between;
+  padding: 15px 16px 5px;
+  align-items: center;
+  b { font-size: 15px; color: #1e293b; font-weight: 700; }
+  small { color: #6c5ce7; font-weight: 600; }
+}
+
+.category-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 10px;
+  padding: 10px 16px;
+}
+
+.cat-item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  
+  .cat-icon {
+    width: 50px;
+    height: 50px;
+    border-radius: 12px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 22px;
+    margin-bottom: 6px;
+    background: #f1f5f9;
+    color: #64748b;
+
+    // Warna ikon pastel agar mirip referensi
+    &.coding { background: #eef2ff; color: #6c5ce7; }
+    &.design { background: #fff7ed; color: #f97316; }
+    &.business { background: #eff6ff; color: #3b82f6; }
+    &.marketing { background: #fdf2f8; color: #ec4899; }
+  }
+
+  span {
+    font-size: 10px;
+    font-weight: 600;
+    color: #64748b;
+  }
+}
+
+// Perbaikan Kursus Card
+.edu-course-card {
+  margin: 10px 16px;
+  background: white;
+  border-radius: 16px;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.03);
+  overflow: hidden;
+  border: 1px solid #f1f5f9;
+
+  .img-wrapper {
+    position: relative;
+    height: 140px;
+    img { width: 100%; height: 100%; object-fit: cover; }
+    .badge {
+      position: absolute; top: 10px; left: 10px;
+      background: #fbbf24; color: white;
+      padding: 3px 8px; border-radius: 6px;
+      font-size: 10px; font-weight: 800;
+    }
+  }
+
+  ion-card-content {
+    padding: 12px;
+    .price { font-size: 16px; font-weight: 800; color: #6c5ce7; margin: 0; }
+    .course-title { font-size: 13px; font-weight: 700; color: #1e293b; margin: 4px 0; }
+    .instructor { font-size: 11px; color: #64748b; margin: 0; }
+  }
 }
