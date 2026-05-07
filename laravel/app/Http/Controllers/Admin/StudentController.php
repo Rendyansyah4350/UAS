@@ -47,4 +47,32 @@ class StudentController extends Controller
         'progress' => $student->enrollments->map(fn($e) => $e->calculateProgress()),
     ]);
     }
+
+    public function store(Request $request)
+    {
+        $request->validate([
+            'name' => 'required|string|max:255',
+            'email' => 'required|email|unique:users,email',
+            'password' => 'required|min:8',
+        ]);
+
+        User::create([
+            'name' => $request->name,
+            'email' => $request->email,
+            'password' => bcrypt($request->password),
+            'role' => 'student', // Pastikan role diset otomatis
+        ]);
+
+        return redirect()->route('admin.students.index')->with('success', 'Student berhasil ditambahkan!');
+    }
+
+    public function destroy($id)
+    {
+    $student = User::findOrFail($id);
+    
+    // Hapus student (Laravel akan menghapus data terkait jika kamu menggunakan cascade delete di DB)
+    $student->delete();
+
+    return redirect()->route('admin.students.index')->with('success', 'Data student berhasil dihapus.');
+    }
 }

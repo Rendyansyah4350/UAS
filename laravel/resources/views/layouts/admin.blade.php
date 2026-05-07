@@ -30,9 +30,10 @@
                 </a>
 
                 <!-- Student -->
-                <a href="#"
-                    class="block p-3 rounded transition {{ request()->is('admin/students*') ? 'bg-blue-600' : 'hover:bg-slate-700' }}">
-                    <i class="fas fa-users mr-2"></i> Student
+                <a href="{{ route('admin.students.index') }}" 
+                class="block p-3 rounded transition {{ request()->routeIs('admin.students.*') ? 'bg-blue-600 text-white' : 'hover:bg-slate-700' }}">
+                    <i class="fas fa-users mr-2"></i>
+                    <span>Student</span>
                 </a>
 
                 <!-- Pembelian -->
