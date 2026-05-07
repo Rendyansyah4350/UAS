@@ -11,8 +11,6 @@ Route::get('/', function () {
     return view('welcome');
 });
 
-
-
 // Grouping route admin agar lebih rapi
 Route::prefix('admin')->group(function () {
     Route::get('/dashboard', [DashboardController::class, 'index'])->name('admin.dashboard');
@@ -29,6 +27,5 @@ Route::prefix('admin')->group(function () {
     Route::get('/api/students/{id}', [StudentController::class, 'apiShow'])->name('students.apiShow');
     Route::delete('/admin/students/{id}', [StudentController::class, 'destroy'])->name('admin.students.destroy');
     Route::post('/students', [StudentController::class, 'store'])->name('admin.students.store');
-    Route::get('/api/students/{id}', [App\Http\Controllers\Admin\StudentController::class, 'apiShow'])->name('students.apiShow');
     Route::get('/pembelian', [TransactionController::class, 'index'])->name('admin.pembelian.index');
 });
