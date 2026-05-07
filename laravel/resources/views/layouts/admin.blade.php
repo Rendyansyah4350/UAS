@@ -36,7 +36,7 @@
                 </a>
 
                 <!-- Pembelian -->
-                <a href="#"
+                <a href="{{ route('admin.pembelian.index') }}"
                     class="block p-3 rounded transition {{ request()->is('admin/pembelian*') ? 'bg-blue-600' : 'hover:bg-slate-700' }}">
                     <i class="fas fa-shopping-cart mr-2"></i> Pembelian
                 </a>

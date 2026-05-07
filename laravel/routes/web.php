@@ -4,6 +4,7 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Admin\DashboardController;
 use App\Http\Controllers\Admin\CourseController;
 use App\Http\Controllers\Admin\StudentController;
+use App\Http\Controllers\Admin\TransactionController;
 
 
 Route::get('/', function () {
@@ -26,4 +27,5 @@ Route::prefix('admin')->group(function () {
     Route::get('/admin/students', [StudentController::class, 'index'])->name('admin.students.index');
     Route::get('/admin/students/{id}', [StudentController::class, 'show'])->name('admin.students.show');
     Route::get('/api/students/{id}', [App\Http\Controllers\Admin\StudentController::class, 'apiShow'])->name('students.apiShow');
+    Route::get('/pembelian', [TransactionController::class, 'index'])->name('admin.pembelian.index');
 });
