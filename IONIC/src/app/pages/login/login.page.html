@@ -10,6 +10,7 @@
   </div>
 
   <div class="login-card">
+    <!-- FORM LOGIN BIASA -->
     <div *ngIf="!otpSent">
       <h2>Welcome Back!</h2>
       <span class="subtitle">Enter your credentials to continue learning</span>
@@ -65,6 +66,7 @@
       </div>
     </div>
 
+    <!-- FORM VERIFIKASI OTP -->
     <div *ngIf="otpSent" class="otp-verification-ui">
       <h2>Verify Your Account</h2>
       <span class="subtitle"

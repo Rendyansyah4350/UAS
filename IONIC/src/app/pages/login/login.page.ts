@@ -79,7 +79,7 @@ export class LoginPage implements OnInit {
     this.auth.verifyOTP(this.emailForVerify, this.otpCode).subscribe({
       next: async (res) => {
         await loading.dismiss();
-        this.otpSent = false;
+        this.otpSent = false; // Menutup form OTP dan kembali ke form login
         this.presentToast(
           'Akun berhasil diverifikasi! Silakan masuk.',
           'success',

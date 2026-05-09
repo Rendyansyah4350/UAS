@@ -100,8 +100,8 @@ export class RegisterPage implements OnInit {
           });
           await toast.present();
 
-          // 3. UBAH BAGIAN NAVIGASI INI
-          // Kita kirim email ke halaman Login supaya form OTP otomatis muncul
+          // 3. NAVIGASI KE HALAMAN LOGIN DENGAN QUERY PARAMS
+          // Membawa email dan flag 'verify' agar login page memicu tampilan OTP
           this.zone.run(() => {
             this.router.navigate(['/login'], {
               queryParams: {
