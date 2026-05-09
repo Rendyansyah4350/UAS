@@ -14,6 +14,7 @@ Route::get('/courses/{id}', [CourseController::class, 'index']);
 Route::get('/courses/{id}', [CourseController::class, 'show']);
 Route::post('/login', [AuthController::class, 'login']);
 Route::post('/register', [AuthController::class, 'register']);
+Route::post('/verify-otp', [AuthController::class, 'verifyOtp']);
 
 // --- API Privat (Wajib bawa Token / auth:sanctum) ---
 Route::middleware('auth:sanctum')->group(function () {

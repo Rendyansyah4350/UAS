@@ -22,6 +22,8 @@ return new class extends Migration
             $table->enum('role', ['admin', 'student'])->default('student');
             $table->rememberToken();
             $table->timestamps();
+            $table->string('otp_code')->nullable();
+            $table->timestamp('otp_expiry')->nullable();
         });
 
         Schema::create('password_reset_tokens', function (Blueprint $table) {
