@@ -1,39 +1,54 @@
 import { NgModule } from '@angular/core';
-import { PreloadAllModules, RouterModule, Routes } from '@angular/router'; // WAJIB ADA
-import { AuthGuard } from './guards/auth-guard'; // Pastikan path ini benar
+import { PreloadAllModules, RouterModule, Routes } from '@angular/router';
 
-const routes: Routes = [ // Gunakan 'const' hanya di sini
+const routes: Routes = [
   {
     path: '',
     redirectTo: 'login',
-    pathMatch: 'full'
+    pathMatch: 'full',
   },
   {
     path: 'login',
-    loadChildren: () => import('./pages/login/login.module').then( m => m.LoginPageModule)
+    loadChildren: () =>
+      import('./pages/login/login.module').then((m) => m.LoginPageModule),
   },
+  // --- TAMBAHKAN REGISTER DI SINI ---
+  {
+    path: 'register',
+    loadChildren: () =>
+      import('./pages/register/register.module').then(
+        (m) => m.RegisterPageModule,
+      ),
+  },
+  // ----------------------------------
   {
     path: 'tabs',
-    loadChildren: () => import('./pages/tabs/tabs.module').then( m => m.TabsPageModule)
+    loadChildren: () =>
+      import('./pages/tabs/tabs.module').then((m) => m.TabsPageModule),
   },
   {
-    path: '**',
-    redirectTo: 'login'
-  },  {
     path: 'wishlist',
-    loadChildren: () => import('./pages/wishlist/wishlist.module').then( m => m.WishlistPageModule)
+    loadChildren: () =>
+      import('./pages/wishlist/wishlist.module').then(
+        (m) => m.WishlistPageModule,
+      ),
   },
   {
     path: 'profil',
-    loadChildren: () => import('./pages/profil/profil.module').then( m => m.ProfilPageModule)
-  }
-
+    loadChildren: () =>
+      import('./pages/profil/profil.module').then((m) => m.ProfilPageModule),
+  },
+  // Wildcard '**' HARUS diletakkan paling bawah agar tidak memblokir path lain
+  {
+    path: '**',
+    redirectTo: 'login',
+  },
 ];
 
 @NgModule({
   imports: [
-    RouterModule.forRoot(routes, { preloadingStrategy: PreloadAllModules })
+    RouterModule.forRoot(routes, { preloadingStrategy: PreloadAllModules }),
   ],
-  exports: [RouterModule]
+  exports: [RouterModule],
 })
-export class AppRoutingModule { }
+export class AppRoutingModule {}
