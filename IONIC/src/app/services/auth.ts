@@ -1,43 +1,47 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { environment } from '../../environments/environment';
-import { tap } from 'rxjs/operators';
+import { Observable } from 'rxjs';
 
 @Injectable({
-  providedIn: 'root'
+  providedIn: 'root',
 })
 export class AuthService {
   private apiUrl = environment.apiUrl;
 
-  constructor(private http: HttpClient) { }
+  constructor(private http: HttpClient) {}
 
-  // Fungsi Login
-  login(credentials: {email: string, password: string}) {
-    return this.http.post(`${this.apiUrl}/login`, credentials).pipe(
-      tap((res: any) => {
-        // Simpan token ke localStorage agar tidak hilang saat refresh
-        localStorage.setItem('auth-token', res.token);
-      })
-    );
-  }
-  // Fungsi Register
-  register(userData: any) {
-    return this.http.post(`${this.apiUrl}/register`, userData).pipe(
-      tap((res: any) => {
-        // Biasanya setelah daftar, Laravel langsung memberikan token (auto-login)
-        if(res.token) {
-          localStorage.setItem('auth-token', res.token);
-        }
-      })
-    );
-  }
-  // Cek apakah user sudah login
-  isLoggedIn() {
-    return !!localStorage.getItem('auth-token');
+  // 1. Fungsi Login Email/Password Dasar
+  login(data: any): Observable<any> {
+    return this.http.post(`${this.apiUrl}/login`, data);
   }
 
-  // Logout
+  // 2. Fungsi Kirim OTP (Baru)
+  // Dipanggil setelah login email/pass berhasil atau untuk login via email saja
+  sendOTP(email: string): Observable<any> {
+    return this.http.post(`${this.apiUrl}/send-otp`, { email });
+  }
+
+  // 3. Fungsi Verifikasi OTP (Baru)
+  verifyOTP(email: string, otp: string): Observable<any> {
+    return this.http.post(`${this.apiUrl}/verify-otp`, { email, otp });
+  }
+
+  // 4. Fungsi Register
+  register(data: any): Observable<any> {
+    return this.http.post(`${this.apiUrl}/register`, data);
+  }
+
+  // 5. Fungsi Cek Status Login
+  isLoggedIn(): boolean {
+    // Cek apakah ada token di localStorage
+    return !!localStorage.getItem('token');
+  }
+
+  // 6. Fungsi Logout (Disederhanakan tanpa GoogleAuth)
   logout() {
-    localStorage.removeItem('auth-token');
+    localStorage.removeItem('token');
+    localStorage.removeItem('user_data');
+    // Opsional: arahkan ke halaman login setelah logout
   }
 }

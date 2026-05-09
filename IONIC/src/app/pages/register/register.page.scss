@@ -43,12 +43,31 @@
         --background: #f1f5f9;
         --border-radius: 12px;
         --highlight-height: 0;
+        
+        // --- PERBAIKAN WARNA TEKS DI SINI ---
+        --color: #1e293b; // Warna teks yang diketik (Slate 800)
+        color: #1e293b; 
+        // ------------------------------------
+
         border: 1px solid #e2e8f0;
         border-radius: 12px;
         
         &.item-has-focus { border-color: #2563eb; }
         
-        ion-input { --padding-top: 10px; --padding-bottom: 10px; font-size: 0.95rem; }
+        ion-input { 
+          --padding-top: 10px; 
+          --padding-bottom: 10px; 
+          font-size: 0.95rem; 
+
+          // Menjamin warna teks input tetap gelap di Android/iOS
+          --color: #1e293b; 
+          color: #1e293b;
+          
+          // Warna teks petunjuk (placeholder)
+          --placeholder-color: #94a3b8; 
+          --placeholder-opacity: 1;
+        }
+
         ion-icon { font-size: 18px; color: #64748b; }
       }
     }
