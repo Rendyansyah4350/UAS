@@ -1,0 +1,112 @@
+ion-content {
+  --background: #F4F7FE !important;
+}
+
+.main-wrapper {
+  padding: 20px;
+}
+
+.header-area {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 25px;
+  
+  h2 { font-size: 22px; font-weight: 800; color: #1e293b; margin: 0; }
+  
+  .count-badge {
+    background: #Eef2ff;
+    color: #5142E1;
+    padding: 6px 12px;
+    border-radius: 20px;
+    font-size: 12px;
+    font-weight: 700;
+  }
+}
+
+.wishlist-card {
+  display: flex;
+  background: white;
+  border-radius: 20px;
+  padding: 12px;
+  margin-bottom: 16px;
+  gap: 15px;
+  border: 1px solid #f1f5f9;
+  box-shadow: 0 8px 25px rgba(81, 66, 225, 0.04);
+
+  .thumb-section {
+    position: relative;
+    width: 110px;
+    height: 110px;
+    flex-shrink: 0;
+
+    img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      border-radius: 16px;
+    }
+
+    .wish-icon {
+      position: absolute;
+      top: 6px;
+      right: 6px;
+      background: white;
+      width: 28px;
+      height: 28px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: #ef4444; // Warna merah untuk tanda hati aktif
+      font-size: 16px;
+      box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+    }
+  }
+
+  .info-section {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+
+    h5 {
+      margin: 0 0 6px;
+      font-size: 14px;
+      font-weight: 700;
+      color: #1e293b;
+      line-height: 1.4;
+    }
+
+    .meta-row {
+      display: flex;
+      align-items: center;
+      gap: 4px;
+      margin-bottom: 12px;
+      
+      ion-icon { color: #fbbf24; font-size: 14px; }
+      span { font-size: 12px; font-weight: 800; color: #fbbf24; }
+      .reviews { color: #94a3b8; font-weight: 400; }
+    }
+
+    .price-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+
+      .current-price {
+        font-size: 16px;
+        font-weight: 800;
+        color: #5142E1;
+      }
+
+      .add-cart {
+        font-size: 20px;
+        color: #64748b;
+        background: #f8fafc;
+        padding: 8px;
+        border-radius: 12px;
+      }
+    }
+  }
+}

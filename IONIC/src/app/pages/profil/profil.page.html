@@ -1,52 +1,61 @@
-<ion-header class="ion-no-border">
-  <ion-toolbar mode="ios" style="--background: #6c5ce7; --color: white;">
-    <ion-title>Profil</ion-title>
-    <ion-buttons slot="end">
-      <ion-button color="light">
-        <ion-icon name="settings-outline"></ion-icon>
-      </ion-button>
-    </ion-buttons>
-  </ion-toolbar>
-</ion-header>
-
 <ion-content>
-  <div class="profile-purple-header">
-    <div class="avatar-box">
-      <img src="assets/imgs/user-photo.jpg" onerror="this.src='https://via.placeholder.com/150'" />
-      <div class="edit-badge"><ion-icon name="pencil"></ion-icon></div>
+  <div class="profile-header">
+    <div class="avatar-container">
+      <div class="avatar-wrapper">
+        <img src="https://i.pravatar.cc/150?u=user" />
+        <div class="camera-badge">
+          <ion-icon name="camera"></ion-icon>
+        </div>
+      </div>
     </div>
-    <h2>Hallo, Andi</h2>
-    <p>andi@email.com</p>
+    
+    <div class="user-info">
+      <h1>Nama Lengkap Anda</h1>
+      <p>Mahasiswa Universitas</p>
+    </div>
+
+    <div class="stats-container">
+      <div class="stat-box">
+        <h3>12</h3>
+        <span>Kursus</span>
+      </div>
+      <div class="divider"></div>
+      <div class="stat-box">
+        <h3>5</h3>
+        <span>Sertifikat</span>
+      </div>
+    </div>
   </div>
 
-  <ion-list lines="none" style="background: transparent; margin-top: 10px;">
-    <ion-item button mode="ios" class="menu-item">
-      <ion-icon name="person-outline" slot="start"></ion-icon>
-      <ion-label>Profil Saya</ion-label>
-      <ion-icon name="chevron-forward" slot="end" color="medium"></ion-icon>
-    </ion-item>
-    
-    <ion-item button mode="ios" class="menu-item">
-      <ion-icon name="receipt-outline" slot="start"></ion-icon>
-      <ion-label>Riwayat Transaksi</ion-label>
-      <ion-icon name="chevron-forward" slot="end" color="medium"></ion-icon>
-    </ion-item>
+  <div class="menu-container">
+    <div class="menu-card">
+      <ion-item lines="full" detail="true" class="menu-item" (click)="goToEdit()">
+        <div class="icon-box blue" slot="start">
+          <ion-icon name="person-outline"></ion-icon>
+        </div>
+        <ion-label>Edit Profil</ion-label>
+      </ion-item>
 
-    <ion-item button mode="ios" class="menu-item">
-      <ion-icon name="card-outline" slot="start"></ion-icon>
-      <ion-label>Metode Pembayaran</ion-label>
-      <ion-icon name="chevron-forward" slot="end" color="medium"></ion-icon>
-    </ion-item>
+      <ion-item lines="full" detail="true" class="menu-item" (click)="goToSecurity()">
+        <div class="icon-box green" slot="start">
+          <ion-icon name="shield-checkmark-outline"></ion-icon>
+        </div>
+        <ion-label>Keamanan Akun</ion-label>
+      </ion-item>
 
-    <ion-item button mode="ios" class="menu-item">
-      <ion-icon name="help-circle-outline" slot="start"></ion-icon>
-      <ion-label>Bantuan & Dukungan</ion-label>
-      <ion-icon name="chevron-forward" slot="end" color="medium"></ion-icon>
-    </ion-item>
+      <ion-item lines="full" detail="true" class="menu-item" (click)="goToNotif()">
+        <div class="icon-box orange" slot="start">
+          <ion-icon name="notifications-outline"></ion-icon>
+        </div>
+        <ion-label>Notifikasi</ion-label>
+      </ion-item>
 
-    <ion-item button mode="ios" class="menu-item" style="--color: #ff7675;">
-      <ion-icon name="log-out-outline" slot="start"></ion-icon>
-      <ion-label>Keluar</ion-label>
-    </ion-item>
-  </ion-list>
+      <ion-item lines="none" detail="true" class="menu-item logout" (click)="logout()">
+        <div class="icon-box red" slot="start">
+          <ion-icon name="log-out-outline"></ion-icon>
+        </div>
+        <ion-label>Keluar</ion-label>
+      </ion-item>
+    </div>
+  </div>
 </ion-content>

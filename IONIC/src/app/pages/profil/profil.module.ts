@@ -1,11 +1,8 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
-
 import { IonicModule } from '@ionic/angular';
-
 import { ProfilPageRoutingModule } from './profil-routing.module';
-
 import { ProfilPage } from './profil.page';
 
 @NgModule({
@@ -13,8 +10,9 @@ import { ProfilPage } from './profil.page';
     CommonModule,
     FormsModule,
     IonicModule,
-    ProfilPageRoutingModule
+    ProfilPageRoutingModule,
+    ProfilPage // ProfilPage masuk ke sini karena dia Standalone
   ],
-  declarations: [ProfilPage]
+  declarations: [] // KOSONGKAN INI, JANGAN DIISI ProfilPage
 })
 export class ProfilPageModule {}

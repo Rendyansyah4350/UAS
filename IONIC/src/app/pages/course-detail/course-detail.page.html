@@ -1,13 +1,66 @@
-<ion-header [translucent]="true">
+<ion-header class="ion-no-border">
   <ion-toolbar>
-    <ion-title>course-detail</ion-title>
+    <ion-buttons slot="start">
+      <ion-back-button defaultHref="home" color="dark" text=""></ion-back-button>
+    </ion-buttons>
   </ion-toolbar>
 </ion-header>
 
-<ion-content [fullscreen]="true">
-  <ion-header collapse="condense">
-    <ion-toolbar>
-      <ion-title size="large">course-detail</ion-title>
-    </ion-toolbar>
-  </ion-header>
+<ion-content>
+  <!-- Area Banner -->
+  <div class="banner-container">
+    <img src="assets/imgs/course-coding.jpg" onerror="this.src='https://via.placeholder.com/400x250'" />
+    <div class="play-button-overlay">
+      <ion-icon name="play-circle"></ion-icon>
+    </div>
+  </div>
+
+  <div class="main-content">
+    <div class="badge-bestseller">BESTSELLER</div>
+    <h1 class="course-title">UI/UX Design from Zero to Hero</h1>
+    
+    <!-- Bagian Instruktur -->
+    <div class="instructor-section">
+      <ion-avatar>
+        <img src="https://images.unsplash.com/photo-1516321318423-f06f85e504b3?q=80&w=1000" />
+      </ion-avatar>
+      <div class="instructor-details">
+        <h3>Dinda Amelia</h3>
+        <p>UI/UX Designer & Mentor</p>
+      </div>
+    </div>
+
+    <!-- Grid Statistik (4 Kolom) -->
+    <div class="stats-grid">
+      <div class="stat-item">
+        <span>Level</span>
+        <strong>Pemula</strong>
+      </div>
+      <div class="stat-item">
+        <span>Durasi</span>
+        <strong>12 Jam</strong>
+      </div>
+      <div class="stat-item">
+        <span>Modul</span>
+        <strong>24</strong>
+      </div>
+      <div class="stat-item">
+        <span>Sertifikat</span>
+        <strong>Ya</strong>
+      </div>
+    </div>
+  </div>
 </ion-content>
+
+<!-- Bagian Harga & Tombol Enroll (Sticky di bawah) -->
+<ion-footer class="ion-no-border">
+  <div class="purchase-bar">
+    <div class="price-container">
+      <span>Harga</span>
+      <h3>Rp 399.000</h3>
+    </div>
+    <ion-button expand="block" class="enroll-btn">
+      ENROLL SEKARANG
+    </ion-button>
+  </div>
+</ion-footer>

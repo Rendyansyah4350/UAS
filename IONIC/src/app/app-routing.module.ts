@@ -1,8 +1,8 @@
 import { NgModule } from '@angular/core';
-import { PreloadAllModules, RouterModule, Routes } from '@angular/router'; // WAJIB ADA
-import { AuthGuard } from './guards/auth-guard'; // Pastikan path ini benar
+import { PreloadAllModules, RouterModule, Routes } from '@angular/router';
+import { AuthGuard } from './guards/auth-guard'; // Pastikan guard ini ada jika ingin digunakan
 
-const routes: Routes = [ // Gunakan 'const' hanya di sini
+const routes: Routes = [
   {
     path: '',
     redirectTo: 'login',
@@ -17,17 +17,32 @@ const routes: Routes = [ // Gunakan 'const' hanya di sini
     loadChildren: () => import('./pages/tabs/tabs.module').then( m => m.TabsPageModule)
   },
   {
-    path: '**',
-    redirectTo: 'login'
-  },  {
     path: 'wishlist',
     loadChildren: () => import('./pages/wishlist/wishlist.module').then( m => m.WishlistPageModule)
   },
   {
     path: 'profil',
     loadChildren: () => import('./pages/profil/profil.module').then( m => m.ProfilPageModule)
-  }
+  },
+  {
+    path: 'course-detail',
+    loadChildren: () => import('./pages/course-detail/course-detail.module').then( m => m.CourseDetailPageModule)
+  },
+  // RUTE WILDCARD: Harus paling bawah agar tidak memblokir rute lain
+  
+  {
+    path: 'edit-profil',
+    loadChildren: () => import('./pages/edit-profil/edit-profil.module').then( m => m.EditProfilPageModule)
+  },
+  {
+    path: 'notifications',
+    loadChildren: () => import('./pages/notifications/notifications.module').then( m => m.NotificationsPageModule)
+  },
 
+{
+    path: '**',
+    redirectTo: 'login'
+  }
 ];
 
 @NgModule({

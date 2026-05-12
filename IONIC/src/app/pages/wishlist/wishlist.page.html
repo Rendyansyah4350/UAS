@@ -1,42 +1,59 @@
-<ion-header class="ion-no-border">
-  <ion-toolbar mode="ios">
-    <ion-title>Wishlist</ion-title>
-    <ion-buttons slot="end">
-      <ion-button color="primary" style="font-weight: 600;">Edit</ion-button>
-    </ion-buttons>
-  </ion-toolbar>
-</ion-header>
-
-<ion-content>
-  <div class="wish-card">
-    <div class="card-content">
-      <img src="assets/imgs/course-flutter.jpg" class="card-img" />
-      <div class="card-text">
-        <div style="display: flex; justify-content: space-between; align-items: flex-start;">
-          <h3 class="course-title">Mobile App Development with Flutter</h3>
-          <ion-icon name="heart" style="color: #ff7675; font-size: 22px;"></ion-icon>
-        </div>
-        <p class="instructor">Siti Rahma</p>
-        <div class="price-row">
-          <span class="price">Rp 399.000</span>
-        </div>
-      </div>
+<ion-content [fullscreen]="true">
+  <div class="main-wrapper">
+    
+    <div class="header-area">
+      <h2>Wishlist</h2>
+      <div class="count-badge">3 Kursus</div>
     </div>
-  </div>
 
-  <div class="wish-card">
-    <div class="card-content">
-      <img src="assets/imgs/course-ds.jpg" class="card-img" />
-      <div class="card-text">
-        <div style="display: flex; justify-content: space-between; align-items: flex-start;">
-          <h3 class="course-title">Data Science for Beginners</h3>
-          <ion-icon name="heart" style="color: #ff7675; font-size: 22px;"></ion-icon>
+    <div class="wishlist-container">
+      
+      <!-- Item Wishlist 1 -->
+      <div class="wishlist-card">
+        <div class="thumb-section">
+          <img src="assets/imgs/course-1.jpg" />
+          <div class="wish-icon">
+            <ion-icon name="heart"></ion-icon>
+          </div>
         </div>
-        <p class="instructor">Rudi Hermawan</p>
-        <div class="price-row">
-          <span class="price">Rp 299.000</span>
+        
+        <div class="info-section">
+          <h5>Advanced Flutter Mastery 2024</h5>
+          <div class="meta-row">
+            <ion-icon name="star"></ion-icon>
+            <span>4.9</span>
+            <span class="reviews">(2.1k)</span>
+          </div>
+          <div class="price-row">
+            <span class="current-price">Rp 350.000</span>
+            <ion-icon name="cart-outline" class="add-cart"></ion-icon>
+          </div>
         </div>
       </div>
+
+      <!-- Item Wishlist 2 -->
+      <div class="wishlist-card">
+        <div class="thumb-section">
+          <img src="assets/imgs/course-2.jpg" />
+          <div class="wish-icon">
+            <ion-icon name="heart"></ion-icon>
+          </div>
+        </div>
+        
+        <div class="info-section">
+          <h5>Business Intelligence with Power BI</h5>
+          <div class="meta-row">
+            <ion-icon name="star"></ion-icon>
+            <span>4.7</span>
+            <span class="reviews">(850)</span>
+          </div>
+          <div class="price-row">
+            <span class="current-price">Rp 275.000</span>
+            <ion-icon name="cart-outline" class="add-cart"></ion-icon>
+          </div>
+        </div>
+      </div>
+
     </div>
   </div>
 </ion-content>

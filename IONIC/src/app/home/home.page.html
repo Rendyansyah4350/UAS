@@ -1,76 +1,87 @@
-<ion-header class="ion-no-border">
-  <ion-toolbar mode="ios" class="edu-header">
-    <ion-title>
-      <div class="logo-text">Edu<span>Van</span></div>
-    </ion-title>
-    <ion-buttons slot="end">
-      <ion-button color="dark">
-        <ion-icon name="notifications-outline"></ion-icon>
-      </ion-button>
-    </ion-buttons>
-  </ion-toolbar>
-</ion-header>
+<ion-content [fullscreen]="true">
+  <div class="main-wrapper">
+    
+    <div class="header-section">
+      <div class="brand">Edu<span>Van</span></div>
+      <ion-icon name="notifications-outline" class="icon-notif" (click)="goToNotif()" style="cursor: pointer;"></ion-icon>
+    </div>
 
-<ion-content>
-  <div class="search-section">
-    <ion-searchbar 
-      placeholder="Cari kursus, topik, atau instruktur..." 
-      class="edu-search"
-      mode="ios">
-    </ion-searchbar>
-  </div>
+    <div class="search-container">
+      <div class="search-inner">
+        <ion-icon name="search-outline"></ion-icon>
+        <input type="text" placeholder="Cari kursus coding, office, dll...">
+      </div>
+    </div>
 
-  <div class="banner-container">
-    <div class="banner-box">
+    <div class="promo-banner">
       <div class="banner-text">
         <h3>Tingkatkan Skill,<br>Wujudkan Masa Depan</h3>
-        <p>Belajar kapan saja bersama EduVan.</p>
-        <ion-button mode="ios" class="btn-banner">Jelajahi Kursus</ion-button>
+        <p>Belajar kapan saja, di mana saja bersama EduVan.</p>
+        <button class="cta-button">Jelajahi Kursus</button>
       </div>
-      <img src="assets/imgs/student.png" class="student-img">
+      <img src="assets/imgs/student.png" class="banner-img" />
     </div>
-  </div>
 
-  <div class="section-title">
-    <b>Kategori Populer</b>
-    <small>Lihat semua</small>
-  </div>
+    <div class="label-row">
+      <h4>Kategori Populer</h4>
+      <span class="see-all">Lihat semua</span>
+    </div>
 
-  <div class="category-grid">
-    <div class="cat-item">
-      <div class="cat-icon coding"><ion-icon name="code-slash-outline"></ion-icon></div>
-      <span>Coding</span>
-    </div>
-    <div class="cat-item">
-      <div class="cat-icon design"><ion-icon name="brush-outline"></ion-icon></div>
-      <span>Design</span>
-    </div>
-    <div class="cat-item">
-      <div class="cat-icon business"><ion-icon name="business-outline"></ion-icon></div>
-      <span>Bisnis</span>
-    </div>
-    <div class="cat-item">
-      <div class="cat-icon marketing"><ion-icon name="megaphone-outline"></ion-icon></div>
-      <span>Marketing</span>
-    </div>
-  </div>
-
-  <div class="section-title">
-    <b>Kursus Populer</b>
-    <small>Lihat semua</small>
-  </div>
-
-  <div class="course-list">
-    <ion-card mode="ios" class="edu-course-card">
-      <div class="img-wrapper">
-        <img src="assets/imgs/course-web.jpg" />
-        <div class="badge">Bestseller</div>
+    <div class="category-list">
+      <div class="category-item">
+        <div class="cat-icon blue"><ion-icon name="code-slash"></ion-icon></div>
+        <p>Coding</p>
       </div>
-      <ion-card-content>
-        <h2 class="price">Rp 499.000</h2>
-        <h3 class="course-title">Complete Web Developer Bootcamp 2024</h3>
-        <p class="instructor">Andi Pratama</p>
-      </ion-card-content>
-    </ion-card>
+      <div class="category-item">
+        <div class="cat-icon green"><ion-icon name="document-text"></ion-icon></div>
+        <p>MS Office</p>
+      </div>
+      <div class="category-item">
+        <div class="cat-icon orange"><ion-icon name="briefcase"></ion-icon></div>
+        <p>Bisnis</p>
+      </div>
+    </div>
+
+    <div class="label-row">
+      <h4>Kursus Populer</h4>
+      <span class="see-all">Lihat semua</span>
+    </div>
+
+    <div class="course-list-vertical">
+      <div class="premium-course-card-horizontal" (click)="goToDetail()" style="cursor: pointer;">
+        <div class="course-thumb-box">
+          <img src="assets/imgs/course-coding.jpg" />
+          <div class="tag-best">Bestseller</div>
+        </div>
+        
+        <div class="course-info-box">
+          <h5>Logika Pemrograman Dasar</h5>
+          <p class="instructor">Andi Pratama</p>
+          <div class="course-meta">
+            <ion-icon name="star"></ion-icon> 
+            <span class="rating-val">4.8</span> 
+            <span class="rating-count">(12.5k)</span>
+          </div>
+          <div class="course-price">Rp 499.000</div>
+        </div>
+      </div>
+
+      <div class="premium-course-card-horizontal" (click)="goToDetail()" style="cursor: pointer;">
+        <div class="course-thumb-box">
+          <img src="assets/imgs/excel-master.jpg" />
+        </div>
+        
+        <div class="course-info-box">
+          <h5>Mastering MS Excel Dasar</h5>
+          <p class="instructor">Rina Septiani</p>
+          <div class="course-meta">
+            <ion-icon name="star"></ion-icon> 
+            <span class="rating-val">4.7</span> 
+            <span class="rating-count">(8.2k)</span>
+          </div>
+          <div class="course-price">Rp 199.000</div>
+        </div>
+      </div>
+    </div>
   </div>
 </ion-content>
