@@ -1,4 +1,4 @@
-@extends('layouts.admin') {{-- Pastikan ini nama file layout admin kamu --}}
+@extends('layouts.admin')
 
 @section('content')
     <div class="container-fluid p-4">

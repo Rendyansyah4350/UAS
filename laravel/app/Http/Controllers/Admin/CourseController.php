@@ -9,10 +9,22 @@ use Illuminate\Http\Request;
 
 class CourseController extends Controller
 {
-    public function index()
+    public function index(Request $request)
     {
-        // Mengambil semua data course dari database
-        $courses = Course::all();
+        // 1. Ambil input dari search bar (jika ada)
+        $search = $request->input('search');
+
+        // 2. Query ke database
+        // "when" akan menjalankan filter query HANYA jika variable $search ada isinya
+        $courses = Course::when($search, function ($query, $search)
+        {
+            return $query->where('title', 'like', "%{$search}%")
+                ->orWhere('description', 'like', "%{$search}%");
+        })
+            ->latest()
+            ->get();
+
+        // 3. Kirim ke view
         return view('admin.courses.index', compact('courses'));
     }
 
@@ -33,7 +45,8 @@ class CourseController extends Controller
 
         // 2. Olah upload gambar jika ada
         $imagePath = null;
-        if ($request->hasFile('image')) {
+        if ($request->hasFile('image'))
+        {
             $imagePath = $request->file('image')->store('course_covers', 'public');
         }
 
@@ -106,7 +119,8 @@ class CourseController extends Controller
             'price' => $request->price,
         ];
 
-        if ($request->hasFile('image')) {
+        if ($request->hasFile('image'))
+        {
             $data['image'] = $request->file('image')->store('course_covers', 'public');
         }
 

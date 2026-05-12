@@ -50,5 +50,7 @@ class Enrollment extends Model
 
         // 3. Kembalikan dalam persen
         return round(($completedContents / $totalContents) * 100);
-    } 
+    }
+
+    
 }
