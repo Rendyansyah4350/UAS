@@ -7,7 +7,22 @@
             <i class="fas fa-plus mr-2"></i> Tambah Kursus Baru
         </a>
     </div>
-
+    <div class="flex flex-col md:flex-row md:items-center justify-between gap-4 mb-6">
+        <div class="flex items-center gap-3">
+            <form action="{{ route('admin.courses.index') }}" method="GET" class="relative">
+                <input type="text" name="search" value="{{ request('search') }}"
+                    placeholder="Cari kursus atau kategori..."
+                    class="pl-10 pr-4 py-2 border border-gray-200 rounded-xl focus:ring-2 focus:ring-indigo-500 outline-none transition text-sm w-64">
+                <div class="absolute left-3 top-2.5 text-gray-400">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24"
+                        stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                            d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
+                    </svg>
+                </div>
+            </form>
+        </div>
+    </div>
     <div class="bg-white rounded-lg shadow-md overflow-hidden">
         <table class="w-full text-left border-collapse">
             <thead class="bg-gray-50">
