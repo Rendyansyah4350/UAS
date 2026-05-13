@@ -49,7 +49,11 @@ const routes: Routes = [
   {
     path: '**',
     redirectTo: 'login'
+  },  {
+    path: 'course',
+    loadChildren: () => import('./pages/course/course.module').then( m => m.CoursePageModule)
   }
+
 ];
 
 @NgModule({
