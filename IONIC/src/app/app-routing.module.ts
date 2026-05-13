@@ -21,6 +21,10 @@ const routes: Routes = [
     // canActivate: [AuthGuard], // Menggunakan AuthGuard agar tidak merah
     loadChildren: () => import('./pages/tabs/tabs.module').then(m => m.TabsPageModule)
   },
+    {
+    path: 'course',
+    loadChildren: () => import('./pages/course/course.module').then( m => m.CoursePageModule)
+    },
   {
     path: 'wishlist',
     canActivate: [AuthGuard],
@@ -32,7 +36,7 @@ const routes: Routes = [
     loadChildren: () => import('./pages/profil/profil.module').then(m => m.ProfilPageModule)
   },
   {
-    path: 'course-detail',
+    path: 'course-detail/:id',
     loadChildren: () => import('./pages/course-detail/course-detail.module').then(m => m.CourseDetailPageModule)
   },
   {
@@ -49,10 +53,7 @@ const routes: Routes = [
   {
     path: '**',
     redirectTo: 'login'
-  },  {
-    path: 'course',
-    loadChildren: () => import('./pages/course/course.module').then( m => m.CoursePageModule)
-  }
+  },
 
 ];
 

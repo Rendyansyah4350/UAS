@@ -1,66 +1,46 @@
-<ion-header class="ion-no-border">
+<ion-header>
   <ion-toolbar>
     <ion-buttons slot="start">
-      <ion-back-button defaultHref="home" color="dark" text=""></ion-back-button>
+      <ion-back-button defaultHref="/course"></ion-back-button>
     </ion-buttons>
+    <ion-title>Detail Kursus</ion-title>
   </ion-toolbar>
 </ion-header>
 
-<ion-content>
-  <!-- Area Banner -->
-  <div class="banner-container">
-    <img src="assets/imgs/course-coding.jpg" onerror="this.src='https://via.placeholder.com/400x250'" />
-    <div class="play-button-overlay">
-      <ion-icon name="play-circle"></ion-icon>
+<ion-content class="ion-padding">
+  <img [src]="course.image_url || 'assets/images/placeholder.jpg'" />
+
+  <h2 class="course-title">{{ course.title }}</h2> 
+  
+  <p class="instructor">Oleh: {{ course.instructor_name || 'Admin' }}</p>
+
+  <div class="info-grid">
+    <div class="info-item">
+      <span>Level</span>
+      <strong>{{ course.level }}</strong>
+    </div>
+    <div class="info-item">
+      <span>Durasi</span>
+      <strong>{{ course.duration }} Jam</strong>
     </div>
   </div>
 
-  <div class="main-content">
-    <div class="badge-bestseller">BESTSELLER</div>
-    <h1 class="course-title">UI/UX Design from Zero to Hero</h1>
-    
-    <!-- Bagian Instruktur -->
-    <div class="instructor-section">
-      <ion-avatar>
-        <img src="https://images.unsplash.com/photo-1516321318423-f06f85e504b3?q=80&w=1000" />
-      </ion-avatar>
-      <div class="instructor-details">
-        <h3>Dinda Amelia</h3>
-        <p>UI/UX Designer & Mentor</p>
-      </div>
-    </div>
-
-    <!-- Grid Statistik (4 Kolom) -->
-    <div class="stats-grid">
-      <div class="stat-item">
-        <span>Level</span>
-        <strong>Pemula</strong>
-      </div>
-      <div class="stat-item">
-        <span>Durasi</span>
-        <strong>12 Jam</strong>
-      </div>
-      <div class="stat-item">
-        <span>Modul</span>
-        <strong>24</strong>
-      </div>
-      <div class="stat-item">
-        <span>Sertifikat</span>
-        <strong>Ya</strong>
-      </div>
-    </div>
+  <div class="description">
+    <h3>Deskripsi</h3>
+    <p>{{ course.description }}</p>
   </div>
 </ion-content>
 
-<!-- Bagian Harga & Tombol Enroll (Sticky di bawah) -->
 <ion-footer class="ion-no-border">
-  <div class="purchase-bar">
-    <div class="price-container">
-      <span>Harga</span>
-      <h3>Rp 399.000</h3>
+  <ion-toolbar>
+    <div class="footer-flex">
+      <div class="price-section">
+        <p>Harga</p>
+        <h2 color="primary">Rp {{ course.price | number }}</h2>
+      </div>
+      <ion-button expand="block" shape="round" (click)="enroll()">
+        ENROLL SEKARANG
+      </ion-button>
     </div>
-    <ion-button expand="block" class="enroll-btn">
-      ENROLL SEKARANG
-    </ion-button>
-  </div>
+  </ion-toolbar>
 </ion-footer>
