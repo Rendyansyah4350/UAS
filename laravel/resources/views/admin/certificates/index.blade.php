@@ -27,31 +27,36 @@
                                 {{ $progress->course->title }}
                             </td>
                             <td class="px-6 py-4 text-center">
-                                {{-- Cek apakah sudah punya nomor sertifikat di tabel certificates --}}
-                                @php
-                                    $certificate = \App\Models\Certificate::where('user_id', $progress->user_id)
-                                        ->where('course_id', $progress->course_id)
-                                        ->first();
-                                    $isIssued = !empty($certificate);
-                                @endphp
-
-                                @if ($isIssued)
+                                {{-- Menggunakan properti hasil pengecekan di Controller --}}
+                                @if ($progress->user->already_has_certificate)
                                     <div class="flex flex-col items-center space-y-2">
-                                        <span class="text-green-600 font-bold text-[10px] uppercase">
-                                            <i class="fas fa-check-double mr-1"></i> Terbit
+                                        {{-- Badge Status --}}
+                                        <span
+                                            class="bg-green-100 text-green-700 font-bold text-[10px] uppercase px-3 py-1 rounded-full flex items-center">
+                                            <i class="fas fa-check-circle mr-1"></i> Sudah Terbit
                                         </span>
-                                        <a href="{{ route('admin.certificates.preview', $certificate->id) }}"
-                                            class="text-indigo-600 hover:text-indigo-800 font-bold text-[10px] uppercase flex items-center justify-center bg-indigo-50 px-3 py-1 rounded-full transition">
-                                            <i class="fas fa-eye mr-1"></i> Preview Sertifikat
+
+                                        {{-- Tombol Lihat/Preview Sertifikat --}}
+                                        {{-- Kita ambil ID sertifikat dari data yang sudah divalidasi --}}
+                                        @php
+                                            $certId = \App\Models\Certificate::where('user_id', $progress->user->id)
+                                                ->where('course_id', $progress->course->id)
+                                                ->value('id');
+                                        @endphp
+
+                                        <a href="{{ route('admin.certificates.preview', $certId) }}"
+                                            class="text-indigo-600 hover:text-white hover:bg-indigo-600 border border-indigo-600 font-bold text-[10px] uppercase flex items-center justify-center px-4 py-1.5 rounded-lg transition-all duration-200">
+                                            <i class="fas fa-eye mr-1"></i> Lihat Sertifikat
                                         </a>
                                     </div>
                                 @else
+                                    {{-- Tombol Validasi untuk yang belum punya sertifikat --}}
                                     <form
-                                        action="{{ route('admin.certificates.issue', [$progress->user_id, $progress->course_id]) }}"
+                                        action="{{ route('admin.certificates.issue', [$progress->user->id, $progress->course->id]) }}"
                                         method="POST">
                                         @csrf
                                         <button type="submit"
-                                            class="bg-blue-600 text-white px-4 py-2 rounded-lg text-[10px] font-black uppercase hover:bg-blue-700 transition shadow-sm">
+                                            class="bg-blue-600 text-white px-5 py-2 rounded-lg text-[10px] font-black uppercase hover:bg-blue-700 transition shadow-md active:transform active:scale-95">
                                             Validasi Sertifikat
                                         </button>
                                     </form>

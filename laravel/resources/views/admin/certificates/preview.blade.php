@@ -28,7 +28,7 @@
                 </h2>
 
                 <p class="text-gray-600 max-w-md mx-auto leading-relaxed">
-                    Telah berhasil menyelesaikan kursus secara menyeluruh pada platform **EduVan** dalam program:
+                    Telah berhasil menyelesaikan kursus secara menyeluruh pada platform EduVan dalam program:
                 </p>
                 <h3 class="text-2xl font-black text-gray-800 mt-4 uppercase">{{ $certificate->course->title }}</h3>
 
