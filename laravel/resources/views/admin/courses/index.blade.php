@@ -7,6 +7,7 @@
             <i class="fas fa-plus mr-2"></i> Tambah Kursus Baru
         </a>
     </div>
+
     <div class="flex flex-col md:flex-row md:items-center justify-between gap-4 mb-6">
         <div class="flex items-center gap-3">
             <form action="{{ route('admin.courses.index') }}" method="GET" class="relative">
@@ -23,6 +24,7 @@
             </form>
         </div>
     </div>
+
     <div class="bg-white rounded-lg shadow-md overflow-hidden">
         <table class="w-full text-left border-collapse">
             <thead class="bg-gray-50">
@@ -30,8 +32,9 @@
                     <th class="p-4 border-b">No</th>
                     <th class="p-4 border-b">Gambar</th>
                     <th class="p-4 border-b">Judul Kursus</th>
-                    <th class="p-4 border-b">Deskripsi</th>
+                    <th class="p-4 border-b">Kategori</th>
                     <th class="p-4 border-b">Harga</th>
+                    <th class="p-4 border-b">Rating</th>
                     <th class="p-4 border-b text-center">Aksi</th>
                 </tr>
             </thead>
@@ -48,8 +51,15 @@
                                 {{ $course->title }}
                             </a>
                         </td>
-                        <td class="p-4 border-b">{{ $course->description }}</td>
+                        <td class="p-4 border-b">
+                            <span class="px-2 py-1 bg-indigo-100 text-indigo-700 rounded-md text-xs font-bold uppercase">
+                                {{ $course->category ?? 'General' }}
+                            </span>
+                        </td>
                         <td class="p-4 border-b text-green-600 font-bold">Rp {{ number_format($course->price) }}</td>
+                        <td class="p-4 border-b text-orange-500 font-bold">
+                            <i class="fas fa-star text-sm"></i> {{ number_format($course->rating, 1) ?? '0.0' }}
+                        </td>
                         <td class="p-4 border-b text-center">
                             <a href="{{ route('admin.courses.edit', $course->id) }}"
                                 class="text-blue-500 hover:text-blue-700 mr-3">
@@ -57,7 +67,7 @@
                             </a>
                             <form action="{{ route('admin.courses.destroy', $course->id) }}" method="POST"
                                 class="inline-block"
-                                onsubmit="return confirm('Apakah Anda yakin ingin menghapus kursus ini? Semua materi di dalamnya akan ikut terhapus.')">
+                                onsubmit="return confirm('Apakah Anda yakin ingin menghapus kursus ini?')">
                                 @csrf
                                 @method('DELETE')
                                 <button type="submit" class="text-red-500 hover:text-red-700">
@@ -68,7 +78,7 @@
                     </tr>
                 @empty
                     <tr>
-                        <td colspan="4" class="p-10 text-center text-gray-500">
+                        <td colspan="7" class="p-10 text-center text-gray-500">
                             Belum ada kursus. Klik tombol "Tambah Kursus Baru" untuk memulai.
                         </td>
                     </tr>

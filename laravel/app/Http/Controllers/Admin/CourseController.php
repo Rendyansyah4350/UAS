@@ -16,8 +16,7 @@ class CourseController extends Controller
 
         // 2. Query ke database
         // "when" akan menjalankan filter query HANYA jika variable $search ada isinya
-        $courses = Course::when($search, function ($query, $search)
-        {
+        $courses = Course::when($search, function ($query, $search) {
             return $query->where('title', 'like', "%{$search}%")
                 ->orWhere('description', 'like', "%{$search}%");
         })
@@ -45,20 +44,19 @@ class CourseController extends Controller
 
         // 2. Olah upload gambar jika ada
         $imagePath = null;
-        if ($request->hasFile('image'))
-        {
+        if ($request->hasFile('image')) {
             $imagePath = $request->file('image')->store('course_covers', 'public');
         }
 
         // 3. Simpan ke database
         Course::create([
             'title' => $request->title,
+            'category' => $request->category, // <--- Cek baris ini
             'description' => $request->description,
             'price' => $request->price,
+            'rating' => 0, // Default untuk student nanti
             'image' => $imagePath,
-            // 'user_id' => auth()->id(), // Nanti aktifkan ini setelah kita set role & login admin
         ]);
-
         return redirect()->route('admin.courses.index')->with('success', 'Kursus berhasil ditambahkan!');
     }
 
@@ -77,24 +75,6 @@ class CourseController extends Controller
     /**
      * Menyimpan materi video baru ke dalam kursus
      */
-    public function storeContent(Request $request, $courseId)
-    {
-        $request->validate([
-            'title' => 'required|string|max:255',
-            'content_url' => 'required',
-            'order' => 'required|integer'
-        ]);
-
-        Content::create([
-            'course_id' => $courseId,
-            'title' => $request->title,
-            'content_url' => $request->content_url,
-            'type' => 'video', // Sesuai enum di migration kamu
-            'order' => $request->order,
-        ]);
-
-        return back()->with('success', 'Materi berhasil ditambahkan!');
-    }
 
     public function edit($id)
     {
@@ -110,17 +90,19 @@ class CourseController extends Controller
             'title' => 'required|string|max:255',
             'description' => 'required',
             'price' => 'required|integer',
-            'image' => 'nullable|image|mimes:jpeg,png,jpg|max:2048'
+            'image' => 'nullable|image|mimes:jpeg,png,jpg|max:2048',
+            'category' => 'required'
         ]);
 
         $data = [
             'title' => $request->title,
+            'category' => $request->category,
             'description' => $request->description,
             'price' => $request->price,
+            
         ];
 
-        if ($request->hasFile('image'))
-        {
+        if ($request->hasFile('image')) {
             $data['image'] = $request->file('image')->store('course_covers', 'public');
         }
 
