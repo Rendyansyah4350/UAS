@@ -1,48 +1,44 @@
 <ion-content class="login-container" [fullscreen]="true">
+  <div class="blob-bg"></div>
+  <div class="blob-bg-secondary"></div>
+  
   <div class="top-decoration">
-    <div class="logo-circle">
-      <ion-icon
-        [name]="otpSent ? 'mail-open-outline' : 'rocket-sharp'"
-      ></ion-icon>
+    <div class="logo-wrapper">
+      <div class="logo-circle">
+        <ion-icon [name]="otpSent ? 'mail-open-outline' : 'rocket-sharp'"></ion-icon>
+      </div>
+      <div class="logo-ring"></div>
     </div>
-    <h1>Eduvan</h1>
-    <p>{{ otpSent ? 'Email Verification' : 'Premium Learning Marketplace' }}</p>
+    
+    <div class="header-text">
+      <h1>Eduvan</h1>
+      <div class="premium-badge">
+        <span>{{ otpSent ? 'SECURITY VERIFIED' : 'LEARNING COURSE MARKETPLACE' }}</span>
+      </div>
+    </div>
   </div>
 
-  <div class="login-card">
-    <!-- FORM LOGIN BIASA -->
-    <div *ngIf="!otpSent">
-      <h2>Welcome Back!</h2>
+  <div class="login-card edu-card">
+    
+    <div *ngIf="!otpSent" class="fade-in">
+      <h2>SELAMAT DATANG!</h2>
       <span class="subtitle">Enter your credentials to continue learning</span>
 
       <form [formGroup]="loginForm" (ngSubmit)="onLogin()">
         <div class="input-group">
           <ion-label class="input-label">Email Address</ion-label>
-          <ion-item lines="none" class="input-item">
+          <ion-item lines="none" class="input-item edu-input-item">
             <ion-icon name="mail-outline" slot="start"></ion-icon>
-            <ion-input
-              type="email"
-              formControlName="email"
-              placeholder="example@gmail.com"
-            ></ion-input>
+            <ion-input type="email" formControlName="email" placeholder="example@gmail.com"></ion-input>
           </ion-item>
         </div>
 
         <div class="input-group">
           <ion-label class="input-label">Password</ion-label>
-          <ion-item lines="none" class="input-item">
+          <ion-item lines="none" class="input-item edu-input-item">
             <ion-icon name="lock-closed-outline" slot="start"></ion-icon>
-            <ion-input
-              [type]="showPassword ? 'text' : 'password'"
-              formControlName="password"
-              placeholder="••••••••"
-            ></ion-input>
-            <ion-icon
-              [name]="showPassword ? 'eye-off-outline' : 'eye-outline'"
-              slot="end"
-              (click)="togglePassword()"
-              style="cursor: pointer"
-            ></ion-icon>
+            <ion-input [type]="showPassword ? 'text' : 'password'" formControlName="password" placeholder="••••••••"></ion-input>
+            <ion-icon [name]="showPassword ? 'eye-off-outline' : 'eye-outline'" slot="end" (click)="togglePassword()" class="toggle-eye"></ion-icon>
           </ion-item>
 
           <div class="forgot-link-container">
@@ -50,42 +46,29 @@
           </div>
         </div>
 
-        <ion-button
-          expand="block"
-          type="submit" 
-          class="btn-primary"
-          [disabled]="!loginForm.valid"
-        >
+        <ion-button expand="block" type="submit" class="btn-primary main-btn" [disabled]="!loginForm.valid">
           Sign In
         </ion-button>
       </form>
 
       <div class="footer-action">
-        Don't have an account?
-        <strong (click)="goToRegister()">Join for Free</strong>
+        Don't have an account? <strong (click)="goToRegister()">Join for Free</strong>
       </div>
     </div>
 
-    <!-- FORM VERIFIKASI OTP -->
-    <div *ngIf="otpSent" class="otp-verification-ui">
+    <div *ngIf="otpSent" class="otp-verification-ui fade-in">
       <h2>Verify Your Account</h2>
-      <span class="subtitle"
-        >Enter code sent to <strong>{{ emailForVerify }}</strong></span
-      >
+      <span class="subtitle">Enter code sent to <strong>{{ emailForVerify }}</strong></span>
 
-      <div class="input-group" style="margin-top: 20px">
+      <div class="input-group otp-input-wrapper">
         <ion-label class="input-label">6-Digit Code</ion-label>
-        <ion-item lines="none" class="input-item">
+        <ion-item lines="none" class="input-item edu-input-item">
           <ion-icon name="key-outline" slot="start"></ion-icon>
-          <ion-input
-            type="number"
-            [(ngModel)]="otpCode"
-            placeholder="000000"
-          ></ion-input>
+          <ion-input type="number" [(ngModel)]="otpCode" placeholder="000000" class="otp-input-font"></ion-input>
         </ion-item>
       </div>
 
-      <ion-button expand="block" class="btn-primary" (click)="onVerifyOTP()">
+      <ion-button expand="block" class="btn-primary main-btn" (click)="onVerifyOTP()">
         Verify Account
       </ion-button>
 
@@ -93,5 +76,6 @@
         Wrong email? <strong (click)="otpSent = false">Go Back</strong>
       </div>
     </div>
+
   </div>
 </ion-content>

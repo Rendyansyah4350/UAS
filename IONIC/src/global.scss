@@ -1,26 +1,95 @@
-/* EDUVAN PREMIUM DESIGN SYSTEM */
+/* * EDUVAN PREMIUM DESIGN SYSTEM 
+ * Authorized Revised 2026 
+ */
+
+/* 1. CORE IONIC IMPORTS (Fixed & Clean) */
 @import "@ionic/angular/css/core.css";
 @import "@ionic/angular/css/normalize.css";
-/* ... (import standar lainnya) ... */
+@import "@ionic/angular/css/structure.css";
+@import "@ionic/angular/css/typography.css";
+@import "@ionic/angular/css/display.css";
+@import "@ionic/angular/css/padding.css";
+@import "@ionic/angular/css/float-elements.css";
+@import "@ionic/angular/css/text-alignment.css";
+@import "@ionic/angular/css/text-transformation.css";
+@import "@ionic/angular/css/flex-utils.css";
 
+/* 2. DESIGN TOKENS (Variables) */
 :root {
-  --ion-color-primary: #5142E1;
-  --bg-app: #F8FAFF;
-  --white: #ffffff;
-  
-  /* Shadow Premium: Tipis, Luas, Lembut */
-  --premium-shadow: 0 10px 30px rgba(81, 66, 225, 0.06), 0 4px 8px rgba(0, 0, 0, 0.04);
-  --soft-border: 1px solid #f1f5f9;
+  /* Warna Utama: Deep Ocean #093C5D */
+  --ion-color-primary: #093C5D;
+  --ion-color-primary-rgb: 9, 60, 93;
+  --ion-color-primary-contrast: #ffffff;
+  --ion-color-primary-shade: #083552;
+  --ion-color-primary-tint: #22506d;
+
+  /* Palette Premium Eduvan */
+  --edu-accent: #1565C0;      
+  --edu-bg: #F4F7FA;          
+  --edu-white: #ffffff;
+  --edu-text-main: #1A202C;   
+  --edu-text-muted: #718096;
+
+  /* Shadow System: Menggunakan tint biru gelap agar tidak kotor */
+  --premium-shadow: 0 20px 40px rgba(9, 60, 93, 0.08), 0 5px 15px rgba(0, 0, 0, 0.03);
+  --glass-shadow: 0 8px 32px 0 rgba(9, 60, 93, 0.1);
+  --soft-border: 1px solid rgba(226, 232, 240, 0.8);
 }
-/* Base Card yang akan kita pakai di mana-mana */
+
+/* 3. GLOBAL UI COMPONENTS */
+
+/* Base Card Premium: Efek Melayang */
 .edu-card {
-  background: var(--white);
-  border-radius: 20px;
+  background: var(--edu-white);
+  border-radius: 28px; 
   border: var(--soft-border);
   box-shadow: var(--premium-shadow);
-  transition: transform 0.3s ease;
+  transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+  overflow: hidden;
+  margin-bottom: 16px;
   
   &:active {
-    transform: scale(0.98);
+    transform: scale(0.97);
+    box-shadow: 0 5px 15px rgba(9, 60, 93, 0.1);
   }
+}
+
+/* Button Styling: Modern & Bold */
+ion-button {
+  --border-radius: 16px !important;
+  --box-shadow: 0 10px 20px rgba(9, 60, 93, 0.15);
+  font-weight: 700;
+  letter-spacing: 0.3px;
+  height: 54px;
+  margin-top: 10px;
+}
+
+/* Custom Premium Input Item */
+.edu-input-item {
+  --background: #F8FAFC;
+  --border-radius: 16px;
+  --padding-start: 16px;
+  --highlight-height: 0; /* Menghilangkan garis bawah default Ionic */
+  border: 1.5px solid #E2E8F0;
+  margin-top: 8px;
+  transition: all 0.3s ease;
+  
+  /* State saat Input diklik */
+  &.item-has-focus {
+    border-color: var(--ion-color-primary);
+    --background: #ffffff;
+    box-shadow: 0 0 0 4px rgba(9, 60, 93, 0.05);
+  }
+
+  ion-icon {
+    color: var(--ion-color-primary);
+    font-size: 20px;
+  }
+}
+
+/* Helper Class untuk Teks */
+.subtitle-premium {
+  color: var(--edu-text-muted);
+  font-size: 0.9rem;
+  line-height: 1.5;
 }

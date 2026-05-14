@@ -1,6 +1,10 @@
 import { Component } from '@angular/core';
 import { Router } from '@angular/router';
-import { LoadingController, ToastController } from '@ionic/angular';
+import {
+  LoadingController,
+  ToastController,
+  NavController,
+} from '@ionic/angular';
 
 @Component({
   selector: 'app-forgot-password',
@@ -9,53 +13,107 @@ import { LoadingController, ToastController } from '@ionic/angular';
   standalone: false,
 })
 export class ForgotPasswordPage {
-  email: string = '';
+  // Variabel Kontrol Alur
+  step: number = 1; // 1: Email, 2: OTP, 3: Password Baru
 
-  goToLogin() {
-    this.router.navigate(['/login']);
-  }
+  // Variabel Data
+  email: string = '';
+  otpCode: string = '';
+  newPassword: string = '';
+  confirmPassword: string = '';
+
+  // Variabel UI
+  showPassword = false;
 
   constructor(
     private router: Router,
+    private navCtrl: NavController,
     private loadingCtrl: LoadingController,
-    private toastCtrl: ToastController
+    private toastCtrl: ToastController,
   ) {}
 
+  // --- STEP 1: KIRIM OTP ---
   async sendOtp() {
-    // Validasi sederhana: pastikan email diisi
-    if (!this.email) {
-      this.presentToast('Silakan masukkan email Anda', 'warning');
+    if (!this.email || !this.email.includes('@')) {
+      this.presentToast('Silakan masukkan format email yang benar', 'warning');
       return;
     }
 
-    const loading = await this.loadingCtrl.create({ 
+    const loading = await this.loadingCtrl.create({
       message: 'Mengirim kode OTP...',
-      spinner: 'crescent'
+      spinner: 'crescent',
     });
     await loading.present();
 
-    // --- Simulasi Hit API Laravel ---
-    // Nanti di sini Anda akan memanggil AuthService Anda
-    // this.authService.requestOtp(this.email).subscribe(...)
-    
+    // Simulasi API Laravel
     setTimeout(async () => {
       await loading.dismiss();
-      
       this.presentToast('Kode OTP telah dikirim ke Gmail Anda', 'success');
-
-      // Navigasi ke Verify OTP dan kirim email via state
-      this.router.navigate(['/verify-otp'], { 
-        state: { userEmail: this.email } 
-      });
+      this.step = 2; // Pindah ke tampilan input OTP
     }, 2000);
+  }
+
+  // --- STEP 2: VERIFIKASI OTP ---
+  async verifyOtp() {
+    if (!this.otpCode || this.otpCode.toString().length < 4) {
+      this.presentToast('Masukkan kode OTP yang valid', 'warning');
+      return;
+    }
+
+    const loading = await this.loadingCtrl.create({
+      message: 'Memverifikasi kode...',
+      spinner: 'crescent',
+    });
+    await loading.present();
+
+    // Simulasi Cek OTP ke Backend
+    setTimeout(async () => {
+      await loading.dismiss();
+      this.presentToast('OTP Valid. Silakan buat password baru', 'success');
+      this.step = 3; // Pindah ke tampilan ganti password
+    }, 2000);
+  }
+
+  // --- STEP 3: UPDATE PASSWORD ---
+  async updatePassword() {
+    if (this.newPassword.length < 8) {
+      this.presentToast('Password minimal 8 karakter', 'warning');
+      return;
+    }
+
+    if (this.newPassword !== this.confirmPassword) {
+      this.presentToast('Konfirmasi password tidak cocok', 'danger');
+      return;
+    }
+
+    const loading = await this.loadingCtrl.create({
+      message: 'Memperbarui password...',
+      spinner: 'crescent',
+    });
+    await loading.present();
+
+    // Simulasi Update Database Laravel
+    setTimeout(async () => {
+      await loading.dismiss();
+      this.presentToast('Password berhasil diperbarui!', 'success');
+
+      // Kembali ke Login setelah sukses
+      this.navCtrl.navigateRoot('/login');
+    }, 2000);
+  }
+
+  // Navigasi & UI Helpers
+  goToLogin() {
+    this.navCtrl.back();
   }
 
   async presentToast(message: string, color: 'success' | 'warning' | 'danger') {
     const toast = await this.toastCtrl.create({
       message: message,
-      duration: 2000,
+      duration: 2500,
       color: color,
-      position: 'bottom'
+      position: 'bottom',
+      buttons: [{ text: 'OK', role: 'cancel' }],
     });
     await toast.present();
   }

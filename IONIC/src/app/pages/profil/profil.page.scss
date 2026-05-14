@@ -1,105 +1,55 @@
-.profile-header {
-  background: linear-gradient(to bottom, #f8f9ff 0%, #ffffff 100%);
-  padding: 40px 20px 30px;
+.header-container {
+  background: #093c5d;
+  padding: 50px 20px 60px;
   text-align: center;
-  border-bottom-left-radius: 30px;
-  border-bottom-right-radius: 30px;
+  border-bottom-left-radius: 40px;
+  border-bottom-right-radius: 40px;
 
-  .avatar-container {
-    display: flex;
-    justify-content: center;
-    margin-bottom: 15px;
-
-    .avatar-wrapper {
-      position: relative;
-      width: 110px;
-      height: 110px;
-      border: 4px solid white;
-      border-radius: 50%;
-      box-shadow: 0 10px 25px rgba(81, 66, 225, 0.15);
-
-      img {
-        width: 100%;
-        height: 100%;
-        border-radius: 50%;
-        object-fit: cover;
-      }
-
-      .camera-badge {
-        position: absolute;
-        bottom: 5px;
-        right: 5px;
-        background: #5142E1;
-        color: white;
-        padding: 6px;
-        border-radius: 50%;
-        display: flex;
-        box-shadow: 0 4px 10px rgba(0,0,0,0.1);
-        ion-icon { font-size: 16px; }
-      }
+  .image-wrapper {
+    width: 90px;
+    height: 90px;
+    margin: 0 auto;
+    position: relative;
+    img { border-radius: 25px; border: 3px solid rgba(255, 255, 255, 0.2); }
+    .camera-badge {
+      position: absolute; bottom: -5px; right: -5px;
+      background: white; color: #093c5d;
+      width: 25px; height: 25px; border-radius: 50%;
+      display: flex; align-items: center; justify-content: center;
     }
   }
 
-  .user-info {
-    h1 { font-size: 20px; font-weight: 800; margin: 0; color: #1e293b; }
-    p { font-size: 14px; color: #94a3b8; margin: 5px 0 0; }
-  }
+  .icon-box.blue {
+  background: rgba(9, 60, 93, 0.1);
+  color: #093c5d;
+} 
+  
+  h2 { color: white; font-weight: 700; margin-top: 15px; }
+  p { color: rgba(255, 255, 255, 0.7); font-size: 13px; }
 }
 
-.stats-container {
-  display: flex;
+.stat-grid {
   background: white;
-  margin: 25px 10px 0;
-  padding: 15px;
+  margin: -30px 40px 20px;
+  padding: 20px;
   border-radius: 20px;
-  box-shadow: 0 8px 20px rgba(0,0,0,0.04);
-  border: 1px solid #f1f5f9;
-
-  .stat-box {
-    flex: 1;
-    h3 { margin: 0; color: #5142E1; font-weight: 800; font-size: 18px; }
+  display: flex;
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.05);
+  
+  .stat-item {
+    flex: 1; text-align: center;
+    h3 { color: #093c5d; margin: 0; font-weight: 800; }
     span { font-size: 12px; color: #94a3b8; }
   }
-
-  .divider { width: 1px; background: #f1f5f9; margin: 5px 0; }
 }
 
-.menu-container {
-  padding: 20px;
-
-  .menu-card {
-    background: white;
-    border-radius: 20px;
-    overflow: hidden;
-    box-shadow: 0 10px 30px rgba(0,0,0,0.03);
-    border: 1px solid #f1f5f9;
-  }
-
-  .menu-item {
-    --padding-start: 15px;
-    --inner-padding-end: 15px;
-    height: 65px;
-    
-    ion-label { font-size: 15px; font-weight: 600; color: #334155; }
-
-    .icon-box {
-      width: 38px;
-      height: 38px;
-      border-radius: 10px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      ion-icon { font-size: 20px; }
-      
-      &.blue { background: #eef2ff; color: #5142E1; }
-      &.green { background: #f0fdf4; color: #22c55e; }
-      &.orange { background: #fff7ed; color: #f97316; }
-      &.red { background: #fef2f2; color: #ef4444; }
-    }
-  }
-}
-.menu-item.logout {
-  ion-label {
-    color: #ef4444; // Warna merah untuk menu Keluar
+.menu-section {
+  padding: 0 20px;
+  ion-item {
+    --background: white;
+    --border-radius: 15px;
+    margin-bottom: 10px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.02);
+    .icon-box.blue { background: #eff6ff; color: #093c5d; }
   }
 }

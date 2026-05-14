@@ -1,58 +1,45 @@
-<ion-header [translucent]="true" class="ion-no-border">
+<ion-header class="ion-no-border">
   <ion-toolbar color="primary">
     <ion-title>Katalog Kursus</ion-title>
   </ion-toolbar>
-  <ion-toolbar color="primary">
-    <ion-searchbar 
-      placeholder="Cari kursus favoritmu..." 
-      class="custom-search">
-    </ion-searchbar>
-  </ion-toolbar>
+  <div class="search-box">
+    <ion-searchbar placeholder="Cari kursus favoritmu..." mode="ios"></ion-searchbar>
+  </div>
 </ion-header>
 
-<ion-content [fullscreen]="true" class="ion-padding">
-  <div class="category-section">
-    <h3 class="section-title">Kategori Populer</h3>
-    <div class="scroll-x">
-      <ion-chip outline="true" color="primary">
-        <ion-icon name="code-working-outline"></ion-icon> 
-        <ion-label>Programming</ion-label>
-      </ion-chip>
-      <ion-chip outline="true" color="primary">
-        <ion-icon name="color-palette-outline"></ion-icon> 
-        <ion-label>UI/UX</ion-label>
-      </ion-chip>
-      <ion-chip outline="true" color="primary">
-        <ion-icon name="megaphone-outline"></ion-icon> 
-        <ion-label>Marketing</ion-label>
-      </ion-chip>
-    </div>
+<ion-content>
+  <div class="section-label">
+    <h3>Kategori Populer</h3>
+  </div>
+  
+  <div class="category-scroll">
+    <ion-chip class="chip-active"><ion-icon name="code-working"></ion-icon> Programming</ion-chip>
+    <ion-chip><ion-icon name="color-palette"></ion-icon> UI/UX</ion-chip>
+    <ion-chip><ion-icon name="megaphone"></ion-icon> Marketing</ion-chip>
   </div>
 
-  <h3 class="section-title">Semua Kursus</h3>
-  
-<ion-grid class="ion-no-padding">
-  <ion-row>
-    <ion-col size="6" class="ion-no-padding" *ngFor="let c of listCourses">
-      <ion-card class="product-card" (click)="goToDetail(c.id)">
-        <div class="image-container">
-          <img [src]="c.image_url || 'assets/images/placeholder.jpg'" />
-          <div class="badge-new" *ngIf="c.is_new">New</div>
-        </div>
-        <div class="card-content">
-          <p class="course-title">{{ c.title }}</p>
-          <div class="rating-row">
-            <ion-icon name="star" class="star-icon"></ion-icon>
-            <span>{{ c.rating }} | {{ c.enrolled }} terjual</span>
+  <div class="section-label">
+    <h3>Semua Kursus</h3>
+  </div>
+
+  <ion-grid>
+    <ion-row>
+      <ion-col size="6" *ngFor="let course of courses">
+        <ion-card (click)="goToDetail(course.id)">
+          <div class="img-container">
+            <img [src]="course.image" />
           </div>
-          <p class="price">{{ c.price | currency:'IDR':'symbol':'1.0-0' }}</p>
-          <div class="footer-row">
-            <ion-icon name="location-outline"></ion-icon>
-            <span>{{ c.type }}</span>
+          <div class="card-content">
+            <span class="category-tag">Development</span>
+            <ion-card-title>{{ course.title }}</ion-card-title>
+            <div class="rating">
+              <ion-icon name="star" color="warning"></ion-icon>
+              <span>4.8 | Terjual 100+</span>
+            </div>
+            <h2 class="price">IDR {{ course.price }}</h2>
           </div>
-        </div>
-      </ion-card>
-    </ion-col>
-  </ion-row>
-</ion-grid>
+        </ion-card>
+      </ion-col>
+    </ion-row>
+  </ion-grid>
 </ion-content>

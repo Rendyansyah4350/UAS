@@ -40,7 +40,6 @@ export class LoginPage implements OnInit {
   }
 
   ngOnInit() {
-    // Menangkap email dari halaman Register (misal: /login?email=xxx&verify=true)
     this.route.queryParams.subscribe((params) => {
       if (params['email'] && params['verify'] === 'true') {
         this.emailForVerify = params['email'];
@@ -79,7 +78,7 @@ export class LoginPage implements OnInit {
     this.auth.verifyOTP(this.emailForVerify, this.otpCode).subscribe({
       next: async (res) => {
         await loading.dismiss();
-        this.otpSent = false; // Menutup form OTP dan kembali ke form login
+        this.otpSent = false;
         this.presentToast(
           'Akun berhasil diverifikasi! Silakan masuk.',
           'success',
@@ -95,7 +94,7 @@ export class LoginPage implements OnInit {
     });
   }
 
-  // LOGIKA LOGIN UTAMA
+  // LOGIKA LOGIN UTAMA (FIXED)
   async onLogin() {
     if (this.loginForm.valid) {
       const loading = await this.loadingCtrl.create({
@@ -105,17 +104,31 @@ export class LoginPage implements OnInit {
       await loading.present();
 
       this.auth.login(this.loginForm.value).subscribe({
-        next: async (res) => {
+        next: async (res: any) => {
           await loading.dismiss();
+
+          // --- PERBAIKAN DI SINI LEK ---
+          // Simpan token dan data user agar tidak ditendang AuthGuard
+          if (res.token) {
+            localStorage.setItem('token', res.token);
+          }
+          if (res.user) {
+            localStorage.setItem('user_data', JSON.stringify(res.user));
+          }
+          // -----------------------------
+
           this.presentToast('Selamat datang kembali!', 'success');
           this.zone.run(() => {
-            this.navCtrl.navigateRoot('/tabs/beranda');
+            // Gunakan rute yang sesuai dengan AppRoutingModule kamu
+            this.navCtrl.navigateRoot('/tabs'); 
           });
         },
         error: async (err) => {
           await loading.dismiss();
           let msg = 'Gagal masuk. Periksa kembali email dan password Anda.';
           if (err.status === 401) msg = 'Email atau Password salah.';
+          if (err.status === 403) msg = 'Akun belum diverifikasi. Silakan cek email.';
+          
           this.presentToast(msg, 'danger');
         },
       });

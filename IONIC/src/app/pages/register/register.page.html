@@ -1,4 +1,4 @@
-<ion-content class="register-container">
+<ion-content class="register-container" [fullscreen]="true">
   <div class="top-decoration">
     <div class="logo-circle">
       <ion-icon name="person-add-outline"></ion-icon>
@@ -7,12 +7,12 @@
     <p>Mulai belajar hal baru hari ini</p>
   </div>
 
-  <div class="register-card">
+  <div class="register-card edu-card">
     <form [formGroup]="registerForm" (ngSubmit)="onRegister()">
       
       <div class="input-group">
         <ion-label class="input-label">Nama Lengkap</ion-label>
-        <ion-item lines="none" class="input-item">
+        <ion-item lines="none" class="input-item edu-input-item">
           <ion-icon name="person-outline" slot="start"></ion-icon>
           <ion-input type="text" formControlName="name" placeholder="Nama lengkap Anda"></ion-input>
         </ion-item>
@@ -20,7 +20,7 @@
 
       <div class="input-group">
         <ion-label class="input-label">Email</ion-label>
-        <ion-item lines="none" class="input-item">
+        <ion-item lines="none" class="input-item edu-input-item">
           <ion-icon name="mail-outline" slot="start"></ion-icon>
           <ion-input type="email" formControlName="email" placeholder="nama@email.com"></ion-input>
         </ion-item>
@@ -28,19 +28,19 @@
 
       <div class="input-group">
         <ion-label class="input-label">Password</ion-label>
-        <ion-item lines="none" class="input-item">
+        <ion-item lines="none" class="input-item edu-input-item">
           <ion-icon name="lock-closed-outline" slot="start"></ion-icon>
           <ion-input [type]="showPassword ? 'text' : 'password'" formControlName="password" placeholder="Min. 8 karakter"></ion-input>
-          <ion-icon [name]="showPassword ? 'eye-off-outline' : 'eye-outline'" slot="end" (click)="togglePassword()"></ion-icon>
+          <ion-icon [name]="showPassword ? 'eye-off-outline' : 'eye-outline'" slot="end" (click)="togglePassword()" style="cursor: pointer"></ion-icon>
         </ion-item>
       </div>
 
       <div class="input-group">
         <ion-label class="input-label">Konfirmasi Password</ion-label>
-        <ion-item lines="none" class="input-item" [class.mismatch]="registerForm.get('confirmPassword')?.hasError('mustMatch')">
+        <ion-item lines="none" class="input-item edu-input-item" [class.mismatch]="registerForm.get('confirmPassword')?.hasError('mustMatch')">
           <ion-icon name="shield-checkmark-outline" slot="start"></ion-icon>
           <ion-input [type]="showConfirmPassword ? 'text' : 'password'" formControlName="confirmPassword" placeholder="Ulangi password"></ion-input>
-          <ion-icon [name]="showConfirmPassword ? 'eye-off-outline' : 'eye-outline'" slot="end" (click)="toggleConfirmPassword()"></ion-icon>
+          <ion-icon [name]="showConfirmPassword ? 'eye-off-outline' : 'eye-outline'" slot="end" (click)="toggleConfirmPassword()" style="cursor: pointer"></ion-icon>
         </ion-item>
         <small class="error-text" *ngIf="registerForm.get('confirmPassword')?.hasError('mustMatch') && registerForm.get('confirmPassword')?.touched">
           Password tidak cocok!
