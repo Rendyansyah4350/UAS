@@ -1,15 +1,32 @@
 @extends('layouts.admin')
 
 @section('content')
-    <div class="container mx-auto py-10">
-        <div class="mb-6">
-            <a href="{{ route('admin.certificates.index') }}" class="text-indigo-600 font-bold text-sm hover:underline">
-                <i class="fas fa-arrow-left mr-2"></i> Kembali ke Monitoring
-            </a>
+    <div class="container mx-auto py-8 px-6">
+
+        <!-- Navigation & Header Section -->
+        <div class="flex flex-col md:flex-row md:items-center justify-between mb-10 pb-6 border-b border-gray-100">
+            <div class="flex items-center space-x-5">
+                {{-- Tombol Kembali yang Lebih Modern --}}
+                <a href="{{ route('admin.certificates.index') }}"
+                    class="group flex items-center justify-center w-12 h-12 bg-white border border-gray-200 rounded-2xl text-gray-400 hover:text-indigo-600 hover:border-indigo-600 hover:shadow-xl transition-all duration-300">
+                    <i class="fas fa-chevron-left group-hover:-translate-x-1 transition-transform"></i>
+                </a>
+
+                <div>
+                    <nav class="flex mb-1" aria-label="Breadcrumb">
+                        <ol class="flex items-center space-x-2 text-xs text-gray-400 uppercase tracking-wider font-bold">
+                            <li>Monitoring</li>
+                            <li><i class="fas fa-chevron-right text-[8px]"></i></li>
+                            <li class="text-indigo-500">Preview Certificate</li>
+                        </ol>
+                    </nav>
+                    <h1 class="text-2xl font-black text-gray-900 tracking-tight">Detail Kelulusan</h1>
+                </div>
+            </div>
         </div>
 
         <!-- Sisi Sertifikat (Simulasi Kertas A4 Landscape) -->
-        <div class="bg-white mx-auto shadow-2xl border-[15px] border-indigo-600 p-12 max-w-4xl relative overflow-hidden"
+        <div class="bg-white mx-auto shadow-2xl border-[15px] border-indigo-600 p-12 max-w-4xl relative overflow-hidden transition-all duration-500 hover:shadow-indigo-100"
             style="min-height: 500px; background-image: url('https://www.transparenttextures.com/patterns/cubes.png');">
 
             <!-- Watermark Background -->
@@ -28,7 +45,8 @@
                 </h2>
 
                 <p class="text-gray-600 max-w-md mx-auto leading-relaxed">
-                    Telah berhasil menyelesaikan kursus secara menyeluruh pada platform EduVan dalam program:
+                    Telah berhasil menyelesaikan kursus secara menyeluruh pada platform <span
+                        class="font-bold text-indigo-600">EduVan</span> dalam program:
                 </p>
                 <h3 class="text-2xl font-black text-gray-800 mt-4 uppercase">{{ $certificate->course->title }}</h3>
 
@@ -53,14 +71,6 @@
                     </div>
                 </div>
             </div>
-        </div>
-
-        <!-- Tombol Aksi Tambahan -->
-        <div class="mt-8 text-center">
-            <button onclick="window.print()"
-                class="bg-gray-800 text-white px-8 py-3 rounded-2xl font-bold hover:bg-black transition">
-                <i class="fas fa-print mr-2"></i> Print / Save as PDF
-            </button>
         </div>
     </div>
 @endsection

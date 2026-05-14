@@ -8,6 +8,7 @@ use App\Models\Course;
 use App\Models\Certificate; // Perbaikan typo spasi di kode lo tadi
 use Illuminate\Support\Str;
 use App\Models\Progress;
+use Barryvdh\DomPDF\Facade\Pdf;
 use App\Models\Content;
 
 
@@ -98,5 +99,18 @@ class CertificateController extends Controller
     {
         $certificate = Certificate::with(['user', 'course'])->findOrFail($id);
         return view('admin.certificates.preview', compact('certificate'));
+    }
+
+    public function download($id)
+    {
+        $certificate = Certificate::with(['user', 'course'])->findOrFail($id);
+
+        // Load view khusus untuk PDF
+        $pdf = Pdf::loadView('admin.certificates.pdf', compact('certificate'))
+            ->setPaper('a4', 'landscape') // Set kertas A4 Landscape
+            ->setWarnings(false); // Mematikan warning agar proses lebih bersih
+
+        // Nama file saat didownload
+        return $pdf->download('Sertifikat-' . $certificate->user->name . '.pdf');
     }
 }
