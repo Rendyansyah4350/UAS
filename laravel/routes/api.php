@@ -18,8 +18,7 @@ Route::post('/register', [AuthController::class, 'register']);
 Route::post('/verify-otp', [AuthController::class, 'verifyOtp']);
 
 // --- API Privat (Wajib bawa Token / auth:sanctum) ---
-Route::middleware('auth:sanctum')->group(function ()
-{
+Route::middleware('auth:sanctum')->group(function () {
     Route::get('/user', [AuthController::class, 'me']);    // Ambil data profil
     Route::post('/logout', [AuthController::class, 'logout']); // Hapus token
     Route::post('/enrollments', [EnrollmentController::class, 'store']);
@@ -41,4 +40,5 @@ Route::middleware('auth:sanctum')->group(function ()
     Route::post('/progress/mark-completed', [ProgressController::class, 'markAsCompleted']);
     Route::post('/progress/submit-quiz', [ProgressController::class, 'submitQuiz']);
     Route::get('/progress/course/{course_id}', [ProgressController::class, 'getProgress']);
+    Route::post('/courses/{id}/rate', [App\Http\Controllers\Api\CourseController::class, 'rate']);
 });

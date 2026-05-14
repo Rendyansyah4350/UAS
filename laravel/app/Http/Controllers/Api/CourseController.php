@@ -38,6 +38,21 @@ class CourseController extends Controller
             'data'    => $course
         ]);
     }
+    public function rate(Request $request, $id)
+    {
+        $request->validate([
+            'rating' => 'required|numeric|min:1|max:5'
+        ]);
+
+        $course = Course::findOrFail($id);
+
+        // Logic sederhana: Update rating langsung (atau bisa pakai rata-rata)
+        $course->update([
+            'rating' => $request->rating
+        ]);
+
+        return response()->json(['message' => 'Terima kasih atas ratingnya!']);
+    }
     public function dashboard()
     {
         return response()->json([

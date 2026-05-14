@@ -10,9 +10,11 @@ class Course extends Model
 {
     protected $fillable = [
         'title',
+        'category',
         'description',
         'price',
-        'image'
+        'image',
+        'rating',
     ];
     public function contents(): HasMany
     {
