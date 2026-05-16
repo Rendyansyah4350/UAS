@@ -53,7 +53,7 @@
                         </td>
                         <td class="p-4 border-b">
                             <span class="px-2 py-1 bg-indigo-100 text-indigo-700 rounded-md text-xs font-bold uppercase">
-                                {{ $course->category ?? 'General' }}
+                                {{ $course->category }}
                             </span>
                         </td>
                         <td class="p-4 border-b text-green-600 font-bold">Rp {{ number_format($course->price) }}</td>

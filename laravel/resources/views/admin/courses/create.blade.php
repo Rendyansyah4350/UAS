@@ -21,10 +21,8 @@
                     <select name="category" required
                         class="mt-1 block w-full border-gray-300 rounded-md shadow-sm p-2 bg-gray-50 focus:ring-blue-500 focus:border-blue-500">
                         <option value="">-- Pilih Kategori --</option>
-                        <option value="Web Development">Web Development</option>
-                        <option value="Mobile Development">Mobile Development</option>
-                        <option value="UI/UX Design">UI/UX Design</option>
-                        <option value="Data Science">Data Science</option>
+                        <option value="Computer Science">Computer Science</option>
+                        <option value="Microsoft Office">Microsoft Office</option>
                     </select>
                 </div>
 
@@ -61,4 +59,3 @@
         </form>
     </div>
 @endsection
-    
