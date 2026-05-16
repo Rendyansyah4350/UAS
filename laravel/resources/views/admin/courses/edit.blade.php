@@ -49,15 +49,10 @@
                     <label class="block text-sm font-medium text-gray-700">Kategori</label>
                     <select name="category" required
                         class="mt-1 block w-full border-gray-300 rounded-md shadow-sm p-2 bg-gray-50">
-                        <option value="General" {{ $course->category == 'General' ? 'selected' : '' }}>General</option>
-                        <option value="Web Development" {{ $course->category == 'Web Development' ? 'selected' : '' }}>Web
-                            Development</option>
-                        <option value="Mobile Development"
-                            {{ $course->category == 'Mobile Development' ? 'selected' : '' }}>Mobile Development</option>
-                        <option value="UI/UX Design" {{ $course->category == 'UI/UX Design' ? 'selected' : '' }}>UI/UX
-                            Design</option>
-                        <option value="Data Science" {{ $course->category == 'Data Science' ? 'selected' : '' }}>Data
-                            Science</option>
+                        <option value="Computer Science" {{ $course->category == 'Computer Science' ? 'selected' : '' }}>
+                            Computer Science</option>
+                        <option value="UI/UX Design" {{ $course->category == 'Microsoft Office' ? 'selected' : '' }}>Microsoft
+                            Office</option>
                     </select>
                 </div>
             </div>
