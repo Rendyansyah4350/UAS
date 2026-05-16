@@ -9,14 +9,12 @@ use App\Http\Controllers\Admin\QuizProgressController;
 use App\Http\Controllers\Admin\CertificateController;
 
 
-Route::get('/', function ()
-{
+Route::get('/', function () {
     return view('welcome');
 });
 
 // Grouping route admin agar lebih rapi
-Route::prefix('admin')->group(function ()
-{
+Route::prefix('admin')->group(function () {
     Route::get('/dashboard', [DashboardController::class, 'index'])->name('admin.dashboard');
     Route::get('/courses', [CourseController::class, 'index'])->name('admin.courses.index');
     Route::get('/courses/create', [CourseController::class, 'create'])->name('admin.courses.create');
@@ -42,5 +40,6 @@ Route::prefix('admin')->group(function ()
     Route::get('/admin/certificates', [CertificateController::class, 'index'])->name('admin.certificates.index');
     Route::post('/admin/certificates/issue/{userId}/{courseId}', [CertificateController::class, 'issue'])->name('admin.certificates.issue');
     Route::get('/admin/certificates/preview/{id}', [CertificateController::class, 'preview'])->name('admin.certificates.preview');
+    Route::get('/admin/pembelian/pdf', [TransactionController::class, 'exportPdf'])->name('admin.pembelian.pdf');
     Route::get('/admin/certificates/download/{id}', [CertificateController::class, 'download'])->name('admin.certificates.download');
 });

@@ -4,11 +4,10 @@
     <div class="container-fluid p-4">
         <div class="d-sm-flex align-items-center justify-content-between mb-4">
             <h1 class="h3 mb-0 text-gray-800">Laporan Pembelian</h1>
-            <button class="btn btn-sm btn-primary shadow-sm" onclick="window.print()">
-                <i class="fas fa-download fa-sm text-white-50"></i> Cetak Laporan
-            </button>
         </div>
-
+        <a href="{{ route('admin.pembelian.pdf') }}" class="bg-red-600 text-white px-4 py-2 rounded-lg hover:bg-red-700">
+            <i class="fas fa-file-pdf mr-2"></i> Cetak PDF
+        </a>
         <div class="card shadow mb-4 border-left-primary">
             <div class="card-header py-3 bg-white">
                 <h6 class="m-0 font-weight-bold text-primary">Ringkasan Pendapatan Per Materi</h6>
