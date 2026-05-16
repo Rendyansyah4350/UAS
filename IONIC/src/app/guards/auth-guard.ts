@@ -1,25 +1,22 @@
+// src/app/guards/auth-guard.ts
 import { Injectable } from '@angular/core';
 import { CanActivate, Router } from '@angular/router';
-import { AuthService } from '../services/auth';
 
 @Injectable({
   providedIn: 'root'
 })
 export class AuthGuard implements CanActivate {
+  constructor(private router: Router) {}
 
-  constructor(private auth: AuthService, private router: Router) {}
-
-// src/app/guards/auth-guard.ts
-canActivate(): boolean {
-  // Cek langsung ke sumber kebenaran (localStorage)
-  const token = localStorage.getItem('token');
-  
-  if (token && token !== '') {
-    return true; 
-  } else {
-    // Jika tidak ada token, paksa kembali ke login
-    this.router.navigateByUrl('/login');
-    return false;
+  canActivate(): boolean {
+    // Cek apakah ada data user di storage
+    const user = localStorage.getItem('user_data'); 
+    
+    if (user) {
+      return true; // Izinkan masuk
+    } else {
+      this.router.navigate(['/login']); // Tendang ke login
+      return false;
+    }
   }
-}
 }

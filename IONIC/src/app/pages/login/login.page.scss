@@ -1,166 +1,199 @@
 .login-container {
-  // Background dengan gradasi sangat halus
-  --background: radial-gradient(circle at top right, #ffffff, #f0f7ff);
-  
-  &::before {
-    content: '';
+  --background: #f8fafc;
+  position: relative;
+  overflow: hidden;
+
+  /* Elemen Dekoratif Futuristik di Background */
+  .blob-bg, .blob-bg-secondary {
     position: absolute;
-    width: 100%;
-    height: 100%;
-    background-image: url('https://www.transparenttextures.com/patterns/cubes.png'); // Tekstur halus
-    opacity: 0.03;
-    pointer-events: none;
+    width: 350px;
+    height: 350px;
+    background: radial-gradient(circle, rgba(9, 60, 93, 0.12) 0%, rgba(21, 101, 192, 0.05) 100%);
+    filter: blur(60px);
+    border-radius: 50%;
+    z-index: -1;
   }
+  .blob-bg { top: -100px; right: -50px; }
+  .blob-bg-secondary { bottom: -50px; left: -80px; }
 
   .top-decoration {
-    background: linear-gradient(135deg, #2563eb 0%, #1d4ed8 100%);
-    height: 38vh;
+    height: 45vh;
+    background: linear-gradient(160deg, #093C5D 0%, #1565C0 100%);
     display: flex;
     flex-direction: column;
     align-items: center;
     justify-content: center;
-    border-bottom-left-radius: 50px;
-    border-bottom-right-radius: 50px;
-    box-shadow: 0 10px 30px rgba(37, 99, 235, 0.2);
+    /* MODEL ASYMMETRIC: Melengkung hanya di satu sisi untuk kesan futuristik */
+    border-bottom-left-radius: 120px; 
+    position: relative;
+    box-shadow: 0 15px 40px rgba(9, 60, 93, 0.3);
 
-    .logo-circle {
-      width: 75px;
-      height: 75px;
-      background: rgba(255, 255, 255, 0.15);
-      border-radius: 22px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      margin-bottom: 15px;
-      backdrop-filter: blur(12px);
-      border: 1px solid rgba(255, 255, 255, 0.3);
-      
-      ion-icon { font-size: 38px; color: white; filter: drop-shadow(0 4px 6px rgba(0,0,0,0.1)); }
+    .logo-wrapper {
+      position: relative;
+      margin-bottom: 25px;
+
+      .logo-circle {
+        width: 90px;
+        height: 90px;
+        background: rgba(255, 255, 255, 0.15);
+        backdrop-filter: blur(15px);
+        border-radius: 30px; // Squircle premium
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        border: 1px solid rgba(255, 255, 255, 0.3);
+        z-index: 2;
+        position: relative;
+        box-shadow: 0 20px 40px rgba(0, 0, 0, 0.15);
+        
+        ion-icon { font-size: 45px; color: white; }
+      }
+
+      /* Efek Ring Animasi di sekeliling Logo */
+      .logo-ring {
+        position: absolute;
+        top: -12px; left: -12px; right: -12px; bottom: -12px;
+        border: 2px dashed rgba(255, 255, 255, 0.3);
+        border-radius: 38%;
+        animation: rotateRing 15s linear infinite;
+      }
     }
 
-    h1 { color: white; font-weight: 800; font-size: 2.5rem; margin: 0; letter-spacing: -1px; }
-    p { color: rgba(255, 255, 255, 0.9); font-size: 0.95rem; margin: 5px 0 0 0; font-weight: 300; }
+    h1 { 
+      color: white; 
+      font-weight: 900; 
+      font-size: 2.8rem; 
+      margin: 0; 
+      letter-spacing: -1.5px;
+      text-shadow: 0 4px 10px rgba(0,0,0,0.1);
+    }
+    
+    .premium-badge {
+      background: rgba(255, 255, 255, 0.1);
+      padding: 6px 16px;
+      border-radius: 30px;
+      margin-top: 10px;
+      border: 1px solid rgba(255, 255, 255, 0.2);
+      span { 
+        color: white; 
+        font-size: 0.65rem; 
+        font-weight: 800; 
+        letter-spacing: 2px;
+        text-transform: uppercase;
+      }
+    }
   }
 
   .login-card {
-    position: relative;
-    z-index: 10;
-    margin: -60px 24px 24px 24px;
-    background: rgba(255, 255, 255, 0.95);
-    border-radius: 30px;
-    padding: 35px 28px;
+    margin: -85px 25px 30px; // Floating effect menimpa header
+    padding: 45px 30px;
+    background: rgba(255, 255, 255, 0.95) !important;
     backdrop-filter: blur(20px);
-    box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.1);
-    border: 1px solid rgba(255, 255, 255, 0.8);
+    border-radius: 40px;
+    box-shadow: 0 30px 60px -12px rgba(9, 60, 93, 0.18) !important;
+    border: 1px solid rgba(255, 255, 255, 1);
+    animation: slideUp 0.8s cubic-bezier(0.2, 0.8, 0.2, 1);
 
-    h2 { color: #0f172a; font-weight: 800; font-size: 1.6rem; margin: 0; }
-    .subtitle { color: #64748b; font-size: 0.85rem; margin: 8px 0 30px 0; display: block; }
+    h2 { 
+      color: #093C5D;
+      font-weight: 900; 
+      font-size: 1.9rem; 
+      margin: 0; 
+      letter-spacing: -0.5px;
+      background: linear-gradient(to right, #093C5D, #1565C0);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+    
+    .subtitle { 
+      color: #64748b; 
+      font-size: 0.9rem; 
+      margin: 8px 0 32px 0; 
+      display: block; 
+      font-weight: 400;
+    }
 
     .input-group {
-      margin-bottom: 22px;
-      
+      margin-bottom: 24px;
+
       .input-label { 
-        font-weight: 700; 
-        color: #334155; 
-        font-size: 0.8rem; 
+        font-weight: 800; 
+        color: #093C5D; 
+        font-size: 0.7rem; 
+        text-transform: uppercase; 
+        letter-spacing: 1.2px; 
         margin-bottom: 10px; 
-        display: block;
-        text-transform: uppercase;
-        letter-spacing: 0.5px;
+        display: block; 
+      }
+      
+      .edu-input-item {
+        --background: #f1f5f9;
+        --border-radius: 20px;
+        border: 1.5px solid transparent;
+        transition: all 0.4s ease;
+
+        &.item-has-focus {
+          border-color: #093C5D;
+          --background: #ffffff;
+          transform: translateY(-3px);
+          box-shadow: 0 12px 25px rgba(9, 60, 93, 0.1);
+        }
+
+        ion-input { 
+          --padding-top: 15px; 
+          --padding-bottom: 15px; 
+          font-weight: 500;
+        }
       }
 
-     .input-item {
-  --background: #f1f5f9;
-  --border-radius: 12px;
-  --highlight-height: 0;
-  border: 1px solid #e2e8f0;
-  border-radius: 12px;
-
-  /* --- TAMBAHKAN INI UNTUK MEMPERJELAS PLACEHOLDER --- */
-  --placeholder-color: #64748b; /* Warna abu-abu yang lebih tegas */
-  --placeholder-opacity: 1;    /* Menghilangkan efek samar/transparan */
-  --placeholder-font-weight: 500;
-
-  ion-input {
-    --padding-top: 12px;
-    --padding-bottom: 12px;
-    font-size: 0.95rem;
-    color: #1e293b; /* Warna teks saat diketik juga harus jelas */
-  }
-  
-  ion-icon {
-    font-size: 18px;
-    color: #475569; /* Warna ikon disamakan agar kontras */
-    margin-right: 8px;
-  }
-}
-
-      .forgot-password {
-        color: #2563eb;
-        font-size: 0.9rem;
-        margin-top: 15px;
-        display: block;
-        text-align: right;
+      .forgot-link-container span {
+        color: #093C5D;
+        font-weight: 800;
+        font-size: 0.85rem;
+        cursor: pointer;
+        transition: 0.3s;
+        &:hover { opacity: 0.7; }
       }
     }
   }
 
   .btn-primary {
-    margin-top: 15px;
-    --border-radius: 16px;
-    --background: linear-gradient(to right, #2563eb, #3b82f6);
-    --box-shadow: 0 12px 24px -6px rgba(37, 99, 235, 0.4);
-    height: 60px;
+    margin-top: 35px;
+    --border-radius: 22px;
+    --background: linear-gradient(135deg, #093C5D 0%, #1565C0 100%);
+    --box-shadow: 0 15px 35px rgba(9, 60, 93, 0.3);
+    height: 65px;
     font-weight: 800;
-    font-size: 1.1rem;
-    text-transform: none;
-    letter-spacing: 0.5px;
-    transition: transform 0.2s;
+    font-size: 1.15rem;
+    letter-spacing: 1px;
+    transition: all 0.3s ease;
 
-    &:active { transform: scale(0.97); }
+    &:active { transform: scale(0.95); }
   }
 
   .footer-action {
     text-align: center;
-    margin-top: 35px;
-    font-size: 0.95rem;
+    margin-top: 30px;
     color: #64748b;
+    font-weight: 500;
     
     strong { 
-      color: #2563eb; 
-      margin-left: 6px; 
-      cursor: pointer; 
-      font-weight: 800;
-      position: relative;
-      
-      &::after {
-        content: '';
-        position: absolute;
-        width: 100%; height: 2px;
-        bottom: -2px; left: 0;
-        background: #2563eb;
-        transform: scaleX(0);
-        transition: transform 0.3s;
-      }
-      &:hover::after { transform: scaleX(1); }
-    }
-  }
-  .forgot-link-container {
-  display: flex;
-  justify-content: flex-end;
-  margin-top: 8px;
-  margin-bottom: 10px;
-
-  span {
-    color: var(--ion-color-primary, #00ffcc); /* Sesuaikan warna neon Anda */
-    font-size: 0.85rem;
-    font-weight: 500;
-    cursor: pointer;
-    transition: opacity 0.2s;
-
-    &:active {
-      opacity: 0.6;
+      color: #093C5D; 
+      font-weight: 900; 
+      cursor: pointer;
+      margin-left: 5px;
+      padding: 5px;
     }
   }
 }
+
+/* Keyframes untuk animasi modern */
+@keyframes rotateRing {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
+}
+
+@keyframes slideUp {
+  from { opacity: 0; transform: translateY(50px); }
+  to { opacity: 1; transform: translateY(0); }
 }

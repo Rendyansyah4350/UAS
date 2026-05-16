@@ -36,17 +36,19 @@
                                             <i class="fas fa-check-circle mr-1"></i> Sudah Terbit
                                         </span>
 
-                                        {{-- Tombol Lihat/Preview Sertifikat --}}
-                                        {{-- Kita ambil ID sertifikat dari data yang sudah divalidasi --}}
                                         @php
                                             $certId = \App\Models\Certificate::where('user_id', $progress->user->id)
                                                 ->where('course_id', $progress->course->id)
                                                 ->value('id');
                                         @endphp
+                                        <a href="{{ route('admin.certificates.download', $certId) }}"
+                                            class="bg-red-600 text-white font-bold text-[10px] uppercase px-4 py-1.5 rounded-lg transition shadow-md hover:bg-red-700">
+                                            <i class="fas fa-download mr-1"></i> Download PDF
+                                        </a>
 
                                         <a href="{{ route('admin.certificates.preview', $certId) }}"
                                             class="text-indigo-600 hover:text-white hover:bg-indigo-600 border border-indigo-600 font-bold text-[10px] uppercase flex items-center justify-center px-4 py-1.5 rounded-lg transition-all duration-200">
-                                            <i class="fas fa-eye mr-1"></i> Lihat Sertifikat
+                                            <i class="fas fa-eye mr-1"></i> Lihat Certificate
                                         </a>
                                     </div>
                                 @else

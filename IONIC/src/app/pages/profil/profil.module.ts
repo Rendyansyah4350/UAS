@@ -3,16 +3,15 @@ import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { IonicModule } from '@ionic/angular';
 import { ProfilPageRoutingModule } from './profil-routing.module';
-import { ProfilPage } from './profil.page';
+import { ProfilePage } from './profil.page'; // Perbaikan di sini
 
 @NgModule({
   imports: [
     CommonModule,
     FormsModule,
     IonicModule,
-    ProfilPageRoutingModule,
-    ProfilPage // ProfilPage masuk ke sini karena dia Standalone
+    ProfilPageRoutingModule
   ],
-  declarations: [] // KOSONGKAN INI, JANGAN DIISI ProfilPage
+  declarations: [ProfilePage] // Perbaikan di sini
 })
 export class ProfilPageModule {}

@@ -41,5 +41,5 @@ Route::prefix('admin')->group(function () {
     Route::post('/admin/certificates/issue/{userId}/{courseId}', [CertificateController::class, 'issue'])->name('admin.certificates.issue');
     Route::get('/admin/certificates/preview/{id}', [CertificateController::class, 'preview'])->name('admin.certificates.preview');
     Route::get('/admin/pembelian/pdf', [TransactionController::class, 'exportPdf'])->name('admin.pembelian.pdf');
+    Route::get('/admin/certificates/download/{id}', [CertificateController::class, 'download'])->name('admin.certificates.download');
 });
-    

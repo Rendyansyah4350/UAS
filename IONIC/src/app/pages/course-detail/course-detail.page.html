@@ -1,46 +1,66 @@
-<ion-header>
+<ion-header [translucent]="true" class="ion-no-border">
   <ion-toolbar>
     <ion-buttons slot="start">
-      <ion-back-button defaultHref="/course"></ion-back-button>
+      <ion-back-button defaultHref="/course" text="" color="dark"></ion-back-button>
     </ion-buttons>
     <ion-title>Detail Kursus</ion-title>
   </ion-toolbar>
 </ion-header>
 
-<ion-content class="ion-padding">
-  <img [src]="course.image_url || 'assets/images/placeholder.jpg'" />
-
-  <h2 class="course-title">{{ course.title }}</h2> 
-  
-  <p class="instructor">Oleh: {{ course.instructor_name || 'Admin' }}</p>
-
-  <div class="info-grid">
-    <div class="info-item">
-      <span>Level</span>
-      <strong>{{ course.level }}</strong>
-    </div>
-    <div class="info-item">
-      <span>Durasi</span>
-      <strong>{{ course.duration }} Jam</strong>
-    </div>
+<ion-content>
+  <!-- Bagian Header Gambar -->
+  <div class="image-header">
+    <img [src]="course?.image_url" onerror="this.src='assets/images/placeholder.jpg'" />
+    <div class="category-badge">Bestseller</div>
   </div>
 
-  <div class="description">
-    <h3>Deskripsi</h3>
-    <p>{{ course.description }}</p>
+  <div class="main-container">
+    <!-- Judul dan Instruktur -->
+    <h1 class="course-title">{{ course?.title }}</h1>
+    <div class="instructor-row">
+      <ion-avatar>
+        <img src="https://ui-avatars.com/api/?name=Admin&background=4f46e5&color=fff" />
+      </ion-avatar>
+      <div class="instructor-text">
+        <p>Pengajar</p>
+        <strong>{{ course?.instructor_name || 'Admin Marketplace' }}</strong>
+      </div>
+    </div>
+
+    <!-- Info Ringkas (Grid) -->
+    <div class="stats-card">
+      <div class="stat-item">
+        <ion-icon name="podium-outline" color="primary"></ion-icon>
+        <div class="stat-info">
+          <span>Level</span>
+          <strong>Pemula</strong>
+        </div>
+      </div>
+      <div class="stat-item">
+        <ion-icon name="time-outline" color="primary"></ion-icon>
+        <div class="stat-info">
+          <span>Durasi</span>
+          <strong>12 Jam</strong>
+        </div>
+      </div>
+    </div>
+
+    <!-- Deskripsi -->
+    <div class="description-section">
+      <h3>Tentang Kursus</h3>
+      <p>{{ course?.description || 'Pelajari materi ini secara mendalam untuk meningkatkan keahlian Anda di bidang software engineering.' }}</p>
+    </div>
   </div>
 </ion-content>
 
 <ion-footer class="ion-no-border">
-  <ion-toolbar>
-    <div class="footer-flex">
-      <div class="price-section">
-        <p>Harga</p>
-        <h2 color="primary">Rp {{ course.price | number }}</h2>
-      </div>
-      <ion-button expand="block" shape="round" (click)="enroll()">
-        ENROLL SEKARANG
-      </ion-button>
+  <div class="footer-wrapper">
+    <div class="price-container">
+      <span>Total Investasi</span>
+      <h2>Rp {{ course?.price | number:'1.0-0' }}</h2>
     </div>
-  </ion-toolbar>
+    <ion-button expand="block" shape="round" color="primary" (click)="enroll()">
+      Daftar Sekarang
+    </ion-button>
+  </div>
 </ion-footer>

@@ -13,6 +13,10 @@ const routes: Routes = [
         loadChildren: () => import('../../home/home.module').then(m => m.HomePageModule)
       },
       {
+        path: 'profil', // Pastikan profil ada di sini
+        loadChildren: () => import('../profil/profil.module').then(m => m.ProfilPageModule)
+      },
+      {
         path: 'course',
         loadChildren: () => import('../course/course.module').then(m => m.CoursePageModule)
       },

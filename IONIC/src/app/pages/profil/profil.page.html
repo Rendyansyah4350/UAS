@@ -1,61 +1,65 @@
 <ion-content>
-  <div class="profile-header">
-    <div class="avatar-container">
-      <div class="avatar-wrapper">
-        <img src="https://i.pravatar.cc/150?u=user" />
+  <div class="header-container">
+    <div class="avatar-section">
+      <div class="image-wrapper">
+        <img src="https://ui-avatars.com/api/?name=User&background=ffffff&color=1560bd" />
         <div class="camera-badge">
           <ion-icon name="camera"></ion-icon>
         </div>
       </div>
     </div>
-    
-    <div class="user-info">
-      <h1>Nama Lengkap Anda</h1>
+
+    <div class="user-details">
+      <h2>Nama Lengkap Anda</h2>
       <p>Mahasiswa Universitas</p>
     </div>
 
-    <div class="stats-container">
-      <div class="stat-box">
+    <div class="stat-grid">
+      <div class="stat-item">
         <h3>12</h3>
         <span>Kursus</span>
       </div>
-      <div class="divider"></div>
-      <div class="stat-box">
+      <div class="stat-divider"></div>
+      <div class="stat-item">
         <h3>5</h3>
         <span>Sertifikat</span>
       </div>
     </div>
   </div>
 
-  <div class="menu-container">
-    <div class="menu-card">
-      <ion-item lines="full" detail="true" class="menu-item" (click)="goToEdit()">
+  <div class="menu-section">
+    <ion-list lines="none">
+      <ion-item button (click)="goToEdit()">
         <div class="icon-box blue" slot="start">
           <ion-icon name="person-outline"></ion-icon>
         </div>
         <ion-label>Edit Profil</ion-label>
+        <ion-icon name="chevron-forward-outline" slot="end" class="arrow"></ion-icon>
       </ion-item>
 
-      <ion-item lines="full" detail="true" class="menu-item" (click)="goToSecurity()">
+      <ion-item button (click)="goToHistory()">
         <div class="icon-box green" slot="start">
-          <ion-icon name="shield-checkmark-outline"></ion-icon>
+          <ion-icon name="receipt-outline"></ion-icon>
         </div>
-        <ion-label>Keamanan Akun</ion-label>
+        <ion-label>Riwayat Transaksi</ion-label>
+        <ion-icon name="chevron-forward-outline" slot="end" class="arrow"></ion-icon>
       </ion-item>
 
-      <ion-item lines="full" detail="true" class="menu-item" (click)="goToNotif()">
+      <ion-item button (click)="goToNotif()">
         <div class="icon-box orange" slot="start">
           <ion-icon name="notifications-outline"></ion-icon>
         </div>
         <ion-label>Notifikasi</ion-label>
+        <ion-icon name="chevron-forward-outline" slot="end" class="arrow"></ion-icon>
       </ion-item>
 
-      <ion-item lines="none" detail="true" class="menu-item logout" (click)="logout()">
+      <ion-item button (click)="logout()" class="logout-item">
         <div class="icon-box red" slot="start">
           <ion-icon name="log-out-outline"></ion-icon>
         </div>
-        <ion-label>Keluar</ion-label>
+        <ion-label color="danger">Keluar</ion-label>
+        <ion-icon name="chevron-forward-outline" slot="end" class="arrow"></ion-icon>
       </ion-item>
-    </div>
+    </ion-list>
   </div>
 </ion-content>
