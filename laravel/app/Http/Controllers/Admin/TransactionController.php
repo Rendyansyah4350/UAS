@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Admin;
 use App\Http\Controllers\Controller;
 use App\Models\Course;
 use App\Models\Enrollment;
+use Barryvdh\DomPDF\Facade\Pdf;
 use Illuminate\Http\Request;
 
 class TransactionController extends Controller
@@ -31,5 +32,18 @@ class TransactionController extends Controller
         $grandTotal = $transactionDetails->sum('price_bought');
 
         return view('admin.pembelian.index', compact('courseReports', 'transactionDetails', 'grandTotal'));
+    }
+
+    public function exportPdf()
+    {
+        // Ambil semua data transaksi (sama seperti di halaman index)
+        $transactions = Enrollment::with(['user', 'course'])->latest()->get();
+        $totalRevenue = Enrollment::sum('price_bought');
+
+        // Load view khusus untuk PDF
+        $pdf = Pdf::loadView('admin.pembelian.pdf', compact('transactions', 'totalRevenue'));
+
+        // Download file PDF-nya
+        return $pdf->download('laporan-pembelian-' . date('Y-m-d') . '.pdf');
     }
 }
