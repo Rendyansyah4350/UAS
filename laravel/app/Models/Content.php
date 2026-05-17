@@ -14,7 +14,8 @@ class Content extends Model
         'course_id',
         'title',
         'content_url',
-        'type'
+        'type',
+        'order'
     ];
 
     // Relasi balik ke Course (Satu materi punya satu kursus)

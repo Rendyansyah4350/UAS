@@ -1,92 +1,160 @@
 @extends('layouts.admin')
 
 @section('content')
-<div class="container mx-auto p-6">
-    <div class="flex justify-between items-center mb-6">
+    <div class="mb-6 flex flex-col sm:flex-row justify-between items-start sm:items-center gap-2">
         <div>
+            <a href="{{ route('admin.quiz.index') }}"
+                class="text-indigo-600 font-bold text-sm hover:underline inline-flex items-center mb-2">
+                <i class="fas fa-arrow-left mr-2"></i> Kembali ke Daftar
+            </a>
             <h1 class="text-2xl font-bold text-gray-800">Kelola Quiz</h1>
-            <p class="text-gray-600">Course: {{ $course->title }}</p>
+            <p class="text-gray-600 text-sm">Course: <span class="font-semibold text-gray-900">{{ $course->title }}</span></p>
         </div>
-        <a href="{{ route('admin.quiz.index') }}" class="text-gray-500 hover:text-gray-700"> kembali ke daftar</a>
     </div>
 
-    <div class="bg-white p-6 rounded-2xl shadow-sm border border-gray-100 mb-8">
-        <h2 class="text-lg font-bold mb-4 text-indigo-600">Tambah Soal Baru</h2>
+    <div class="bg-white p-5 sm:p-6 rounded-2xl shadow-sm border border-gray-100 mb-8">
+        <div class="flex items-center gap-2 mb-4 border-b border-gray-50 pb-3">
+            <div class="p-2 bg-indigo-50 text-indigo-600 rounded-lg">
+                <i class="fas fa-plus-circle text-sm"></i>
+            </div>
+            <h2 class="text-lg font-bold text-gray-800">Tambah Soal Baru</h2>
+        </div>
+
         <form action="{{ route('admin.quiz.store', $course->id) }}" method="POST">
             @csrf
 
             <div class="mb-4">
-                <label class="block text-sm font-medium text-gray-700 mb-1">Pertanyaan</label>
-                <textarea name="question" rows="3" class="w-full border-gray-300 rounded-xl shadow-sm focus:border-indigo-500 focus:ring-indigo-500" placeholder="Masukkan soal di sini..." required></textarea>
+                <label class="block text-sm font-semibold text-gray-700 mb-1">Pertanyaan</label>
+                <textarea name="question" rows="3"
+                    class="w-full border border-gray-200 rounded-xl p-3 focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-500 outline-none transition text-sm shadow-sm"
+                    placeholder="Masukkan soal di sini..." required></textarea>
             </div>
 
             <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
                 <div>
-                    <label class="block text-sm font-medium text-gray-700">Opsi A</label>
-                    <input type="text" name="option_a" class="mt-1 w-full border-gray-300 rounded-lg shadow-sm focus:ring-indigo-500" required>
+                    <label class="block text-sm font-semibold text-gray-700 mb-1">Opsi A</label>
+                    <input type="text" name="option_a"
+                        class="w-full border border-gray-200 rounded-xl px-3 py-2.5 focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-500 outline-none transition text-sm shadow-sm"
+                        required>
                 </div>
                 <div>
-                    <label class="block text-sm font-medium text-gray-700">Opsi B</label>
-                    <input type="text" name="option_b" class="mt-1 w-full border-gray-300 rounded-lg shadow-sm focus:ring-indigo-500" required>
+                    <label class="block text-sm font-semibold text-gray-700 mb-1">Opsi B</label>
+                    <input type="text" name="option_b"
+                        class="w-full border border-gray-200 rounded-xl px-3 py-2.5 focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-500 outline-none transition text-sm shadow-sm"
+                        required>
                 </div>
                 <div>
-                    <label class="block text-sm font-medium text-gray-700">Opsi C</label>
-                    <input type="text" name="option_c" class="mt-1 w-full border-gray-300 rounded-lg shadow-sm focus:ring-indigo-500" required>
+                    <label class="block text-sm font-semibold text-gray-700 mb-1">Opsi C</label>
+                    <input type="text" name="option_c"
+                        class="w-full border border-gray-200 rounded-xl px-3 py-2.5 focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-500 outline-none transition text-sm shadow-sm"
+                        required>
                 </div>
                 <div>
-                    <label class="block text-sm font-medium text-gray-700">Opsi D</label>
-                    <input type="text" name="option_d" class="mt-1 w-full border-gray-300 rounded-lg shadow-sm focus:ring-indigo-500" required>
+                    <label class="block text-sm font-semibold text-gray-700 mb-1">Opsi D</label>
+                    <input type="text" name="option_d"
+                        class="w-full border border-gray-200 rounded-xl px-3 py-2.5 focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-500 outline-none transition text-sm shadow-sm"
+                        required>
                 </div>
             </div>
 
             <div class="mb-6">
-                <label class="block text-sm font-medium text-gray-700">Jawaban yang Benar</label>
-                <select name="answer" class="mt-1 block w-full pl-3 pr-10 py-2 text-base border-gray-300 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm rounded-lg" required>
-                    <option value="a">Opsi A</option>
-                    <option value="b">Opsi B</option>
-                    <option value="c">Opsi C</option>
-                    <option value="d">Opsi D</option>
-                </select>
+                <label class="block text-sm font-semibold text-gray-700 mb-1">Jawaban yang Benar</label>
+                <div class="relative">
+                    <select name="answer"
+                        class="w-full border border-gray-200 rounded-xl px-3 py-2.5 bg-white focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-500 outline-none transition text-sm shadow-sm appearance-none cursor-pointer"
+                        required>
+                        <option value="a">Opsi A</option>
+                        <option value="b">Opsi B</option>
+                        <option value="c">Opsi C</option>
+                        <option value="d">Opsi D</option>
+                    </select>
+                    <div class="absolute inset-y-0 right-0 flex items-center pr-3 pointer-events-none text-gray-400">
+                        <i class="fas fa-chevron-down text-xs"></i>
+                    </div>
+                </div>
             </div>
 
-            <button type="submit" class="w-full bg-indigo-600 text-white font-bold py-3 px-4 rounded-xl hover:bg-indigo-700 transition duration-200">
-                Simpan Soal
+            <button type="submit"
+                class="w-full bg-indigo-600 text-white font-bold py-3 px-4 rounded-xl hover:bg-indigo-700 active:bg-indigo-800 transition shadow-md shadow-indigo-100 flex items-center justify-center gap-2">
+                <i class="fas fa-save"></i> Simpan Soal
             </button>
         </form>
     </div>
 
-    <h2 class="text-xl font-bold mb-4 text-gray-800">Daftar Soal Saat Ini ({{ $quizzes->count() }})</h2>
+    <div class="flex items-center justify-between mb-4">
+        <h2 class="text-xl font-bold text-gray-800">Daftar Soal Saat Ini ({{ $quizzes->count() }})</h2>
+    </div>
 
-    @if($quizzes->isEmpty())
-        <div class="bg-gray-50 border-2 border-dashed border-gray-200 p-8 text-center rounded-2xl">
-            <p class="text-gray-500">Belum ada soal untuk course ini. Silakan tambah soal di atas.</p>
+    @if ($quizzes->isEmpty())
+        <div class="bg-white border border-gray-200 border-dashed p-8 text-center rounded-2xl shadow-sm">
+            <div class="text-gray-300 mb-2">
+                <i class="fas fa-clipboard-list text-4xl"></i>
+            </div>
+            <p class="text-gray-500 text-sm italic">Belum ada soal untuk course ini. Silakan tambah soal di atas.</p>
         </div>
     @else
         <div class="space-y-4">
-            @foreach($quizzes as $index => $quiz)
-            <div class="bg-white p-5 rounded-2xl border border-gray-100 shadow-sm flex justify-between items-start">
-                <div>
-                    <span class="text-xs font-bold uppercase text-indigo-500 tracking-wider">Soal #{{ $index + 1 }}</span>
-                    <p class="text-gray-800 font-semibold mt-1 mb-3">{{ $quiz->question }}</p>
-                    <div class="grid grid-cols-2 gap-x-8 gap-y-1 text-sm text-gray-600">
-                        <p @if($quiz->answer == 'a') class="text-green-600 font-bold" @endif>A: {{ $quiz->option_a }}</p>
-                        <p @if($quiz->answer == 'b') class="text-green-600 font-bold" @endif>B: {{ $quiz->option_b }}</p>
-                        <p @if($quiz->answer == 'c') class="text-green-600 font-bold" @endif>C: {{ $quiz->option_c }}</p>
-                        <p @if($quiz->answer == 'd') class="text-green-600 font-bold" @endif>D: {{ $quiz->option_d }}</p>
+            @foreach ($quizzes as $index => $quiz)
+                <div
+                    class="bg-white p-5 rounded-2xl border border-gray-100 shadow-sm flex flex-col sm:flex-row justify-between items-start gap-4">
+                    <div class="w-full">
+                        <div class="flex items-center gap-2">
+                            <span
+                                class="inline-block px-2.5 py-0.5 bg-indigo-50 text-indigo-700 rounded-md font-bold text-[10px] uppercase tracking-wider">
+                                Soal #{{ $index + 1 }}
+                            </span>
+                            <span
+                                class="inline-block px-2.5 py-0.5 bg-emerald-50 text-emerald-700 rounded-md font-bold text-[10px] uppercase tracking-wider">
+                                Kunci: {{ strtoupper($quiz->answer) }}
+                            </span>
+                        </div>
+
+                        <p class="text-gray-900 font-bold text-base mt-2 mb-3 leading-relaxed break-words">
+                            {{ $quiz->question }}</p>
+
+                        <div class="grid grid-cols-1 sm:grid-cols-2 gap-x-8 gap-y-2 text-sm">
+                            <div
+                                class="flex items-center gap-2 p-2 rounded-lg transition-colors @if ($quiz->answer == 'a') bg-emerald-50/60 text-emerald-700 font-bold border border-emerald-100/50 @else text-gray-600 @endif">
+                                <span
+                                    class="w-5 h-5 rounded-md flex items-center justify-center text-xs @if ($quiz->answer == 'a') bg-emerald-500 text-white @else bg-gray-100 text-gray-400 @endif">A</span>
+                                <span class="break-words">{{ $quiz->option_a }}</span>
+                            </div>
+                            <div
+                                class="flex items-center gap-2 p-2 rounded-lg transition-colors @if ($quiz->answer == 'b') bg-emerald-50/60 text-emerald-700 font-bold border border-emerald-100/50 @else text-gray-600 @endif">
+                                <span
+                                    class="w-5 h-5 rounded-md flex items-center justify-center text-xs @if ($quiz->answer == 'b') bg-emerald-500 text-white @else bg-gray-100 text-gray-400 @endif">B</span>
+                                <span class="break-words">{{ $quiz->option_b }}</span>
+                            </div>
+                            <div
+                                class="flex items-center gap-2 p-2 rounded-lg transition-colors @if ($quiz->answer == 'c') bg-emerald-50/60 text-emerald-700 font-bold border border-emerald-100/50 @else text-gray-600 @endif">
+                                <span
+                                    class="w-5 h-5 rounded-md flex items-center justify-center text-xs @if ($quiz->answer == 'c') bg-emerald-500 text-white @else bg-gray-100 text-gray-400 @endif">C</span>
+                                <span class="break-words">{{ $quiz->option_c }}</span>
+                            </div>
+                            <div
+                                class="flex items-center gap-2 p-2 rounded-lg transition-colors @if ($quiz->answer == 'd') bg-emerald-50/60 text-emerald-700 font-bold border border-emerald-100/50 @else text-gray-600 @endif">
+                                <span
+                                    class="w-5 h-5 rounded-md flex items-center justify-center text-xs @if ($quiz->answer == 'd') bg-emerald-500 text-white @else bg-gray-100 text-gray-400 @endif">D</span>
+                                <span class="break-words">{{ $quiz->option_d }}</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div
+                        class="w-full sm:w-auto flex sm:justify-end justify-start pt-2 sm:pt-0 border-t sm:border-t-0 border-gray-50">
+                        <form action="{{ route('admin.quiz.destroy', $quiz->id) }}" method="POST"
+                            onsubmit="return confirm('Yakin mau hapus soal ini?')" class="w-full sm:w-auto">
+                            @csrf
+                            @method('DELETE')
+                            <button type="submit"
+                                class="w-full sm:w-auto inline-flex items-center justify-center gap-1 bg-red-50 hover:bg-red-100 text-red-600 px-3.5 py-2 sm:p-2.5 rounded-xl transition-all border border-red-100/30 text-sm font-semibold">
+                                <i class="fas fa-trash-alt sm:text-sm text-xs"></i>
+                                <span class="sm:hidden">Hapus Soal</span>
+                            </button>
+                        </form>
                     </div>
                 </div>
-                <form action="{{ route('admin.quiz.destroy', $quiz->id) }}" method="POST" onsubmit="return confirm('Yakin mau hapus soal ini?')">
-                    @csrf
-                    @method('DELETE')
-                    <button type="submit" class="bg-red-50 text-red-600 p-2 rounded-lg hover:bg-red-100 transition">
-                        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
-                        </svg>
-                    </button>
-                </form>
-            </div>
             @endforeach
         </div>
     @endif
-</div>
 @endsection
