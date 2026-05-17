@@ -6,7 +6,7 @@
         <p class="text-gray-600">Lengkapi formulir di bawah untuk membuat kursus baru di marketplace.</p>
     </div>
 
-    <div class="bg-white rounded-lg shadow-md p-6">
+    <div class="hidden md:block bg-white rounded-lg shadow-md p-6">
         <form action="{{ route('admin.courses.store') }}" method="POST" enctype="multipart/form-data">
             @csrf
             <div class="grid grid-cols-1 gap-6">
@@ -54,6 +54,58 @@
                     <button type="submit" class="bg-blue-600 text-white px-6 py-2 rounded-lg hover:bg-blue-700">
                         <i class="fas fa-save mr-2"></i> Simpan Kursus
                     </button>
+                </div>
+            </div>
+        </form>
+    </div>
+
+    <div class="block md:hidden bg-white rounded-lg shadow-md p-4">
+        <form action="{{ route('admin.courses.store') }}" method="POST" enctype="multipart/form-data">
+            @csrf
+            <div class="space-y-4">
+                <div>
+                    <label class="block text-sm font-medium text-gray-700">Judul Kursus</label>
+                    <input type="text" name="title" required
+                        class="mt-1 block w-full border-gray-300 rounded-md shadow-sm p-2 bg-gray-50 focus:ring-blue-500 focus:border-blue-500">
+                </div>
+
+                <div>
+                    <label class="block text-sm font-medium text-gray-700">Kategori</label>
+                    <select name="category" required
+                        class="mt-1 block w-full border-gray-300 rounded-md shadow-sm p-2 bg-gray-50 focus:ring-blue-500 focus:border-blue-500">
+                        <option value="">-- Pilih Kategori --</option>
+                        <option value="Computer Science">Computer Science</option>
+                        <option value="Microsoft Office">Microsoft Office</option>
+                    </select>
+                </div>
+
+                <div>
+                    <label class="block text-sm font-medium text-gray-700">Deskripsi</label>
+                    <textarea name="description" rows="4" required
+                        class="mt-1 block w-full border-gray-300 rounded-md shadow-sm p-2 bg-gray-50"
+                        placeholder="Jelaskan apa yang akan dipelajari student..."></textarea>
+                </div>
+
+                <div>
+                    <label class="block text-sm font-medium text-gray-700">Harga (Rp)</label>
+                    <input type="number" name="price" required
+                        class="mt-1 block w-full border-gray-300 rounded-md shadow-sm p-2 bg-gray-50"
+                        placeholder="Contoh: 150000">
+                </div>
+
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-1">Cover Kursus (Opsional)</label>
+                    <input type="file" name="image"
+                        class="block w-full text-sm text-gray-500 file:w-full file:py-2 file:px-4 file:rounded-lg file:border-0 file:text-sm file:font-semibold file:bg-blue-50 file:text-blue-700 hover:file:bg-blue-100">
+                </div>
+
+                <div class="flex flex-col gap-2 pt-4 border-t border-gray-100">
+                    <button type="submit"
+                        class="w-full bg-blue-600 text-white py-2.5 rounded-lg hover:bg-blue-700 text-center font-medium">
+                        <i class="fas fa-save mr-2"></i> Simpan Kursus
+                    </button>
+                    <a href="{{ route('admin.courses.index') }}"
+                        class="w-full bg-gray-200 text-gray-700 py-2.5 rounded-lg hover:bg-gray-300 text-center font-medium">Batal</a>
                 </div>
             </div>
         </form>

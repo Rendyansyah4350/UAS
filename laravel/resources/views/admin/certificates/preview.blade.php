@@ -1,76 +1,89 @@
 @extends('layouts.admin')
 
 @section('content')
-    <div class="container mx-auto py-8 px-6">
+    <div class="container mx-auto py-6 px-2 sm:px-6">
 
-        <!-- Navigation & Header Section -->
-        <div class="flex flex-col md:flex-row md:items-center justify-between mb-10 pb-6 border-b border-gray-100">
-            <div class="flex items-center space-x-5">
-                {{-- Tombol Kembali yang Lebih Modern --}}
+        <div class="flex flex-col sm:flex-row sm:items-center justify-between mb-6 pb-4 border-b border-gray-100 gap-4">
+            <div class="flex items-center space-x-4">
+                {{-- Tombol Kembali Modern --}}
                 <a href="{{ route('admin.certificates.index') }}"
-                    class="group flex items-center justify-center w-12 h-12 bg-white border border-gray-200 rounded-2xl text-gray-400 hover:text-indigo-600 hover:border-indigo-600 hover:shadow-xl transition-all duration-300">
-                    <i class="fas fa-chevron-left group-hover:-translate-x-1 transition-transform"></i>
+                    class="group flex items-center justify-center w-10 h-10 bg-white border border-gray-200 rounded-xl text-gray-400 hover:text-indigo-600 hover:border-indigo-600 hover:shadow-md transition-all duration-300">
+                    <i class="fas fa-chevron-left group-hover:-translate-x-1 transition-transform text-sm"></i>
                 </a>
 
                 <div>
-                    <nav class="flex mb-1" aria-label="Breadcrumb">
-                        <ol class="flex items-center space-x-2 text-xs text-gray-400 uppercase tracking-wider font-bold">
+                    <nav class="flex mb-0.5" aria-label="Breadcrumb">
+                        <ol class="flex items-center space-x-2 text-[10px] text-gray-400 uppercase tracking-wider font-bold">
                             <li>Monitoring</li>
-                            <li><i class="fas fa-chevron-right text-[8px]"></i></li>
-                            <li class="text-indigo-500">Preview Certificate</li>
+                            <li><i class="fas fa-chevron-right text-[6px]"></i></li>
+                            <li class="text-indigo-500">Preview</li>
                         </ol>
                     </nav>
-                    <h1 class="text-2xl font-black text-gray-900 tracking-tight">Detail Kelulusan</h1>
+                    <h1 class="text-xl sm:text-2xl font-black text-gray-900 tracking-tight">Detail Kelulusan</h1>
                 </div>
             </div>
         </div>
 
-        <!-- Sisi Sertifikat (Simulasi Kertas A4 Landscape) -->
-        <div class="bg-white mx-auto shadow-2xl border-[15px] border-indigo-600 p-12 max-w-4xl relative overflow-hidden transition-all duration-500 hover:shadow-indigo-100"
-            style="min-height: 500px; background-image: url('https://www.transparenttextures.com/patterns/cubes.png');">
+        {{-- KONTEN UTAMA PREVIEW SERTIFIKAT (SINKRONISASI 1:1 DENGAN PDF TERBAIK) --}}
+        <div class="w-full max-w-5xl mx-auto overflow-x-auto pb-4">
+            {{-- Mengunci dimensi rasio A4 landscape (1056px x 746px) --}}
+            <div class="bg-white shadow-2xl relative overflow-hidden select-none rounded-2xl border border-gray-200 mx-auto"
+                style="width: 1056px; height: 746px; background-image: url('{{ asset('assets/images/certificate/certificate-eduvan.png') }}'); background-size: 100% 100%; background-repeat: no-repeat; background-position: center; font-family: 'Helvetica', Arial, sans-serif;">
 
-            <!-- Watermark Background -->
-            <div class="absolute inset-0 opacity-5 flex items-center justify-center pointer-events-none">
-                <h1 class="text-[120px] font-black rotate-12">EDUVAN</h1>
-            </div>
+                {{-- 1. Teks "Dengan ini menyatakan bahwa" --}}
+                <div class="absolute left-0 right-0 text-center" style="top: 300px;">
+                    <p class="text-[#2c3e50] text-[15px] m-0 p-0 font-medium">Dengan ini menyatakan bahwa</p>
+                </div>
 
-            <div class="relative z-10 text-center">
-                <h1 class="text-5xl font-black text-gray-800 tracking-tighter mb-2">CERTIFICATE</h1>
-                <p class="text-indigo-600 font-bold tracking-[0.2em] uppercase text-sm mb-12">Of Achievement</p>
+                {{-- 2. Nama Peserta (Dinaikkan agar pas berada di atas garis tipis tengah bawaan template) --}}
+                <div class="absolute left-0 right-0 text-center" style="top: 325px;">
+                    <h1 class="text-[#1a252f] text-[46px] font-bold m-0 p-0 tracking-tight leading-tight">
+                        {{ $certificate->user->name }}
+                    </h1>
+                </div>
 
-                <p class="text-gray-500 italic text-lg">Sertifikat ini diberikan kepada:</p>
-                <h2
-                    class="text-4xl font-serif font-bold text-gray-900 my-6 underline decoration-indigo-500 decoration-2 underline-offset-8">
-                    {{ $certificate->user->name }}
-                </h2>
+                {{-- 3. Teks "telah berhasil menyelesaikan persyaratan kursus untuk" (Dinaikkan tepat di bawah garis tipis tengah) --}}
+                <div class="absolute left-0 right-0 text-center" style="top: 440px;">
+                    <p class="text-[#7f8c8d] text-[14px] m-0 p-0">telah berhasil menyelesaikan persyaratan kursus untuk</p>
+                </div>
 
-                <p class="text-gray-600 max-w-md mx-auto leading-relaxed">
-                    Telah berhasil menyelesaikan kursus secara menyeluruh pada platform <span
-                        class="font-bold text-indigo-600">EduVan</span> dalam program:
-                </p>
-                <h3 class="text-2xl font-black text-gray-800 mt-4 uppercase">{{ $certificate->course->title }}</h3>
+                {{-- 4. Judul Kursus (Dinaikkan tepat di atas garis panjang abu-abu horizontal) --}}
+                <div class="absolute left-0 right-0 text-center" style="top: 490px;">
+                    <h2 class="text-[28px] font-bold text-[#1d4ed8] uppercase m-0 p-0 tracking-wide">
+                        {{ $certificate->course->title }}
+                    </h2>
+                </div>
 
-                <!-- Footer Sertifikat -->
-                <div class="mt-16 flex justify-between items-end px-10">
-                    <div class="text-left">
-                        <p class="text-[10px] text-gray-400 font-bold uppercase">Nomor Sertifikat</p>
-                        <p class="font-mono text-sm text-indigo-700">{{ $certificate->certificate_number }}</p>
-                    </div>
-
-                    <div class="text-center">
-                        <div class="mb-2 text-indigo-600">
-                            <i class="fas fa-certificate fa-3x"></i>
+                {{-- 5. Logo EduVan & Nomor Sertifikat (Dinaikkan agar nangkring pas di bawah garis panjang abu-abu) --}}
+                <div class="absolute left-0 right-0 flex justify-center" style="top: 600px;">
+                    <div class="flex items-center text-left h-[40px]">
+                        <img src="{{ asset('assets/images/eduvan.png') }}" alt="Logo EduVan"
+                            class="w-[36px] h-[36px] object-contain mr-2.5">
+                        <div class="flex flex-col justify-center">
+                            <span
+                                class="text-[9px] text-[#7f8c8d] uppercase tracking-wider font-bold leading-none mb-0.5">Nomor
+                                Sertifikat</span>
+                            <span class="text-[13px] font-semibold text-[#1c3d5a] font-mono leading-none tracking-wide">
+                                {{ $certificate->certificate_number }}
+                            </span>
                         </div>
-                        <p class="text-[10px] text-gray-400 font-bold uppercase leading-none">Verified By</p>
-                        <p class="font-black text-lg text-gray-800">EduVan Team</p>
-                    </div>
-
-                    <div class="text-right">
-                        <p class="text-[10px] text-gray-400 font-bold uppercase">Tanggal Terbit</p>
-                        <p class="font-bold text-sm text-gray-800">{{ $certificate->issued_at->format('d M Y') }}</p>
                     </div>
                 </div>
+
+                {{-- 6. Tanggal Terbit (Dinaikkan agar pas berada di atas garis pendek paling bawah) --}}
+                <div class="absolute left-0 right-0 text-center" style="top: 660px;">
+                    <div class="flex flex-col items-center justify-center">
+                        <span
+                            class="text-[9px] text-[#7f8c8d] uppercase tracking-wider font-bold leading-none mb-0.5">Tanggal
+                            Terbit</span>
+                        <span class="text-[14px] font-bold text-[#1d4ed8] leading-none">
+                            {{ \Carbon\Carbon::parse($certificate->issued_at)->format('d F Y') }}
+                        </span>
+                    </div>
+                </div>
+
             </div>
         </div>
+
     </div>
 @endsection

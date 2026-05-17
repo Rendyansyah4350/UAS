@@ -12,133 +12,257 @@
         body {
             margin: 0;
             padding: 0;
-            font-family: 'Helvetica', sans-serif;
+            font-family: 'Helvetica', Arial, sans-serif;
             width: 29.7cm;
             height: 21cm;
             overflow: hidden;
+            background-image: url('{{ public_path('assets/images/certificate/certificate-eduvan.png') }}');
+            background-size: 100% 100%;
+            background-repeat: no-repeat;
+            background-position: center;
         }
 
-        /* Border Utama */
-        .border-purple {
-            position: absolute;
-            top: 0.5cm;
-            left: 0.5cm;
-            right: 0.5cm;
-            bottom: 0.5cm;
-            border: 15pt solid #4f46e5;
+        /* Container utama pengunci halaman anti-jebol */
+        .container {
+            position: relative;
+            width: 29.7cm;
+            height: 21cm;
             box-sizing: border-box;
+            overflow: hidden;
         }
 
-        .border-thin {
-            position: absolute;
-            top: 10px;
-            left: 10px;
-            right: 10px;
-            bottom: 10px;
-            border: 2pt solid #4f46e5;
+        /* ==================== KONTEN TENGAH ==================== */
+
+        .content-wrapper {
+            width: 100%;
+            padding-top: 312px;
             text-align: center;
         }
 
-        /* Konten diatur manual jaraknya */
-        .title {
-            margin-top: 50px;
-            font-size: 50pt;
-            font-weight: bold;
-            color: #1e1b4b;
-        }
-
-        .subtitle {
+        .pembuka {
             font-size: 14pt;
-            letter-spacing: 10px;
-            color: #6366f1;
-            text-transform: uppercase;
-        }
-
-        .name-box {
-            margin-top: 40px;
+            color: #334155;
+            margin: 0;
+            padding: 0;
+            line-height: 1;
         }
 
         .student-name {
-            font-size: 35pt;
+            font-size: 44pt;
             font-weight: bold;
-            color: #000;
-            border-bottom: 2pt solid #eee;
+            color: #0f172a;
+            margin-top: 15px;
+            margin-bottom: 0;
+            line-height: 1;
+        }
+
+        .name-line-container {
+            margin-top: 12px;
+            text-align: center;
+        }
+
+        .name-line {
             display: inline-block;
-            padding: 0 40px;
-            margin-bottom: 10px;
+            width: 500px;
+            border-bottom: 1.5pt solid #cbd5e1;
+            position: relative;
+        }
+
+        .name-line::after {
+            content: "◆";
+            position: absolute;
+            color: #d97706;
+            font-size: 10pt;
+            top: -7px;
+            left: 50%;
+            margin-left: -6px;
+            background-color: #ffffff;
+            padding: 0 6px;
+        }
+
+        .keterangan {
+            color: #475569;
+            font-size: 13pt;
+            margin-top: 25px;
+            margin-bottom: 0;
+            padding: 0;
+            line-height: 1;
+        }
+
+        .course-box {
+            margin-top: 45px;
+            text-align: center;
+        }
+
+        .course-title-wrapper {
+            display: inline-block;
+            position: relative;
+            padding: 0 70px;
+        }
+
+        .course-line-left {
+            position: absolute;
+            left: 0;
+            top: 50%;
+            width: 45px;
+            border-bottom: 2pt solid #d97706;
+            margin-top: -1px;
+        }
+
+        .course-line-left::after {
+            content: "◆";
+            position: absolute;
+            color: #d97706;
+            font-size: 8pt;
+            right: -4px;
+            top: -6px;
+        }
+
+        .course-line-right {
+            position: absolute;
+            right: 0;
+            top: 50%;
+            width: 45px;
+            border-bottom: 2pt solid #d97706;
+            margin-top: -1px;
+        }
+
+        .course-line-right::before {
+            content: "◆";
+            position: absolute;
+            color: #d97706;
+            font-size: 8pt;
+            left: -4px;
+            top: -6px;
         }
 
         .course-title {
-            font-size: 22pt;
+            font-size: 26pt;
             font-weight: bold;
-            color: #1e1b4b;
+            color: #1d4ed8;
             text-transform: uppercase;
+            margin: 0;
+            padding: 0;
+            line-height: 1;
+            letter-spacing: 0.5px;
         }
 
-        /* Footer dikunci posisinya */
-        .footer {
+
+        /* ==================== SECTION VALIDASI (TENGAH BAWAH) ==================== */
+
+        /* Blok Utama Komponen Tengah Bawah */
+        .validation-center-box {
             position: absolute;
-            bottom: 40px;
-            width: 100%;
-            padding: 0 60px;
-            box-sizing: border-box;
+            bottom: 100px;
+            /* Diatur agar pas dengan posisi tinggi area dekorasi bawah */
+            left: 0;
+            right: 0;
+            text-align: center;
         }
 
-        table {
-            width: 100%;
-            border-collapse: collapse;
+        /* 1. Atas Garis Bawaan Template: Group Logo & Nomor Sertifikat */
+        .cert-info-group {
+            display: inline-block;
+            height: 45px;
+            margin-bottom: 35px;
+            /* Memberi ruang space tepat di atas garis tengah bawaan */
+            text-align: left;
         }
 
-        .label {
-            font-size: 9pt;
-            color: #9ca3af;
+        .footer-logo {
+            float: left;
+            width: 42px;
+            height: 42px;
+            margin-right: 12px;
+        }
+
+        .footer-logo img {
+            width: 100%;
+            height: 100%;
+            object-fit: contain;
+        }
+
+        .meta-text-center {
+            float: left;
+            margin-top: 2px;
+        }
+
+        .footer-label {
+            font-size: 8pt;
+            color: #64748b;
             text-transform: uppercase;
+            letter-spacing: 0.5px;
+            display: block;
+            margin-bottom: 2px;
         }
 
-        .value {
+        .value-no {
             font-size: 11pt;
             font-weight: bold;
-            color: #111827;
+            color: #1e3a8a;
             display: block;
+            line-height: 1;
+        }
+
+        /* 2. Bawah Garis Bawaan Template: Tanggal Terbit */
+        .date-container {
+            display: block;
+            margin-top: 5px;
+            /* Menyesuaikan agar teks langsung berada di bawah garis pendek */
+        }
+
+        .date-text {
+            font-size: 12.5pt;
+            color: #1d4ed8;
+            font-weight: bold;
+            display: block;
+            margin-top: 3px;
         }
     </style>
 </head>
 
 <body>
-    <div class="border-purple">
-        <div class="border-thin">
-            <h1 class="title">CERTIFICATE</h1>
-            <p class="subtitle">OF ACHIEVEMENT</p>
+    <div class="container">
 
-            <div class="name-box">
-                <p style="color: #6b7280; font-style: italic;">Sertifikat ini diberikan kepada:</p>
-                <div class="student-name">{{ $certificate->user->name }}</div>
+        <div class="content-wrapper">
+            <p class="pembuka">Dengan ini menyatakan bahwa</p>
+
+            <h1 class="student-name">{{ $certificate->user->name }}</h1>
+
+            <div class="name-line-container">
+                <div class="name-line"></div>
             </div>
 
-            <p style="color: #4b5563; margin-top: 20px;">Telah berhasil menyelesaikan kursus pada platform
-                <strong>EduVan</strong>:</p>
-            <h2 class="course-title">{{ $certificate->course->title }}</h2>
+            <p class="keterangan">telah berhasil menyelesaikan persyaratan kursus untuk</p>
 
-            <div class="footer">
-                <table>
-                    <tr>
-                        <td align="left">
-                            <span class="label">Nomor Sertifikat</span>
-                            <span class="value">{{ $certificate->certificate_number }}</span>
-                        </td>
-                        <td align="center">
-                            <span class="label">Verified By</span>
-                            <span class="value" style="color: #4f46e5;">EduVan Official</span>
-                        </td>
-                        <td align="right">
-                            <span class="label">Tanggal Terbit</span>
-                            <span
-                                class="value">{{ \Carbon\Carbon::parse($certificate->issued_at)->format('d F Y') }}</span>
-                        </td>
-                    </tr>
-                </table>
+            <div class="course-box">
+                <div class="course-title-wrapper">
+                    <div class="course-line-left"></div>
+                    <h2 class="course-title">{{ $certificate->course->title }}</h2>
+                    <div class="course-line-right"></div>
+                </div>
             </div>
         </div>
+
+        <div class="validation-center-box">
+
+            <div class="cert-info-group">
+                <div class="footer-logo">
+                    <img src="{{ public_path('assets/images/eduvan.png') }}" alt="Logo EduVan">
+                </div>
+                <div class="meta-text-center">
+                    <span class="footer-label">Nomor Sertifikat</span>
+                    <span class="value-no">{{ $certificate->certificate_number }}</span>
+                </div>
+            </div>
+
+            <div class="date-container">
+                <span class="footer-label">Tanggal Terbit</span>
+                <span class="date-text">{{ \Carbon\Carbon::parse($certificate->issued_at)->format('d F Y') }}</span>
+            </div>
+
+        </div>
+
     </div>
 </body>
 
