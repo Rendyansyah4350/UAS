@@ -6,7 +6,6 @@ import {
   ToastController,
   LoadingController,
 } from '@ionic/angular';
-// 1. TAMBAHKAN IMPORT ROUTER
 import { Router } from '@angular/router';
 
 @Component({
@@ -27,7 +26,7 @@ export class RegisterPage implements OnInit {
     private zone: NgZone,
     private toastCtrl: ToastController,
     private loadingCtrl: LoadingController,
-    private router: Router, // 2. MASUKKAN KE CONSTRUCTOR
+    private router: Router, 
   ) {
     this.registerForm = this.fb.group(
       {
@@ -72,6 +71,17 @@ export class RegisterPage implements OnInit {
     });
   }
 
+  // ======================================================================
+  // PERBAIKAN: Menambahkan fungsi dengan penamaan camelCase yang valid
+  // untuk mengatasi error compile "Property 'otp' does not exist" di HTML
+  // ======================================================================
+  goToVerifyOtp() {
+    this.zone.run(() => {
+      this.router.navigate(['/verify-otp']);
+    });
+  }
+  // ======================================================================
+
   async onRegister() {
     if (this.registerForm.valid) {
       const loading = await this.loadingCtrl.create({
@@ -92,22 +102,17 @@ export class RegisterPage implements OnInit {
         next: async (res) => {
           await loading.dismiss();
           const toast = await this.toastCtrl.create({
-            message:
-              'Registrasi berhasil! Silakan cek email untuk kode verifikasi.',
+            message: 'Registrasi berhasil! Silakan cek email untuk kode verifikasi.',
             duration: 3000,
             color: 'success',
             position: 'bottom',
           });
           await toast.present();
 
-          // 3. NAVIGASI KE HALAMAN LOGIN DENGAN QUERY PARAMS
-          // Membawa email dan flag 'verify' agar login page memicu tampilan OTP
+          // Alihkan navigasi langsung ke halaman /verify-otp dengan membawa state data email
           this.zone.run(() => {
-            this.router.navigate(['/login'], {
-              queryParams: {
-                email: formVal.email,
-                verify: 'true',
-              },
+            this.router.navigate(['/verify-otp'], {
+              state: { email: formVal.email }
             });
           });
         },

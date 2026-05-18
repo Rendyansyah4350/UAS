@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpHeaders } from '@angular/common/http'; // Tambahkan HttpHeaders di sini
 import { environment } from '../../environments/environment';
-import { Observable, tap } from 'rxjs'; // Tambahkan tap
+import { Observable, tap } from 'rxjs';
 
 @Injectable({
   providedIn: 'root',
@@ -11,19 +11,16 @@ export class AuthService {
 
   constructor(private http: HttpClient) {}
 
-  // PERBAIKAN: Simpan token otomatis saat login berhasil
-  login(data: any): Observable<any> {
+login(data: any): Observable<any> {
     return this.http.post(`${this.apiUrl}/login`, data).pipe(
       tap((res: any) => {
-        if (res && res.token) {
-          localStorage.setItem('token', res.token); // Simpan token di sini
-          localStorage.setItem('user_data', JSON.stringify(res.user));
+        if (res && res.access_token) {
+          localStorage.setItem('token', res.access_token);
         }
       })
     );
   }
 
-  // Jika verifikasi OTP juga menghasilkan token, lakukan hal yang sama
   verifyOTP(email: string, otp: string): Observable<any> {
     return this.http.post(`${this.apiUrl}/verify-otp`, { email, otp }).pipe(
       tap((res: any) => {
@@ -33,13 +30,23 @@ export class AuthService {
       })
     );
   }
+  sendResetOtp(email: string): Observable<any> {
+    return this.http.post(`${this.apiUrl}/forgot-password/send-otp`, { email });
+  }
+
+  verifyResetOtp(email: string, otp: string): Observable<any> {
+    return this.http.post(`${this.apiUrl}/forgot-password/verify-otp`, { email, otp });
+  }
+
+  resetPassword(data: any): Observable<any> {
+    return this.http.post(`${this.apiUrl}/forgot-password/reset`, data);
+  }
 
   register(data: any): Observable<any> {
     return this.http.post(`${this.apiUrl}/register`, data);
   }
 
   isLoggedIn(): boolean {
-    // Sekarang ini akan mengembalikan true jika token sudah tersimpan oleh fungsi login di atas
     return !!localStorage.getItem('token');
   }
 
@@ -47,4 +54,28 @@ export class AuthService {
     localStorage.removeItem('token');
     localStorage.removeItem('user_data');
   }
-}
+
+  // --- TAMBAHAN BARU: Taruh di sini ya ---
+  getProfileFromServer(): Observable<any> {
+      // Ambil token secara dinamis dari localStorage saat fungsi dieksekusi
+      const token = localStorage.getItem('token');
+      
+      console.log('Token yang dikirim ke server live:', token); // Cek di console untuk memastikan tidak null
+
+      const headers = new HttpHeaders({
+        'Authorization': `Bearer ${token}`,
+        'Accept': 'application/json'
+      });
+
+      return this.http.get(`${this.apiUrl}/user`, { headers });
+    }
+
+updateProfile(data: any): Observable<any> {
+    const token = localStorage.getItem('token');
+    const headers = new HttpHeaders({
+      'Authorization': `Bearer ${token}`,
+      'Accept': 'application/json'
+    });
+    return this.http.put(`${this.apiUrl}/user/update`, data, { headers });
+  }
+} 

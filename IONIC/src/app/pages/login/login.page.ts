@@ -6,7 +6,7 @@ import {
   ToastController,
   LoadingController,
 } from '@ionic/angular';
-import { Router, ActivatedRoute } from '@angular/router';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-login',
@@ -18,11 +18,6 @@ export class LoginPage implements OnInit {
   loginForm: FormGroup;
   showPassword = false;
 
-  // Variabel Kontrol Verifikasi (OTP)
-  otpSent = false;
-  otpCode: string = '';
-  emailForVerify: string = '';
-
   constructor(
     private fb: FormBuilder,
     private auth: AuthService,
@@ -31,7 +26,6 @@ export class LoginPage implements OnInit {
     private toastCtrl: ToastController,
     private loadingCtrl: LoadingController,
     private router: Router,
-    private route: ActivatedRoute,
   ) {
     this.loginForm = this.fb.group({
       email: ['', [Validators.required, Validators.email]],
@@ -40,16 +34,7 @@ export class LoginPage implements OnInit {
   }
 
   ngOnInit() {
-    this.route.queryParams.subscribe((params) => {
-      if (params['email'] && params['verify'] === 'true') {
-        this.emailForVerify = params['email'];
-        this.otpSent = true;
-        this.presentToast(
-          'Silakan cek email Anda untuk kode verifikasi.',
-          'primary',
-        );
-      }
-    });
+    // Bersih dari pengecekan queryParams OTP register
   }
 
   togglePassword() {
@@ -62,39 +47,11 @@ export class LoginPage implements OnInit {
     });
   }
 
-  // LOGIKA VERIFIKASI OTP
-  async onVerifyOTP() {
-    if (!this.otpCode || this.otpCode.toString().length < 4) {
-      this.presentToast('Masukkan kode verifikasi yang valid.', 'warning');
-      return;
-    }
-
-    const loading = await this.loadingCtrl.create({
-      message: 'Memverifikasi akun...',
-      spinner: 'crescent',
-    });
-    await loading.present();
-
-    this.auth.verifyOTP(this.emailForVerify, this.otpCode).subscribe({
-      next: async (res) => {
-        await loading.dismiss();
-        this.otpSent = false;
-        this.presentToast(
-          'Akun berhasil diverifikasi! Silakan masuk.',
-          'success',
-        );
-      },
-      error: async (err) => {
-        await loading.dismiss();
-        this.presentToast(
-          'Kode verifikasi salah atau sudah kadaluwarsa.',
-          'danger',
-        );
-      },
-    });
+  goToForgotPassword() {
+    this.router.navigate(['/forgot-password']);
   }
 
-  // LOGIKA LOGIN UTAMA (FIXED)
+  // LOGIKA LOGIN UTAMA
   async onLogin() {
     if (this.loginForm.valid) {
       const loading = await this.loadingCtrl.create({
@@ -107,7 +64,6 @@ export class LoginPage implements OnInit {
         next: async (res: any) => {
           await loading.dismiss();
 
-          // --- PERBAIKAN DI SINI LEK ---
           // Simpan token dan data user agar tidak ditendang AuthGuard
           if (res.token) {
             localStorage.setItem('token', res.token);
@@ -115,19 +71,29 @@ export class LoginPage implements OnInit {
           if (res.user) {
             localStorage.setItem('user_data', JSON.stringify(res.user));
           }
-          // -----------------------------
 
           this.presentToast('Selamat datang kembali!', 'success');
           this.zone.run(() => {
-            // Gunakan rute yang sesuai dengan AppRoutingModule kamu
             this.navCtrl.navigateRoot('/tabs'); 
           });
         },
         error: async (err) => {
           await loading.dismiss();
           let msg = 'Gagal masuk. Periksa kembali email dan password Anda.';
-          if (err.status === 401) msg = 'Email atau Password salah.';
-          if (err.status === 403) msg = 'Akun belum diverifikasi. Silakan cek email.';
+          
+          if (err.status === 401) {
+            msg = 'Email atau Password salah.';
+          } else if (err.status === 403) {
+            msg = 'Akun belum diverifikasi. Silakan cek email Anda.';
+            
+            // OPSIONAL: Jika backend mengembalikan status 403 (belum verifikasi),
+            // kamu bisa otomatis melempar user ke halaman verify-otp dengan membawa email mereka.
+            this.zone.run(() => {
+              this.router.navigate(['/verify-otp'], {
+                state: { email: this.loginForm.value.email }
+              });
+            });
+          }
           
           this.presentToast(msg, 'danger');
         },
@@ -145,9 +111,5 @@ export class LoginPage implements OnInit {
       position: 'bottom',
     });
     await toast.present();
-  }
-
-  goToForgotPassword() {
-    this.router.navigate(['/forgot-password']);
   }
 }

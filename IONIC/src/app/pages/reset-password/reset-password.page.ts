@@ -1,83 +1,63 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
-import { ToastController, LoadingController } from '@ionic/angular';
+import { AuthService } from '../../services/auth';
 
 @Component({
   selector: 'app-reset-password',
   templateUrl: './reset-password.page.html',
   styleUrls: ['./reset-password.page.scss'],
-  standalone: false,
+  standalone: false
 })
 export class ResetPasswordPage implements OnInit {
+  email: string = '';
+  otpKode: string = ''; // Menampung kiriman data OTP dari page sebelah
   newPassword: string = '';
   confirmPassword: string = '';
   showPassword: boolean = false;
-  email: string = '';
 
-  constructor(
-    private router: Router,
-    private toastCtrl: ToastController,
-    private loadingCtrl: LoadingController
-  ) {
-    // Mengambil email dari state navigasi (dikirim dari page sebelumnya)
-    const nav = this.router.getCurrentNavigation();
-    if (nav?.extras.state) {
-      this.email = nav.extras.state['userEmail'];
+  constructor(private authService: AuthService, private router: Router) {}
+
+  ngOnInit() {
+    // Menangkap data lembaran dari forgot-password page
+    const navigation = this.router.getCurrentNavigation();
+    if (navigation?.extras.state) {
+      this.email = navigation.extras.state['email'];
+      this.otpKode = navigation.extras.state['otp']; // Menerima kode OTP rahasia
+    }
+
+    // Keamanan: Jika coba tembus paksa tanpa validasi OTP, usir balik
+    if (!this.email || !this.otpKode) {
+      this.router.navigate(['/forgot-password']);
     }
   }
 
-  ngOnInit() {}
-
-  togglePassword() {
-    this.showPassword = !this.showPassword;
-  }
-
-  async onResetPassword() {
-    // 1. Validasi Input Kosong
-    if (!this.newPassword || !this.confirmPassword) {
-      this.presentToast('Please fill in all fields', 'warning');
-      return;
-    }
-
-    // 2. Validasi Kesamaan Password
+updatePassword() {
     if (this.newPassword !== this.confirmPassword) {
-      this.presentToast('Passwords do not match', 'danger');
-      return;
+      return alert('Konfirmasi password tidak cocok!');
     }
 
-    // 3. Validasi Panjang Password (Contoh: min 8 karakter)
-    if (this.newPassword.length < 8) {
-      this.presentToast('Password must be at least 8 characters', 'warning');
-      return;
-    }
+    const payload = {
+      email: this.email,
+      otp: this.otpKode,
+      password: this.newPassword,
+      password_confirmation: this.confirmPassword
+    };
 
-    const loading = await this.loadingCtrl.create({
-      message: 'Updating password...',
-      spinner: 'crescent'
-    });
-    await loading.present();
-
-    // Simulasi Response dari Laravel
-    setTimeout(async () => {
-      await loading.dismiss();
-      this.presentToast('Password updated successfully!', 'success');
-      
-      // Kembali ke halaman login
-      this.router.navigate(['/login']);
-    }, 2000);
-  }
-
-  async presentToast(message: string, color: string) {
-    const toast = await this.toastCtrl.create({
-      message: message,
-      duration: 2000,
-      color: color,
-      position: 'bottom'
-    });
-    await toast.present();
-  }
-
-  goToLogin() {
-    this.router.navigate(['/login']);
+    this.authService.resetPassword(payload).subscribe(
+      (res: any) => {
+        alert('Mantap! ' + res.message);
+        this.router.navigate(['/login']);
+      },
+      (error: any) => {
+        // PERBAIKAN: Tangkap error spesifik dari Laravel validation
+        if (error.status === 422 && error.error.errors) {
+          // Menggabungkan semua pesan error dari Laravel menjadi satu teks alert
+          const validationErrors = Object.values(error.error.errors).join('\n');
+          alert('Validasi Gagal:\n' + validationErrors);
+        } else {
+          alert(error.error?.message || 'Gagal memperbarui password.');
+        }
+      }
+    );
   }
 }

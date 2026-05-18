@@ -2,7 +2,7 @@
   <div class="header-container">
     <div class="avatar-section">
       <div class="image-wrapper">
-        <img src="https://ui-avatars.com/api/?name=User&background=ffffff&color=1560bd" />
+        <img [src]="userProfile?.name ? 'https://ui-avatars.com/api/?name=' + userProfile.name + '&background=ffffff&color=1560bd' : 'https://ui-avatars.com/api/?name=User&background=ffffff&color=1560bd'" />
         <div class="camera-badge">
           <ion-icon name="camera"></ion-icon>
         </div>
@@ -10,19 +10,20 @@
     </div>
 
     <div class="user-details">
-      <h2>Nama Lengkap Anda</h2>
+      <h2>{{ userProfile?.name ?? 'Memuat Nama...' }}</h2>
       <p>Mahasiswa Universitas</p>
     </div>
 
     <div class="stat-grid">
       <div class="stat-item">
-        <h3>12</h3>
+        <h3>{{ userProfile?.total_courses ?? 0 }}</h3>
         <span>Kursus</span>
       </div>
       <div class="stat-divider"></div>
-      <div class="stat-item">
-        <h3>5</h3>
-        <span>Sertifikat</span>
+      
+      <div class="stat-item" (click)="goToCertificate()" style="cursor: pointer;">
+        <h3>{{ userProfile?.total_certificates ?? 0 }}</h3>
+        <span style="color: #1560bd; font-weight: bold;">Sertifikat</span>
       </div>
     </div>
   </div>
@@ -34,6 +35,14 @@
           <ion-icon name="person-outline"></ion-icon>
         </div>
         <ion-label>Edit Profil</ion-label>
+        <ion-icon name="chevron-forward-outline" slot="end" class="arrow"></ion-icon>
+      </ion-item>
+
+      <ion-item button (click)="goToCertificate()">
+        <div class="icon-box orange" slot="start" style="background: #fff7ed; color: #ea580c;">
+          <ion-icon name="ribbon-outline"></ion-icon>
+        </div>
+        <ion-label>Sertifikat Saya</ion-label>
         <ion-icon name="chevron-forward-outline" slot="end" class="arrow"></ion-icon>
       </ion-item>
 

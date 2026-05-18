@@ -1,120 +1,54 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
-import {
-  LoadingController,
-  ToastController,
-  NavController,
-} from '@ionic/angular';
+import { AuthService } from '../../services/auth'; // Sesuaikan folder service kalian
 
 @Component({
   selector: 'app-forgot-password',
   templateUrl: './forgot-password.page.html',
   styleUrls: ['./forgot-password.page.scss'],
-  standalone: false,
+  standalone: false
 })
-export class ForgotPasswordPage {
-  // Variabel Kontrol Alur
-  step: number = 1; // 1: Email, 2: OTP, 3: Password Baru
-
-  // Variabel Data
+export class ForgotPasswordPage implements OnInit {
   email: string = '';
   otpCode: string = '';
-  newPassword: string = '';
-  confirmPassword: string = '';
+  step: number = 1;
 
-  // Variabel UI
-  showPassword = false;
+  constructor(private authService: AuthService, private router: Router) {}
 
-  constructor(
-    private router: Router,
-    private navCtrl: NavController,
-    private loadingCtrl: LoadingController,
-    private toastCtrl: ToastController,
-  ) {}
+  ngOnInit() {}
 
-  // --- STEP 1: KIRIM OTP ---
-  async sendOtp() {
-    if (!this.email || !this.email.includes('@')) {
-      this.presentToast('Silakan masukkan format email yang benar', 'warning');
-      return;
-    }
+  sendOtp() {
+    if (!this.email) return alert('Email wajib diisi!');
 
-    const loading = await this.loadingCtrl.create({
-      message: 'Mengirim kode OTP...',
-      spinner: 'crescent',
-    });
-    await loading.present();
-
-    // Simulasi API Laravel
-    setTimeout(async () => {
-      await loading.dismiss();
-      this.presentToast('Kode OTP telah dikirim ke Gmail Anda', 'success');
-      this.step = 2; // Pindah ke tampilan input OTP
-    }, 2000);
+    this.authService.sendResetOtp(this.email).subscribe(
+      (res: any) => {
+        alert(res.message);
+        this.step = 2; // Naik ke step 2 (buka form input OTP)
+      },
+      (error: any) => {
+        alert(error.error?.message || 'Gagal mengirim OTP');
+      }
+    );
   }
 
-  // --- STEP 2: VERIFIKASI OTP ---
-  async verifyOtp() {
-    if (!this.otpCode || this.otpCode.toString().length < 4) {
-      this.presentToast('Masukkan kode OTP yang valid', 'warning');
-      return;
-    }
+  verifyOtp() {
+    if (!this.otpCode) return alert('Kode OTP wajib diisi!');
 
-    const loading = await this.loadingCtrl.create({
-      message: 'Memverifikasi kode...',
-      spinner: 'crescent',
-    });
-    await loading.present();
-
-    // Simulasi Cek OTP ke Backend
-    setTimeout(async () => {
-      await loading.dismiss();
-      this.presentToast('OTP Valid. Silakan buat password baru', 'success');
-      this.step = 3; // Pindah ke tampilan ganti password
-    }, 2000);
+    this.authService.verifyResetOtp(this.email, this.otpCode).subscribe(
+      (res: any) => {
+        alert(res.message);
+        // OTP Valid! Lempar data email dan otpCode ke page reset-password
+        this.router.navigate(['/reset-password'], {
+          state: { email: this.email, otp: this.otpCode }
+        });
+      },
+      (error: any) => {
+        alert(error.error?.message || 'Kode OTP salah atau expired!');
+      }
+    );
   }
 
-  // --- STEP 3: UPDATE PASSWORD ---
-  async updatePassword() {
-    if (this.newPassword.length < 8) {
-      this.presentToast('Password minimal 8 karakter', 'warning');
-      return;
-    }
-
-    if (this.newPassword !== this.confirmPassword) {
-      this.presentToast('Konfirmasi password tidak cocok', 'danger');
-      return;
-    }
-
-    const loading = await this.loadingCtrl.create({
-      message: 'Memperbarui password...',
-      spinner: 'crescent',
-    });
-    await loading.present();
-
-    // Simulasi Update Database Laravel
-    setTimeout(async () => {
-      await loading.dismiss();
-      this.presentToast('Password berhasil diperbarui!', 'success');
-
-      // Kembali ke Login setelah sukses
-      this.navCtrl.navigateRoot('/login');
-    }, 2000);
-  }
-
-  // Navigasi & UI Helpers
   goToLogin() {
-    this.navCtrl.back();
-  }
-
-  async presentToast(message: string, color: 'success' | 'warning' | 'danger') {
-    const toast = await this.toastCtrl.create({
-      message: message,
-      duration: 2500,
-      color: color,
-      position: 'bottom',
-      buttons: [{ text: 'OK', role: 'cancel' }],
-    });
-    await toast.present();
+    this.router.navigate(['/login']);
   }
 }

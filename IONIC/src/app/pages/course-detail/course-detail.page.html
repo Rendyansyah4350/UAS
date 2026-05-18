@@ -10,7 +10,7 @@
 <ion-content>
   <!-- Bagian Header Gambar -->
   <div class="image-header">
-    <img [src]="course?.image_url" onerror="this.src='assets/images/placeholder.jpg'" />
+    <img [src]="course.image ? course.image : 'https://via.placeholder.com/150'" />
     <div class="category-badge">Bestseller</div>
   </div>
 

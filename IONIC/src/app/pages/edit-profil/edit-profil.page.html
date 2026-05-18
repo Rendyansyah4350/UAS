@@ -10,7 +10,7 @@
 <ion-content class="ion-padding">
   <div class="edit-avatar-section">
     <div class="avatar-wrapper">
-      <img src="https://i.pravatar.cc/150?u=user" />
+      <img [src]="userProfile?.name ? 'https://ui-avatars.com/api/?name=' + userProfile.name + '&background=ffffff&color=1560bd' : 'https://i.pravatar.cc/150?u=user'" />
       <div class="change-photo">
         <ion-icon name="camera-outline"></ion-icon>
       </div>
@@ -21,21 +21,21 @@
   <div class="form-container">
     <ion-item lines="none" class="input-item">
       <ion-label position="stacked">Nama Lengkap</ion-label>
-      <ion-input type="text" value="Nama Lengkap Anda"></ion-input>
+      <ion-input type="text" [(ngModel)]="userProfile.name"></ion-input>
     </ion-item>
 
     <ion-item lines="none" class="input-item">
       <ion-label position="stacked">Email</ion-label>
-      <ion-input type="email" value="user@universitas.ac.id"></ion-input>
+      <ion-input type="email" [(ngModel)]="userProfile.email"></ion-input>
     </ion-item>
 
     <ion-item lines="none" class="input-item">
       <ion-label position="stacked">Universitas / Instansi</ion-label>
-      <ion-input type="text" value="Mahasiswa Universitas"></ion-input>
+      <ion-input type="text" value="Mahasiswa Universitas" readonly="true"></ion-input>
     </ion-item>
   </div>
 
-  <ion-button expand="block" class="save-btn">
+  <ion-button expand="block" class="save-btn" (click)="simpanPerubahan()">
     SIMPAN PERUBAHAN
   </ion-button>
 </ion-content>

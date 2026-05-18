@@ -1,13 +1,77 @@
-<ion-header [translucent]="true">
-  <ion-toolbar>
-    <ion-title>verify-otp</ion-title>
+<ion-header [translucent]="true" class="ion-no-border">
+  <ion-toolbar color="transparent">
+    <!-- Menambahkan tombol kembali ke halaman login/register jika diperlukan -->
+    <ion-buttons slot="start">
+      <ion-back-button defaultHref="/login" text=""></ion-back-button>
+    </ion-buttons>
+    <ion-title>Verify OTP</ion-title>
   </ion-toolbar>
 </ion-header>
 
-<ion-content [fullscreen]="true">
-  <ion-header collapse="condense">
-    <ion-toolbar>
-      <ion-title size="large">verify-otp</ion-title>
+<ion-content [fullscreen]="true" class="login-container">
+  <!-- Header Kondisional untuk iOS (Collapse Effect) -->
+  <ion-header collapse="condense" class="ion-no-border">
+    <ion-toolbar color="transparent">
+      <ion-title size="large">Verify OTP</ion-title>
     </ion-toolbar>
   </ion-header>
+
+  <!-- Latar Belakang Estetik (Blob) -->
+  <div class="blob-bg"></div>
+  <div class="blob-bg-secondary"></div>
+  
+  <!-- Bagian Dekorasi Atas & Logo -->
+  <div class="top-decoration">
+    <div class="logo-wrapper">
+      <div class="logo-circle">
+        <ion-icon name="mail-open-outline"></ion-icon>
+      </div>
+      <div class="logo-ring"></div>
+    </div>
+    
+    <div class="header-text">
+      <h1>Eduvan</h1>
+      <div class="premium-badge">
+        <span>SECURITY VERIFIED</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- Kartu Utama Verifikasi OTP -->
+  <div class="login-card edu-card">
+    <div class="otp-verification-ui fade-in">
+      <h2>Verify Your Account</h2>
+      <span class="subtitle">Enter code sent to <strong>{{ emailForVerify }}</strong></span>
+
+      <!-- Grup Input OTP -->
+      <div class="input-group otp-input-wrapper">
+        <ion-label class="input-label">6-Digit Code</ion-label>
+        <ion-item lines="none" class="input-item edu-input-item">
+          <ion-icon name="key-outline" slot="start"></ion-icon>
+          <!-- Menggunakan type="tel" agar memunculkan keyboard angka di HP & aman dari bug angka 0 di depan -->
+          <ion-input 
+            type="tel" 
+            maxlength="6" 
+            [(ngModel)]="otpCode" 
+            placeholder="000000" 
+            class="otp-input-font">
+          </ion-input>
+        </ion-item>
+      </div>
+
+      <!-- Tombol Verifikasi (Otomatis terkunci jika input tidak pas 6 digit) -->
+      <ion-button 
+        expand="block" 
+        class="btn-primary main-btn" 
+        (click)="onVerifyOTP()" 
+        [disabled]="!otpCode || otpCode.toString().length !== 6">
+        Verify Account
+      </ion-button>
+
+      <!-- Menu Aksi di Bawah Form -->
+      <div class="footer-action">
+        Wrong email or want to change? <strong (click)="goBack()">Go Back</strong>
+      </div>
+    </div>
+  </div>
 </ion-content>
