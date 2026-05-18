@@ -54,6 +54,8 @@ Route::middleware(['auth', 'admin'])->prefix('admin')->group(function ()
 
     // Manajemen Pembelian / Transaksi
     Route::get('/pembelian', [TransactionController::class, 'index'])->name('admin.pembelian.index');
+    Route::get('/admin/pembelian/download/{id}', [TransactionController::class, 'downloadReport'])->name('admin.pembelian.download');
+    Route::get('/admin/pembelian/course-pdf/{id}', [App\Http\Controllers\Admin\TransactionController::class, 'downloadCourseReport'])->name('admin.pembelian.course_pdf');
 
     // Manajemen Quiz & Progress
     Route::get('/quiz-progress', [QuizProgressController::class, 'index'])->name('admin.quiz.index');
