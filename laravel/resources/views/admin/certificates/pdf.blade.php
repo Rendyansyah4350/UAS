@@ -94,8 +94,7 @@
         /* 5. Logo EduVan & Nomor Sertifikat */
         .cert-info-box {
             position: absolute;
-            top: 80.5%;
-            /* Diatur pas di bawah garis panjang abu-abu */
+            top: 84%;
             left: 0;
             right: 0;
             text-align: center;
@@ -105,18 +104,19 @@
             display: inline-block;
             text-align: left;
             height: 40px;
+            padding-right: 40px;
         }
 
         .footer-logo {
             float: left;
             width: 36px;
-            height: 36px;
+            height: auto;
             margin-right: 10px;
         }
 
         .meta-text-center {
             float: left;
-            margin-top: -2px;
+            margin-top: 1px;
         }
 
         .footer-label {

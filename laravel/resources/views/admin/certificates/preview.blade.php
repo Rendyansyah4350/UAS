@@ -25,61 +25,70 @@
         </div>
 
         {{-- KONTEN UTAMA PREVIEW SERTIFIKAT (SINKRONISASI 1:1 DENGAN PDF TERBAIK) --}}
-        <div class="w-full max-w-5xl mx-auto overflow-x-auto pb-4">
-            {{-- Mengunci dimensi rasio A4 landscape (1056px x 746px) --}}
-            <div class="bg-white shadow-2xl relative overflow-hidden select-none rounded-2xl border border-gray-200 mx-auto"
-                style="width: 1056px; height: 746px; background-image: url('{{ asset('assets/images/certificate/certificate-eduvan.png') }}'); background-size: 100% 100%; background-repeat: no-repeat; background-position: center; font-family: 'Helvetica', Arial, sans-serif;">
+        {{-- Penyesuaian h-[270px] di HP & h-[480px] di Tablet dilakukan untuk mengimbangi ruang kosong akibat efek penskalaan CSS --}}
+        <div class="w-full max-w-5xl mx-auto overflow-x-visible md:overflow-x-auto pb-4 h-[270px] sm:h-[480px] md:h-auto">
 
-                {{-- 1. Teks "Dengan ini menyatakan bahwa" --}}
-                <div class="absolute left-0 right-0 text-center" style="top: 300px;">
-                    <p class="text-[#2c3e50] text-[15px] m-0 p-0 font-medium">Dengan ini menyatakan bahwa</p>
-                </div>
+            {{-- Wrapper Scale: Mengecilkan kontifikat di HP/Tablet, dan kembali normal (scale-100) di Laptop --}}
+            <div
+                class="transform origin-top-left md:origin-top scale-[0.33] sm:scale-[0.6] md:scale-100 transition-all duration-300 w-full flex justify-start md:justify-center">
 
-                {{-- 2. Nama Peserta (Dinaikkan agar pas berada di atas garis tipis tengah bawaan template) --}}
-                <div class="absolute left-0 right-0 text-center" style="top: 325px;">
-                    <h1 class="text-[#1a252f] text-[46px] font-bold m-0 p-0 tracking-tight leading-tight">
-                        {{ $certificate->user->name }}
-                    </h1>
-                </div>
+                {{-- Mengunci dimensi rasio A4 landscape (1056px x 746px) --}}
+                <div class="bg-white shadow-2xl relative overflow-hidden select-none rounded-2xl border border-gray-200 mx-auto flex-shrink-0"
+                    style="width: 1056px; height: 746px; background-image: url('{{ asset('assets/images/certificate/certificate-eduvan.png') }}'); background-size: 100% 100%; background-repeat: no-repeat; background-position: center; font-family: 'Helvetica', Arial, sans-serif;">
 
-                {{-- 3. Teks "telah berhasil menyelesaikan persyaratan kursus untuk" (Dinaikkan tepat di bawah garis tipis tengah) --}}
-                <div class="absolute left-0 right-0 text-center" style="top: 440px;">
-                    <p class="text-[#7f8c8d] text-[14px] m-0 p-0">telah berhasil menyelesaikan persyaratan kursus untuk</p>
-                </div>
+                    {{-- 1. Teks "Dengan ini menyatakan bahwa" --}}
+                    <div class="absolute left-0 right-0 text-center" style="top: 300px;">
+                        <p class="text-[#2c3e50] text-[15px] m-0 p-0 font-medium">Dengan ini menyatakan bahwa</p>
+                    </div>
 
-                {{-- 4. Judul Kursus (Dinaikkan tepat di atas garis panjang abu-abu horizontal) --}}
-                <div class="absolute left-0 right-0 text-center" style="top: 490px;">
-                    <h2 class="text-[28px] font-bold text-[#1d4ed8] uppercase m-0 p-0 tracking-wide">
-                        {{ $certificate->course->title }}
-                    </h2>
-                </div>
+                    {{-- 2. Nama Peserta (Dinaikkan agar pas berada di atas garis tipis tengah bawaan template) --}}
+                    <div class="absolute left-0 right-0 text-center" style="top: 325px;">
+                        <h1 class="text-[#1a252f] text-[46px] font-bold m-0 p-0 tracking-tight leading-tight">
+                            {{ $certificate->user->name }}
+                        </h1>
+                    </div>
 
-                {{-- 5. Logo EduVan & Nomor Sertifikat (Dinaikkan agar nangkring pas di bawah garis panjang abu-abu) --}}
-                <div class="absolute left-0 right-0 flex justify-center" style="top: 600px;">
-                    <div class="flex items-center text-left h-[40px]">
-                        <img src="{{ asset('assets/images/eduvan.png') }}" alt="Logo EduVan"
-                            class="w-[36px] h-[36px] object-contain mr-2.5">
-                        <div class="flex flex-col justify-center">
+                    {{-- 3. Teks "telah berhasil menyelesaikan persyaratan kursus untuk" (Dinaikkan tepat di bawah garis tipis tengah) --}}
+                    <div class="absolute left-0 right-0 text-center" style="top: 440px;">
+                        <p class="text-[#7f8c8d] text-[14px] m-0 p-0">telah berhasil menyelesaikan persyaratan kursus untuk
+                        </p>
+                    </div>
+
+                    {{-- 4. Judul Kursus (Dinaikkan tepat di atas garis panjang abu-abu horizontal) --}}
+                    <div class="absolute left-0 right-0 text-center" style="top: 490px;">
+                        <h2 class="text-[28px] font-bold text-[#1d4ed8] uppercase m-0 p-0 tracking-wide">
+                            {{ $certificate->course->title }}
+                        </h2>
+                    </div>
+
+                    {{-- 5. Logo EduVan & Nomor Sertifikat (Dinaikkan agar nangkring pas di bawah garis panjang abu-abu) --}}
+                    <div class="absolute left-0 right-0 flex justify-center" style="top: 600px;">
+                        <div class="flex items-center text-left h-[40px]">
+                            <img src="{{ asset('assets/images/eduvan.png') }}" alt="Logo EduVan"
+                                class="w-[36px] h-[36px] object-contain mr-2.5">
+                            <div class="flex flex-col justify-center">
+                                <span
+                                    class="text-[9px] text-[#7f8c8d] uppercase tracking-wider font-bold leading-none mb-0.5">Nomor
+                                    Sertifikat</span>
+                                <span class="text-[13px] font-semibold text-[#1c3d5a] font-mono leading-none tracking-wide">
+                                    {{ $certificate->certificate_number }}
+                                </span>
+                            </div>
+                        </div>
+                    </div>
+
+                    {{-- 6. Tanggal Terbit (Dinaikkan agar pas berada di atas garis pendek paling bawah) --}}
+                    <div class="absolute left-0 right-0 text-center" style="top: 660px;">
+                        <div class="flex flex-col items-center justify-center">
                             <span
-                                class="text-[9px] text-[#7f8c8d] uppercase tracking-wider font-bold leading-none mb-0.5">Nomor
-                                Sertifikat</span>
-                            <span class="text-[13px] font-semibold text-[#1c3d5a] font-mono leading-none tracking-wide">
-                                {{ $certificate->certificate_number }}
+                                class="text-[9px] text-[#7f8c8d] uppercase tracking-wider font-bold leading-none mb-0.5">Tanggal
+                                Terbit</span>
+                            <span class="text-[14px] font-bold text-[#1d4ed8] leading-none">
+                                {{ \Carbon\Carbon::parse($certificate->issued_at)->format('d F Y') }}
                             </span>
                         </div>
                     </div>
-                </div>
 
-                {{-- 6. Tanggal Terbit (Dinaikkan agar pas berada di atas garis pendek paling bawah) --}}
-                <div class="absolute left-0 right-0 text-center" style="top: 660px;">
-                    <div class="flex flex-col items-center justify-center">
-                        <span
-                            class="text-[9px] text-[#7f8c8d] uppercase tracking-wider font-bold leading-none mb-0.5">Tanggal
-                            Terbit</span>
-                        <span class="text-[14px] font-bold text-[#1d4ed8] leading-none">
-                            {{ \Carbon\Carbon::parse($certificate->issued_at)->format('d F Y') }}
-                        </span>
-                    </div>
                 </div>
 
             </div>
