@@ -1,281 +1,165 @@
-// ==========================================
-// VARIABEL WARNA (Eduvan Theme)
-// ==========================================
-$primary-color: #093C5D;       // Warna utama pilihanmu (Deep Blue)
-$secondary-color: #11537e;     // Variasi biru agak terang untuk gradasi blob
-$accent-color: #ff9f43;        // Warna aksen emas/oranye untuk badge & interaksi
-$bg-light: #f4f7f9;            // Latar belakang dasar halaman
-$card-bg: #ffffff;             // Latar belakang kartu putih bersih
-$text-dark: #2d3436;           // Warna teks utama
-$text-muted: #636e72;          // Warna teks sekunder/subtitle
-
-// ==========================================
-// GAYA UTAMA HALAMAN
-// ==========================================
-.login-container {
-  --background: #{$bg-light};
-  position: relative;
-  overflow: hidden;
-
-  // Efek Blur Abstrak di Latar Belakang (Blob)
-  .blob-bg {
-    position: absolute;
-    width: 300px;
-    height: 300px;
-    background: $primary-color;
-    border-radius: 50%;
-    top: -90px;
-    right: -80px;
-    filter: blur(80px);
-    opacity: 0.15;
-    z-index: 0;
-  }
-
-  .blob-bg-secondary {
-    position: absolute;
-    width: 250px;
-    height: 250px;
-    background: $secondary-color;
-    border-radius: 50%;
-    bottom: -50px;
-    left: -80px;
-    filter: blur(70px);
-    opacity: 0.12;
-    z-index: 0;
-  }
+ion-content {
+  --background: #f8fafc;
 }
 
-// ==========================================
-// DEKORASI ATAS & LOGO
-// ==========================================
-.top-decoration {
+@keyframes rotasiKanan {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
+}
+
+@keyframes rotasiKiri {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(-360deg); }
+}
+
+.verify-header-section {
+  background: #093C5D; 
+  height: 38vh;
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  margin-top: 10%;
-  margin-bottom: 25px;
+  border-bottom-left-radius: 50px;
+  border-bottom-right-radius: 50px;
+  padding-bottom: 30px;
   position: relative;
-  z-index: 1;
 
-  .logo-wrapper {
-    position: relative;
-    margin-bottom: 15px;
-
-    .logo-circle {
-      width: 75px;
-      height: 75px;
-      background: $primary-color;
-      border-radius: 50%;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      box-shadow: 0 8px 20px rgba(9, 60, 93, 0.3);
-      position: relative;
-      z-index: 2;
-
-      ion-icon {
-        font-size: 32px;
-        color: #ffffff;
-      }
-    }
-
-    .logo-ring {
-      position: absolute;
-      width: 91px;
-      height: 91px;
-      border: 2px dashed rgba(9, 60, 93, 0.25);
-      border-radius: 50%;
-      top: -8px;
-      left: -8px;
-      animation: spin 20s linear infinite;
+  .icon-container {
+    background: rgba(255, 255, 255, 0.12);
+    padding: 20px;
+    border-radius: 50%;
+    border: 2px dashed rgba(255, 255, 255, 0.4);
+    color: white;
+    font-size: 45px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 95px;
+    height: 95px;
+    animation: rotasiKanan 12s linear infinite; 
+    transform-origin: center center;
+    
+    ion-icon {
+      display: inline-block;
+      animation: rotasiKiri 12s linear infinite; 
+      transform-origin: center center;
     }
   }
 
-  .header-text {
-    text-align: center;
+  .brand-name {
+    color: white;
+    font-size: 28px;
+    font-weight: 800;
+    margin: 18px 0 2px 0;
+  }
 
-    h1 {
-      font-size: 28px;
-      font-weight: 800;
-      color: $primary-color;
-      margin: 0 0 6px 0;
-      letter-spacing: 0.5px;
-    }
-
-    .premium-badge {
-      background: rgba(9, 60, 93, 0.08);
-      padding: 4px 12px;
-      border-radius: 20px;
-      display: inline-block;
-      border: 1px solid rgba(9, 60, 93, 0.15);
-
-      span {
-        font-size: 10px;
-        font-weight: 700;
-        color: $primary-color;
-        letter-spacing: 1px;
-      }
-    }
+  .brand-subtitle {
+    color: rgba(255, 255, 255, 0.7);
+    font-size: 13px;
+    margin: 0;
+    font-weight: 400;
   }
 }
 
-// ==========================================
-// KARTU FORM (CARD)
-// ==========================================
-.edu-card {
-  background: $card-bg;
-  border-radius: 24px;
-  padding: 30px 24px;
-  margin: 0 20px;
-  box-shadow: 0 10px 30px rgba(9, 60, 93, 0.06);
+.form-card {
+  background: white;
+  margin: -45px 24px 20px 24px;
+  padding: 32px 24px;
+  border-radius: 30px;
+  box-shadow: 0 15px 35px rgba(9, 60, 93, 0.08);
   position: relative;
-  z-index: 1;
-  border: 1px solid rgba(9, 60, 93, 0.03);
+  z-index: 10;
 
   h2 {
-    font-size: 22px;
-    font-weight: 700;
-    color: $text-dark;
-    margin: 0 0 8px 0;
+    color: #1e293b;
+    font-weight: 800;
+    font-size: 24px;
     text-align: center;
+    margin: 0 0 10px 0;
   }
 
-  .subtitle {
-    display: block;
-    font-size: 14px;
-    color: $text-muted;
+  .instruction-text {
+    color: #64748b;
+    font-size: 13px;
     text-align: center;
-    margin-bottom: 30px;
-    line-height: 1.4;
+    line-height: 1.6;
+    margin-bottom: 25px;
 
-    strong {
-      color: $primary-color;
-      font-weight: 600;
-    }
-  }
-}
-
-// ==========================================
-// INPUT GROUP & OTP STYLE
-// ==========================================
-.input-group {
-  margin-bottom: 24px;
-
-  .input-label {
-    font-size: 12px;
-    font-weight: 600;
-    color: $primary-color;
-    letter-spacing: 0.3px;
-    margin-bottom: 8px;
-    display: block;
-  }
-
-  .edu-input-item {
-    background: #f8fafc;
-    border: 1.5px solid #e2e8f0;
-    border-radius: 14px;
-    padding: 0 8px;
-    transition: all 0.3s ease;
-    --background: transparent;
-
-    &.item-has-focus {
-      border-color: $primary-color;
-      box-shadow: 0 0 0 3px rgba(9, 60, 93, 0.1);
-      background: #ffffff;
-    }
-
-    ion-icon {
-      color: $text-muted;
-      font-size: 20px;
-      margin-right: 12px;
-    }
-
-    .otp-input-font {
-      font-size: 20px;
+    span {
+      color: #093C5D;
       font-weight: 700;
-      letter-spacing: 4px;
-      color: $primary-color;
-      text-align: center;
-      --padding-start: 4px;
     }
   }
 }
 
-// ==========================================
-// TOMBOL (BUTTON)
-// ==========================================
-.main-btn {
-  margin-top: 10px;
-  margin-bottom: 20px;
-  --border-radius: 14px;
-  --box-shadow: 0 6px 16px rgba(9, 60, 93, 0.25);
-  font-weight: 600;
+.input-label {
+  color: #093C5D;
+  font-size: 11px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.8px;
+  margin-bottom: 8px;
+  display: block;
+}
+
+.otp-input-box {
+  --background: #f8fafc;
+  --border-radius: 16px;
+  --padding-start: 16px;
+  border: 1px solid #e2e8f0;
+  margin-bottom: 25px;
+  transition: all 0.3s ease;
+
+  &:focus-within {
+    border-color: #093C5D;
+    box-shadow: 0 0 0 3px rgba(9, 60, 93, 0.1);
+  }
+
+  ion-icon {
+    color: #94a3b8;
+    font-size: 20px;
+  }
+
+  ion-input {
+    --padding-top: 14px;
+    --padding-bottom: 14px;
+    font-size: 18px;
+    font-weight: 700;
+    color: #093C5D;
+    letter-spacing: 4px;
+    text-align: center;
+  }
+}
+
+ion-button.verify-btn {
+  --background: #093C5D;
+  --background-activated: #06273d;
+  --color: white;
+  --border-radius: 16px;
+  margin-top: 5px;
+  font-weight: 700;
+  font-size: 15px;
+  height: 52px;
   letter-spacing: 0.5px;
-  font-size: 16px;
-  height: 48px;
-
-  &.btn-primary {
-    --background: #{$primary-color};
-    --color: #ffffff;
-
-    &:hover {
-      --background: #{$secondary-color};
-    }
-
-    &[disabled] {
-      --background: #cbd5e1;
-      --color: #94a3b8;
-      --box-shadow: none;
-      opacity: 0.7;
-    }
-  }
+  box-shadow: 0 8px 20px rgba(9, 60, 93, 0.2);
+  text-transform: uppercase;
 }
 
-// ==========================================
-// FOOTER ACTION
-// ==========================================
-.footer-action {
+.footer-links {
   text-align: center;
+  margin-top: 22px;
   font-size: 13px;
-  color: $text-muted;
+  color: #64748b;
+  
+  p { margin: 0; }
+  .margin-top-link { margin-top: 12px; }
 
-  strong {
-    color: $primary-color;
+  .link-bold {
+    color: #093C5D;
     font-weight: 700;
     cursor: pointer;
-    margin-start: 4px;
-    transition: color 0.2s ease;
-
-    &:hover {
-      color: $accent-color;
-    }
-  }
-}
-
-// ==========================================
-// ANIMASI & EFEK TRANSISI
-// ==========================================
-.fade-in {
-  animation: fadeIn 0.4s ease-out forwards;
-}
-
-@keyframes fadeIn {
-  from {
-    opacity: 0;
-    transform: translateY(10px);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
-}
-
-@keyframes spin {
-  from {
-    transform: rotate(0deg);
-  }
-  to {
-    transform: rotate(360deg);
+    margin-left: 4px;
+    
+    &:hover { text-decoration: underline; }
   }
 }

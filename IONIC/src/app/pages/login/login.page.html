@@ -1,67 +1,45 @@
-<ion-content class="login-container" [fullscreen]="true">
-  <!-- Latar Belakang Estetik (Blob) -->
-  <div class="blob-bg"></div>
-  <div class="blob-bg-secondary"></div>
-  
-  <!-- Bagian Dekorasi Atas & Logo -->
-  <div class="top-decoration">
-    <div class="logo-wrapper">
-      <div class="logo-circle">
-        <!-- Menggunakan ikon roket permanen karena halaman ini murni untuk login -->
-        <ion-icon name="rocket-sharp"></ion-icon>
-      </div>
-      <div class="logo-ring"></div>
+<ion-content>
+  <div class="auth-header-section">
+    <div class="icon-container">
+      <ion-icon name="rocket-outline"></ion-icon>
     </div>
-    
-    <div class="header-text">
-      <h1>Eduvan</h1>
-      <div class="premium-badge">
-        <span>LEARNING COURSE MARKETPLACE</span>
-      </div>
-    </div>
+    <div class="brand-name">Eduvan</div>
+    <div class="badge-subtitle">LEARNING COURSE MARKETPLACE</div>
   </div>
 
-  <!-- Kartu Login -->
-  <div class="login-card edu-card">
-    <div class="fade-in">
-      <h2>SELAMAT DATANG!</h2>
-      <span class="subtitle">Enter your credentials to continue learning</span>
+  <div class="form-card" [formGroup]="loginForm">
+    <h2>SELAMAT DATANG!</h2>
+    <p class="instruction-text">Enter your credentials to continue learning</p>
 
-      <form [formGroup]="loginForm" (ngSubmit)="onLogin()">
-        <!-- Input Email -->
-        <div class="input-group">
-          <ion-label class="input-label">Email Address</ion-label>
-          <ion-item lines="none" class="input-item edu-input-item">
-            <ion-icon name="mail-outline" slot="start"></ion-icon>
-            <ion-input type="email" formControlName="email" placeholder="example@gmail.com"></ion-input>
-          </ion-item>
-        </div>
+    <span class="input-label">EMAIL ADDRESS</span>
+    <ion-item lines="none" class="auth-input-box">
+      <ion-icon name="mail-outline" slot="start"></ion-icon>
+      <ion-input type="email" placeholder="nama@email.com" formControlName="email"></ion-input>
+    </ion-item>
+    <p class="error-msg" *ngif="loginForm.get('email')?.touched && loginForm.get('email')?.invalid">
+      Masukkan alamat email yang valid
+    </p>
 
-        <!-- Input Password -->
-        <div class="input-group">
-          <ion-label class="input-label">Password</ion-label>
-          <ion-item lines="none" class="input-item edu-input-item">
-            <ion-icon name="lock-closed-outline" slot="start"></ion-icon>
-            <!-- Mengubah type secara dinamis untuk fitur show/hide password -->
-            <ion-input [type]="showPassword ? 'text' : 'password'" formControlName="password" placeholder="••••••••"></ion-input>
-            <ion-icon [name]="showPassword ? 'eye-off-outline' : 'eye-outline'" slot="end" (click)="togglePassword()" class="toggle-eye"></ion-icon>
-          </ion-item>
+    <span class="input-label">PASSWORD</span>
+    <ion-item lines="none" class="auth-input-box">
+      <ion-icon name="lock-closed-outline" slot="start"></ion-icon>
+      <ion-input [type]="showPassword ? 'text' : 'password'" placeholder="••••••••" formControlName="password"></ion-input>
+      <ion-icon [name]="showPassword ? 'eye-outline' : 'eye-off-outline'" slot="end" class="eye-icon" (click)="togglePassword()"></ion-icon>
+    </ion-item>
+    <p class="error-msg" *ngif="loginForm.get('password')?.touched && loginForm.get('password')?.invalid">
+      Password wajib diisi (minimal 8 karakter)
+    </p>
 
-          <div class="forgot-link-container">
-            <span (click)="goToForgotPassword()">Forgot Password?</span>
-          </div>
-        </div>
+    <div class="forgot-password-link">
+      <span (click)="goToForgotPassword()">Forgot Password?</span>
+    </div>
 
-        <!-- Tombol Sign In (Aktif hanya jika form valid) -->
-        <ion-button expand="block" type="submit" class="btn-primary main-btn" [disabled]="!loginForm.valid">
-          Sign In
-        </ion-button>
-      </form>
+    <ion-button expand="block" class="auth-btn" (click)="onLogin()">
+      SIGN IN
+    </ion-button>
 
-      <!-- Navigasi ke Register -->
-      <div class="footer-action">
-        Don't have an account? <strong (click)="goToRegister()">Join for Free</strong>
-      </div>
+    <div class="footer-links">
+      Don't have an account? <span class="link-bold" (click)="goToRegister()">Join for Free</span>
     </div>
   </div>
 </ion-content>
