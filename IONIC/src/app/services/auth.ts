@@ -11,13 +11,13 @@ export class AuthService {
 
   constructor(private http: HttpClient) {}
 
-login(data: any): Observable<any> {
+  login(data: any): Observable<any> {
     return this.http.post(`${this.apiUrl}/login`, data).pipe(
       tap((res: any) => {
         if (res && res.access_token) {
           localStorage.setItem('token', res.access_token);
         }
-      })
+      }),
     );
   }
 
@@ -27,7 +27,7 @@ login(data: any): Observable<any> {
         if (res && res.token) {
           localStorage.setItem('token', res.token);
         }
-      })
+      }),
     );
   }
   sendResetOtp(email: string): Observable<any> {
@@ -35,7 +35,10 @@ login(data: any): Observable<any> {
   }
 
   verifyResetOtp(email: string, otp: string): Observable<any> {
-    return this.http.post(`${this.apiUrl}/forgot-password/verify-otp`, { email, otp });
+    return this.http.post(`${this.apiUrl}/forgot-password/verify-otp`, {
+      email,
+      otp,
+    });
   }
 
   resetPassword(data: any): Observable<any> {
@@ -57,25 +60,41 @@ login(data: any): Observable<any> {
 
   // --- TAMBAHAN BARU: Taruh di sini ya ---
   getProfileFromServer(): Observable<any> {
-      // Ambil token secara dinamis dari localStorage saat fungsi dieksekusi
-      const token = localStorage.getItem('token');
-      
-      console.log('Token yang dikirim ke server live:', token); // Cek di console untuk memastikan tidak null
+    // Ambil token secara dinamis dari localStorage saat fungsi dieksekusi
+    const token = localStorage.getItem('token');
 
-      const headers = new HttpHeaders({
-        'Authorization': `Bearer ${token}`,
-        'Accept': 'application/json'
-      });
+    console.log('Token yang dikirim ke server live:', token); // Cek di console untuk memastikan tidak null
 
-      return this.http.get(`${this.apiUrl}/user`, { headers });
-    }
+    const headers = new HttpHeaders({
+      Authorization: `Bearer ${token}`,
+      Accept: 'application/json',
+    });
 
-updateProfile(data: any): Observable<any> {
+    return this.http.get(`${this.apiUrl}/user`, { headers });
+  }
+
+  updateProfile(data: any): Observable<any> {
     const token = localStorage.getItem('token');
     const headers = new HttpHeaders({
-      'Authorization': `Bearer ${token}`,
-      'Accept': 'application/json'
+      Authorization: `Bearer ${token}`,
+      Accept: 'application/json',
     });
     return this.http.put(`${this.apiUrl}/user/update`, data, { headers });
   }
-} 
+
+  // --- FUNGSI AMBIL DAFTAR KURSUS DARI HOSTING CPANEL ---
+  getCoursesFromServer(): Observable<any> {
+    const token = localStorage.getItem('token');
+
+    // Siapkan header jika backend Laravel lo mewajibkan login (auth:api / auth:sanctum)
+    const headers = new HttpHeaders({
+      Authorization: `Bearer ${token}`,
+      Accept: 'application/json',
+    });
+
+    // Gantilah '/courses' di bawah ini kalau ternyata nama endpoint dari temen lo berbeda!
+    return this.http.get(`${this.apiUrl}/courses`, { headers });
+  }
+
+  
+}

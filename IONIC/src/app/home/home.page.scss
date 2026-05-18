@@ -2,8 +2,78 @@ ion-content {
   --background: #f4f7fe !important;
 }
 
+.main-wrapper {
+  background: #f8faff;
+  padding-bottom: 30px;
+  min-height: 100%;
+}
+
+// ==========================================
+// AREA ATAS DASHBOARD (HEADER, SEARCH, CARD)
+// ==========================================
+
+// 1. Header Section (Jarak bawah dikecilkan agar dekat ke search bar)
+.header-section {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 20px 20px 10px; // Padding bawah 10px agar proporsional
+
+  .brand {
+    font-size: 24px;
+    font-weight: 800;
+    color: #1a1a1a;
+
+    span { color: #5142E1; }
+  }
+
+  .icon-notif {
+    font-size: 24px;
+    color: #333;
+  }
+}
+
+// 2. Search Container (Posisi baru di atas welcome card)
+.search-container {
+  padding: 5px 20px 12px; // Jarak atas 5px, bawah 12px agar tidak menempel ke card bawahnya
+
+  .search-inner {
+    background: white !important;
+    border-radius: 14px;
+    padding: 12px 15px;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    box-shadow: 0 8px 20px rgba(0,0,0,0.03);
+    border: 1px solid #f1f5f9;
+
+    ion-icon {
+      color: #94a3b8;
+      font-size: 20px;
+    }
+
+    input {
+      border: none !important;
+      outline: none !important;
+      width: 100%;
+      font-size: 14px;
+      background: none !important;
+      background-color: transparent !important;
+      box-shadow: none !important;
+      -webkit-appearance: none;
+      color: #1e293b;
+
+      &::placeholder {
+        color: #94a3b8;
+        opacity: 1;
+      }
+    }
+  }
+}
+
+// 3. Welcome Card Container (Mengikuti gaya card premium)
 .welcome-card-container {
-  padding: 10px 20px 20px 20px; // Mengatur jarak antar header dan banner
+  padding: 0 20px 15px 20px; // Padding atas 0 karena sudah mendapat space dari search container
 
   .welcome-card-inner {
     background: #ffffff;
@@ -12,7 +82,7 @@ ion-content {
     display: flex;
     align-items: center;
     justify-content: space-between;
-    box-shadow: 0 8px 24px rgba(81, 66, 225, 0.04); // Shadow soft kebiruan murni
+    box-shadow: 0 8px 24px rgba(81, 66, 225, 0.04);
     border: 1px solid #f1f5f9;
 
     .text-group {
@@ -29,73 +99,6 @@ ion-content {
         color: #64748b;
         margin: 0;
         font-weight: 500;
-      }
-    }
-  }
-}
-.main-wrapper {
-  background: #f8faff;
-  padding-bottom: 30px;
-  min-height: 100%;
-}
-
-// Header
-.header-section {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  padding: 20px;
-  .brand {
-    font-size: 24px;
-    font-weight: 800;
-    color: #1a1a1a;
-    span {
-      color: #5142e1;
-    }
-  }
-  .icon-notif {
-    font-size: 24px;
-    color: #333;
-  }
-}
-
-// Search
-// Search
-.search-container {
-  padding: 0 20px 20px;
-
-  .search-inner {
-    background: white !important;
-    border-radius: 14px;
-    padding: 12px 15px;
-    display: flex;
-    align-items: center;
-    gap: 12px;
-    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.03);
-    border: 1px solid #f1f5f9;
-
-    ion-icon {
-      color: #94a3b8;
-      font-size: 20px;
-    }
-
-    input {
-      border: none !important;
-      outline: none !important;
-      width: 100%;
-      font-size: 14px;
-
-      // KUNCI UTAMA: Menghapus background hitam & bayangan input bawaan
-      background: none !important;
-      background-color: transparent !important;
-      box-shadow: none !important;
-      -webkit-appearance: none; // Untuk browser berbasis safari/chrome
-
-      color: #1e293b;
-
-      &::placeholder {
-        color: #94a3b8;
-        opacity: 1;
       }
     }
   }

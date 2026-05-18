@@ -10,10 +10,22 @@
       ></ion-icon>
     </div>
 
+    <div class="search-container">
+      <div class="search-inner">
+        <ion-icon name="search-outline"></ion-icon>
+        <input
+          type="text"
+          [(ngModel)]="keywordPencarian"
+          (input)="fungsiCariKursus()"
+          placeholder="Cari kursus coding, office, dll..."
+        />
+      </div>
+    </div>
+
     <div class="welcome-card-container">
       <div class="welcome-card-inner">
         <div class="text-group">
-          <h2>Selamat Datang, {{ namaUser }}! 👋</h2>
+          <h2>Selamat Datang, {{ namaUser }}!</h2>
           <p>Mau belajar skill apa hari ini?</p>
         </div>
       </div>
@@ -49,27 +61,67 @@
     </div>
 
     <div class="course-list-vertical">
-      <div
-        class="premium-course-card-horizontal"
-        (click)="goToDetail()"
-        style="cursor: pointer"
-      >
-        <div class="course-thumb-box">
-          <img src="assets/imgs/course-coding.jpg" />
-          <div class="tag-best">Bestseller</div>
+      <div *ngIf="isLoading" style="text-align: center; padding: 30px">
+        <ion-spinner name="crescent" color="primary"></ion-spinner>
+        <p style="color: #94a3b8; font-size: 13px; margin-top: 8px">
+          Menghubungkan ke server EduVan...
+        </p>
+      </div>
+
+      <ng-container *ngIf="!isLoading">
+        <div
+          class="premium-course-card-horizontal"
+          *ngFor="let kursus of kursusTersaring"
+          (click)="goToDetail()"
+          style="cursor: pointer"
+        >
+          <div class="course-thumb-box">
+            <img [src]="kursus.image || 'assets/imgs/course-coding.jpg'" />
+            <div class="tag-best">{{ kursus.category || 'Populer' }}</div>
+          </div>
+
+          <div class="course-info-box">
+            <h5>{{ kursus.title }}</h5>
+            <p class="instructor">Instructor EduVan</p>
+
+            <div class="course-meta">
+              <ion-icon name="star"></ion-icon>
+              <span class="rating-val">{{ kursus.rating || '5.0' }}</span>
+              <span class="rating-count">(Live)</span>
+            </div>
+
+            <div class="course-price">
+              {{ kursus.price == 0 || kursus.price == '0' ? 'Gratis' : 'Rp ' +
+              kursus.price }}
+            </div>
+          </div>
         </div>
 
-        <div class="course-info-box">
-          <h5>Logika Pemrograman Dasar</h5>
-          <p class="instructor">Andi Pratama</p>
-          <div class="course-meta">
-            <ion-icon name="star"></ion-icon>
-            <span class="rating-val">4.8</span>
-            <span class="rating-count">(12.5k)</span>
-          </div>
-          <div class="course-price">Rp 499.000</div>
+        <div
+          *ngIf="kursusTersaring.length === 0 && !keywordPencarian.trim()"
+          style="text-align: center; padding: 40px; color: #94a3b8"
+        >
+          <ion-icon
+            name="star-outline"
+            style="
+              font-size: 40px;
+              color: #cbd5e1;
+              display: block;
+              margin: 0 auto 10px;
+            "
+          ></ion-icon>
+          <p>Belum ada kursus populer saat ini </p>
         </div>
-      </div>
+
+        <div
+          *ngIf="kursusTersaring.length === 0 && keywordPencarian.trim()"
+          style="text-align: center; padding: 40px; color: #94a3b8"
+        >
+          <p>
+            Kursus "{{ keywordPencarian }}" tidak ditemukan
+          </p>
+        </div>
+      </ng-container>
     </div>
   </div>
 </ion-content>

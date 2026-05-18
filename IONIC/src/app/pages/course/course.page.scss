@@ -22,14 +22,27 @@ ion-header {
   }
 }
 
+/* Label Seksi Judul */
+.section-label {
+  padding: 15px 16px 5px 16px;
+  h3 {
+    margin: 0;
+    font-size: 16px;
+    font-weight: 700;
+    color: #1e293b;
+  }
+}
+
 /* Kategori Populer */
 .category-scroll {
   display: flex;
   overflow-x: auto;
-  padding: 15px 16px;
+  padding: 10px 16px;
   gap: 12px;
-  &::-webkit-scrollbar { display: none; }
-  
+  &::-webkit-scrollbar {
+    display: none;
+  }
+
   ion-chip {
     margin: 0;
     --background: #ffffff;
@@ -37,34 +50,86 @@ ion-header {
     border: 1px solid #e2e8f0;
     border-radius: 12px;
     font-weight: 600;
+    transition: all 0.2s ease-in-out;
 
     &.chip-active {
       --background: #093c5d;
       --color: #ffffff;
-      border: none;
+      border: 1px solid #093c5d;
     }
   }
 }
 
-/* Card Kursus */
+/* Card Kursus (Dioptimalkan biar simetris dan tinggi rata) */
 ion-card {
   border-radius: 20px;
   box-shadow: 0 8px 24px rgba(0, 0, 0, 0.05);
   border: 1px solid #f1f5f9;
-  margin: 10px;
+  margin: 0; /* Dinormalisasi agar tidak bertabrakan dengan ion-col */
+  display: flex;
+  flex-direction: column;
+  height: 100%; /* Memaksa tinggi card seragam kiri-kanan */
 
   .img-container {
     height: 120px;
     background: #f8fafc;
-    padding: 15px;
+    padding: 0; /* Diubah jadi 0 agar gambar cover memenuhi container dengan rapi */
     display: flex;
     justify-content: center;
-    img { max-height: 100%; object-fit: contain; }
+    align-items: center;
+    overflow: hidden;
+
+    img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover; /* Membuat gambar memenuhi area thumbnail tanpa distorsi */
+    }
   }
 
   .card-content {
-    padding: 15px;
-    ion-card-title { font-size: 14px; font-weight: 700; color: #1e293b; }
-    .price { color: #093c5d; font-weight: 800; font-size: 15px; margin-top: 8px; }
+    padding: 12px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    flex-grow: 1; /* Mendorong harga tetap sejajar paling bawah */
+
+    .category-tag {
+      font-size: 10px;
+      font-weight: 700;
+      color: #093c5d;
+      background: rgba(9, 60, 93, 0.1);
+      padding: 3px 8px;
+      border-radius: 6px;
+      width: fit-content;
+      text-transform: uppercase;
+    }
+
+    ion-card-title {
+      font-size: 13px;
+      font-weight: 700;
+      color: #1e293b;
+      margin: 8px 0;
+      display: -webkit-box;
+      -webkit-line-clamp: 2; /* Membatasi teks judul maksimal 2 baris agar layout tidak pecah */
+      -webkit-box-orient: vertical;
+      overflow: hidden;
+    }
+
+    .rating {
+      display: flex;
+      align-items: center;
+      gap: 4px;
+      font-size: 11px;
+      color: #64748b;
+      margin-top: auto; /* Membantu elemen setelahnya terdorong ke bawah */
+    }
+
+    .price {
+      color: #093c5d;
+      font-weight: 800;
+      font-size: 14px;
+      margin: 6px 0 0 0;
+    }
   }
 }
+

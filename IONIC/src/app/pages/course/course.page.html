@@ -3,46 +3,135 @@
     <ion-title>Katalog Kursus</ion-title>
   </ion-toolbar>
   <div class="search-box">
-    <ion-searchbar placeholder="Cari kursus favoritmu..." mode="ios"></ion-searchbar>
+    <ion-searchbar
+      placeholder="Cari kursus yang di inginkan..."
+      mode="ios"
+      [(ngModel)]="keywordPencarian"
+      (ionInput)="fungsiCariKursus()"
+      (ionClear)="fungsiCariKursus()"
+    ></ion-searchbar>
   </div>
 </ion-header>
 
 <ion-content>
   <div class="section-label">
-    <h3>Kategori Populer</h3>
+    <h3>Kategori</h3>
   </div>
-  
+
   <div class="category-scroll">
-    <ion-chip class="chip-active"><ion-icon name="code-working"></ion-icon> Programming</ion-chip>
-    <ion-chip><ion-icon name="color-palette"></ion-icon> UI/UX</ion-chip>
-    <ion-chip><ion-icon name="megaphone"></ion-icon> Marketing</ion-chip>
+    <ion-chip
+      [class.chip-active]="kategoriAktif === 'Semua'"
+      (click)="pilihKategori('Semua')"
+      style="cursor: pointer"
+    >
+      <ion-icon name="apps-outline"></ion-icon> Semua
+    </ion-chip>
+
+    <ion-chip
+      [class.chip-active]="kategoriAktif === 'Computer Science'"
+      (click)="pilihKategori('Computer Science')"
+      style="cursor: pointer"
+    >
+      <ion-icon name="code-working"></ion-icon> Computer Science
+    </ion-chip>
+
+    <ion-chip
+      [class.chip-active]="kategoriAktif === 'Microsoft Office'"
+      (click)="pilihKategori('Microsoft Office')"
+      style="cursor: pointer"
+    >
+      <ion-icon name="document-text-outline"></ion-icon> Microsoft Office
+    </ion-chip>
   </div>
 
   <div class="section-label">
-    <h3>Semua Kursus</h3>
+    <h3>
+      {{ kategoriAktif === 'Semua' ? 'Semua Kursus' : 'Kursus ' + kategoriAktif
+      }}
+    </h3>
   </div>
 
-  <ion-grid>
+  <div *ngIf="isLoading" style="text-align: center; padding: 40px">
+    <ion-spinner name="crescent" color="primary"></ion-spinner>
+    <p style="color: #94a3b8; font-size: 13px; margin-top: 8px">
+      Memuat data katalog...
+    </p>
+  </div>
+
+  <ion-grid *ngIf="!isLoading">
     <ion-row>
       <ion-col size="6" *ngFor="let course of listCourses">
-        <ion-card (click)="goToDetail(course.id)">
+        <ion-card
+          (click)="goToDetail(course.id)"
+          style="margin: 8px 4px; height: calc(100% - 16px); cursor: pointer"
+        >
           <div class="img-container">
-            <img [src]="course.image ? course.image : 'https://via.placeholder.com/150'" />
+            <img [src]="course.image || 'assets/imgs/course-coding.jpg'" />
           </div>
           <div class="card-content">
             <span class="category-tag">{{ course.category ?? 'General' }}</span>
-            
-            <ion-card-title>{{ course.title }}</ion-card-title>
-            
-            <div class="rating">
+
+            <ion-card-title
+              style="
+                font-size: 14px;
+                font-weight: 600;
+                margin: 6px 0;
+                line-height: 1.3;
+              "
+            >
+              {{ course.title }}
+            </ion-card-title>
+
+            <div
+              class="rating"
+              style="
+                display: flex;
+                align-items: center;
+                gap: 4px;
+                font-size: 11px;
+              "
+            >
               <ion-icon name="star" color="warning"></ion-icon>
-              <span>{{ course.rating ? (course.rating | number:'1.1-1') : '0.0' }} | Terjual 100+</span>
+              <span
+                >{{ course.rating ? (course.rating | number:'1.1-1') : '0.0' }}
+                | Live</span
+              >
             </div>
-            
-            <h2 class="price">IDR {{ course.price | number }}</h2>
+
+            <h2
+              class="price"
+              style="font-size: 13px; font-weight: 700; margin-top: 8px"
+            >
+              {{ course.price == 0 || course.price == '0' ? 'Gratis' : 'Rp ' +
+              (course.price | number) }}
+            </h2>
           </div>
         </ion-card>
       </ion-col>
     </ion-row>
   </ion-grid>
+
+  <div
+    *ngIf="!isLoading && listCourses.length === 0"
+    style="text-align: center; padding: 50px 20px; color: #94a3b8"
+  >
+    <ion-icon
+      name="folder-open-outline"
+      style="font-size: 45px; color: #cbd5e1"
+    ></ion-icon>
+
+    <p
+      *ngIf="keywordPencarian.trim()"
+      style="margin-top: 10px; font-size: 14px"
+    >
+      Kursus {{ keywordPencarian }} tidak ditemukan
+    </p>
+
+    <p
+      *ngIf="!keywordPencarian.trim()"
+      style="margin-top: 10px; font-size: 14px"
+    >
+      Belum ada kursus untuk kategori {{ kategoriAktif }}
+    </p>
+  </div>
 </ion-content>
