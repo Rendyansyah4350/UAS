@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { AuthService } from '../../services/auth';
+import { ToastController, LoadingController } from '@ionic/angular'; // TAMBAHKAN LoadingController DI SINI LEK
 
 @Component({
   selector: 'app-reset-password',
@@ -10,31 +11,54 @@ import { AuthService } from '../../services/auth';
 })
 export class ResetPasswordPage implements OnInit {
   email: string = '';
-  otpKode: string = ''; // Menampung kiriman data OTP dari page sebelah
+  otpKode: string = '';
   newPassword: string = '';
   confirmPassword: string = '';
   showPassword: boolean = false;
+  showConfirmPassword: boolean = false;
 
-  constructor(private authService: AuthService, private router: Router) {}
+  constructor(
+    private authService: AuthService, 
+    private router: Router,
+    private toastCtrl: ToastController,
+    private loadingCtrl: LoadingController // DAFTARKAN DI SINI
+  ) {}
 
   ngOnInit() {
-    // Menangkap data lembaran dari forgot-password page
     const navigation = this.router.getCurrentNavigation();
     if (navigation?.extras.state) {
       this.email = navigation.extras.state['email'];
-      this.otpKode = navigation.extras.state['otp']; // Menerima kode OTP rahasia
+      this.otpKode = navigation.extras.state['otp'];
     }
 
-    // Keamanan: Jika coba tembus paksa tanpa validasi OTP, usir balik
     if (!this.email || !this.otpKode) {
       this.router.navigate(['/forgot-password']);
     }
   }
 
-updatePassword() {
+  async presentToast(message: string, color: 'success' | 'danger' | 'warning') {
+    const toast = await this.toastCtrl.create({
+      message: message,
+      duration: 3000,
+      color: color,
+      position: 'bottom',
+      cssClass: 'premium-toast'
+    });
+    await toast.present();
+  }
+
+  async updatePassword() {
     if (this.newPassword !== this.confirmPassword) {
-      return alert('Konfirmasi password tidak cocok!');
+      this.presentToast('Konfirmasi password tidak cocok!', 'warning');
+      return;
     }
+
+    // MEMBUAT & MEMUNCULKAN LOADING SEGERA SETELAH DIKLIK
+    const loading = await this.loadingCtrl.create({
+      message: 'Memperbarui password...',
+      spinner: 'crescent'
+    });
+    await loading.present();
 
     const payload = {
       email: this.email,
@@ -43,21 +67,21 @@ updatePassword() {
       password_confirmation: this.confirmPassword
     };
 
-    this.authService.resetPassword(payload).subscribe(
-      (res: any) => {
-        alert('Mantap! ' + res.message);
+    this.authService.resetPassword(payload).subscribe({
+      next: async (res: any) => {
+        await loading.dismiss(); // Matikan loading saat sukses
+        this.presentToast('Mantap! ' + res.message, 'success');
         this.router.navigate(['/login']);
       },
-      (error: any) => {
-        // PERBAIKAN: Tangkap error spesifik dari Laravel validation
+      error: async (error: any) => {
+        await loading.dismiss(); // Matikan loading saat gagal
         if (error.status === 422 && error.error.errors) {
-          // Menggabungkan semua pesan error dari Laravel menjadi satu teks alert
           const validationErrors = Object.values(error.error.errors).join('\n');
-          alert('Validasi Gagal:\n' + validationErrors);
+          this.presentToast('Validasi Gagal:\n' + validationErrors, 'danger');
         } else {
-          alert(error.error?.message || 'Gagal memperbarui password.');
+          this.presentToast(error.error?.message || 'Gagal memperbarui password.', 'danger');
         }
       }
-    );
+    });
   }
 }

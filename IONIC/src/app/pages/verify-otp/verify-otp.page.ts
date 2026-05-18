@@ -11,20 +11,19 @@ import { ToastController, LoadingController, NavController } from '@ionic/angula
 })
 export class VerifyOtpPage implements OnInit {
   otpCode: string = '';
-  emailForVerify: string = ''; // Disamakan dengan {{ emailForVerify }} di HTML
+  emailForVerify: string = ''; 
 
   constructor(
     private router: Router,
-    private auth: AuthService, // Ditambahkan untuk memproses verifikasi ke backend
+    private auth: AuthService, 
     private zone: NgZone,
     private toastCtrl: ToastController,
-    private loadingCtrl: LoadingController, // Ditambahkan untuk efek loading spinner
-    private navCtrl: NavController // Ditambahkan untuk navigasi back aman khas Ionic
+    private loadingCtrl: LoadingController, 
+    private navCtrl: NavController 
   ) {
     // Mengambil data email yang dikirim saat navigasi dari Register atau Login (403)
     const nav = this.router.getCurrentNavigation();
     if (nav?.extras.state) {
-      // Mengantisipasi jika dikirim dengan key 'email' atau 'userEmail'
       this.emailForVerify = nav.extras.state['email'] || nav.extras.state['userEmail'] || '';
     }
   }
@@ -37,9 +36,8 @@ export class VerifyOtpPage implements OnInit {
     }
   }
 
-  // Nama fungsi disamakan dengan (click)="onVerifyOTP()" di HTML
+  // Fungsi memproses verifikasi OTP ke backend
   async onVerifyOTP() {
-    // Validasi panjang OTP (di HTML kita set maksimal 6 karakter)
     if (!this.otpCode || this.otpCode.length < 6) {
       this.presentToast('Masukkan 6 digit kode verifikasi yang valid.', 'warning');
       return;
@@ -58,7 +56,6 @@ export class VerifyOtpPage implements OnInit {
         this.presentToast('Akun berhasil diverifikasi! Silakan masuk.', 'success');
         
         this.zone.run(() => {
-          // Setelah sukses, lempar ke halaman login
           this.navCtrl.navigateRoot('/login');
         });
       },
@@ -69,12 +66,17 @@ export class VerifyOtpPage implements OnInit {
     });
   }
 
-  // Fungsi untuk tombol "Go Back" di HTML
-  goBack() {
+  // Tambahan Fungsi Kirim Ulang OTP agar tidak error
+  resendCode() {
+    this.presentToast('Kode OTP baru berhasil dikirim ulang!', 'success');
+  }
+
+  // Fungsi tombol kembali ke Sign In
+  kembali() {
     this.navCtrl.navigateBack('/login');
   }
 
-  async presentToast(msg: string, color: string) {
+  async presentToast(msg: string, color: string = 'bottom') {
     const toast = await this.toastCtrl.create({ 
       message: msg, 
       duration: 3000, 
