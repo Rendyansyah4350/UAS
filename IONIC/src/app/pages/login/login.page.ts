@@ -70,22 +70,23 @@ export class LoginPage implements OnInit {
           }
           if (res.user) {
             localStorage.setItem('user_data', JSON.stringify(res.user));
+            localStorage.setItem('user', JSON.stringify(res.user));
           }
 
           this.presentToast('Selamat datang kembali!', 'success');
           this.zone.run(() => {
-            this.navCtrl.navigateRoot('/tabs'); 
+            this.navCtrl.navigateRoot('/tabs');
           });
         },
         error: async (err) => {
           await loading.dismiss();
           let msg = 'Gagal masuk. Periksa kembali email dan password Anda.';
-          
+
           if (err.status === 401) {
             msg = 'Email atau Password salah.';
           } else if (err.status === 403) {
             msg = 'Akun belum diverifikasi. Silakan cek email Anda.';
-            
+
             // OPSIONAL: Jika backend mengembalikan status 403 (belum verifikasi),
             // kamu bisa otomatis melempar user ke halaman verify-otp dengan membawa email mereka.
             this.zone.run(() => {
@@ -94,7 +95,7 @@ export class LoginPage implements OnInit {
               });
             });
           }
-          
+
           this.presentToast(msg, 'danger');
         },
       });

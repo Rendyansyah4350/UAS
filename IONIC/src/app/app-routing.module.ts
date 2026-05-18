@@ -5,10 +5,10 @@ import { AuthGuard } from './guards/auth-guard'; // Memastikan Guard terhubung d
 const routes: Routes = [
   {
     path: '',
-    redirectTo: 'tabs', // Diarahkan ke tabs agar user bisa langsung melihat katalog
+    redirectTo: 'login', // Diarahkan ke tabs agar user bisa langsung melihat katalog
     pathMatch: 'full'
   },
-  
+
   // ==========================================
   // RUTE UTAN AUTENTIKASI & KEAMANAN AKUN
   // ==========================================
@@ -31,7 +31,7 @@ const routes: Routes = [
   {
     path: 'reset-password',
     loadChildren: () => import('./pages/reset-password/reset-password.module').then(m => m.ResetPasswordPageModule)
-  },   
+  },
 
   // ==========================================
   // RUTE UTAMA APLIKASI EDUVAN

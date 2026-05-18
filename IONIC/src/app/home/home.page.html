@@ -1,65 +1,70 @@
 <ion-content [fullscreen]="true">
   <div class="main-wrapper">
-    
     <div class="header-section">
       <div class="brand">Edu<span>Van</span></div>
-      <ion-icon name="notifications-outline" class="icon-notif" (click)="goToNotif()" style="cursor: pointer;"></ion-icon>
+      <ion-icon
+        name="notifications-outline"
+        class="icon-notif"
+        (click)="goToNotif()"
+        style="cursor: pointer"
+      ></ion-icon>
     </div>
 
-    <div class="search-container">
-      <div class="search-inner">
-        <ion-icon name="search-outline"></ion-icon>
-        <input type="text" placeholder="Cari kursus coding, office, dll...">
+    <div class="welcome-card-container">
+      <div class="welcome-card-inner">
+        <div class="text-group">
+          <h2>Selamat Datang, {{ namaUser }}! 👋</h2>
+          <p>Mau belajar skill apa hari ini?</p>
+        </div>
       </div>
     </div>
 
     <div class="promo-banner">
       <div class="banner-text">
-        <h3>Tingkatkan Skill,<br>Wujudkan Masa Depan</h3>
+        <h3>Tingkatkan Skill,<br />Wujudkan Masa Depan</h3>
         <p>Belajar kapan saja, di mana saja bersama EduVan.</p>
         <button class="cta-button">Jelajahi Kursus</button>
       </div>
       <img src="assets/imgs/student.png" class="banner-img" />
     </div>
 
-    <div class="label-row">
-      <h4>Kategori Populer</h4>
-      <span class="see-all">Lihat semua</span>
-    </div>
-
     <div class="category-list">
       <div class="category-item">
         <div class="cat-icon blue"><ion-icon name="code-slash"></ion-icon></div>
-        <p>Coding</p>
+        <p>Computer Science</p>
       </div>
       <div class="category-item">
-        <div class="cat-icon green"><ion-icon name="document-text"></ion-icon></div>
-        <p>MS Office</p>
-      </div>
-      <div class="category-item">
-        <div class="cat-icon orange"><ion-icon name="briefcase"></ion-icon></div>
-        <p>Bisnis</p>
+        <div class="cat-icon green">
+          <ion-icon name="document-text"></ion-icon>
+        </div>
+        <p>Microsoft Office</p>
       </div>
     </div>
 
     <div class="label-row">
       <h4>Kursus Populer</h4>
-      <span class="see-all">Lihat semua</span>
+      <span class="see-all" (click)="goToCourse()" style="cursor: pointer"
+        >Lihat semua</span
+      >
     </div>
 
     <div class="course-list-vertical">
-      <div class="premium-course-card-horizontal" (click)="goToDetail()" style="cursor: pointer;">
+      <div
+        class="premium-course-card-horizontal"
+        (click)="goToDetail()"
+        style="cursor: pointer"
+      >
         <div class="course-thumb-box">
           <img src="assets/imgs/course-coding.jpg" />
           <div class="tag-best">Bestseller</div>
         </div>
-        
+
         <div class="course-info-box">
           <h5>Logika Pemrograman Dasar</h5>
           <p class="instructor">Andi Pratama</p>
           <div class="course-meta">
-            <ion-icon name="star"></ion-icon> 
-            <span class="rating-val">4.8</span> 
+            <ion-icon name="star"></ion-icon>
+            <span class="rating-val">4.8</span>
             <span class="rating-count">(12.5k)</span>
           </div>
           <div class="course-price">Rp 499.000</div>

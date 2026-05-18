@@ -1,29 +1,69 @@
 ion-content {
-  --background: #F4F7FE !important; 
+  --background: #f4f7fe !important;
 }
 
+.welcome-card-container {
+  padding: 10px 20px 20px 20px; // Mengatur jarak antar header dan banner
+
+  .welcome-card-inner {
+    background: #ffffff;
+    border-radius: 16px;
+    padding: 16px 20px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    box-shadow: 0 8px 24px rgba(81, 66, 225, 0.04); // Shadow soft kebiruan murni
+    border: 1px solid #f1f5f9;
+
+    .text-group {
+      h2 {
+        font-size: 18px;
+        font-weight: 800;
+        color: #1a1a1a;
+        margin: 0 0 4px 0;
+        letter-spacing: -0.3px;
+      }
+
+      p {
+        font-size: 12px;
+        color: #64748b;
+        margin: 0;
+        font-weight: 500;
+      }
+    }
+  }
+}
 .main-wrapper {
-  background: #F8FAFF;
+  background: #f8faff;
   padding-bottom: 30px;
   min-height: 100%;
 }
 
 // Header
 .header-section {
-  display: flex; justify-content: space-between; align-items: center;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
   padding: 20px;
   .brand {
-    font-size: 24px; font-weight: 800; color: #1a1a1a;
-    span { color: #5142E1; }
+    font-size: 24px;
+    font-weight: 800;
+    color: #1a1a1a;
+    span {
+      color: #5142e1;
+    }
   }
-  .icon-notif { font-size: 24px; color: #333; }
+  .icon-notif {
+    font-size: 24px;
+    color: #333;
+  }
 }
 
 // Search
 // Search
 .search-container {
   padding: 0 20px 20px;
-  
+
   .search-inner {
     background: white !important;
     border-radius: 14px;
@@ -31,28 +71,28 @@ ion-content {
     display: flex;
     align-items: center;
     gap: 12px;
-    box-shadow: 0 8px 20px rgba(0,0,0,0.03);
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.03);
     border: 1px solid #f1f5f9;
 
-    ion-icon { 
-      color: #94a3b8; 
-      font-size: 20px; 
+    ion-icon {
+      color: #94a3b8;
+      font-size: 20px;
     }
 
-    input { 
-      border: none !important; 
-      outline: none !important; 
-      width: 100%; 
-      font-size: 14px; 
-      
+    input {
+      border: none !important;
+      outline: none !important;
+      width: 100%;
+      font-size: 14px;
+
       // KUNCI UTAMA: Menghapus background hitam & bayangan input bawaan
       background: none !important;
       background-color: transparent !important;
       box-shadow: none !important;
       -webkit-appearance: none; // Untuk browser berbasis safari/chrome
-      
+
       color: #1e293b;
-      
+
       &::placeholder {
         color: #94a3b8;
         opacity: 1;
@@ -63,9 +103,12 @@ ion-content {
 
 // Banner
 .promo-banner {
-  margin: 0 20px; padding: 25px;
-  background: linear-gradient(135deg, #1e1b4b 0%, #5142E1 100%);
-  border-radius: 24px; position: relative; overflow: hidden;
+  margin: 0 20px;
+  padding: 25px;
+  background: linear-gradient(135deg, #1e1b4b 0%, #5142e1 100%);
+  border-radius: 24px;
+  position: relative;
+  overflow: hidden;
   min-height: 180px;
 
   position: relative;
@@ -73,7 +116,7 @@ ion-content {
 
   // Membuat lingkaran hiasan di pojok banner
   &::after {
-    content: '';
+    content: "";
     position: absolute;
     width: 150px;
     height: 150px;
@@ -84,65 +127,157 @@ ion-content {
   }
 
   .banner-text {
-    width: 65%; z-index: 2; position: relative;
-    h3 { color: white; font-size: 19px; font-weight: 800; line-height: 1.3; margin: 0; }
-    p { color: rgba(255,255,255,0.7); font-size: 11px; margin: 12px 0 20px; }
-    .cta-button { 
-      background: white; color: #5142E1; border: none; 
-      padding: 10px 20px; border-radius: 12px; font-weight: 700;
+    width: 65%;
+    z-index: 2;
+    position: relative;
+    h3 {
+      color: white;
+      font-size: 19px;
+      font-weight: 800;
+      line-height: 1.3;
+      margin: 0;
+    }
+    p {
+      color: rgba(255, 255, 255, 0.7);
+      font-size: 11px;
+      margin: 12px 0 20px;
+    }
+    .cta-button {
+      background: white;
+      color: #5142e1;
+      border: none;
+      padding: 10px 20px;
+      border-radius: 12px;
+      font-weight: 700;
     }
   }
-  .banner-img { position: absolute; right: -5px; bottom: 0; width: 45%; z-index: 1; }
+  .banner-img {
+    position: absolute;
+    right: -5px;
+    bottom: 0;
+    width: 45%;
+    z-index: 1;
+  }
 }
 
 // Section Label
 .label-row {
-  display: flex; justify-content: space-between; align-items: center;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
   padding: 25px 20px 15px;
-  h4 { margin: 0; font-size: 17px; font-weight: 700; color: #0f172a; }
-  .see-all { color: #5142E1; font-size: 12px; font-weight: 600; }
+  h4 {
+    margin: 0;
+    font-size: 17px;
+    font-weight: 700;
+    color: #0f172a;
+  }
+  .see-all {
+    color: #5142e1;
+    font-size: 12px;
+    font-weight: 600;
+  }
 }
 
 // Category Slider
 .category-list {
-  display: flex; gap: 15px; padding: 0 20px; overflow-x: auto;
+  display: flex;
+  gap: 15px;
+  padding: 0 20px;
+  overflow-x: auto;
   .category-item {
-    display: flex; flex-direction: column; align-items: center; min-width: 70px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    min-width: 70px;
     .cat-icon {
-      width: 60px; height: 60px; border-radius: 18px;
-      display: flex; align-items: center; justify-content: center;
-      font-size: 26px; background: white; margin-bottom: 8px;
+      width: 60px;
+      height: 60px;
+      border-radius: 18px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 26px;
+      background: white;
+      margin-bottom: 8px;
       box-shadow: 0 10px 30px rgba(81, 66, 225, 0.05);
-      &.blue { color: #5142E1; background: #eef2ff; }
-      &.green { color: #107c41; background: #f0fdf4; }
-      &.orange { color: #f97316; background: #fff7ed; }
+      &.blue {
+        color: #5142e1;
+        background: #eef2ff;
+      }
+      &.green {
+        color: #107c41;
+        background: #f0fdf4;
+      }
+      &.orange {
+        color: #f97316;
+        background: #fff7ed;
+      }
     }
-    p { font-size: 11px; font-weight: 600; color: #64748b; margin: 0; }
+    p {
+      font-size: 11px;
+      font-weight: 600;
+      color: #64748b;
+      margin: 0;
+    }
   }
 }
 
 // Course Card
 .premium-course-card {
-  width: 230px; margin-left: 20px; background: white;
-  border-radius: 20px; border: 1px solid #f1f5f9;
+  width: 230px;
+  margin-left: 20px;
+  background: white;
+  border-radius: 20px;
+  border: 1px solid #f1f5f9;
   box-shadow: 0 10px 30px rgba(81, 66, 225, 0.05);
-  
+
   .course-thumb {
-    background: #E2E8F0;
+    background: #e2e8f0;
     position: relative;
-    img { width: 100%; height: 125px; object-fit: cover; border-radius: 20px 20px 0 0; }
+    img {
+      width: 100%;
+      height: 125px;
+      object-fit: cover;
+      border-radius: 20px 20px 0 0;
+    }
     .tag-best {
-      position: absolute; top: 10px; left: 10px;
-      background: #fbbf24; color: white; font-size: 9px;
-      padding: 4px 8px; border-radius: 6px; font-weight: 800;
+      position: absolute;
+      top: 10px;
+      left: 10px;
+      background: #fbbf24;
+      color: white;
+      font-size: 9px;
+      padding: 4px 8px;
+      border-radius: 6px;
+      font-weight: 800;
     }
   }
   .course-body {
     padding: 15px;
-    h5 { font-size: 14px; font-weight: 700; margin: 0; line-height: 1.4; color: #1e293b; }
-    .instructor { font-size: 11px; color: #94a3b8; margin: 6px 0; }
-    .course-meta { color: #fbbf24; font-size: 12px; font-weight: 800; }
-    .course-price { font-size: 15px; font-weight: 800; color: #5142E1; margin-top: 10px; }
+    h5 {
+      font-size: 14px;
+      font-weight: 700;
+      margin: 0;
+      line-height: 1.4;
+      color: #1e293b;
+    }
+    .instructor {
+      font-size: 11px;
+      color: #94a3b8;
+      margin: 6px 0;
+    }
+    .course-meta {
+      color: #fbbf24;
+      font-size: 12px;
+      font-weight: 800;
+    }
+    .course-price {
+      font-size: 15px;
+      font-weight: 800;
+      color: #5142e1;
+      margin-top: 10px;
+    }
   }
 }
 // Container untuk daftar kursus vertikal (kartu berjejer ke bawah)
@@ -159,7 +294,7 @@ ion-content {
   background: white;
   border-radius: 20px;
   border: 1px solid #f1f5f9;
- box-shadow: 0 10px 30px rgba(81, 66, 225, 0.05);
+  box-shadow: 0 10px 30px rgba(81, 66, 225, 0.05);
   padding: 12px;
   gap: 15px;
   align-items: center;
@@ -192,7 +327,7 @@ ion-content {
 
   .course-info-box {
     flex: 1; // Mengambil sisa ruang di sebelah kanan
-    
+
     h5 {
       margin: 0;
       font-size: 14px;
@@ -212,18 +347,18 @@ ion-content {
       align-items: center;
       gap: 4px;
       margin-bottom: 6px;
-      
+
       ion-icon {
         color: #fbbf24;
         font-size: 14px;
       }
-      
+
       .rating-val {
         font-size: 12px;
         font-weight: 800;
         color: #fbbf24;
       }
-      
+
       .rating-count {
         font-size: 11px;
         color: #94a3b8;
@@ -234,7 +369,7 @@ ion-content {
     .course-price {
       font-size: 15px;
       font-weight: 800;
-      color: #5142E1;
+      color: #5142e1;
     }
   }
 }
