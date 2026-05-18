@@ -9,6 +9,7 @@ use App\Http\Controllers\Api\ContentController;
 use App\Http\Controllers\Api\ProgressController;
 use App\Http\Controllers\Api\QuizController;
 use App\Http\Controllers\Api\CertificateApiController;
+use App\Http\Controllers\Api\ForgotPasswordController;
 
 // --- API Publik (Bisa diakses tanpa login) ---
 Route::get('/courses', [CourseController::class, 'index']);
@@ -16,6 +17,10 @@ Route::get('/courses/{id}', [CourseController::class, 'show']);
 Route::post('/login', [AuthController::class, 'login']);
 Route::post('/register', [AuthController::class, 'register']);
 Route::post('/verify-otp', [AuthController::class, 'verifyOtp']);
+Route::post('/forgot-password/send-otp', [ForgotPasswordController::class, 'sendOtp']);
+Route::post('/forgot-password/verify-otp', [ForgotPasswordController::class, 'verifyOtp']);
+Route::post('/forgot-password/reset', [ForgotPasswordController::class, 'resetPassword']);
+
 
 // --- API Privat (Wajib bawa Token / auth:sanctum) ---
 Route::middleware('auth:sanctum')->group(function () {
