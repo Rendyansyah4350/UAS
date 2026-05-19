@@ -16,7 +16,7 @@
       <ion-icon name="mail-outline" slot="start"></ion-icon>
       <ion-input type="email" placeholder="nama@email.com" formControlName="email"></ion-input>
     </ion-item>
-    <p class="error-msg" *ngif="loginForm.get('email')?.touched && loginForm.get('email')?.invalid">
+    <p class="error-msg" *ngIf="loginForm.get('email')?.touched && loginForm.get('email')?.invalid">
       Masukkan alamat email yang valid
     </p>
 
@@ -26,7 +26,7 @@
       <ion-input [type]="showPassword ? 'text' : 'password'" placeholder="••••••••" formControlName="password"></ion-input>
       <ion-icon [name]="showPassword ? 'eye-outline' : 'eye-off-outline'" slot="end" class="eye-icon" (click)="togglePassword()"></ion-icon>
     </ion-item>
-    <p class="error-msg" *ngif="loginForm.get('password')?.touched && loginForm.get('password')?.invalid">
+    <p class="error-msg" *ngIf="loginForm.get('password')?.touched && loginForm.get('password')?.invalid">
       Password wajib diisi (minimal 8 karakter)
     </p>
 

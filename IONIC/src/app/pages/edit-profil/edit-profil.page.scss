@@ -1,95 +1,81 @@
-// Background halaman dibuat agak abu-abu muda supaya form putihnya menonjol
-ion-content {
-  --background: #f8f9ff;
+ion-toolbar {
+  --background: #F4F7FA;
+  --color: #1A202C;
+  
+  ion-title {
+    font-size: 18px;
+    font-weight: 700;
+  }
 }
 
-.edit-avatar-section {
+ion-content {
+  --background: #F4F7FA;
+}
+
+.edit-profile-container {
+  padding: 16px 24px;
   display: flex;
   flex-direction: column;
-  align-items: center;
-  padding: 30px 0;
-
-  .avatar-wrapper {
-    position: relative;
-    width: 120px;
-    height: 120px;
-    border-radius: 20px; // Bentuk kotak melengkung (squircle) agar modern
-    overflow: visible;
-    box-shadow: 0 10px 25px rgba(81, 66, 225, 0.2);
-
-    img {
-      width: 100%;
-      height: 100%;
-      object-fit: cover;
-      border-radius: 20px;
-      border: 3px solid white;
-    }
-
-    .change-photo {
-      position: absolute;
-      bottom: -10px;
-      right: -10px;
-      background: #5142E1;
-      color: white;
-      width: 35px;
-      height: 35px;
-      border-radius: 12px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      box-shadow: 0 4px 10px rgba(0,0,0,0.15);
-      
-      ion-icon { font-size: 20px; }
-    }
-  }
-
-  p {
-    margin-top: 15px;
-    font-size: 14px;
-    color: #5142E1;
-    font-weight: 600;
-  }
+  gap: 24px; /* Memberi jarak aman antara form dan tombol */
 }
 
+/* Kotak Putih Pembungkus Form */
 .form-container {
-  background: white;
-  border-radius: 25px;
-  padding: 10px 5px;
-  margin-bottom: 30px;
-  box-shadow: 0 4px 15px rgba(0,0,0,0.02);
+  background: #ffffff;
+  border-radius: 20px;
+  padding: 24px 16px;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.02);
+  margin-top: 10px;
 
-  .input-item {
-    --background: transparent;
-    --padding-start: 15px;
-    --padding-end: 15px;
-    --inner-padding-end: 0;
-    margin-bottom: 10px;
+  .input-group {
+    margin-bottom: 20px;
 
-    ion-label {
-      font-size: 13px;
+    &:last-child {
+      margin-bottom: 0;
+    }
+
+    label {
+      font-size: 11px;
       font-weight: 700;
       color: #94a3b8;
-      margin-bottom: 8px !important;
+      display: block;
+      margin-bottom: 8px;
+      margin-left: 4px;
     }
 
-    ion-input {
+    /* Style Field Input Abu-Abu Lembut */
+    .custom-input-item {
       --background: #f1f5f9;
-      --padding-start: 15px !important;
       --border-radius: 12px;
-      font-size: 15px;
+      --padding-start: 14px;
+      --padding-end: 14px;
+      --min-height: 48px;
+      font-size: 14px;
       font-weight: 600;
-      color: #1e293b;
-      min-height: 50px;
+      color: #1A202C;
+      
+      ion-input {
+        --padding-top: 0px;
+        --padding-bottom: 0px;
+      }
     }
   }
 }
 
-.save-btn {
-  --background: #5142E1;
-  --border-radius: 15px;
-  --box-shadow: 0 8px 20px rgba(81, 66, 225, 0.3);
-  height: 55px;
-  font-weight: 700;
-  font-size: 16px;
-  margin-top: 10px;
+/* Area Tombol Simpan di Bawah Form */
+.action-container {
+  margin-bottom: 16px;
+
+  .btn-simpan {
+    // 🟢 WARNA BIRU UTAMA EDUVAN KAMU LEK:
+    --background: #093C5D; 
+    --background-activated: #06283F; /* Biru agak gelap pas ditekan */
+    --border-radius: 14px;
+    --box-shadow: 0 6px 16px rgba(9, 60, 93, 0.25);
+    font-size: 14px;
+    font-weight: 700;
+    letter-spacing: 0.5px;
+    height: 50px;
+    margin: 0;
+  }
 }
