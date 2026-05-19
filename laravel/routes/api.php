@@ -47,4 +47,5 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::get('/progress/course/{course_id}', [ProgressController::class, 'getProgress']);
     Route::post('/courses/{id}/rate', [CourseController::class, 'rate']);
     Route::put('/user/update', [AuthController::class, 'updateProfile']);
+    Route::middleware('auth:sanctum')->post('/quiz/submit', [QuizController::class, 'store']);
 });
