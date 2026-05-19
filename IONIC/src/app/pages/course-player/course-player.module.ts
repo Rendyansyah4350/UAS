@@ -2,16 +2,17 @@ import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { IonicModule } from '@ionic/angular';
-import { CoursePlayerPageRoutingModule } from './course-player-routing.module';
-import { CoursePlayerPage } from './course-player.page'; // Import komponennya
+import { RouterModule } from '@angular/router'; // Import RouterModule
+import { CoursePlayerPage } from './course-player.page';
 
 @NgModule({
   imports: [
     CommonModule,
     FormsModule,
-    IonicModule, // IonicModule ini wajib ada agar tag <ion-header> dll dikenali
-    CoursePlayerPageRoutingModule
+    IonicModule,
+    // Rute didefinisikan di sini agar modul tahu komponen mana yang dimuat
+    RouterModule.forChild([{ path: '', component: CoursePlayerPage }])
   ],
-  declarations: [CoursePlayerPage] // <--- Didaftarkan di sini, BUKAN di imports!
+  declarations: [CoursePlayerPage]
 })
 export class CoursePlayerPageModule {}

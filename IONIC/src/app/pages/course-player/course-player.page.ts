@@ -1,23 +1,19 @@
 import { Component, OnInit } from '@angular/core';
+import { ActivatedRoute } from '@angular/router';
 
 @Component({
   selector: 'app-course-player',
   templateUrl: './course-player.page.html',
   styleUrls: ['./course-player.page.scss'],
-  standalone: false, // Wajib false sesuai permintaanmu
+  standalone: false
 })
-export class CoursePlayerPage implements OnInit {
-  materiAktif: any;
-  daftarMateri = [
-    { id: 1, judul: 'Pendahuluan Laravel', durasi: '5m', video_url: 'url_video_1', is_completed: true },
-    { id: 2, judul: 'Instalasi Database', durasi: '10m', video_url: 'url_video_2', is_completed: false }
-  ];
+// WAJIB ADA KATA 'export' DI SINI
+export class CoursePlayerPage implements OnInit { 
+  courseId: string | null = '';
+
+  constructor(private route: ActivatedRoute) {}
 
   ngOnInit() {
-    this.materiAktif = this.daftarMateri[0];
-  }
-
-  pilihMateri(m: any) {
-    this.materiAktif = m;
+    this.courseId = this.route.snapshot.paramMap.get('id');
   }
 }

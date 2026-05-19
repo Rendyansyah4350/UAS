@@ -1,35 +1,21 @@
-<ion-header [translucent]="true">
-  <ion-toolbar color="dark">
+<ion-header>
+  <ion-toolbar>
     <ion-buttons slot="start">
-      <ion-back-button defaultHref="/tabs/course"></ion-back-button>
+      <ion-back-button defaultHref="/tabs/my-learning"></ion-back-button>
     </ion-buttons>
-    <ion-title>Belajar Sekarang</ion-title>
+    <ion-title>Player Kursus {{ courseId }}</ion-title>
   </ion-toolbar>
 </ion-header>
 
-<ion-content>
-  <div class="video-wrapper">
-    <video controls [src]="materiAktif?.video_url" class="player">
-      Browser kamu tidak mendukung video.
-    </video>
+<ion-content class="ion-padding">
+  <div class="video-container">
+    <div style="height: 200px; background: #ddd; display: flex; align-items: center; justify-content: center;">
+      Video Player (ID: {{ courseId }})
+    </div>
   </div>
 
-  <div class="content-container">
-    <h2 class="lesson-title">{{ materiAktif?.judul || 'Pilih Materi' }}</h2>
-    
-    <div class="curriculum-section">
-      <h4 class="section-header">Daftar Materi</h4>
-      
-      <ion-list lines="none" class="materi-list">
-        <ion-item button *ngFor="let m of daftarMateri" (click)="pilihMateri(m)" [class.active]="m.id === materiAktif?.id">
-          <ion-icon [name]="m.id === materiAktif?.id ? 'play-circle' : 'play-outline'" slot="start"></ion-icon>
-          <ion-label>
-            <h3>{{ m.judul }}</h3>
-            <p>{{ m.durasi }}</p>
-          </ion-label>
-          <ion-checkbox slot="end" [checked]="m.is_completed"></ion-checkbox>
-        </ion-item>
-      </ion-list>
-    </div>
+  <div class="materi-list">
+    <h3>Daftar Materi</h3>
+    <p>Ini adalah halaman fullscreen. Tidak ada tab bar di bawah!</p>
   </div>
 </ion-content>
