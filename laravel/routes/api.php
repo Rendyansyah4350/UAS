@@ -8,6 +8,7 @@ use App\Http\Controllers\Api\EnrollmentController;
 use App\Http\Controllers\Api\ContentController;
 use App\Http\Controllers\Api\ProgressController;
 use App\Http\Controllers\Api\QuizController;
+use App\Http\Controllers\Api\WishlistController;
 use App\Http\Controllers\Api\CertificateApiController;
 use App\Http\Controllers\Api\ForgotPasswordController;
 
@@ -47,4 +48,6 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::get('/progress/course/{course_id}', [ProgressController::class, 'getProgress']);
     Route::post('/courses/{id}/rate', [CourseController::class, 'rate']);
     Route::put('/user/update', [AuthController::class, 'updateProfile']);
+    Route::get('/wishlist', [WishlistController::class, 'index']);
+    Route::post('/wishlist/toggle', [WishlistController::class, 'toggle']);
 });
