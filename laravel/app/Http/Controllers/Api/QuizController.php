@@ -8,6 +8,7 @@ use App\Models\Quiz;
 use App\Models\Progress;
 use Illuminate\Support\Facades\Auth;
 use App\Models\Content;
+use App\Models\QuizResult;
 
 class QuizController extends Controller
 {
@@ -56,9 +57,9 @@ class QuizController extends Controller
 
         if ($totalQuestions === 0)
         {
-            return response()->json(['message' => 'Belum ada soal untuk kursus ini'], 404);
+            return response()->json(['message' => 'Belum ada soal'], 404);
         }
-        // Hitung jawaban (tetap dihitung buat ditampilin di Ionic, tapi nggak nentuin lulus/nggak)
+
         foreach ($userAnswers as $userAns)
         {
             $quiz = $quizzes->where('id', $userAns['quiz_id'])->first();
@@ -68,19 +69,20 @@ class QuizController extends Controller
             }
         }
 
-        // SIMPAN PROGRES
-        Progress::updateOrCreate(
-            [
-                'user_id'    => $userId,
-                'course_id'  => $course_id,
-                'content_id' => null, // PAKSA NULL: Menandakan ini progres QUIZ, bukan VIDEO
-            ],
-            [
-                'is_completed' => true
-            ]
+        $finalScore = ($correctCount / $totalQuestions) * 100;
+
+        $status = 'passed';
+        
+        QuizResult::updateOrCreate(
+            ['user_id' => $userId, 'course_id' => $course_id],
+            ['score' => round($finalScore, 2), 'status' => $status]
         );
 
-        $finalScore = ($correctCount / $totalQuestions) * 100;
+        // Tetap simpan ke tabel progress sebagai penanda quiz sudah dikerjakan
+        Progress::updateOrCreate(
+            ['user_id' => $userId, 'course_id' => $course_id, 'content_id' => null],
+            ['is_completed' => true]
+        );
 
         return response()->json([
             'success' => true,
@@ -88,7 +90,8 @@ class QuizController extends Controller
             'data' => [
                 'total_soal' => $totalQuestions,
                 'jawaban_benar' => $correctCount,
-                'nilai' => round($finalScore, 2)
+                'nilai' => round($finalScore, 2),
+                'status' => $status // Balikin status ke Ionic biar bisa ditampilin
             ]
         ]);
     }

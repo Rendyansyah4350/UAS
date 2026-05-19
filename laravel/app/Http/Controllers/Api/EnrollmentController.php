@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Models\Enrollment;
 use App\Models\Course;
 use Illuminate\Http\Request;
+use App\Models\QuizResult;
 
 class EnrollmentController extends Controller
 {
@@ -20,11 +21,12 @@ class EnrollmentController extends Controller
             ->where('course_id', $request->course_id)
             ->first();
 
-        if ($alreadyEnrolled) {
+        if ($alreadyEnrolled)
+        {
             return response()->json(['message' => 'Kamu sudah memiliki kursus ini'], 400);
         }
 
-        
+
         $course = Course::find($request->course_id);
 
         $enrollment = Enrollment::create([
@@ -44,11 +46,26 @@ class EnrollmentController extends Controller
 
     public function index(Request $request)
     {
-        // Mengambil semua data enrollment milik user yang sedang login
-        // Kita gunakan 'with' agar data detail kursusnya juga ikut terbawa
-        $histori = Enrollment::with('course')
-            ->where('user_id', $request->user()->id)
-            ->get();
+        $userId = $request->user()->id;
+
+        // Tambahkan with(['course', 'user.quizResults'])
+        // Kita panggil relasi quizResults milik user, lalu kita filter di collection nanti
+        $histori = Enrollment::with(['course', 'user.quizResults'])
+            ->where('user_id', $userId)
+            ->get()
+            ->map(function ($item) use ($userId)
+            {
+                // Cari hasil kuis untuk kursus ini
+                $quizResult = $item->user->quizResults
+                    ->where('course_id', $item->course_id)
+                    ->first();
+
+                // Tambahkan data kuis ke dalam objek kursus
+                $item->quiz_status = $quizResult ? $quizResult->status : null;
+                $item->quiz_score = $quizResult ? $quizResult->score : null;
+
+                return $item;
+            });
 
         return response()->json([
             'success' => true,
@@ -61,17 +78,22 @@ class EnrollmentController extends Controller
     {
         $user = $request->user();
 
-        // 🟢 DIOPTIMALKAN: Cari data enrollment dan langsung cek kolom progress-nya
+        // 1. Cek progress 100%
         $enrollment = Enrollment::where('user_id', $user->id)
             ->where('course_id', $course_id)
             ->first();
 
-        // Jika data beli gak ada atau progress belum 100%, blokir klaim sertifikat
-        if (!$enrollment || $enrollment->progress < 100)
+        // 2. Cek apakah ada record di QuizResult dengan status 'passed'
+        $hasPassedQuiz = QuizResult::where('user_id', $user->id)
+            ->where('course_id', $course_id)
+            ->where('status', 'passed')
+            ->exists();
+
+        if (!$enrollment || $enrollment->progress < 100 || !$hasPassedQuiz)
         {
             return response()->json([
                 'success' => false,
-                'message' => 'Selesaikan semua materi terlebih dahulu untuk mendapatkan sertifikat.'
+                'message' => 'Selesaikan materi dan kuis untuk mengklaim sertifikat.'
             ], 403);
         }
 
