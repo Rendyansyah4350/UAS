@@ -48,8 +48,14 @@
                         <td class="p-4 pl-6 text-center font-bold text-gray-400">{{ $loop->iteration }}</td>
                         <td class="p-4">
                             @if ($course->image)
-                                <img src="{{ asset('storage/' . $course->image) }}"
-                                    class="w-16 h-10 object-cover rounded-xl border border-gray-100 shadow-sm">
+                                {{-- 🟢 PERBAIKAN DI SINI: Cek jika data mengandung Base64, langsung tampilkan tanpa asset() --}}
+                                @if (str_contains($course->image, 'data:image'))
+                                    <img src="{{ $course->image }}"
+                                        class="w-16 h-10 object-cover rounded-xl border border-gray-100 shadow-sm">
+                                @else
+                                    <img src="{{ asset('storage/' . $course->image) }}"
+                                        class="w-16 h-10 object-cover rounded-xl border border-gray-100 shadow-sm">
+                                @endif
                             @else
                                 <div
                                     class="w-16 h-10 rounded-xl bg-gradient-to-br from-indigo-500 to-purple-600 flex items-center justify-center text-white text-[10px] font-black tracking-wide shadow-sm">
@@ -118,7 +124,8 @@
                 <div class="flex gap-3">
                     <div class="flex-shrink-0">
                         @if ($course->image)
-                            <img src="{{ asset('storage/' . $course->image) }}"
+                            {{-- 🟢 DI SINI SUDAH BENAR LANGSUNG MENEMBAK VARIABEL BASE64 --}}
+                            <img src="{{ $course->image }}" alt="Sampul" style="max-width: 150px; height: auto;"
                                 class="w-20 h-14 object-cover rounded-xl border border-gray-100">
                         @else
                             <div
