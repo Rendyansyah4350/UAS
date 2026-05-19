@@ -30,19 +30,23 @@
     <div class="learning-list">
       <div *ngIf="filteredEnrollments.length === 0" class="empty-state">
         <ion-icon name="book-outline" class="empty-icon"></ion-icon>
-
         <p *ngIf="activeTab === 'ongoing'">Kamu belum beli course nih....</p>
-
         <p *ngIf="activeTab === 'completed'">
           Belum ada kursus yang kamu selesaikan.
         </p>
       </div>
 
-      <div class="learning-card" *ngFor="let item of filteredEnrollments">
+      <div
+        class="learning-card"
+        *ngFor="let item of filteredEnrollments"
+        (click)="openCourse(item.course_id)"
+        style="cursor: pointer"
+      >
         <div class="card-content-row">
           <div class="thumbnail">
             <img
               [src]="item.course?.image ? item.course.image : 'assets/imgs/default-thumb.jpg'"
+              alt="Cover Kursus"
             />
           </div>
 
@@ -55,6 +59,67 @@
                 class="progress-fill"
                 [style.width]="(item.progress ?? 0) + '%'"
               ></div>
+            </div>
+
+            <div
+              class="action-area"
+              style="margin-top: 10px; display: flex; gap: 8px"
+            >
+              <button
+                *ngIf="activeTab === 'ongoing'"
+                class="btn-action continue-btn"
+                (click)="openCourse(item.course_id); $event.stopPropagation()"
+                style="
+                  font-size: 11px;
+                  font-weight: bold;
+                  padding: 6px 12px;
+                  border-radius: 8px;
+                  background: #093c5d;
+                  color: white;
+                  border: none;
+                "
+              >
+                Lanjut Belajar
+                <i
+                  class="fas fa-arrow-right"
+                  style="font-size: 9px; margin-left: 4px"
+                ></i>
+              </button>
+
+              <button
+                *ngIf="activeTab === 'ongoing'"
+                class="btn-action quiz-btn"
+                (click)="openQuiz(item); $event.stopPropagation()"
+                style="
+                  font-size: 11px;
+                  font-weight: bold;
+                  padding: 6px 12px;
+                  border-radius: 8px;
+                  background: #f59e0b;
+                  color: white;
+                  border: none;
+                "
+              >
+                <i class="fas fa-question-circle"></i> Kerjakan Kuis
+              </button>
+
+              <button
+                *ngIf="activeTab === 'completed'"
+                class="btn-action certificate-btn"
+                (click)="claimCertificate(item.course_id); $event.stopPropagation()"
+                style="
+                  font-size: 11px;
+                  font-weight: bold;
+                  padding: 6px 12px;
+                  border-radius: 8px;
+                  background: #10b981;
+                  color: white;
+                  border: none;
+                "
+              >
+                <i class="fas fa-award" style="margin-right: 4px"></i> Klaim
+                Sertifikat
+              </button>
             </div>
           </div>
         </div>

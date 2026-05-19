@@ -50,4 +50,5 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::put('/user/update', [AuthController::class, 'updateProfile']);
     Route::get('/wishlist', [WishlistController::class, 'index']);
     Route::post('/wishlist/toggle', [WishlistController::class, 'toggle']);
+    Route::middleware('auth:sanctum')->post('/quiz/submit', [QuizController::class, 'store']);
 });

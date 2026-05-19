@@ -24,7 +24,7 @@ class User extends Authenticatable
         'email',
         'password',
         'role',
-        'otp_code',   
+        'otp_code',
         'otp_expiry',
     ];
 
@@ -59,5 +59,10 @@ class User extends Authenticatable
     public function progress()
     {
         return $this->hasMany(Progress::class);
+    }
+
+    public function quizResults()
+    {
+        return $this->hasMany(QuizResult::class);
     }
 }

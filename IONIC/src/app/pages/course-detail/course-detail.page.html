@@ -8,15 +8,19 @@
 </ion-header>
 
 <ion-content>
-  <!-- Bagian Header Gambar -->
   <div class="image-header">
-    <img [src]="course.image ? course.image : 'https://via.placeholder.com/150'" />
+    <img [src]="course?.image || 'https://via.placeholder.com/400x200'" />
     <div class="category-badge">Bestseller</div>
   </div>
 
   <div class="main-container">
-    <!-- Judul dan Instruktur -->
     <h1 class="course-title">{{ course?.title }}</h1>
+    <div class="rating-row">
+      <ion-icon name="star" color="warning"></ion-icon>
+      <strong>4.9</strong>
+      <span class="text-muted">(1.284 ulasan) • 3.500 Siswa</span>
+    </div>
+
     <div class="instructor-row">
       <ion-avatar>
         <img src="https://ui-avatars.com/api/?name=Admin&background=4f46e5&color=fff" />
@@ -27,39 +31,53 @@
       </div>
     </div>
 
-    <!-- Info Ringkas (Grid) -->
     <div class="stats-card">
-      <div class="stat-item">
-        <ion-icon name="podium-outline" color="primary"></ion-icon>
-        <div class="stat-info">
-          <span>Level</span>
-          <strong>Pemula</strong>
-        </div>
-      </div>
-      <div class="stat-item">
-        <ion-icon name="time-outline" color="primary"></ion-icon>
-        <div class="stat-info">
-          <span>Durasi</span>
-          <strong>12 Jam</strong>
-        </div>
-      </div>
+      <div class="stat-item"><ion-icon name="podium-outline" color="primary"></ion-icon><span>Pemula</span></div>
+      <div class="stat-item"><ion-icon name="time-outline" color="primary"></ion-icon><span>12 Jam</span></div>
+      <div class="stat-item"><ion-icon name="people-outline" color="primary"></ion-icon><span>3.5k Siswa</span></div>
     </div>
 
-    <!-- Deskripsi -->
-    <div class="description-section">
+    <div class="section">
       <h3>Tentang Kursus</h3>
-      <p>{{ course?.description || 'Pelajari materi ini secara mendalam untuk meningkatkan keahlian Anda di bidang software engineering.' }}</p>
+      <p>{{ course?.description || 'Pelajari materi ini secara mendalam...' }}</p>
+    </div>
+
+    <div class="section">
+      <h3>Kurikulum Kursus</h3>
+      <ion-list lines="full" class="curriculum-list">
+        <ion-item *ngFor="let i of [1,2,3,4]">
+          <ion-icon name="play-circle-outline" slot="start" color="medium"></ion-icon>
+          <ion-label>
+            <h2>Bagian {{i}}: Modul Pembelajaran</h2>
+            <p>Durasi: 15 Menit</p>
+          </ion-label>
+        </ion-item>
+      </ion-list>
+    </div>
+
+    <div class="section">
+      <h3>Persyaratan</h3>
+      <ul class="req-list">
+        <li>Memiliki akses internet dan laptop.</li>
+        <li>Dasar pemrograman PHP atau Laravel.</li>
+        <li>Kemauan belajar yang tinggi.</li>
+      </ul>
     </div>
   </div>
 </ion-content>
 
 <ion-footer class="ion-no-border">
   <div class="footer-wrapper">
+    <ion-button fill="outline" shape="round" color="primary" class="wishlist-btn">
+      <ion-icon name="heart-outline"></ion-icon>
+    </ion-button>
+    
     <div class="price-container">
-      <span>Total Investasi</span>
+      <small>Total Investasi</small>
       <h2>Rp {{ course?.price | number:'1.0-0' }}</h2>
     </div>
-    <ion-button expand="block" shape="round" color="primary" (click)="enroll()">
+    
+    <ion-button expand="block" shape="round" color="primary" class="enroll-btn" (click)="enroll()">
       Daftar Sekarang
     </ion-button>
   </div>

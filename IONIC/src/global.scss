@@ -1,5 +1,5 @@
-/* * EDUVAN PREMIUM DESIGN SYSTEM 
- * Authorized Revised 2026 
+/* * EDUVAN PREMIUM DESIGN SYSTEM
+ * Authorized Revised 2026
  */
 
 /* 1. CORE IONIC IMPORTS (Fixed & Clean) */
@@ -24,10 +24,10 @@
   --ion-color-primary-tint: #22506d;
 
   /* Palette Premium Eduvan */
-  --edu-accent: #1565C0;      
-  --edu-bg: #F4F7FA;          
+  --edu-accent: #1565C0;
+  --edu-bg: #F4F7FA;
   --edu-white: #ffffff;
-  --edu-text-main: #1A202C;   
+  --edu-text-main: #1A202C;
   --edu-text-muted: #718096;
 
   /* Shadow System: Menggunakan tint biru gelap agar tidak kotor */
@@ -41,13 +41,13 @@
 /* Base Card Premium: Efek Melayang */
 .edu-card {
   background: var(--edu-white);
-  border-radius: 28px; 
+  border-radius: 28px;
   border: var(--soft-border);
   box-shadow: var(--premium-shadow);
   transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
   overflow: hidden;
   margin-bottom: 16px;
-  
+
   &:active {
     transform: scale(0.97);
     box-shadow: 0 5px 15px rgba(9, 60, 93, 0.1);
@@ -73,7 +73,7 @@ ion-button {
   border: 1.5px solid #E2E8F0;
   margin-top: 8px;
   transition: all 0.3s ease;
-  
+
   /* State saat Input diklik */
   &.item-has-focus {
     border-color: var(--ion-color-primary);
@@ -112,19 +112,19 @@ ion-button {
 
   /* State Berhasil: Mengikuti warna tema biru utama Eduvan */
   &.ion-color-success {
-    --background: var(--ion-color-primary); 
+    --background: var(--ion-color-primary);
     --color: var(--ion-color-primary-contrast);
   }
 
   /* State Gagal: Merah menyala modern */
   &.ion-color-danger {
-    --background: #ef4444; 
+    --background: #ef4444;
     --color: #ffffff;
   }
 
   /* State Peringatan/Validasi: Jingga hangat */
   &.ion-color-warning {
-    --background: #f59e0b; 
+    --background: #f59e0b;
     --color: #ffffff;
   }
 }
@@ -137,7 +137,7 @@ ion-loading {
   --border-radius: 24px;
   font-weight: 700;
   box-shadow: var(--premium-shadow);
-  
+
   /* Desain text di dalam loading */
   .loading-wrapper {
     padding: 24px !important;

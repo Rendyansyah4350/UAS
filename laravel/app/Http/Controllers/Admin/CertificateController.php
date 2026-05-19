@@ -5,41 +5,47 @@ namespace App\Http\Controllers\Admin;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Models\Course;
-use App\Models\Certificate; // Perbaikan typo spasi di kode lo tadi
+use App\Models\Certificate;
 use Illuminate\Support\Str;
 use App\Models\Progress;
 use Barryvdh\DomPDF\Facade\Pdf;
 use App\Models\Content;
+use App\Models\QuizResult;
 
 
 class CertificateController extends Controller
 {
     public function index()
     {
-        // 1. Ambil semua kursus beserta student-nya dan progress mereka sekaligus
-        // Eager loading ini penting agar database tidak dipanggil berulang kali di dalam loop
-        $courses = Course::with(['users.progress', 'contents'])->get();
+        // 1. Ambil semua kursus beserta student-nya, progress, DAN quizResults sekaligus (Eager Loading)
+        $courses = Course::with(['users.progress', 'users.quizResults', 'contents'])->get();
 
         $pendingCertificates = collect();
 
         foreach ($courses as $course)
         {
-            $totalMateri = $course->contents->count(); // Mengambil dari collection (sudah di-load di awal)
+            $totalMateri = $course->contents->count();
 
             if ($totalMateri === 0) continue;
 
             foreach ($course->users as $user)
             {
-                // Hitung materi yang selesai dari collection progress yang sudah di-load
+                // Hitung materi yang selesai
                 $userCompleted = $user->progress
                     ->where('course_id', $course->id)
                     ->where('is_completed', true)
                     ->whereNotNull('content_id')
                     ->count();
 
-                if ($userCompleted >= $totalMateri)
+                // 2. TAMBAHAN: Cek apakah user sudah mengerjakan kuis (status passed/failed gak masalah)
+                $isQuizDone = $user->quizResults
+                    ->where('course_id', $course->id)
+                    ->isNotEmpty();
+
+                // Syarat: Materi Selesai DAN Kuis Sudah Dikerjakan
+                if ($userCompleted >= $totalMateri && $isQuizDone)
                 {
-                    // Cek apakah sertifikat sudah ada (opsional, tapi bagus untuk status di View)
+                    // Cek apakah sertifikat sudah ada
                     $user->already_has_certificate = Certificate::where('user_id', $user->id)
                         ->where('course_id', $course->id)
                         ->exists();
