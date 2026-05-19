@@ -27,11 +27,6 @@ const routes: Routes = [
         path: 'wishlist',
         loadChildren: () => import('../wishlist/wishlist.module').then(m => m.WishlistPageModule)
       },
-      // TAMBAHAN: course-player didaftarkan di sini agar Tab Bar tetap ada
-      {
-        path: 'course-player',
-        loadChildren: () => import('../course-player/course-player.module').then(m => m.CoursePlayerPageModule)
-      },
       {
         path: '',
         redirectTo: 'beranda',
