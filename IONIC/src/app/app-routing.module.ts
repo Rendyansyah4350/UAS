@@ -51,7 +51,6 @@ const routes: Routes = [
   },
   {
     path: 'wishlist',
-    canActivate: [AuthGuard], // Wajib login untuk melihat daftar keinginan
     loadChildren: () => import('./pages/wishlist/wishlist.module').then(m => m.WishlistPageModule)
   },
   {
@@ -79,9 +78,6 @@ const routes: Routes = [
   {
     path: '**', // Menangani jika user mengetik alamat asal-asalan, langsung oper ke tabs
     redirectTo: 'tabs'
-  },  {
-    path: 'course-player',
-    loadChildren: () => import('./pages/course-player/course-player.module').then( m => m.CoursePlayerPageModule)
   },
 
 ];
