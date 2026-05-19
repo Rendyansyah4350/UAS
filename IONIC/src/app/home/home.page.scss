@@ -1,378 +1,351 @@
+/* Global Background Halaman */
 ion-content {
-  --background: #f4f7fe !important;
+  --background: #F4F7FA; 
 }
 
 .main-wrapper {
-  background: #f8faff;
-  padding-bottom: 30px;
-  min-height: 100%;
+  padding-bottom: 32px;
 }
 
-// ==========================================
-// AREA ATAS DASHBOARD (HEADER, SEARCH, CARD)
-// ==========================================
-
-// 1. Header Section (Jarak bawah dikecilkan agar dekat ke search bar)
+/* 1. HEADER SECTION (Deep Ocean Identity) */
 .header-section {
+  background: #093C5D;
+  padding: 24px 20px 60px 20px;
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding: 20px 20px 10px; // Padding bawah 10px agar proporsional
+  border-bottom-left-radius: 32px;
+  border-bottom-right-radius: 32px;
 
   .brand {
+    color: #ffffff;
     font-size: 24px;
     font-weight: 800;
-    color: #1a1a1a;
+    letter-spacing: 0.5px;
 
-    span { color: #5142E1; }
+    span {
+      color: #1565C0; /* Warna aksen biru terang */
+    }
   }
 
   .icon-notif {
-    font-size: 24px;
-    color: #333;
+    color: #ffffff;
+    font-size: 26px;
+    transition: transform 0.2s ease;
+
+    &:active {
+      transform: scale(0.9);
+    }
   }
 }
 
-// 2. Search Container (Posisi baru di atas welcome card)
+/* 2. SEARCH CONTAINER (Sudah Bersih dari Kotak Hitam / Outline Default) */
 .search-container {
-  padding: 5px 20px 12px; // Jarak atas 5px, bawah 12px agar tidak menempel ke card bawahnya
+  padding: 0 20px;
+  margin-top: -30px;
+  margin-bottom: 24px;
 
   .search-inner {
-    background: white !important;
-    border-radius: 14px;
-    padding: 12px 15px;
+    background: #ffffff;
+    border-radius: 16px;
+    padding: 6px 16px;
     display: flex;
     align-items: center;
-    gap: 12px;
-    box-shadow: 0 8px 20px rgba(0,0,0,0.03);
-    border: 1px solid #f1f5f9;
+    box-shadow: 0 15px 30px rgba(9, 60, 93, 0.08);
+    border: 1px solid rgba(226, 232, 240, 0.8);
+    transition: all 0.3s ease;
 
-    ion-icon {
-      color: #94a3b8;
-      font-size: 20px;
+    /* Ketika area box search sedang aktif diketik */
+    &:focus-within {
+      border-color: #093C5D;
+      box-shadow: 0 0 0 3px rgba(9, 60, 93, 0.1);
+    }
+
+    ion-icon.search-click-icon {
+      color: #093C5D;
+      font-size: 22px;
+      margin-right: 12px;
+      cursor: pointer;
+      
+      &:active {
+        transform: scale(0.85);
+      }
     }
 
     input {
       border: none !important;
-      outline: none !important;
-      width: 100%;
-      font-size: 14px;
-      background: none !important;
-      background-color: transparent !important;
+      outline: none !important; /* MEMBUANG KOTAK HITAM/GELAP SAAT DIKLIK */
       box-shadow: none !important;
-      -webkit-appearance: none;
-      color: #1e293b;
+      width: 100%;
+      height: 42px;
+      font-size: 14px;
+      color: #1A202C;
+      font-weight: 500;
+      background: transparent;
 
       &::placeholder {
-        color: #94a3b8;
-        opacity: 1;
+        color: #718096;
+        font-weight: 400;
       }
     }
   }
 }
 
-// 3. Welcome Card Container (Mengikuti gaya card premium)
+/* 3. WELCOME TEXT */
 .welcome-card-container {
-  padding: 0 20px 15px 20px; // Padding atas 0 karena sudah mendapat space dari search container
+  padding: 0 20px;
+  margin-bottom: 18px;
 
-  .welcome-card-inner {
-    background: #ffffff;
-    border-radius: 16px;
-    padding: 16px 20px;
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    box-shadow: 0 8px 24px rgba(81, 66, 225, 0.04);
-    border: 1px solid #f1f5f9;
+  h2 {
+    color: #1A202C;
+    font-size: 20px;
+    font-weight: 800;
+    margin: 0 0 4px 0;
+  }
 
-    .text-group {
-      h2 {
-        font-size: 18px;
-        font-weight: 800;
-        color: #1a1a1a;
-        margin: 0 0 4px 0;
-        letter-spacing: -0.3px;
-      }
-
-      p {
-        font-size: 12px;
-        color: #64748b;
-        margin: 0;
-        font-weight: 500;
-      }
-    }
+  p {
+    color: #718096;
+    font-size: 14px;
+    margin: 0;
+    font-weight: 500;
   }
 }
 
-// Banner
+/* 4. PROMO BANNER (Premium Card Style) */
 .promo-banner {
-  margin: 0 20px;
-  padding: 25px;
-  background: linear-gradient(135deg, #1e1b4b 0%, #5142e1 100%);
+  background: linear-gradient(135deg, #093C5D 0%, #1565C0 100%);
+  margin: 0 20px 24px 20px;
+  padding: 24px;
   border-radius: 24px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
   position: relative;
   overflow: hidden;
-  min-height: 180px;
-
-  position: relative;
-  overflow: hidden;
-
-  // Membuat lingkaran hiasan di pojok banner
-  &::after {
-    content: "";
-    position: absolute;
-    width: 150px;
-    height: 150px;
-    background: rgba(255, 255, 255, 0.1);
-    border-radius: 50%;
-    top: -50px;
-    right: -50px;
-  }
+  box-shadow: 0 15px 30px rgba(9, 60, 93, 0.15);
 
   .banner-text {
-    width: 65%;
+    width: 60%;
     z-index: 2;
-    position: relative;
+
     h3 {
-      color: white;
-      font-size: 19px;
+      color: #ffffff;
+      font-size: 18px;
       font-weight: 800;
-      line-height: 1.3;
-      margin: 0;
+      margin: 0 0 8px 0;
+      line-height: 1.4;
     }
+
     p {
-      color: rgba(255, 255, 255, 0.7);
+      color: rgba(255, 255, 255, 0.8);
       font-size: 11px;
-      margin: 12px 0 20px;
+      margin: 0 0 16px 0;
+      line-height: 1.5;
     }
+
     .cta-button {
-      background: white;
-      color: #5142e1;
+      background: #ffffff;
+      color: #093C5D;
       border: none;
-      padding: 10px 20px;
+      padding: 10px 18px;
       border-radius: 12px;
+      font-size: 12px;
       font-weight: 700;
+      box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+      cursor: pointer;
+      transition: all 0.2s ease;
+
+      &:active {
+        transform: scale(0.95);
+        background: #F4F7FA;
+      }
     }
   }
+
   .banner-img {
-    position: absolute;
-    right: -5px;
-    bottom: 0;
-    width: 45%;
-    z-index: 1;
+    width: 35%;
+    max-height: 120px;
+    object-fit: contain;
+    z-index: 2;
   }
 }
 
-// Section Label
+/* 5. CATEGORY HORIZONTAL SYSTEM */
+.category-list {
+  display: flex;
+  gap: 16px;
+  padding: 0 20px;
+  margin-bottom: 28px;
+
+  .category-item {
+    flex: 1;
+    background: #ffffff;
+    padding: 14px;
+    border-radius: 20px;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    border: 1px solid rgba(226, 232, 240, 0.8);
+    box-shadow: 0 8px 20px rgba(9, 60, 93, 0.03);
+
+    .cat-icon {
+      width: 42px;
+      height: 42px;
+      border-radius: 12px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 20px;
+
+      &.blue {
+        background: rgba(9, 60, 93, 0.1);
+        color: #093C5D;
+      }
+      &.green {
+        background: rgba(21, 101, 192, 0.1);
+        color: #1565C0;
+      }
+    }
+
+    p {
+      color: #1A202C;
+      font-size: 12px;
+      font-weight: 700;
+      margin: 0;
+    }
+  }
+}
+
+/* 6. LABEL ROW INTERACT */
 .label-row {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding: 25px 20px 15px;
-  h4 {
-    margin: 0;
-    font-size: 17px;
-    font-weight: 700;
-    color: #0f172a;
-  }
-  .see-all {
-    color: #5142e1;
-    font-size: 12px;
-    font-weight: 600;
-  }
-}
-
-// Category Slider
-.category-list {
-  display: flex;
-  gap: 15px;
   padding: 0 20px;
-  overflow-x: auto;
-  .category-item {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    min-width: 70px;
-    .cat-icon {
-      width: 60px;
-      height: 60px;
-      border-radius: 18px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-size: 26px;
-      background: white;
-      margin-bottom: 8px;
-      box-shadow: 0 10px 30px rgba(81, 66, 225, 0.05);
-      &.blue {
-        color: #5142e1;
-        background: #eef2ff;
-      }
-      &.green {
-        color: #107c41;
-        background: #f0fdf4;
-      }
-      &.orange {
-        color: #f97316;
-        background: #fff7ed;
-      }
-    }
-    p {
-      font-size: 11px;
-      font-weight: 600;
-      color: #64748b;
-      margin: 0;
+  margin-bottom: 16px;
+
+  h4 {
+    color: #1A202C;
+    font-size: 16px;
+    font-weight: 800;
+    margin: 0;
+  }
+
+  .see-all {
+    color: #1565C0;
+    font-size: 13px;
+    font-weight: 700;
+    
+    &:hover {
+      text-decoration: underline;
     }
   }
 }
 
-// Course Card
-.premium-course-card {
-  width: 230px;
-  margin-left: 20px;
-  background: white;
-  border-radius: 20px;
-  border: 1px solid #f1f5f9;
-  box-shadow: 0 10px 30px rgba(81, 66, 225, 0.05);
-
-  .course-thumb {
-    background: #e2e8f0;
-    position: relative;
-    img {
-      width: 100%;
-      height: 125px;
-      object-fit: cover;
-      border-radius: 20px 20px 0 0;
-    }
-    .tag-best {
-      position: absolute;
-      top: 10px;
-      left: 10px;
-      background: #fbbf24;
-      color: white;
-      font-size: 9px;
-      padding: 4px 8px;
-      border-radius: 6px;
-      font-weight: 800;
-    }
-  }
-  .course-body {
-    padding: 15px;
-    h5 {
-      font-size: 14px;
-      font-weight: 700;
-      margin: 0;
-      line-height: 1.4;
-      color: #1e293b;
-    }
-    .instructor {
-      font-size: 11px;
-      color: #94a3b8;
-      margin: 6px 0;
-    }
-    .course-meta {
-      color: #fbbf24;
-      font-size: 12px;
-      font-weight: 800;
-    }
-    .course-price {
-      font-size: 15px;
-      font-weight: 800;
-      color: #5142e1;
-      margin-top: 10px;
-    }
-  }
-}
-// Container untuk daftar kursus vertikal (kartu berjejer ke bawah)
+/* 7. PREMIUM VERTICAL COURSE CARDS (Horizontal Layout) */
 .course-list-vertical {
   padding: 0 20px;
   display: flex;
   flex-direction: column;
-  gap: 16px; // Jarak antar kartu
-}
+  gap: 14px;
 
-// Gaya kartu horizontal sesuai referensi (Gambar di kiri, teks di kanan)
-.premium-course-card-horizontal {
-  display: flex; // Membuat konten berjejer ke samping
-  background: white;
-  border-radius: 20px;
-  border: 1px solid #f1f5f9;
-  box-shadow: 0 10px 30px rgba(81, 66, 225, 0.05);
-  padding: 12px;
-  gap: 15px;
-  align-items: center;
+  .premium-course-card-horizontal {
+    background: #ffffff;
+    border-radius: 20px;
+    padding: 12px;
+    display: flex;
+    gap: 16px;
+    border: 1px solid rgba(226, 232, 240, 0.8);
+    box-shadow: 0 10px 25px rgba(9, 60, 93, 0.04);
+    transition: transform 0.3s ease;
 
-  .course-thumb-box {
-    position: relative;
-    width: 100px; // Ukuran tetap untuk gambar
-    height: 100px;
-    flex-shrink: 0; // Agar gambar tidak mengecil saat teks panjang
+    &:active {
+      transform: scale(0.98);
+    }
 
-    img {
-      width: 100%;
-      height: 100%;
-      object-fit: cover;
+    .course-thumb-box {
+      width: 95px;
+      height: 95px;
       border-radius: 14px;
+      position: relative;
+      overflow: hidden;
+      flex-shrink: 0;
+
+      img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+      }
+
+      .tag-best {
+        position: absolute;
+        bottom: 0;
+        left: 0;
+        right: 0;
+        background: rgba(9, 60, 93, 0.85);
+        color: #ffffff;
+        font-size: 8px;
+        font-weight: 700;
+        text-align: center;
+        padding: 4px 0;
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+      }
     }
 
-    .tag-best {
-      position: absolute;
-      top: 6px;
-      left: 6px;
-      background: #fbbf24;
-      color: white;
-      font-size: 8px;
-      padding: 3px 6px;
-      border-radius: 5px;
-      font-weight: 800;
-    }
-  }
-
-  .course-info-box {
-    flex: 1; // Mengambil sisa ruang di sebelah kanan
-
-    h5 {
-      margin: 0;
-      font-size: 14px;
-      font-weight: 700;
-      color: #1e293b;
-      line-height: 1.4;
-    }
-
-    .instructor {
-      font-size: 11px;
-      color: #94a3b8;
-      margin: 4px 0;
-    }
-
-    .course-meta {
+    .course-info-box {
       display: flex;
-      align-items: center;
-      gap: 4px;
-      margin-bottom: 6px;
+      flex-direction: column;
+      justify-content: space-between;
+      flex: 1;
 
-      ion-icon {
-        color: #fbbf24;
+      h5 {
+        color: #1A202C;
         font-size: 14px;
-      }
-
-      .rating-val {
-        font-size: 12px;
         font-weight: 800;
-        color: #fbbf24;
+        margin: 0 0 2px 0;
+        line-height: 1.4;
+        display: -webkit-box;
+        -webkit-line-clamp: 2;
+        -webkit-box-orient: vertical;
+        overflow: hidden;
       }
 
-      .rating-count {
+      .instructor {
+        color: #718096;
         font-size: 11px;
-        color: #94a3b8;
-        font-weight: 400;
+        margin: 0 0 6px 0;
+        font-weight: 500;
       }
-    }
 
-    .course-price {
-      font-size: 15px;
-      font-weight: 800;
-      color: #5142e1;
+      .course-meta {
+        display: flex;
+        align-items: center;
+        gap: 4px;
+        margin-bottom: 4px;
+
+        ion-icon {
+          color: #ffb300;
+          font-size: 14px;
+        }
+
+        .rating-val {
+          color: #1A202C;
+          font-size: 12px;
+          font-weight: 700;
+        }
+
+        .rating-count {
+          color: #718096;
+          font-size: 11px;
+        }
+      }
+
+      .course-price {
+        color: #093C5D;
+        font-size: 14px;
+        font-weight: 800;
+      }
     }
   }
 }

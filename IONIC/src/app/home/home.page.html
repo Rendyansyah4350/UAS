@@ -12,12 +12,12 @@
 
     <div class="search-container">
       <div class="search-inner">
-        <ion-icon name="search-outline"></ion-icon>
+        <ion-icon name="search-outline" class="search-click-icon" (click)="fungsiCariKursus()"></ion-icon>
         <input
           type="text"
           [(ngModel)]="keywordPencarian"
-          (input)="fungsiCariKursus()"
-          placeholder="Cari kursus coding, office, dll..."
+          (keyup.enter)="fungsiCariKursus()"
+          placeholder="Cari kursus coding, office, dll... (Tekan Enter)"
         />
       </div>
     </div>
@@ -35,7 +35,7 @@
       <div class="banner-text">
         <h3>Tingkatkan Skill,<br />Wujudkan Masa Depan</h3>
         <p>Belajar kapan saja, di mana saja bersama EduVan.</p>
-        <button class="cta-button">Jelajahi Kursus</button>
+        <button class="cta-button" (click)="goToCourse()">Jelajahi Kursus</button>
       </div>
       <img src="assets/imgs/student.png" class="banner-img" />
     </div>
@@ -55,9 +55,7 @@
 
     <div class="label-row">
       <h4>Kursus Populer</h4>
-      <span class="see-all" (click)="goToCourse()" style="cursor: pointer"
-        >Lihat semua</span
-      >
+      <span class="see-all" (click)="goToCourse()" style="cursor: pointer">Lihat semua</span>
     </div>
 
     <div class="course-list-vertical">
@@ -91,35 +89,20 @@
             </div>
 
             <div class="course-price">
-              {{ kursus.price == 0 || kursus.price == '0' ? 'Gratis' : 'Rp ' +
-              kursus.price }}
+              {{ kursus.price == 0 || kursus.price == '0' ? 'Gratis' : 'Rp ' + kursus.price }}
             </div>
           </div>
         </div>
 
         <div
-          *ngIf="kursusTersaring.length === 0 && !keywordPencarian.trim()"
+          *ngIf="kursusTersaring.length === 0"
           style="text-align: center; padding: 40px; color: #94a3b8"
         >
           <ion-icon
             name="star-outline"
-            style="
-              font-size: 40px;
-              color: #cbd5e1;
-              display: block;
-              margin: 0 auto 10px;
-            "
+            style="font-size: 40px; color: #cbd5e1; display: block; margin: 0 auto 10px;"
           ></ion-icon>
-          <p>Belum ada kursus populer saat ini </p>
-        </div>
-
-        <div
-          *ngIf="kursusTersaring.length === 0 && keywordPencarian.trim()"
-          style="text-align: center; padding: 40px; color: #94a3b8"
-        >
-          <p>
-            Kursus "{{ keywordPencarian }}" tidak ditemukan
-          </p>
+          <p>Belum ada kursus populer saat ini</p>
         </div>
       </ng-container>
     </div>

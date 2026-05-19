@@ -66,23 +66,23 @@ export class HomePage implements OnInit {
     });
   }
 
-  // Logika filter search bar berdasarkan kolom 'title' hasil fillable Laravel
+  // Logika ala Shopee: Mengoper kata kunci pencarian langsung ke halaman Course utama
   fungsiCariKursus() {
-    console.log('User lagi nyari kursus:', this.keywordPencarian);
+    console.log('User lagi nyari kursus, alihkan ke page course:', this.keywordPencarian);
 
-    // Jika search bar dikosongkan, kembalikan semua list kursus master
-    if (!this.keywordPencarian.trim()) {
-      this.kursusTersaring = this.daftarKursusMaster;
+    if (!this.keywordPencarian || !this.keywordPencarian.trim()) {
+      // Jika kosong, langsung arahkan saja ke tab course biasa
+      this.router.navigate(['/tabs/course']);
       return;
     }
 
-    // Filter daftar berdasarkan kecocokan judul/title (lowercase agar aman dari huruf kapital)
-    this.kursusTersaring = this.daftarKursusMaster.filter((kursus) => {
-      const judulKursus = kursus.title || '';
-      return judulKursus
-        .toLowerCase()
-        .includes(this.keywordPencarian.toLowerCase());
+    // Alihkan ke halaman course sambil mengoper state beralaskan kata kunci pencarian
+    this.router.navigate(['/tabs/course'], {
+      state: { keyword: this.keywordPencarian }
     });
+
+    // Opsional: Bersihkan bar pencarian di halaman home setelah diredirect
+    this.keywordPencarian = '';
   }
 
   // Fungsi untuk mengambil data login dari database hosting yang tersimpan di device
