@@ -66,9 +66,31 @@ export class VerifyOtpPage implements OnInit {
     });
   }
 
-  // Tambahan Fungsi Kirim Ulang OTP agar tidak error
-  resendCode() {
-    this.presentToast('Kode OTP baru berhasil dikirim ulang!', 'success');
+  // 🟢 PERBAIKAN: Fungsi Kirim Ulang OTP Terhubung ke Server Live Backend
+  async resendCode() {
+    if (!this.emailForVerify) {
+      this.presentToast('Email tidak terdeteksi lek!', 'danger');
+      return;
+    }
+
+    const loading = await this.loadingCtrl.create({
+      message: 'Mengirim ulang kode OTP...',
+      spinner: 'crescent',
+    });
+    await loading.present();
+
+    // Memanggil sendRegisterOtp yang baru kita tambahkan di auth.service.ts
+    this.auth.sendRegisterOtp(this.emailForVerify).subscribe({
+      next: async (res) => {
+        await loading.dismiss();
+        this.presentToast('Kode OTP baru berhasil dikirim ke email lek!', 'success');
+      },
+      error: async (err) => {
+        await loading.dismiss();
+        console.error('Gagal resend OTP:', err);
+        this.presentToast('Gagal mengirim ulang OTP. Pastikan email terdaftar lek!', 'danger');
+      }
+    });
   }
 
   // Fungsi tombol kembali ke Sign In

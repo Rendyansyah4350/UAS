@@ -1,59 +1,57 @@
-<ion-content [fullscreen]="true">
-  <div class="main-wrapper">
-    
-    <div class="header-area">
-      <h2>Wishlist</h2>
-      <div class="count-badge">3 Kursus</div>
-    </div>
+<ion-header class="ion-no-border">
+  <ion-toolbar color="primary">
+    <ion-title>Wishlist Saya</ion-title>
+  </ion-toolbar>
+</ion-header>
 
-    <div class="wishlist-container">
-      
-      <!-- Item Wishlist 1 -->
-      <div class="wishlist-card">
-        <div class="thumb-section">
-          <img src="assets/imgs/course-1.jpg" />
-          <div class="wish-icon">
-            <ion-icon name="heart"></ion-icon>
-          </div>
-        </div>
-        
-        <div class="info-section">
-          <h5>Advanced Flutter Mastery 2024</h5>
-          <div class="meta-row">
-            <ion-icon name="star"></ion-icon>
-            <span>4.9</span>
-            <span class="reviews">(2.1k)</span>
-          </div>
-          <div class="price-row">
-            <span class="current-price">Rp 350.000</span>
-            <ion-icon name="cart-outline" class="add-cart"></ion-icon>
-          </div>
-        </div>
-      </div>
-
-      <!-- Item Wishlist 2 -->
-      <div class="wishlist-card">
-        <div class="thumb-section">
-          <img src="assets/imgs/course-2.jpg" />
-          <div class="wish-icon">
-            <ion-icon name="heart"></ion-icon>
-          </div>
-        </div>
-        
-        <div class="info-section">
-          <h5>Business Intelligence with Power BI</h5>
-          <div class="meta-row">
-            <ion-icon name="star"></ion-icon>
-            <span>4.7</span>
-            <span class="reviews">(850)</span>
-          </div>
-          <div class="price-row">
-            <span class="current-price">Rp 275.000</span>
-            <ion-icon name="cart-outline" class="add-cart"></ion-icon>
-          </div>
-        </div>
-      </div>
-
-    </div>
+<ion-content>
+  <div *ngIf="isLoading" class="loading-wishlist-box">
+    <ion-spinner name="crescent" color="primary"></ion-spinner>
+    <p>Sinkronisasi wishlist kamu...</p>
   </div>
+
+  <ng-container *ngIf="!isLoading">
+    
+    <div *ngIf="wishlistCourses.length === 0" class="empty-wishlist-box">
+      <ion-icon name="heart-dislike-outline"></ion-icon>
+      <h3>Belum Ada Wishlist</h3>
+      <p>Kursus yang kamu sukai di katalog nanti akan muncul berkumpul di sini lek.</p>
+    </div>
+
+    <ion-grid *ngIf="wishlistCourses.length > 0" class="wishlist-grid-container">
+      <ion-row>
+        <ion-col size="6" *ngFor="let course of wishlistCourses; let i = index">
+          <ion-card (click)="goToDetail(course.id)" style="margin: 8px 4px; height: calc(100% - 16px); cursor: pointer">
+            
+            <div class="img-container">
+              <img [src]="course.image || 'assets/imgs/course-coding.jpg'" />
+              
+              <div class="wishlist-heart-btn" (click)="hapusDariWishlist($event, course.id, i)">
+                <ion-icon name="heart" class="hati-aktif"></ion-icon>
+              </div>
+            </div>
+            
+            <div class="card-content">
+              <span class="category-tag">{{ course.category ?? 'General' }}</span>
+
+              <ion-card-title style="font-size: 14px; font-weight: 600; margin: 6px 0; line-height: 1.3;">
+                {{ course.title }}
+              </ion-card-title>
+
+              <div class="rating" style="display: flex; align-items: center; gap: 4px; font-size: 11px;">
+                <ion-icon name="star" color="warning"></ion-icon>
+                <span>{{ course.rating ? (course.rating | number:'1.1-1') : '5.0' }} | Live</span>
+              </div>
+
+              <h2 class="price" style="font-size: 13px; font-weight: 700; margin-top: 8px">
+                {{ course.price == 0 || course.price == '0' ? 'Gratis' : 'Rp ' + (course.price | number) }}
+              </h2>
+            </div>
+
+          </ion-card>
+        </ion-col>
+      </ion-row>
+    </ion-grid>
+
+  </ng-container>
 </ion-content>

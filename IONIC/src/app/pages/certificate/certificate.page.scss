@@ -1,0 +1,140 @@
+ion-toolbar {
+  --background: #F4F7FA;
+  --color: #1A202C;
+  
+  ion-title {
+    font-size: 18px;
+    font-weight: 700;
+  }
+}
+
+ion-content {
+  --background: #F4F7FA;
+}
+
+.certificate-container {
+  padding: 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+
+/* Teks Summary Atas */
+.cert-summary {
+  margin-bottom: 4px;
+  padding-left: 4px;
+  
+  p {
+    margin: 0;
+    font-size: 13px;
+    color: #718096;
+    font-weight: 500;
+    
+    span {
+      color: #093C5D; /* Biru EduVan */
+      font-weight: 700;
+    }
+  }
+}
+
+/* Desain Premium Card Sertifikat */
+.certificate-card {
+  background: #ffffff;
+  border-radius: 20px;
+  padding: 18px 16px;
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  position: relative;
+  overflow: hidden;
+  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.02);
+  border: 1px solid rgba(9, 60, 93, 0.06);
+  transition: transform 0.2s ease;
+
+  &:active {
+    transform: scale(0.98);
+  }
+
+  /* Efek garis dekorasi tipis warna emas di sisi kiri card */
+  &::before {
+    content: '';
+    position: absolute;
+    left: 0;
+    top: 0;
+    bottom: 0;
+    width: 5px;
+    background: linear-gradient(to bottom, #D4AF37, #F3E5AB); /* Gradasi Emas */
+  }
+
+  /* Pembungkus Ikon Medal Emas */
+  .cert-badge {
+    width: 46px;
+    height: 46px;
+    border-radius: 14px;
+    background: linear-gradient(135deg, rgba(212, 175, 55, 0.15), rgba(243, 229, 171, 0.2));
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+
+    ion-icon {
+      font-size: 24px;
+      color: #D4AF37; /* Warna Gold Medal */
+    }
+  }
+
+  /* Info Detail Teks */
+  .cert-info {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+
+    .cert-id {
+      font-size: 10px;
+      font-weight: 700;
+      color: #a0aec0;
+      letter-spacing: 0.5px;
+    }
+
+    h3 {
+      margin: 0;
+      font-size: 14px;
+      font-weight: 700;
+      color: #093C5D; /* Judul pakai warna utama Eduvan */
+      line-height: 1.4;
+    }
+
+    .cert-date {
+      margin: 0;
+      font-size: 11px;
+      color: #718096;
+      font-weight: 500;
+    }
+  }
+
+  /* Lingkaran Tombol Download di Kanan */
+  .cert-action {
+    flex-shrink: 0;
+
+    .btn-download {
+      --padding-top: 0;
+      --padding-bottom: 0;
+      --padding-start: 0;
+      --padding-end: 0;
+      width: 38px;
+      height: 38px;
+      margin: 0;
+      background: #F4F7FA;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+
+      ion-icon {
+        font-size: 18px;
+        color: #093C5D; /* Warna Biru EduVan */
+      }
+    }
+  }
+}

@@ -1,13 +1,50 @@
-<ion-header [translucent]="true">
+<ion-header class="ion-no-border">
   <ion-toolbar>
-    <ion-title>certificate</ion-title>
+    <ion-buttons slot="start">
+      <ion-back-button defaultHref="/tabs/profile" text="" color="dark"></ion-back-button>
+    </ion-buttons>
+    <ion-title>Sertifikat Saya</ion-title>
   </ion-toolbar>
 </ion-header>
 
-<ion-content [fullscreen]="true">
-  <ion-header collapse="condense">
-    <ion-toolbar>
-      <ion-title size="large">certificate</ion-title>
-    </ion-toolbar>
-  </ion-header>
+<ion-content>
+  <div class="certificate-container">
+    
+    <div class="cert-summary">
+      <p>Selamat lek! Kamu telah menyelesaikan <span>2 Kursus</span></p>
+    </div>
+
+    <div class="certificate-card">
+      <div class="cert-badge">
+        <ion-icon name="medal"></ion-icon>
+      </div>
+      <div class="cert-info">
+        <span class="cert-id">ID: CERT-UIUX-8821</span>
+        <h3>UI/UX Design Masterclass</h3>
+        <p class="cert-date">Lulus pada: 14 Mei 2026</p>
+      </div>
+      <div class="cert-action">
+        <ion-button fill="clear" class="btn-download">
+          <ion-icon name="download-outline"></ion-icon>
+        </ion-button>
+      </div>
+    </div>
+
+    <div class="certificate-card">
+      <div class="cert-badge">
+        <ion-icon name="medal"></ion-icon>
+      </div>
+      <div class="cert-info">
+        <span class="cert-id">ID: CERT-LARAVEL-9012</span>
+        <h3>Backend Web Development dengan Laravel 11</h3>
+        <p class="cert-date">Lulus pada: 28 April 2026</p>
+      </div>
+      <div class="cert-action">
+        <ion-button fill="clear" class="btn-download">
+          <ion-icon name="download-outline"></ion-icon>
+        </ion-button>
+      </div>
+    </div>
+
+  </div>
 </ion-content>

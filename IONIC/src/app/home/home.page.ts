@@ -28,8 +28,30 @@ export class HomePage implements OnInit {
 
   ngOnInit() {
     // 2. Jalankan fungsi penangkap data saat halaman dashboard dimuat
-    this.ambilNamaUser();
+    this.ambilNamaUserLive(); // 🟢 Kita ganti pakai fungsi yang live lek
     this.muatKursusDariHosting();
+  }
+
+  // 🟢 FUNGSI BARU: Mendengarkan siaran data user secara real-time dari AuthService
+  ambilNamaUserLive() {
+    this.authService.currentUser$.subscribe({
+      next: (user: any) => {
+        if (user) {
+          console.log('Halaman Home menerima siaran data user terbaru lek:', user);
+          
+          // Ambil properti nama dari objek user (bisa .name atau .nama sesuai API Laravel)
+          const namaLengkap = user.name || user.nama || user.fullname || 'User';
+          
+          // Potong ambil nama depan saja seperti logika lamamu lek
+          this.namaUser = namaLengkap.split(' ')[0];
+        } else {
+          this.namaUser = 'User';
+        }
+      },
+      error: (err) => {
+        console.error('Gagal dengerin siaran nama di home:', err);
+      }
+    });
   }
 
   // Fungsi untuk mengambil data kursus secara live dari database hosting cPanel
@@ -83,35 +105,6 @@ export class HomePage implements OnInit {
 
     // Opsional: Bersihkan bar pencarian di halaman home setelah diredirect
     this.keywordPencarian = '';
-  }
-
-  // Fungsi untuk mengambil data login dari database hosting yang tersimpan di device
-  ambilNamaUser() {
-    // 1. Coba ambil dari beberapa kemungkinan key local storage
-    const dataLokal =
-      localStorage.getItem('user') ||
-      localStorage.getItem('userData') ||
-      localStorage.getItem('name');
-
-    if (dataLokal) {
-      try {
-        // Jika data berupa objek JSON
-        const userObjek = JSON.parse(dataLokal);
-
-        // Cek apakah propertinya bernama .name atau .nama atau .fullname
-        const namaLengkap =
-          userObjek.name || userObjek.nama || userObjek.fullname;
-
-        if (namaLengkap) {
-          this.namaUser = namaLengkap.split(' ')[0];
-        } else if (typeof userObjek === 'string') {
-          this.namaUser = userObjek.split(' ')[0];
-        }
-      } catch (e) {
-        // Jika ternyata yang disimpan murni string nama langsung tanpa format JSON
-        this.namaUser = dataLokal.split(' ')[0];
-      }
-    }
   }
 
   // Fungsi untuk ke halaman Notifikasi

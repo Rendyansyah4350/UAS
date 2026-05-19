@@ -1,60 +1,78 @@
 import { Component, OnInit } from '@angular/core';
 import { NavController, ToastController } from '@ionic/angular';
-import { AuthService } from '../../services/auth'; // Sesuaikan jalurnya
+import { AuthService } from '../../services/auth'; // Pastikan path ke auth service sudah benar lek
 
 @Component({
   selector: 'app-edit-profil',
   templateUrl: './edit-profil.page.html',
   styleUrls: ['./edit-profil.page.scss'],
-  standalone: false,
+  standalone: false
 })
 export class EditProfilPage implements OnInit {
-  userProfile: any = { name: '', email: '' };
+  
+  // 🟢 KUNCI PENYENTER: Inisialisasi properti formData agar dikenal oleh HTML
+  formData: any = {
+    name: '',
+    email: '',
+    instansi: ''
+  };
+
+  isLoading: boolean = false;
 
   constructor(
-    private authService: AuthService,
     private navCtrl: NavController,
+    private authService: AuthService,
     private toastCtrl: ToastController
-  ) { }
+  ) {}
 
   ngOnInit() {
-    this.loadCurrentProfile();
-  }
-
-  loadCurrentProfile() {
-    // Ambil profil live dari server biar inputan form langsung terisi nama asli
-    this.authService.getProfileFromServer().subscribe((res: any) => {
-      if (res) {
-        this.userProfile = { name: res.name, email: res.email };
+    // Ambil data user yang sedang login dari stasiun radio AuthService lek
+    this.authService.currentUser$.subscribe({
+      next: (user: any) => {
+        if (user) {
+          // Masukkan data lama ke dalam form biar user tinggal edit teksnya lek
+          this.formData.name = user.name || user.nama || '';
+          this.formData.email = user.email || '';
+          this.formData.instansi = user.instansi || user.university || 'Mahasiswa Universitas';
+        }
       }
     });
   }
 
-  async simpanPerubahan() {
-    const bodyData = {
-      name: this.userProfile.name,
-      email: this.userProfile.email
-    };
+  simpanPerubahan() {
+    // Validasi super simpel biar gak kosong
+    if (!this.formData.name || !this.formData.email) {
+      this.tampilkanToast('Nama dan Email tidak boleh kosong lek!', 'danger');
+      return;
+    }
 
-    // Tembak langsung ke server hosting online kamu
-    this.authService.updateProfile(bodyData).subscribe(async (res: any) => {
-      const toast = await this.toastCtrl.create({
-        message: 'Profil berhasil diperbarui di database!',
-        duration: 2000,
-        color: 'success',
-        position: 'bottom'
-      });
-      await toast.present();
-      
-      this.navCtrl.back(); // Balik ke profil, otomatis profil ngeload API me yang baru
-    }, async (error) => {
-      console.error(error);
-      const toast = await this.toastCtrl.create({
-        message: 'Gagal memperbarui profil di server.',
-        duration: 2000,
-        color: 'danger'
-      });
-      await toast.present();
+    this.isLoading = true;
+
+    // Tembak langsung ke fungsi updateProfile di auth.service.ts
+    this.authService.updateProfile(this.formData).subscribe({
+      next: (res: any) => {
+        this.isLoading = false;
+        this.tampilkanToast('Profil kamu berhasil diperbarui lek!', 'success');
+        
+        // Kembalikan user ke halaman profil utama (Home & Profil otomatis berubah live!)
+        this.navCtrl.back();
+      },
+      error: (err) => {
+        this.isLoading = false;
+        console.error('Gagal update ke API Laravel:', err);
+        this.tampilkanToast('Gagal menyinkronkan data ke server.', 'danger');
+      }
     });
+  }
+
+  // Fungsi pembantu untuk memunculkan notifikasi toast di layar
+  async tampilkanToast(pesan: string, warna: string) {
+    const toast = await this.toastCtrl.create({
+      message: pesan,
+      duration: 2000,
+      color: warna,
+      position: 'bottom'
+    });
+    await toast.present();
   }
 }

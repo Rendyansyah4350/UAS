@@ -1,34 +1,40 @@
 <ion-header class="ion-no-border">
   <ion-toolbar>
     <ion-buttons slot="start">
-      <ion-back-button defaultHref="/tabs/profil" color="dark" text=""></ion-back-button>
+      <ion-back-button defaultHref="/tabs/home" text="" color="dark"></ion-back-button>
     </ion-buttons>
     <ion-title>Notifikasi</ion-title>
   </ion-toolbar>
 </ion-header>
 
 <ion-content>
-  <ion-list lines="full">
-    <ion-item class="notif-item">
-      <div class="icon-circle blue" slot="start">
+  <div class="notification-container">
+    
+    <div class="notif-card promo">
+      <div class="icon-wrapper">
         <ion-icon name="megaphone-outline"></ion-icon>
       </div>
-      <ion-label>
-        <h3>Promo Ramadhan!</h3>
-        <p>Diskon 50% untuk kursus UI/UX Design khusus minggu ini.</p>
-        <span class="time">2 jam yang lalu</span>
-      </ion-label>
-    </ion-item>
+      <div class="notif-content">
+        <div class="notif-header">
+          <h3>Promo Ramadhan!</h3>
+          <span class="time-badge">2 jam lalu</span>
+        </div>
+        <p>Diskon 50% untuk kursus UI/UX Design khusus minggu ini. Jangan sampai kelewatan lek!</p>
+      </div>
+    </div>
 
-    <ion-item class="notif-item">
-      <div class="icon-circle green" slot="start">
+    <div class="notif-card success">
+      <div class="icon-wrapper">
         <ion-icon name="checkmark-circle-outline"></ion-icon>
       </div>
-      <ion-label>
-        <h3>Pembayaran Berhasil</h3>
-        <p>Kursus "Coding Hero" Anda sudah bisa diakses sekarang.</p>
-        <span class="time">1 hari yang lalu</span>
-      </ion-label>
-    </ion-item>
-  </ion-list>
+      <div class="notif-content">
+        <div class="notif-header">
+          <h3>Pembayaran Berhasil</h3>
+          <span class="time-badge">1 hari lalu</span>
+        </div>
+        <p>Kursus "Coding Hero" Anda sudah aktif dan bisa diakses sekarang. Selamat belajar!</p>
+      </div>
+    </div>
+
+  </div>
 </ion-content>

@@ -83,7 +83,15 @@
         >
           <div class="img-container">
             <img [src]="course.image || 'assets/imgs/course-coding.jpg'" />
+            
+            <div class="wishlist-heart-btn" (click)="toggleFavorit($event, course)">
+              <ion-icon 
+                [name]="course.is_wishlist ? 'heart' : 'heart-outline'" 
+                [class.hati-aktif]="course.is_wishlist">
+              </ion-icon>
+            </div>
           </div>
+          
           <div class="card-content">
             <span class="category-tag">{{ course.category ?? 'General' }}</span>
 

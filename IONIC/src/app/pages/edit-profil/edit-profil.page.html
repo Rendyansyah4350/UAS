@@ -1,41 +1,57 @@
 <ion-header class="ion-no-border">
   <ion-toolbar>
     <ion-buttons slot="start">
-      <ion-back-button defaultHref="/tabs/profil" color="dark" text=""></ion-back-button>
+      <ion-back-button defaultHref="/tabs/profile" text="" color="dark"></ion-back-button>
     </ion-buttons>
-    <ion-title style="font-weight: 800; color: #1e293b;">Ubah Profil</ion-title>
+    <ion-title>Ubah Profil</ion-title>
   </ion-toolbar>
 </ion-header>
 
-<ion-content class="ion-padding">
-  <div class="edit-avatar-section">
-    <div class="avatar-wrapper">
-      <img [src]="userProfile?.name ? 'https://ui-avatars.com/api/?name=' + userProfile.name + '&background=ffffff&color=1560bd' : 'https://i.pravatar.cc/150?u=user'" />
-      <div class="change-photo">
-        <ion-icon name="camera-outline"></ion-icon>
+<ion-content>
+  <div class="edit-profile-container">
+    
+    <div class="form-container">
+      
+      <div class="input-group">
+        <label>Nama Lengkap</label>
+        <ion-item lines="none" class="custom-input-item">
+          <ion-input 
+            type="text" 
+            [(ngModel)]="formData.name" 
+            placeholder="Masukkan nama lengkap">
+          </ion-input>
+        </ion-item>
       </div>
+
+      <div class="input-group">
+        <label>Email</label>
+        <ion-item lines="none" class="custom-input-item">
+          <ion-input 
+            type="email" 
+            [(ngModel)]="formData.email" 
+            placeholder="Masukkan alamat email">
+          </ion-input>
+        </ion-item>
+      </div>
+
+      <div class="input-group">
+        <label>Universitas / Instansi</label>
+        <ion-item lines="none" class="custom-input-item">
+          <ion-input 
+            type="text" 
+            [(ngModel)]="formData.instansi" 
+            placeholder="Masukkan nama instansi">
+          </ion-input>
+        </ion-item>
+      </div>
+
     </div>
-    <p>Ketuk untuk ganti foto</p>
+
+    <div class="action-container">
+      <ion-button expand="block" class="btn-simpan" (click)="simpanPerubahan()">
+        SIMPAN PERUBAHAN
+      </ion-button>
+    </div>
+
   </div>
-
-  <div class="form-container">
-    <ion-item lines="none" class="input-item">
-      <ion-label position="stacked">Nama Lengkap</ion-label>
-      <ion-input type="text" [(ngModel)]="userProfile.name"></ion-input>
-    </ion-item>
-
-    <ion-item lines="none" class="input-item">
-      <ion-label position="stacked">Email</ion-label>
-      <ion-input type="email" [(ngModel)]="userProfile.email"></ion-input>
-    </ion-item>
-
-    <ion-item lines="none" class="input-item">
-      <ion-label position="stacked">Universitas / Instansi</ion-label>
-      <ion-input type="text" value="Mahasiswa Universitas" readonly="true"></ion-input>
-    </ion-item>
-  </div>
-
-  <ion-button expand="block" class="save-btn" (click)="simpanPerubahan()">
-    SIMPAN PERUBAHAN
-  </ion-button>
 </ion-content>

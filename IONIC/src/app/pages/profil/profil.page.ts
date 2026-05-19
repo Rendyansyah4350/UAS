@@ -19,23 +19,34 @@ export class ProfilePage implements OnInit {
   ) {}
 
   ngOnInit() {
-    // Jalankan saat pertama kali load
+    // 🟢 1. LANGSUNG LANGGANAN KE STASIUN RADIO USER_DATA LIVE
+    // Kunci utama biar pas kelar edit, halaman profil ini langsung ganti teks namanya instan!
+    this.authService.currentUser$.subscribe({
+      next: (user: any) => {
+        if (user) {
+          this.userProfile = user;
+          console.log('Halaman Profil dapat siaran update data user:', this.userProfile);
+        }
+      }
+    });
+
+    // Jalankan penembakan awal ke API saat pertama kali aplikasi dibuka
     this.loadProfileFromAPI();
   }
 
   ionViewWillEnter() {
-    // Dipanggil ulang otomatis tiap kali Ivan balik ke halaman ini
+    // Dipanggil ulang otomatis tiap kali Ivan balik ke halaman ini untuk memastikan data tetap segar
     this.loadProfileFromAPI();
   }
 
-loadProfileFromAPI() {
-    this.authService.getProfileFromServer().subscribe(
-      (res: any) => {
+  loadProfileFromAPI() {
+    this.authService.getProfileFromServer().subscribe({
+      next: (res: any) => {
         // Data sukses diambil live dari hosting eduvan.rehalivan.com
-        this.userProfile = res;
-        console.log('Data profil live berhasil dimuat:', this.userProfile);
+        // Di auth.service.ts data ini sudah otomatis disiarkan ke `.currentUser$` lek!
+        console.log('Data profil live berhasil dimuat ulang:', res);
       },
-      (error) => {
+      error: (error) => {
         console.error('Gagal mengambil profil dari API:', error);
         
         // Skenario jika token mati / 401: Tendang ke login agar dapet token baru
@@ -45,7 +56,7 @@ loadProfileFromAPI() {
           this.navCtrl.navigateRoot('/login');
         }
       }
-    );
+    });
   }
 
   goToEdit() { 
