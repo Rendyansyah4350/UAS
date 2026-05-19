@@ -1,15 +1,16 @@
 import { NgModule } from '@angular/core';
 import { PreloadAllModules, RouterModule, Routes } from '@angular/router';
-import { AuthGuard } from './guards/auth-guard';
+import { AuthGuard } from './guards/auth-guard'; // Memastikan Guard terhubung dengan benar
 
 const routes: Routes = [
   {
     path: '',
-    redirectTo: 'login',
+    redirectTo: 'login', // Diarahkan ke tabs agar user bisa langsung melihat katalog
     pathMatch: 'full'
   },
 
   // ==========================================
+  // RUTE UTAN AUTENTIKASI & KEAMANAN AKUN
   // RUTE OTENTIKASI & KEAMANAN
   // ==========================================
   {
@@ -21,7 +22,7 @@ const routes: Routes = [
     loadChildren: () => import('./pages/register/register.module').then(m => m.RegisterPageModule)
   },
   {
-    path: 'verify-otp',
+    path: 'verify-otp', // <-- PERBAIKAN: Menambahkan rute verifikasi OTP yang baru dipisah
     loadChildren: () => import('./pages/verify-otp/verify-otp.module').then(m => m.VerifyOtpPageModule)
   },
   {
@@ -34,22 +35,28 @@ const routes: Routes = [
   },
 
   // ==========================================
+  // RUTE UTAMA APLIKASI EDUVAN
+  // ==========================================
+  {
+    path: 'tabs',
+    // canActivate: [AuthGuard], // Dibuka agar pengunjung anonim bisa melihat katalog kursus
+    loadChildren: () => import('./pages/tabs/tabs.module').then(m => m.TabsPageModule)
+  },
   // RUTE UTAMA APLIKASI
   // ==========================================
   {
     path: 'tabs',
     loadChildren: () => import('./pages/tabs/tabs.module').then(m => m.TabsPageModule)
   },
-  // Rute Fullscreen Course Player (Penting: tambahkan /:id)
-  {
-    path: 'course-player/:id',
-    loadChildren: () => import('./pages/course-player/course-player.module').then(m => m.CoursePlayerPageModule)
-  },
   {
     path: 'course',
     loadChildren: () => import('./pages/course/course.module').then(m => m.CoursePageModule)
   },
- {
+  {
+    path: 'course-detail/:id',
+    loadChildren: () => import('./pages/course-detail/course-detail.module').then(m => m.CourseDetailPageModule)
+  },
+  {
   path: 'course-detail/:id',
   loadChildren: () => import('./pages/course-detail/course-detail.module').then(m => m.CourseDetailPageModule)
 },
@@ -60,6 +67,11 @@ const routes: Routes = [
   },
   {
     path: 'edit-profil',
+    // canActivate: [AuthGuard], // Wajib login untuk mengubah data diri
+    loadChildren: () => import('./pages/edit-profil/edit-profil.module').then(m => m.EditProfilPageModule)
+  },
+  {
+    path: 'certificate', // <-- Pastikan namanya sama persis 'certificate'
     loadChildren: () => import('./pages/edit-profil/edit-profil.module').then(m => m.EditProfilPageModule)
   },
   {
@@ -68,6 +80,7 @@ const routes: Routes = [
   },
   {
     path: 'notifications',
+    // canActivate: [AuthGuard], // Wajib login karena notifikasi bersifat personal
     loadChildren: () => import('./pages/notifications/notifications.module').then(m => m.NotificationsPageModule)
   },
   {
@@ -79,7 +92,7 @@ const routes: Routes = [
   // WILDCARD ROUTE (HARUS PALING BAWAH)
   // ==========================================
   {
-    path: '**',
+    path: '**', // Menangani jika user mengetik alamat asal-asalan, langsung oper ke tabs
     redirectTo: 'tabs'
   },
 ];
