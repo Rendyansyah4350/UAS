@@ -22,10 +22,10 @@ export class CoursePage implements OnInit {
     private courseService: CourseService,
     private router: Router
   ) {
+    // Tangkap keyword dari Home
     const navigation = this.router.getCurrentNavigation();
-    if (navigation?.extras.state && navigation.extras.state['keyword']) {
+    if (navigation?.extras.state?.['keyword']) {
       this.keywordPencarian = navigation.extras.state['keyword'];
-      console.log('Mantap! Dapat operan keyword dari Home:', this.keywordPencarian);
     }
   }
 
@@ -33,26 +33,18 @@ export class CoursePage implements OnInit {
     this.loadData();
   }
 
-  ionViewWillEnter() {
-    const currentNav = this.router.getCurrentNavigation();
-    if (currentNav?.extras.state && currentNav.extras.state['keyword']) {
-      this.keywordPencarian = currentNav.extras.state['keyword'];
-      this.fungsiCariKursus();
-    }
-  }
-
   loadData() {
     this.isLoading = true;
     this.courseService.getCourses().subscribe({
       next: (res: any) => {
         this.allCourses = res.data || [];
-        this.listCourses = this.allCourses;
         this.isLoading = false;
-        console.log('Data API Katalog Sukses:', this.listCourses);
-
-        if (this.keywordPencarian) {
+        
+        // 🟢 FIX: Gunakan setTimeout agar filter berjalan 
+        // setelah data 100% masuk ke variabel allCourses
+        setTimeout(() => {
           this.fungsiCariKursus();
-        }
+        }, 100);
       },
       error: (error) => {
         console.error('Gagal ambil data katalog', error);
@@ -61,21 +53,14 @@ export class CoursePage implements OnInit {
     });
   }
 
-  // 🟢 FUNGSI BARU: MENANGANI TOGGLE WISHLIST LIVE KE SERVERS
   toggleFavorit(event: Event, course: any) {
-    event.stopPropagation(); // Biar pas diklik ikon hatinya, gak malah mental masuk ke Detail Course
-
-    // Balik status di lokal dulu biar UI terasa super responsif tanpa delay (Instant Feedback)
+    event.stopPropagation();
     course.is_wishlist = !course.is_wishlist;
 
-    // Tembak ke API Laravel cPanel kamu lek
     this.courseService.toggleWishlistServer(course.id).subscribe({
-      next: (res: any) => {
-        console.log('Sukses memperbarui status wishlist di server:', res);
-      },
+      next: (res: any) => console.log('Wishlist updated:', res),
       error: (err) => {
-        console.error('Gagal sinkronisasi wishlist ke server, kembalikan status:', err);
-        // Jika internet putus atau server error, kembalikan status hati ke semula
+        console.error('Gagal sinkronisasi wishlist:', err);
         course.is_wishlist = !course.is_wishlist;
       }
     });
@@ -83,50 +68,27 @@ export class CoursePage implements OnInit {
 
   pilihKategori(namaKategori: string) {
     this.kategoriAktif = namaKategori;
-    this.keywordPencarian = '';
-    this.filterAktif = 'default';
-
-    if (namaKategori === 'Semua') {
-      this.listCourses = this.allCourses;
-      return;
-    }
-
-    this.listCourses = this.allCourses.filter((course: any) => {
-      const kategoriDatabase = course.category || '';
-      return kategoriDatabase.toLowerCase() === namaKategori.toLowerCase();
-    });
-  }
-
-  goToDetail(id: any) {
-    this.navCtrl.navigateForward(['/course-detail', id]);
+    // Jika ganti kategori, kita tetap pertahankan keyword yang ada 
+    // agar user tidak perlu mengetik ulang
+    this.fungsiCariKursus();
   }
 
   fungsiCariKursus() {
-    console.log('User sedang mencari:', this.keywordPencarian);
+    // 1. Filter dasar berdasarkan Kategori
+    let dataHasil = this.kategoriAktif === 'Semua' 
+      ? [...this.allCourses] 
+      : this.allCourses.filter(c => (c.category || '').toLowerCase() === this.kategoriAktif.toLowerCase());
 
-    let dataDasar = this.allCourses;
-    if (this.kategoriAktif !== 'Semua') {
-      dataDasar = this.allCourses.filter((course: any) => {
-        const kategoriDatabase = course.category || '';
-        return (
-          kategoriDatabase.toLowerCase() === this.kategoriAktif.toLowerCase()
-        );
-      });
+    // 2. Filter lanjutan berdasarkan Keyword
+    const keyword = this.keywordPencarian.toLowerCase().trim();
+    if (keyword) {
+      dataHasil = dataHasil.filter(c => 
+        (c.title || '').toLowerCase().includes(keyword) || 
+        (c.description || '').toLowerCase().includes(keyword)
+      );
     }
 
-    if (!this.keywordPencarian.trim()) {
-      this.listCourses = dataDasar;
-      this.eksekusiFilterSort();
-      return;
-    }
-
-    this.listCourses = dataDasar.filter((course: any) => {
-      const judulKursus = course.title || '';
-      return judulKursus
-        .toLowerCase()
-        .includes(this.keywordPencarian.toLowerCase());
-    });
-
+    this.listCourses = dataHasil;
     this.eksekusiFilterSort();
   }
 
@@ -139,14 +101,14 @@ export class CoursePage implements OnInit {
       const ratingA = parseFloat(a.rating) || 0;
       const ratingB = parseFloat(b.rating) || 0;
 
-      if (this.filterAktif === 'harga-termurah') {
-        return hargaA - hargaB;
-      } else if (this.filterAktif === 'harga-termahal') {
-        return hargaB - hargaA;
-      } else if (this.filterAktif === 'rating-tertinggi') {
-        return ratingB - ratingA;
-      }
+      if (this.filterAktif === 'harga-termurah') return hargaA - hargaB;
+      if (this.filterAktif === 'harga-termahal') return hargaB - hargaA;
+      if (this.filterAktif === 'rating-tertinggi') return ratingB - ratingA;
       return 0;
     });
+  }
+
+  goToDetail(id: any) {
+    this.navCtrl.navigateForward(['/course-detail', id]);
   }
 }

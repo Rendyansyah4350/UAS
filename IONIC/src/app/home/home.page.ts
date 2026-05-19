@@ -1,7 +1,5 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
-import { CommonModule } from '@angular/common';
-import { IonicModule } from '@ionic/angular';
 import { AuthService } from '../services/auth';
 
 @Component({
@@ -11,15 +9,12 @@ import { AuthService } from '../services/auth';
   standalone: false,
 })
 export class HomePage implements OnInit {
-  // 1. Inisialisasi variabel untuk nama user dengan nilai default
   namaUser: string = 'User';
   keywordPencarian: string = '';
-
-  daftarKursusMaster: any[] = [];
-  kursusTersaring: any[] = [];
-
-  // Indikator loading saat mengambil data dari internet
   isLoading: boolean = true;
+  
+  // 🟢 KITA KEMBALIKAN NAMA INI AGAR SESUAI DENGAN HTML KAMU
+  kursusTersaring: any[] = []; 
 
   constructor(
     private router: Router,
@@ -27,97 +22,59 @@ export class HomePage implements OnInit {
   ) {}
 
   ngOnInit() {
-    // 2. Jalankan fungsi penangkap data saat halaman dashboard dimuat
-    this.ambilNamaUserLive(); // 🟢 Kita ganti pakai fungsi yang live lek
+    this.ambilNamaUserLive();
     this.muatKursusDariHosting();
   }
 
-  // 🟢 FUNGSI BARU: Mendengarkan siaran data user secara real-time dari AuthService
   ambilNamaUserLive() {
-    this.authService.currentUser$.subscribe({
-      next: (user: any) => {
-        if (user) {
-          console.log('Halaman Home menerima siaran data user terbaru lek:', user);
-          
-          // Ambil properti nama dari objek user (bisa .name atau .nama sesuai API Laravel)
-          const namaLengkap = user.name || user.nama || user.fullname || 'User';
-          
-          // Potong ambil nama depan saja seperti logika lamamu lek
-          this.namaUser = namaLengkap.split(' ')[0];
-        } else {
-          this.namaUser = 'User';
-        }
-      },
-      error: (err) => {
-        console.error('Gagal dengerin siaran nama di home:', err);
+    this.authService.currentUser$.subscribe((user: any) => {
+      if (user) {
+        const namaLengkap = user.name || user.nama || user.fullname || 'User';
+        this.namaUser = namaLengkap.split(' ')[0];
+      } else {
+        this.namaUser = 'User';
       }
     });
   }
 
-  // Fungsi untuk mengambil data kursus secara live dari database hosting cPanel
-  // --- AMBIL DATA DARI LIVE SERVERS CPANEL + FILTER RATING > 0 + SORTING 3 TERTINGGI ---
   muatKursusDariHosting() {
     this.isLoading = true;
-
     this.authService.getCoursesFromServer().subscribe({
       next: (res: any) => {
-        // Ambil data mentah array dari key 'data'
         const dataMentah = res.data || [];
-
-        // 🟢 1. FILTER: Hanya ambil kursus yang beneran punya rating (di atas 0)
-        const dataLolosFilter = dataMentah.filter((kursus: any) => {
-          return Number(kursus.rating || 0) > 0;
-        });
-
-        // 🟢 2. SORT: Urutkan dari rating tertinggi ke terendah
-        const dataTerurut = dataLolosFilter.sort((a: any, b: any) => {
-          return Number(b.rating || 0) - Number(a.rating || 0);
-        });
-
-        // 🟢 3. SLICE: Potong array agar hanya mengambil maksimal 3 item teratas
-        this.daftarKursusMaster = dataTerurut.slice(0, 3);
-
-        // Samakan ke penampung filter search
-        this.kursusTersaring = this.daftarKursusMaster;
+        // 🟢 Kita simpan ke kursusTersaring agar HTML tidak error
+        this.kursusTersaring = dataMentah
+          .filter((k: any) => Number(k.rating || 0) > 0)
+          .sort((a: any, b: any) => Number(b.rating || 0) - Number(a.rating || 0))
+          .slice(0, 3);
         this.isLoading = false;
       },
       error: (err) => {
-        console.error('Koneksi ke server cPanel gagal bre:', err);
+        console.error('Gagal:', err);
         this.isLoading = false;
       },
     });
   }
 
-  // Logika ala Shopee: Mengoper kata kunci pencarian langsung ke halaman Course utama
-  fungsiCariKursus() {
-    console.log('User lagi nyari kursus, alihkan ke page course:', this.keywordPencarian);
-
-    if (!this.keywordPencarian || !this.keywordPencarian.trim()) {
-      // Jika kosong, langsung arahkan saja ke tab course biasa
-      this.router.navigate(['/tabs/course']);
-      return;
+  // 🟢 FUNGSI INI WAJIB ADA AGAR ERROR goToDetail() HILANG
+  goToDetail(id?: any) {
+    if (id) {
+      this.router.navigate(['/course-detail', id]);
+    } else {
+      this.router.navigate(['/course-detail']);
     }
+  }
 
-    // Alihkan ke halaman course sambil mengoper state beralaskan kata kunci pencarian
-    this.router.navigate(['/tabs/course'], {
-      state: { keyword: this.keywordPencarian }
-    });
-
-    // Opsional: Bersihkan bar pencarian di halaman home setelah diredirect
+  fungsiCariKursus() {
+    const keyword = this.keywordPencarian.trim();
+    if (keyword) {
+      this.router.navigate(['/tabs/course'], { state: { keyword: keyword } });
+    } else {
+      this.router.navigate(['/tabs/course']);
+    }
     this.keywordPencarian = '';
   }
 
-  // Fungsi untuk ke halaman Notifikasi
-  goToNotif() {
-    this.router.navigate(['/notifications']);
-  }
-
-  // Fungsi untuk ke halaman Detail Kursus
-  goToDetail() {
-    this.router.navigate(['/course-detail']);
-  }
-
-  goToCourse() {
-    this.router.navigateByUrl('/tabs/course');
-  }
+  goToNotif() { this.router.navigate(['/notifications']); }
+  goToCourse() { this.router.navigateByUrl('/tabs/course'); }
 }

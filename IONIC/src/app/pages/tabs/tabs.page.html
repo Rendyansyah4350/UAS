@@ -1,30 +1,32 @@
 <ion-tabs>
+
+  <ion-router-outlet></ion-router-outlet>
+
   <ion-tab-bar slot="bottom">
-    
-    <ion-tab-button tab="beranda">
+    <ion-tab-button tab="beranda" href="/tabs/beranda">
       <ion-icon name="home-outline"></ion-icon>
       <ion-label>Beranda</ion-label>
     </ion-tab-button>
 
-    <ion-tab-button tab="course">
+    <ion-tab-button tab="course" href="/tabs/course">
       <ion-icon name="book-outline"></ion-icon>
       <ion-label>Course</ion-label>
     </ion-tab-button>
 
-    <ion-tab-button tab="my-learning">
+    <ion-tab-button tab="my-learning" href="/tabs/my-learning">
       <ion-icon name="play-circle-outline"></ion-icon>
       <ion-label>My Learning</ion-label>
     </ion-tab-button>
 
-    <ion-tab-button tab="wishlist">
+    <ion-tab-button tab="wishlist" href="/tabs/wishlist">
       <ion-icon name="heart-outline"></ion-icon>
       <ion-label>Wishlist</ion-label>
     </ion-tab-button>
 
-    <ion-tab-button tab="profil">
+    <ion-tab-button tab="profil" href="/tabs/profil">
       <ion-icon name="person-outline"></ion-icon>
       <ion-label>Profil</ion-label>
     </ion-tab-button>
-
   </ion-tab-bar>
+
 </ion-tabs>

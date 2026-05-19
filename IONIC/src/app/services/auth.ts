@@ -27,32 +27,28 @@ export class AuthService {
   login(data: any): Observable<any> {
     return this.http.post(`${this.apiUrl}/login`, data).pipe(
       tap((res: any) => {
-        if (res && res.access_token) localStorage.setItem('token', res.access_token);
-        if (res && (res.user || res.data)) this.updateCurrentUserState(res.user || res.data);
-      }),
+        if (res?.access_token) localStorage.setItem('token', res.access_token);
+        if (res?.user || res?.data) this.updateCurrentUserState(res.user || res.data);
+      })
     );
   }
 
   verifyOTP(email: string, otp: string): Observable<any> {
     return this.http.post(`${this.apiUrl}/verify-otp`, { email, otp }).pipe(
       tap((res: any) => {
-        if (res && res.token) localStorage.setItem('token', res.token);
-        if (res && (res.user || res.data)) this.updateCurrentUserState(res.user || res.data);
-      }),
+        if (res?.token) localStorage.setItem('token', res.token);
+        if (res?.user || res?.data) this.updateCurrentUserState(res.user || res.data);
+      })
     );
   }
-  
+
   sendResetOtp(email: string): Observable<any> {
     return this.http.post(`${this.apiUrl}/forgot-password/send-otp`, { email });
   }
 
-  // 🟢 FUNGSI RESEND: Coba pakai ini dulu. 
-  // Jika masih 404, ganti URL-nya ke '/forgot-password/send-otp'
+  // Menggunakan jalur forgot-password untuk menghindari error 404
   sendRegisterOtp(email: string): Observable<any> {
-    // Jalur ini yang tadi error 404
-    // Silakan ganti ke: return this.http.post(`${this.apiUrl}/forgot-password/send-otp`, { email }); 
-    // jika jalur di bawah ini tetap tidak ditemukan oleh server.
-    return this.http.post(`${this.apiUrl}/register/send-otp`, { email });
+    return this.http.post(`${this.apiUrl}/forgot-password/send-otp`, { email });
   }
 
   verifyResetOtp(email: string, otp: string): Observable<any> {
@@ -78,24 +74,30 @@ export class AuthService {
   }
 
   getProfileFromServer(): Observable<any> {
-    const token = localStorage.getItem('token');
-    const headers = new HttpHeaders({ Authorization: `Bearer ${token}`, Accept: 'application/json' });
+    const headers = new HttpHeaders({ 
+      Authorization: `Bearer ${localStorage.getItem('token')}`, 
+      Accept: 'application/json' 
+    });
     return this.http.get(`${this.apiUrl}/user`, { headers }).pipe(
       tap((res: any) => { if (res) this.updateCurrentUserState(res.user || res.data || res); })
     );
   }
 
   updateProfile(data: any): Observable<any> {
-    const token = localStorage.getItem('token');
-    const headers = new HttpHeaders({ Authorization: `Bearer ${token}`, Accept: 'application/json' });
+    const headers = new HttpHeaders({ 
+      Authorization: `Bearer ${localStorage.getItem('token')}`, 
+      Accept: 'application/json' 
+    });
     return this.http.put(`${this.apiUrl}/user/update`, data, { headers }).pipe(
       tap((res: any) => { if (res) this.updateCurrentUserState(res.user || res.data || res); })
     );
   }
 
   getCoursesFromServer(): Observable<any> {
-    const token = localStorage.getItem('token');
-    const headers = new HttpHeaders({ Authorization: `Bearer ${token}`, Accept: 'application/json' });
+    const headers = new HttpHeaders({ 
+      Authorization: `Bearer ${localStorage.getItem('token')}`, 
+      Accept: 'application/json' 
+    });
     return this.http.get(`${this.apiUrl}/courses`, { headers });
   }
 }
