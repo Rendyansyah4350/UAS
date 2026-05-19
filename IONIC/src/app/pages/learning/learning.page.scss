@@ -1,49 +1,33 @@
-.learning-tabs-container {
+$navy-color: #053B50;
+
+.header-navy {
+  background: $navy-color;
+  height: 80px; 
+  border-bottom-left-radius: 20px;
+  border-bottom-right-radius: 20px;
   display: flex;
-  gap: 10px;
-  margin-bottom: 20px;
-  
-  .tab-pill {
-    padding: 10px 20px;
-    border-radius: 20px;
-    background: #f0f0f0;
-    cursor: pointer;
-    
-    &.active {
-      background: #004a7c; // Ganti warna sesuaikan tema
-      color: white;
-    }
-  }
+  align-items: flex-start;
+  padding: 20px 0 0 20px;
+  ion-title { color: #ffffff; font-weight: 700; font-size: 1.3rem; padding: 0; }
 }
 
+.segment-container { padding: 16px; background: #f8f9fe; }
+
+ion-content { --background: #f8f9fe; }
+
 .course-card {
-  background: white;
-  padding: 15px;
-  border-radius: 12px;
-  box-shadow: 0 4px 10px rgba(0,0,0,0.1);
-  margin-bottom: 20px;
-
-  .card-header {
-    display: flex;
-    align-items: center;
-    gap: 15px;
-    margin-bottom: 15px;
-
-    .course-img {
-      width: 80px;
-      height: 80px;
-      border-radius: 8px;
-      object-fit: cover;
-    }
+  margin: 0 0 20px 0; padding: 16px; border-radius: 20px;
+  background: #ffffff; border: 1px solid #e0e0e0;
+  box-shadow: 0 10px 25px -5px rgba(0,0,0,0.15);
+  
+  .card-content { display: flex; gap: 16px; align-items: center; }
+  .img-box { width: 80px; height: 80px; background: linear-gradient(135deg, #5c35cc, #8e44ad); border-radius: 18px; }
+  .info { flex: 1;
+    h3 { margin: 0 0 8px 0; font-weight: 800; color: #000; }
+    .progress-text { font-size: 0.85rem; color: #444; }
+    .custom-progress { height: 8px; border-radius: 4px; --progress-background: #5c35cc; }
   }
-
-  .card-actions {
-    display: flex;
-    flex-direction: column;
-    gap: 10px;
-
-    .btn-main {
-      --background: #004a7c; // Warna tombol utama
-    }
+  .actions { display: flex; gap: 8px; margin-top: 12px; 
+    ion-button { flex: 1; height: 36px; font-size: 0.75rem; font-weight: 700; --border-radius: 8px; }
   }
 }

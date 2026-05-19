@@ -1,0 +1,29 @@
+.video-container {
+  width: 100%;
+  height: 220px;
+  background: #000;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  .video-placeholder { text-align: center; color: white; ion-icon { font-size: 50px; } }
+}
+
+.content-wrapper {
+  padding: 16px;
+  h2 { margin-top: 0; font-weight: 700; }
+  .instructor { color: #666; font-size: 0.9rem; margin-bottom: 20px; }
+  
+  .curriculum-section {
+    margin-top: 20px;
+    h3 { font-size: 1.2rem; font-weight: 600; margin-bottom: 10px; }
+    
+    ion-list {
+      border: 1px solid #ddd;
+      border-radius: 8px;
+      overflow: hidden; // Agar border radius terlihat
+      ion-item { --padding-start: 10px; }
+    }
+  }
+
+  .finish-btn { margin-top: 25px; --border-radius: 8px; height: 50px; }
+}

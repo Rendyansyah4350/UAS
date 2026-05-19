@@ -1,0 +1,70 @@
+$navy-color: #053B50;
+
+// Header Navy Sama Persis dengan My Learning
+.header-navy {
+  background: $navy-color;
+  height: 80px;
+  border-bottom-left-radius: 20px;
+  border-bottom-right-radius: 20px;
+  display: flex;
+  align-items: flex-start;
+  padding: 20px 0 0 20px;
+  ion-title { color: #ffffff; font-weight: 700; font-size: 1.3rem; }
+}
+
+.quiz-progress {
+  margin: 20px 0;
+  p { font-weight: 600; color: #444; margin-bottom: 8px; }
+  ion-progress-bar { --progress-background: $navy-color; height: 8px; border-radius: 4px; }
+}
+
+.question-card {
+  background: #ffffff;
+  padding: 20px;
+  border-radius: 20px;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+  margin-bottom: 20px;
+  h3 { color: #000; font-weight: 800; margin: 0; }
+}
+
+.option-item {
+  --background: #ffffff;
+  border: 1px solid #e0e0e0;
+  border-radius: 15px;
+  margin-bottom: 12px;
+  &.item-radio-checked { border-color: $navy-color; --background: #f0f4f8; }
+}
+.result-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100%;
+  margin-top: 40px;
+}
+
+.result-card {
+  width: 100%;
+  padding: 30px;
+  background: #ffffff;
+  border-radius: 20px;
+  box-shadow: 0 10px 30px rgba(0,0,0,0.08);
+  border: 1px solid #e0e0e0;
+  
+  h2 { font-weight: 800; color: #053B50; margin-top: 0; }
+  p { color: #666; font-size: 1rem; }
+  
+  .score-display {
+    font-size: 4.5rem;
+    font-weight: 800;
+    color: #053B50;
+    margin: 15px 0;
+  }
+}
+
+.finish-btn {
+  --background: #053B50;
+  --border-radius: 12px;
+  height: 50px;
+  font-weight: 700;
+  margin-top: 20px;
+}

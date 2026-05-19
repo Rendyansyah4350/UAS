@@ -1,0 +1,57 @@
+<ion-header>
+  <ion-toolbar color="primary">
+    <ion-buttons slot="start">
+      <ion-back-button defaultHref="/tabs/learning"></ion-back-button>
+    </ion-buttons>
+    <ion-title>Belajar Sekarang</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+  <div class="video-container">
+    <div class="video-placeholder">
+      <ion-icon name="play-circle-outline"></ion-icon>
+      <p>Video Pembelajaran</p>
+    </div>
+  </div>
+
+  <div class="content-wrapper">
+    <h2>Menguasai Ionic & Angular</h2>
+    <p class="instructor">Oleh: EduVan Instructor</p>
+
+    <div class="curriculum-section">
+      <h3>Kurikulum</h3>
+      <ion-list lines="full">
+        <ion-item button>
+          <ion-icon slot="start" name="play-circle"></ion-icon>
+          <ion-label>
+            <h2>1. Pengenalan Ionic</h2>
+            <p>10:00 menit</p>
+          </ion-label>
+        </ion-item>
+        <ion-item button>
+          <ion-icon slot="start" name="play-circle-outline"></ion-icon>
+          <ion-label>
+            <h2>2. Setup Environment</h2>
+            <p>15:30 menit</p>
+          </ion-label>
+        </ion-item>
+        <ion-item button>
+          <ion-icon slot="start" name="lock-closed-outline"></ion-icon>
+          <ion-label>
+            <h2>3. Komponen Dasar</h2>
+            <p>Locked</p>
+          </ion-label>
+        </ion-item>
+      </ion-list>
+    </div>
+
+<ion-button 
+  expand="block" 
+  class="finish-btn" 
+  (click)="markAsComplete()" 
+  [disabled]="isCompleted">
+  {{ isCompleted ? 'SELESAI' : 'TANDAI SELESAI' }}
+</ion-button>
+  </div>
+</ion-content>

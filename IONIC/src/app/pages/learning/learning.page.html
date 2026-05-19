@@ -1,30 +1,40 @@
-<ion-content class="ion-padding">
-  <div class="learning-tabs-container">
-    <div class="tab-pill" [class.active]="activeTab === 'ongoing'" (click)="switchTab('ongoing')">
-      Kursus Saya
-    </div>
-    <div class="tab-pill" [class.active]="activeTab === 'completed'" (click)="switchTab('completed')">
-      Selesai
-    </div>
+<ion-header mode="ios" class="ion-no-border">
+  <div class="header-navy">
+    <ion-title>My Learning</ion-title>
+  </div>
+</ion-header>
+
+<ion-content>
+  <div class="segment-container">
+    <ion-segment [(ngModel)]="activeTab" (ionChange)="filterData()" mode="ios">
+      <ion-segment-button value="ongoing">Kursus Saya</ion-segment-button>
+      <ion-segment-button value="completed">Selesai</ion-segment-button>
+    </ion-segment>
   </div>
 
-  <div *ngFor="let item of filteredEnrollments" class="course-card">
-    <div class="card-header">
-      <img [src]="item.course?.image || 'assets/imgs/default.jpg'" class="course-img" />
-      <div class="course-info">
-        <h3>{{ item.course?.title }}</h3>
-        <p>{{ item.progress }}% Selesai</p>
+  <div class="course-list ion-padding">
+    <ion-card *ngFor="let item of filteredEnrollments" class="course-card">
+      <div class="card-content">
+        <div class="img-box"></div>
+        <div class="info">
+          <h3>{{ item.course.title }}</h3>
+          <p class="progress-text">{{ item.progress }}% Selesai</p>
+          <ion-progress-bar [value]="item.progress / 100" class="custom-progress"></ion-progress-bar>
+          
+          <div class="actions" *ngIf="activeTab === 'ongoing'">
+            <ion-button size="small" (click)="goToPlayer(item.course_id)">LANJUT BELAJAR</ion-button>
+            <ion-button size="small" fill="outline" 
+              [color]="item.progress >= 100 ? 'warning' : 'medium'" 
+              (click)="openQuiz(item)">
+              {{ item.progress >= 100 ? 'KUIS' : 'TERKUNCI' }}
+            </ion-button>
+          </div>
+          
+          <div class="actions" *ngIf="activeTab === 'completed'">
+            <ion-button expand="block" fill="outline" color="success">LIHAT SERTIFIKAT</ion-button>
+          </div>
+        </div>
       </div>
-    </div>
-    
-    <div class="card-actions">
-      <ion-button expand="block" (click)="goToPlayer(item.course_id)" class="btn-main">
-        LANJUT BELAJAR
-      </ion-button>
-      
-      <ion-button expand="block" color="warning" (click)="openQuiz(item)" class="btn-quiz">
-        KUIS
-      </ion-button>
-    </div>
+    </ion-card>
   </div>
 </ion-content>
