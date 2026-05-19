@@ -1,44 +1,64 @@
-<ion-content [fullscreen]="true">
+<ion-content>
   <div class="main-wrapper">
-    
     <div class="header-area">
       <h2>My Learning</h2>
-      <ion-icon name="notifications-outline" class="notif-btn"></ion-icon>
+      <ion-icon
+        name="notifications-outline"
+        class="icon-notif"
+        (click)="goToNotif()"
+        style="cursor: pointer"
+      ></ion-icon>
     </div>
 
     <div class="learning-tabs">
-      <div class="tab-item" [class.active]="activeTab === 'ongoing'" (click)="switchTab('ongoing')">
+      <div
+        class="tab-item"
+        [class.active]="activeTab === 'ongoing'"
+        (click)="switchTab('ongoing')"
+      >
         Kursus Saya
       </div>
-      <div class="tab-item" [class.active]="activeTab === 'completed'" (click)="switchTab('completed')">
+      <div
+        class="tab-item"
+        [class.active]="activeTab === 'completed'"
+        (click)="switchTab('completed')"
+      >
         Selesai
       </div>
     </div>
 
     <div class="learning-list">
-      
-      <div *ngIf="filteredEnrollments.length === 0" style="text-align: center; padding: 30px; color: #888;">
-        <p>Belum ada data kursus di bagian ini.</p>
+      <div *ngIf="filteredEnrollments.length === 0" class="empty-state">
+        <ion-icon name="book-outline" class="empty-icon"></ion-icon>
+
+        <p *ngIf="activeTab === 'ongoing'">Kamu belum beli course nih....</p>
+
+        <p *ngIf="activeTab === 'completed'">
+          Belum ada kursus yang kamu selesaikan.
+        </p>
       </div>
-      
+
       <div class="learning-card" *ngFor="let item of filteredEnrollments">
         <div class="card-content-row">
-          
           <div class="thumbnail">
-            <img [src]="item.course?.image ? item.course.image : 'assets/imgs/default-thumb.jpg'" />
+            <img
+              [src]="item.course?.image ? item.course.image : 'assets/imgs/default-thumb.jpg'"
+            />
           </div>
-          
+
           <div class="info">
             <h5>{{ item.course?.title ?? 'Memuat nama kursus...' }}</h5>
             <p class="stats">{{ item.progress ?? 0 }}% Selesai</p>
-            
+
             <div class="progress-container">
-              <div class="progress-fill" [style.width]="(item.progress ?? 0) + '%'"></div>
+              <div
+                class="progress-fill"
+                [style.width]="(item.progress ?? 0) + '%'"
+              ></div>
             </div>
           </div>
-
         </div>
       </div>
-      </div>
+    </div>
   </div>
 </ion-content>

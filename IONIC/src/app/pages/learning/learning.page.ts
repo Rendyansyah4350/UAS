@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { environment } from '../../../environments/environment';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-learning', // Sesuai dengan selektor bawaan kamu
@@ -12,9 +13,12 @@ export class LearningPage implements OnInit {
   apiUrl = environment.apiUrl;
   allEnrollments: any[] = []; // Menampung data mentah dari server
   filteredEnrollments: any[] = []; // Menampung data setelah difilter tab
-  activeTab: string = 'ongoing';// Default tab: ongoing (Kursus Saya)
+  activeTab: string = 'ongoing'; // Default tab: ongoing (Kursus Saya)
 
-  constructor(private http: HttpClient) {}
+  constructor(
+    private http: HttpClient,
+    private router: Router,
+  ) {}
 
   ngOnInit() {
     this.loadMyLearning();
@@ -27,8 +31,8 @@ export class LearningPage implements OnInit {
   loadMyLearning() {
     const token = localStorage.getItem('token');
     const headers = new HttpHeaders({
-      'Authorization': `Bearer ${token}`,
-      'Accept': 'application/json'
+      Authorization: `Bearer ${token}`,
+      Accept: 'application/json',
     });
 
     // Menembak endpoint GET /enrollments privat di cPanel kamu
@@ -40,7 +44,7 @@ export class LearningPage implements OnInit {
       },
       (error) => {
         console.error('Gagal mengambil data enrollments:', error);
-      }
+      },
     );
   }
 
@@ -53,9 +57,17 @@ export class LearningPage implements OnInit {
   // Memisahkan kursus berjalan (< 100%) dan kursus tamat (= 100%)
   filterData() {
     if (this.activeTab === 'ongoing') {
-      this.filteredEnrollments = this.allEnrollments.filter(item => (item.progress ?? 0) < 100);
+      this.filteredEnrollments = this.allEnrollments.filter(
+        (item) => (item.progress ?? 0) < 100,
+      );
     } else {
-      this.filteredEnrollments = this.allEnrollments.filter(item => (item.progress ?? 0) === 100);
+      this.filteredEnrollments = this.allEnrollments.filter(
+        (item) => (item.progress ?? 0) === 100,
+      );
     }
+  }
+
+  goToNotif() {
+    this.router.navigate(['/notifications']);
   }
 }

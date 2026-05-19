@@ -44,11 +44,27 @@
     </ion-chip>
   </div>
 
-  <div class="section-label">
+  <div class="section-label" style="display: flex; justify-content: space-between; align-items: center; padding-right: 16px;">
     <h3>
-      {{ kategoriAktif === 'Semua' ? 'Semua Kursus' : 'Kursus ' + kategoriAktif
-      }}
+      {{ kategoriAktif === 'Semua' ? 'Semua Kursus' : 'Kursus ' + kategoriAktif }}
     </h3>
+
+    <div class="filter-dropdown-box" style="display: flex; align-items: center; background: #f1f5f9; padding: 2px 10px; border-radius: 10px;">
+      <ion-icon name="funnel-outline" style="color: #093c5d; font-size: 14px; margin-right: 4px;"></ion-icon>
+      <ion-select
+        interface="popover"
+        [(ngModel)]="filterAktif"
+        (ionChange)="eksekusiFilterSort()"
+        toggleIcon="chevron-down-outline"
+        placeholder="Urutkan"
+        style="font-size: 12px; font-weight: 600; color: #093c5d; --padding-start: 0px; --padding-end: 0px; min-height: unset;"
+      >
+        <ion-select-option value="default">Default</ion-select-option>
+        <ion-select-option value="rating-tertinggi">Rating Tertinggi</ion-select-option>
+        <ion-select-option value="harga-termurah">Harga Termurah</ion-select-option>
+        <ion-select-option value="harga-termahal">Harga Termahal</ion-select-option>
+      </ion-select>
+    </div>
   </div>
 
   <div *ngIf="isLoading" style="text-align: center; padding: 40px">

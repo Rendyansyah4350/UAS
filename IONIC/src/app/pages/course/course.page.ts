@@ -15,6 +15,9 @@ export class CoursePage implements OnInit {
   isLoading: boolean = true;
   keywordPencarian: string = '';
 
+  // 🟢 1. TAMBAHKAN VARIABEL UNTUK FILTER SORTING (Default: polosan/tanpa sort)
+  filterAktif: string = 'default';
+
   constructor(
     private navCtrl: NavController,
     private courseService: CourseService,
@@ -28,7 +31,6 @@ export class CoursePage implements OnInit {
     this.isLoading = true;
     this.courseService.getCourses().subscribe({
       next: (res: any) => {
-        // Simpan data asli ke allCourses dan listCourses
         this.allCourses = res.data || [];
         this.listCourses = this.allCourses;
         this.isLoading = false;
@@ -41,17 +43,17 @@ export class CoursePage implements OnInit {
     });
   }
 
-  // 🟢 FUNGSI CLIK LIVE UNTUK FILTER KATEGORI (Computer Science / Microsoft Office)
   pilihKategori(namaKategori: string) {
     this.kategoriAktif = namaKategori;
+    this.keywordPencarian = '';
+    // Reset urutan filter ke default setiap ganti kategori biar gak pusing user-nya
+    this.filterAktif = 'default';
 
-    // Jika yang di-klik adalah 'Semua', kembalikan seluruh data master tanpa filter
     if (namaKategori === 'Semua') {
       this.listCourses = this.allCourses;
       return;
     }
 
-    // Filter data berdasarkan kolom 'category' yang sesuai dengan database cPanel lo
     this.listCourses = this.allCourses.filter((course: any) => {
       const kategoriDatabase = course.category || '';
       return kategoriDatabase.toLowerCase() === namaKategori.toLowerCase();
@@ -62,11 +64,9 @@ export class CoursePage implements OnInit {
     this.navCtrl.navigateForward(['/course-detail', id]);
   }
 
-  // 🟢 TAMBAHAN FUNGSI LIVE SEARCH (Tanpa mengubah fungsi di atas)
   fungsiCariKursus() {
     console.log('User sedang mencari:', this.keywordPencarian);
 
-    // 1. Tentukan data dasar awal berdasarkan kategori yang lagi aktif
     let dataDasar = this.allCourses;
     if (this.kategoriAktif !== 'Semua') {
       dataDasar = this.allCourses.filter((course: any) => {
@@ -77,18 +77,43 @@ export class CoursePage implements OnInit {
       });
     }
 
-    // 2. Jika isi searchbar kosong, balikin ke data dasar kategori tersebut
     if (!this.keywordPencarian.trim()) {
       this.listCourses = dataDasar;
+      // Jalankan sorting ulang jika ada filter aktif sewaktu search kosong
+      this.eksekusiFilterSort();
       return;
     }
 
-    // 3. Jalankan filter pencarian berdasarkan judul (title) dari data dasar
     this.listCourses = dataDasar.filter((course: any) => {
       const judulKursus = course.title || '';
       return judulKursus
         .toLowerCase()
         .includes(this.keywordPencarian.toLowerCase());
+    });
+
+    // Jalankan sorting setelah data berhasil dicari
+    this.eksekusiFilterSort();
+  }
+
+  // 🟢 2. TAMBAHKAN FUNGSI LIVE SORTING UNTUK RATING & HARGA
+  eksekusiFilterSort() {
+    if (this.filterAktif === 'default') return;
+
+    // Lakukan sorting langsung pada array listCourses yang sedang tampil
+    this.listCourses.sort((a: any, b: any) => {
+      const hargaA = parseFloat(a.price) || 0;
+      const hargaB = parseFloat(b.price) || 0;
+      const ratingA = parseFloat(a.rating) || 0;
+      const ratingB = parseFloat(b.rating) || 0;
+
+      if (this.filterAktif === 'harga-termurah') {
+        return hargaA - hargaB; // Urutkan dari angka kecil ke besar
+      } else if (this.filterAktif === 'harga-termahal') {
+        return hargaB - hargaA; // Urutkan dari besar ke kecil
+      } else if (this.filterAktif === 'rating-tertinggi') {
+        return ratingB - ratingA; // Urutkan dari rating 5.0 ke bawah
+      }
+      return 0;
     });
   }
 }

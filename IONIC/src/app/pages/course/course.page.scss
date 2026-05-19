@@ -34,11 +34,13 @@ ion-header {
 }
 
 /* Kategori Populer */
+/* Kategori Populer */
 .category-scroll {
   display: flex;
   overflow-x: auto;
   padding: 10px 16px;
   gap: 12px;
+  align-items: center;
   &::-webkit-scrollbar {
     display: none;
   }
@@ -50,16 +52,34 @@ ion-header {
     border: 1px solid #e2e8f0;
     border-radius: 12px;
     font-weight: 600;
+    font-size: 13px;
+    height: 38px; /* Menyeragamkan tinggi chip biar rapi */
+    padding: 0 14px; /* Memberikan ruang napas di dalam chip */
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
     transition: all 0.2s ease-in-out;
+
+    /* 🟢 ATURAN UNTUK ICON BIAR GAK NUMPUK */
+    ion-icon {
+      font-size: 16px;
+      margin-right: 6px; /* Memberikan jarak aman antara icon dan teks */
+      margin-left: -2px;
+      color: #64748b; /* Mengikuti warna teks default */
+    }
 
     &.chip-active {
       --background: #093c5d;
       --color: #ffffff;
       border: 1px solid #093c5d;
+
+      /* Icon ikut berubah putih saat chip aktif */
+      ion-icon {
+        color: #ffffff;
+      }
     }
   }
 }
-
 /* Card Kursus (Dioptimalkan biar simetris dan tinggi rata) */
 ion-card {
   border-radius: 20px;
@@ -133,3 +153,13 @@ ion-card {
   }
 }
 
+/* Merapikan teks di dalam komponen ion-select bawaan ionic */
+ion-select {
+  font-size: 12px;
+  font-weight: 700;
+  color: #093c5d;
+
+  &::part(text) {
+    padding-right: 4px;
+  }
+}
