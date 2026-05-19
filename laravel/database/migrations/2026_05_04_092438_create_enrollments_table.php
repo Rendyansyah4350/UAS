@@ -15,9 +15,11 @@ return new class extends Migration
             $table->id();
             $table->foreignId('user_id')->constrained()->onDelete('cascade');
             $table->foreignId('course_id')->constrained()->onDelete('cascade');
-            $table->integer('price_bought'); // Harga saat dibeli (untuk laporan keuangan)
+            $table->integer('price_bought'); 
             $table->enum('status', ['pending', 'success'])->default('success');
-            $table->integer('progress')->default(0); // Letakkan setelah kolom status
+            $table->integer('progress')->default(0);
+            $table->text('payment_url')->nullable();
+            $table->string('external_id')->nullable();
             $table->timestamps();
         });
     }

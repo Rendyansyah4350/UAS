@@ -21,6 +21,7 @@ Route::post('/verify-otp', [AuthController::class, 'verifyOtp']);
 Route::post('/forgot-password/send-otp', [ForgotPasswordController::class, 'sendOtp']);
 Route::post('/forgot-password/verify-otp', [ForgotPasswordController::class, 'verifyOtp']);
 Route::post('/forgot-password/reset', [ForgotPasswordController::class, 'resetPassword']);
+Route::post('/xendit/callback', [EnrollmentController::class, 'handleCallback']);
 
 
 // --- API Privat (Wajib bawa Token / auth:sanctum) ---
@@ -30,17 +31,17 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::post('/enrollments', [EnrollmentController::class, 'store']);
     Route::post('/enrollments', [EnrollmentController::class, 'store']); // Membeli
     Route::get('/enrollments', [EnrollmentController::class, 'index']); // melihat
-    Route::middleware('auth:sanctum')->get('/courses/{course_id}/contents', [ContentController::class, 'index']);
-    Route::middleware('auth:sanctum')->post('/progress', [ProgressController::class, 'markAsCompleted']);
-    Route::middleware('auth:sanctum')->get('/courses/{course_id}/progress', [ProgressController::class, 'getProgress']);
-    Route::middleware('auth:sanctum')->get('/courses/{course_id}/quizzes', [QuizController::class, 'index']);
+    Route::get('/courses/{course_id}/contents', [ContentController::class, 'index']);
+    Route::post('/progress', [ProgressController::class, 'markAsCompleted']);
+    Route::get('/courses/{course_id}/progress', [ProgressController::class, 'getProgress']);
+    Route::get('/courses/{course_id}/quizzes', [QuizController::class, 'index']);
     Route::post('/courses/{course_id}/quizzes/submit', [QuizController::class, 'submit']);
-    Route::middleware('auth:sanctum')->get('/courses/{course_id}/certificate', [EnrollmentController::class, 'getCertificate']);
+    Route::get('/courses/{course_id}/certificate', [EnrollmentController::class, 'getCertificate']);
     Route::post('/quizzes', [QuizController::class, 'store']);
     Route::get('/courses/{course_id}/students', [EnrollmentController::class, 'getEnrolledStudents']);
     Route::get('/courses/{course_id}/progress/{user_id}', [ProgressController::class, 'getStudentProgress']);
     Route::get('/instructor/dashboard', [CourseController::class, 'dashboard']);
-    Route::middleware('auth:sanctum')->post('/contents', [ContentController::class, 'store']);
+    Route::post('/contents', [ContentController::class, 'store']);
     Route::post('/contents', [ContentController::class, 'store']);
     Route::get('/my-certificates', [CertificateApiController::class, 'index']);
     Route::post('/progress/mark-completed', [ProgressController::class, 'markAsCompleted']);
@@ -50,5 +51,5 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::put('/user/update', [AuthController::class, 'updateProfile']);
     Route::get('/wishlist', [WishlistController::class, 'index']);
     Route::post('/wishlist/toggle', [WishlistController::class, 'toggle']);
-    Route::middleware('auth:sanctum')->post('/quiz/submit', [QuizController::class, 'store']);
+    Route::post('/quiz/submit', [QuizController::class, 'store']);
 });
