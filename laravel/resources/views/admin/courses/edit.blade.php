@@ -5,6 +5,18 @@
         <h2 class="text-2xl font-bold text-gray-800">Edit Kursus: {{ $course->title }}</h2>
     </div>
 
+    {{-- 🟢 TAMBAHAN: Alert Box untuk menampilkan pesan eror validasi jika gambar ditolak --}}
+    @if ($errors->any())
+        <div class="mb-6 p-4 bg-rose-50 border border-rose-200 text-rose-700 rounded-xl text-sm">
+            <p class="font-bold mb-1"><i class="fas fa-exclamation-triangle"></i> Terjadi kesalahan input:</p>
+            <ul class="list-disc pl-5 space-y-0.5">
+                @foreach ($errors->all() as $error)
+                    <li>{{ $error }}</li>
+                @endforeach
+            </ul>
+        </div>
+    @endif
+
     <div class="hidden md:block bg-white rounded-lg shadow-md p-6">
         <form action="{{ route('admin.courses.update', $course->id) }}" method="POST" enctype="multipart/form-data">
             @csrf
@@ -44,7 +56,11 @@
                         <label class="block text-sm font-medium text-gray-700">Ganti Cover (Opsional)</label>
                         <input type="file" name="image" class="mt-1 block w-full text-sm text-gray-500">
                         @if ($course->image)
-                            <p class="mt-2 text-xs text-gray-400">Gambar saat ini sudah tersimpan.</p>
+                            <div class="mt-3 flex items-center gap-3">
+                                {{-- 🟢 TAMBAHAN: Preview gambar saat ini biar kelihatan --}}
+                                <img src="{{ $course->image }}" class="w-20 h-12 object-cover rounded-lg border">
+                                <p class="text-xs text-gray-400">Gambar saat ini yang tersimpan di database.</p>
+                            </div>
                         @endif
                     </div>
                 </div>
@@ -99,7 +115,10 @@
                     <input type="file" name="image"
                         class="block w-full text-sm text-gray-500 file:w-full file:py-2 file:px-4 file:rounded-lg file:border-0 file:text-sm file:font-semibold file:bg-blue-50 file:text-blue-700">
                     @if ($course->image)
-                        <p class="mt-1 text-xs text-gray-400">Gambar saat ini sudah tersimpan.</p>
+                        <div class="mt-2 flex items-center gap-2">
+                            <img src="{{ $course->image }}" class="w-16 h-10 object-cover rounded-md border">
+                            <p class="text-xs text-gray-400">Gambar aktif.</p>
+                        </div>
                     @endif
                 </div>
 

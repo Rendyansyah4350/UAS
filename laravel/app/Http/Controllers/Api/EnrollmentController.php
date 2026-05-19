@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
 use App\Models\Enrollment;
+use App\Models\Course;
 use Illuminate\Http\Request;
 
 class EnrollmentController extends Controller
@@ -23,10 +24,15 @@ class EnrollmentController extends Controller
             return response()->json(['message' => 'Kamu sudah memiliki kursus ini'], 400);
         }
 
+        
+        $course = Course::find($request->course_id);
+
         $enrollment = Enrollment::create([
             'user_id' => $request->user()->id,
             'course_id' => $request->course_id,
-            'status' => 'success'
+            'price_bought' => $course->price ?? 0,
+            'status' => 'success',
+            'progress' => 0
         ]);
 
         return response()->json([
@@ -35,6 +41,7 @@ class EnrollmentController extends Controller
             'data' => $enrollment
         ]);
     }
+
     public function index(Request $request)
     {
         // Mengambil semua data enrollment milik user yang sedang login
@@ -49,31 +56,33 @@ class EnrollmentController extends Controller
             'data' => $histori
         ]);
     }
+
     public function getCertificate($course_id, Request $request)
     {
         $user = $request->user();
 
-        // Cek apakah user sudah menyelesaikan kursus (logic progress 100%)
-        $totalContents = \App\Models\Content::where('course_id', $course_id)->count();
-        $completedContents = \App\Models\Progress::where('user_id', $user->id)
-            ->whereHas('content', function ($query) use ($course_id) {
-                $query->where('course_id', $course_id);
-            })
-            ->count();
+        // 🟢 DIOPTIMALKAN: Cari data enrollment dan langsung cek kolom progress-nya
+        $enrollment = Enrollment::where('user_id', $user->id)
+            ->where('course_id', $course_id)
+            ->first();
 
-        if ($totalContents > 0 && $completedContents < $totalContents) {
+        // Jika data beli gak ada atau progress belum 100%, blokir klaim sertifikat
+        if (!$enrollment || $enrollment->progress < 100)
+        {
             return response()->json([
                 'success' => false,
-                'message' => 'Selesaikan semua materi terlebih dahulu untuk klaim sertifikat.'
+                'message' => 'Selesaikan semua materi terlebih dahulu untuk mendapatkan sertifikat.'
             ], 403);
         }
+
+        $course = Course::find($course_id);
 
         return response()->json([
             'success' => true,
             'message' => 'Sertifikat tersedia',
             'data' => [
                 'nama_siswa' => $user->name,
-                'kursus' => \App\Models\Course::find($course_id)->title,
+                'kursus' => $course->title ?? 'Nama Kursus Tidak Ditemukan',
                 'nomor_sertifikat' => 'CERT-' . strtoupper(bin2hex(random_bytes(4))),
                 'tanggal_terbit' => now()->format('Y-m-d')
             ]

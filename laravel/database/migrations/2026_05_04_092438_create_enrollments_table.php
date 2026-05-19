@@ -17,6 +17,7 @@ return new class extends Migration
             $table->foreignId('course_id')->constrained()->onDelete('cascade');
             $table->integer('price_bought'); // Harga saat dibeli (untuk laporan keuangan)
             $table->enum('status', ['pending', 'success'])->default('success');
+            $table->integer('progress')->default(0); // Letakkan setelah kolom status
             $table->timestamps();
         });
     }

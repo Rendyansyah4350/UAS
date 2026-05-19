@@ -44,6 +44,7 @@ Route::middleware(['auth', 'admin'])->prefix('admin')->group(function ()
     Route::get('/courses/{id}/edit', [CourseController::class, 'edit'])->name('admin.courses.edit');
     Route::put('/courses/{id}', [CourseController::class, 'update'])->name('admin.courses.update');
     Route::delete('/courses/{id}', [CourseController::class, 'destroy'])->name('admin.courses.destroy');
+    Route::delete('/courses/content/{content_id}', [CourseController::class, 'destroyContent'])->name('admin.courses.destroyContent');
 
     // Manajemen Students
     Route::get('/students', [StudentController::class, 'index'])->name('admin.students.index');
