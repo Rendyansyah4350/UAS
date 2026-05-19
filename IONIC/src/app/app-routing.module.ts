@@ -11,6 +11,7 @@ const routes: Routes = [
 
   // ==========================================
   // RUTE UTAN AUTENTIKASI & KEAMANAN AKUN
+  // RUTE OTENTIKASI & KEAMANAN
   // ==========================================
   {
     path: 'login',
@@ -41,6 +42,12 @@ const routes: Routes = [
     // canActivate: [AuthGuard], // Dibuka agar pengunjung anonim bisa melihat katalog kursus
     loadChildren: () => import('./pages/tabs/tabs.module').then(m => m.TabsPageModule)
   },
+  // RUTE UTAMA APLIKASI
+  // ==========================================
+  {
+    path: 'tabs',
+    loadChildren: () => import('./pages/tabs/tabs.module').then(m => m.TabsPageModule)
+  },
   {
     path: 'course',
     loadChildren: () => import('./pages/course/course.module').then(m => m.CoursePageModule)
@@ -50,7 +57,12 @@ const routes: Routes = [
     loadChildren: () => import('./pages/course-detail/course-detail.module').then(m => m.CourseDetailPageModule)
   },
   {
+  path: 'course-detail/:id',
+  loadChildren: () => import('./pages/course-detail/course-detail.module').then(m => m.CourseDetailPageModule)
+},
+  {
     path: 'wishlist',
+    // canActivate: [AuthGuard],
     loadChildren: () => import('./pages/wishlist/wishlist.module').then(m => m.WishlistPageModule)
   },
   {
@@ -60,6 +72,10 @@ const routes: Routes = [
   },
   {
     path: 'certificate', // <-- Pastikan namanya sama persis 'certificate'
+    loadChildren: () => import('./pages/edit-profil/edit-profil.module').then(m => m.EditProfilPageModule)
+  },
+  {
+    path: 'certificate',
     loadChildren: () => import('./pages/certificate/certificate.module').then( m => m.CertificatePageModule)
   },
   {
@@ -79,7 +95,6 @@ const routes: Routes = [
     path: '**', // Menangani jika user mengetik alamat asal-asalan, langsung oper ke tabs
     redirectTo: 'tabs'
   },
-
 ];
 
 @NgModule({
