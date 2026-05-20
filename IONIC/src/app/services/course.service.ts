@@ -14,6 +14,7 @@ export class CourseService {
   private baseApiUrl = 'https://eduvan.rehalivan.com/api';
 
   public wishlistChanged$ = new BehaviorSubject<boolean>(false);
+  public progressChanged$ = new BehaviorSubject<boolean>(false);
 
   constructor(private http: HttpClient) {}
 
@@ -78,11 +79,16 @@ export class CourseService {
     });
   }
 
-  // 🟢 TAMBAHAN BARU: Fungsi untuk menyimpan progress video ("Tandai Selesai") ke database Laravel
-  saveProgress(courseId: number, contentId: number): Observable<any> {
+  // 🟢 SEKARANG BISA TERIMA STATUS: 1 untuk tandai selesai, 0 untuk cancel progress
+  saveProgress(
+    courseId: number,
+    contentId: number,
+    isCompleted: number,
+  ): Observable<any> {
     const payload = {
       course_id: courseId,
       content_id: contentId,
+      is_completed: isCompleted, 
     };
     return this.http.post(
       `${this.baseApiUrl}/contents/mark-complete`,

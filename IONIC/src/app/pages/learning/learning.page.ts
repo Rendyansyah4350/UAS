@@ -22,6 +22,16 @@ export class LearningPage implements OnInit {
 
   ngOnInit() {
     this.loadData();
+
+    // 🟢 TAMBAHAN SAKTI: Dengarkan sinyal perubahan dari halaman player secara real-time!
+    this.courseService.progressChanged$.subscribe((berubah) => {
+      if (berubah) {
+        console.log(
+          'Progress berubah mbut! Mengupdate list My Learning otomatis di background...',
+        );
+        this.loadData(); // Ambil data ulang dari database Laravel secara diam-diam
+      }
+    });
   }
 
   // 🟢 PAKEM IONIC SIKLUS: Supaya pas student abis beli kelas terus pindah ke tab ini, datanya langsung ter-refresh otomatis

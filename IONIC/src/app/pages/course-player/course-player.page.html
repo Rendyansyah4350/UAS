@@ -101,11 +101,11 @@
 
     <ion-button
       expand="block"
+      [color]="isCompleted ? 'danger' : 'primary'"
       class="finish-btn"
       (click)="markAsComplete()"
-      [disabled]="isCompleted"
     >
-      {{ isCompleted ? 'SELESAI' : 'TANDAI SELESAI' }}
+      {{ isCompleted ? 'BATALKAN SELESAI' : 'TANDAI SELESAI' }}
     </ion-button>
   </div>
 </ion-content>

@@ -113,21 +113,32 @@ export class CoursePlayerPage implements OnInit {
       return;
     }
 
+    // 🟢 TENTUKAN AKSI DINAMIS: Jika aslinya true (sudah selesai), kita kirim nilai status 0 (artinya mau dicancel)
+    // Jika aslinya false (belum selesai), kita kirim nilai status 1 (artinya mau ditandai selesai)
+    const statusKirim = this.isCompleted ? 0 : 1;
+
     this.courseService
-      .saveProgress(Number(this.courseId), this.activeContentId)
+      .saveProgress(Number(this.courseId), this.activeContentId, statusKirim) // 🟢 FIX: Sekarang mengirim 3 argumen sempurna!
       .subscribe(
         async (res: any) => {
           if (res.success) {
-            this.isCompleted = true; // Kunci tombol di UI jadi "SELESAI"
+            // Balik status variabel lokal di frontend biar tombolnya langsung berubah warna/teks
+            this.isCompleted = statusKirim === 1;
+
+            // Tembakkan sinyal ke BehaviorSubject biar halaman My Learning ikut nambah/berkurang persentasenya secara live
+            this.courseService.progressChanged$.next(true);
 
             const toast = await this.toastCtrl.create({
-              message: 'Materi berhasil diselesaikan!',
+              message:
+                statusKirim === 1
+                  ? 'Materi berhasil diselesaikan!'
+                  : 'Selesai materi dibatalkan!',
               duration: 2000,
-              color: 'success',
+              color: statusKirim === 1 ? 'success' : 'warning', // Kalau cancel warnanya kuning/oranye manis
             });
             await toast.present();
 
-            // 🟢 AUTOMATIS REFRESH: Memuat ulang kurikulum biar icon centang hijaunya langsung muncul di list samping tanpa perlu reload halaman manual
+            // AUTOMATIS REFRESH: Memuat ulang kurikulum biar list centang hijau langsung sinkron
             this.muatDataKelasAsli(this.courseId!);
           }
         },

@@ -72,13 +72,21 @@
             <ion-button size="small" (click)="goToPlayer(item.course_id)"
               >LANJUT BELAJAR</ion-button
             >
+
             <ion-button
               size="small"
               fill="outline"
-              [color]="(item.progress || 0) >= 100 ? 'warning' : 'medium'"
+              [color]="item.is_quiz_unlocked ? 'warning' : 'medium'"
+              [disabled]="!item.is_quiz_unlocked"
               (click)="openQuiz(item)"
             >
-              {{ (item.progress || 0) >= 100 ? 'KUIS' : 'TERKUNCI' }}
+              <ion-icon
+                name="lock-closed-outline"
+                slot="start"
+                *ngIf="!item.is_quiz_unlocked"
+                style="font-size: 14px; margin-right: 2px"
+              ></ion-icon>
+              {{ item.is_quiz_unlocked ? 'KUIS' : 'TERKUNCI' }}
             </ion-button>
           </div>
 
