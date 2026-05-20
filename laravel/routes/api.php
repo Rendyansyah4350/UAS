@@ -52,4 +52,5 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::post('/wishlist/toggle', [WishlistController::class, 'toggle']);
     Route::post('/quiz/submit', [QuizController::class, 'store']);
     Route::get('/notifications', [NotificationController::class, 'getNotifUser']);
+    Route::post('/contents/mark-complete', [ContentController::class, 'markComplete']);
 });
