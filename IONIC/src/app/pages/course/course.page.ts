@@ -20,7 +20,7 @@ export class CoursePage implements OnInit {
   constructor(
     private navCtrl: NavController,
     private courseService: CourseService,
-    private router: Router,
+    private router: Router
   ) {
     // Tangkap keyword dari Home
     const navigation = this.router.getCurrentNavigation();
@@ -31,25 +31,22 @@ export class CoursePage implements OnInit {
 
   ngOnInit() {
     this.loadData();
-
-    // Dengerin sinyal perubahan dari page detail secara live
-    this.courseService.wishlistChanged$.subscribe((berubah) => {
-      if (berubah) {
-        console.log('📢 Ada sinyal masuk! Refresh data katalog utama...');
-        this.loadData();
-      }
-    });
   }
 
-  // 🟢 LIVE REFRESH FIX: Lifecycle Ionic ini akan memaksa data ditarik ulang dari Laravel
-  // setiap kali user memindahkan tab atau kembali ke halaman Semua Kursus.
-  ionViewWillEnter() {
-    console.log(
-      'Menyegarkan katalog kursus dan status wishlist dari database live...',
-    );
-    this.loadData();
-  }
-
+<<<<<<< Updated upstream
+  loadData() {
+    this.isLoading = true;
+    this.courseService.getCourses().subscribe({
+      next: (res: any) => {
+        this.allCourses = res.data || [];
+        this.isLoading = false;
+        
+        // 🟢 FIX: Gunakan setTimeout agar filter berjalan 
+        // setelah data 100% masuk ke variabel allCourses
+        setTimeout(() => {
+          this.fungsiCariKursus();
+        }, 100);
+=======
   ionViewWillEnter() {
     const currentNav = this.router.getCurrentNavigation();
     if (currentNav?.extras.state && currentNav.extras.state['keyword']) {
@@ -58,8 +55,9 @@ export class CoursePage implements OnInit {
     }
   }
 
-  loadData() {
+loadData() {
     this.isLoading = true;
+
     // 1. Ambil data wishlist dari database localhost/server lek
     this.courseService.ambilDaftarWishlist().subscribe({
       next: (wishlistRes: any) => {
@@ -100,39 +98,13 @@ export class CoursePage implements OnInit {
               // Jika kategorinya 'Semua' dan tidak ada pencarian, jalankan sorting default bawaan Ivan
               this.eksekusiFilterSort();
             }
-    // 1. Ambil daftar wishlist teranyar dari server Laravel kamu lek
-    this.courseService.ambilDaftarWishlist().subscribe({
-      next: (wishlistRes: any) => {
-        // Ambil array ID course yang dibungkus di dalam data pivot relasi Laravel
-        const userWishlistIds = (wishlistRes.data || []).map((item: any) =>
-          Number(item.course_id),
-        );
-
-        // 2. Baru load data katalog utama
-        this.courseService.getCourses().subscribe({
-          next: (res: any) => {
-            const dataKatalog = res.data || [];
-
-            // 3. 🟢 NYALAKAN LOVE JIKA ID NYA COCOK DENGAN ARRAY WISHLIST
-            this.allCourses = dataKatalog.map((course: any) => {
-              return {
-                ...course,
-                is_wishlist: userWishlistIds.includes(Number(course.id)),
-              };
-            });
-
-            this.isLoading = false;
-
-            // Picu filter pencarian & kategori biar jalan sinkron
-            setTimeout(() => {
-              this.fungsiCariKursus();
-            }, 100);
           },
           error: (error) => {
             console.error('Gagal ambil data katalog', error);
             this.isLoading = false;
           },
         });
+>>>>>>> Stashed changes
       },
       error: (error) => {
         console.error('Gagal ambil data wishlist untuk sinkronisasi', error);
@@ -150,23 +122,6 @@ export class CoursePage implements OnInit {
           }
         });
       }
-
-      error: (err) => {
-        console.error('Gagal sinkronisasi data wishlist awal', err);
-
-        // 🟢 AMAN: Fallback kalau wishlist bermasalah, tetep tampilin katalog tanpa crash
-        this.courseService.getCourses().subscribe({
-          next: (res: any) => {
-            this.allCourses = res.data || [];
-            this.isLoading = false;
-            setTimeout(() => this.fungsiCariKursus(), 100);
-          },
-          error: (katalogErr) => {
-            console.error('Katalog ikut bermasalah:', katalogErr);
-            this.isLoading = false;
-          },
-        });
-      },
     });
   }
 
@@ -179,35 +134,29 @@ export class CoursePage implements OnInit {
       error: (err) => {
         console.error('Gagal sinkronisasi wishlist:', err);
         course.is_wishlist = !course.is_wishlist;
-      },
+      }
     });
   }
 
   pilihKategori(namaKategori: string) {
     this.kategoriAktif = namaKategori;
-    // Jika ganti kategori, kita tetap pertahankan keyword yang ada
+    // Jika ganti kategori, kita tetap pertahankan keyword yang ada 
     // agar user tidak perlu mengetik ulang
     this.fungsiCariKursus();
   }
 
   fungsiCariKursus() {
     // 1. Filter dasar berdasarkan Kategori
-    let dataHasil =
-      this.kategoriAktif === 'Semua'
-        ? [...this.allCourses]
-        : this.allCourses.filter(
-            (c) =>
-              (c.category || '').toLowerCase() ===
-              this.kategoriAktif.toLowerCase(),
-          );
+    let dataHasil = this.kategoriAktif === 'Semua' 
+      ? [...this.allCourses] 
+      : this.allCourses.filter(c => (c.category || '').toLowerCase() === this.kategoriAktif.toLowerCase());
 
     // 2. Filter lanjutan berdasarkan Keyword
     const keyword = this.keywordPencarian.toLowerCase().trim();
     if (keyword) {
-      dataHasil = dataHasil.filter(
-        (c) =>
-          (c.title || '').toLowerCase().includes(keyword) ||
-          (c.description || '').toLowerCase().includes(keyword),
+      dataHasil = dataHasil.filter(c => 
+        (c.title || '').toLowerCase().includes(keyword) || 
+        (c.description || '').toLowerCase().includes(keyword)
       );
     }
 
