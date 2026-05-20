@@ -1,7 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { ToastController } from '@ionic/angular';
-import { CourseService } from '../../services/course.service'; // 🟢 TAMBAHAN: Import service lu mbut
+import { CourseService } from '../../services/course.service';
+import { DomSanitizer, SafeResourceUrl } from '@angular/platform-browser'; // 🟢 WAJIB IMPORT INI MBUT
 
 @Component({
   selector: 'app-course-player',
@@ -13,16 +14,19 @@ export class CoursePlayerPage implements OnInit {
   courseId: string | null = '';
   isCompleted: boolean = false;
 
-  // 🟢 TAMBAHAN: Wadah penampung data asli dari backend Laravel
-  courseDetail: any = {}; // Untuk judul kursus & instruktur
-  contents: any[] = []; // Untuk list bab/kurikulum materi pembelajaran
-  videoAktifUrl: string = ''; // Menyimpan link video yang sedang disetel student
+  courseDetail: any = {};
+  contents: any[] = [];
+  videoAktifUrl: string = '';
+
+  // 🟢 TAMBAHAN: Variabel khusus untuk menampung URL YouTube yang sudah lolos sensor security Angular
+  safeVideoUrl: SafeResourceUrl | null = null;
   loading: boolean = false;
 
   constructor(
     private route: ActivatedRoute,
     private toastCtrl: ToastController,
-    private courseService: CourseService, // 🟢 TAMBAHAN: Inject CourseService
+    private courseService: CourseService,
+    private sanitizer: DomSanitizer, // 🟢 INJECT SANITIZER DI SINI TOT
   ) {}
 
   ngOnInit() {
@@ -32,30 +36,24 @@ export class CoursePlayerPage implements OnInit {
     }
   }
 
-  // 🟢 TAMBAHAN: Fungsi nembak API server EduVan
   muatDataKelasAsli(id: string) {
     this.loading = true;
-
-    // 1. Tarik info nama course asli
     this.courseService.getCourseById(id).subscribe(
       (res: any) => {
         if (res.success) {
           this.courseDetail = res.data;
-          console.log('Detail Kelas Player Terbuka:', this.courseDetail);
         }
       },
-      (err) => console.error('Gagal memuat info kelas di player:', err),
+      (err) => console.error('Gagal memuat info kelas:', err),
     );
 
-    // 2. Tarik isi materi yang gemboknya udah kebuka
     this.courseService.getCourseContents(Number(id)).subscribe(
       (res: any) => {
         this.loading = false;
         if (res.success) {
           this.contents = res.data || [];
-          console.log('List Kurikulum Asli:', this.contents);
 
-          // Otomatis play video pertama kalau kontennya ada isinya mbut
+          // Auto-play video pertama kalau ada isinya
           if (this.contents.length > 0) {
             this.putarMateri(this.contents[0]);
           }
@@ -63,30 +61,51 @@ export class CoursePlayerPage implements OnInit {
       },
       (err) => {
         this.loading = false;
-        console.error('Materi gagal dimuat karena belum lunas/error:', err);
+        console.error('Materi gagal dimuat:', err);
       },
     );
   }
 
-  // 🟢 TAMBAHAN: Fungsi ketika list materi kurikulum di-klik student
+  // 🟢 LOGIKA UTAMA SAKTI UNTUK YOUTUBE:
   putarMateri(materi: any) {
-    console.log('Memutar Video Materi:', materi.title);
-    // Menyesuaikan properti video dari response database lu (biasanya video_url atau video)
-    this.videoAktifUrl = materi.video_url || materi.video || '';
+    console.log('--- DEBUG MATERI YANG DIKLIK ---');
+    console.log(materi);
+
+    // 🟢 FIX: Tambahin materi.content_url di sini biar kebaca sama Angular
+    this.videoAktifUrl =
+      materi.content_url || materi.video_url || materi.video || '';
+
+    console.log('Link video yang dideteksi:', this.videoAktifUrl);
+
+    if (this.videoAktifUrl) {
+      let embedUrl = this.videoAktifUrl;
+
+      // Parsing link YouTube biar jadi format embed
+      if (this.videoAktifUrl.includes('watch?v=')) {
+        const videoId = this.videoAktifUrl.split('watch?v=')[1].split('&')[0];
+        embedUrl = `https://www.youtube.com/embed/${videoId}`;
+      } else if (this.videoAktifUrl.includes('youtu.be/')) {
+        const videoId = this.videoAktifUrl.split('youtu.be/')[1].split('?')[0];
+        embedUrl = `https://www.youtube.com/embed/${videoId}`;
+      } else if (!this.videoAktifUrl.includes('embed')) {
+        embedUrl = `https://www.youtube.com/embed/${this.videoAktifUrl}`;
+      }
+
+      this.safeVideoUrl =
+        this.sanitizer.bypassSecurityTrustResourceUrl(embedUrl);
+    } else {
+      console.warn('Waduh mbut, field url videonya masih kosong nih!');
+      this.safeVideoUrl = null;
+    }
   }
 
-  // Fungsi dipicu saat tombol Selesai diklik
   async markAsComplete() {
     this.isCompleted = true;
-
     const toast = await this.toastCtrl.create({
       message: 'Materi berhasil diselesaikan!',
       duration: 2000,
       color: 'success',
     });
     await toast.present();
-
-    console.log('Materi ID:', this.courseId, 'ditandai selesai.');
-    // Nanti di sini lu tinggal hubungkan ke endpoint post progress belajar milik Laravel lu tot
   }
 }
