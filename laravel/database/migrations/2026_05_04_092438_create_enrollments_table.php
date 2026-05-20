@@ -11,15 +11,16 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('enrollments', function (Blueprint $table) {
+        Schema::create('enrollments', function (Blueprint $table)
+        {
             $table->id();
             $table->foreignId('user_id')->constrained()->onDelete('cascade');
             $table->foreignId('course_id')->constrained()->onDelete('cascade');
-            $table->integer('price_bought'); 
+            $table->integer('price_bought');
             $table->enum('status', ['pending', 'success'])->default('success');
+            $table->string('external_id', 255)->nullable();
             $table->integer('progress')->default(0);
-            $table->text('payment_url')->nullable();
-            $table->string('external_id')->nullable();
+            $table->text('payment_url')->nullable(); // 🟢 Sudah aman menggunakan TEXT & nullable sesuai phpMyAdmin cPanel
             $table->timestamps();
         });
     }

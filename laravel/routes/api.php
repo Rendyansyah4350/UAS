@@ -22,16 +22,16 @@ Route::post('/forgot-password/send-otp', [ForgotPasswordController::class, 'send
 Route::post('/forgot-password/verify-otp', [ForgotPasswordController::class, 'verifyOtp']);
 Route::post('/forgot-password/reset', [ForgotPasswordController::class, 'resetPassword']);
 Route::post('/xendit/callback', [EnrollmentController::class, 'handleCallback']);
+Route::get('/courses/{course_id}/contents', [ContentController::class, 'index']);
 
 
 // --- API Privat (Wajib bawa Token / auth:sanctum) ---
-Route::middleware('auth:sanctum')->group(function () {
+Route::middleware('auth:sanctum')->group(function ()
+{
     Route::get('/user', [AuthController::class, 'me']);    // Ambil data profil
     Route::post('/logout', [AuthController::class, 'logout']); // Hapus token
     Route::post('/enrollments', [EnrollmentController::class, 'store']);
-    Route::post('/enrollments', [EnrollmentController::class, 'store']); // Membeli
     Route::get('/enrollments', [EnrollmentController::class, 'index']); // melihat
-    Route::get('/courses/{course_id}/contents', [ContentController::class, 'index']);
     Route::post('/progress', [ProgressController::class, 'markAsCompleted']);
     Route::get('/courses/{course_id}/progress', [ProgressController::class, 'getProgress']);
     Route::get('/courses/{course_id}/quizzes', [QuizController::class, 'index']);
@@ -41,7 +41,6 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::get('/courses/{course_id}/students', [EnrollmentController::class, 'getEnrolledStudents']);
     Route::get('/courses/{course_id}/progress/{user_id}', [ProgressController::class, 'getStudentProgress']);
     Route::get('/instructor/dashboard', [CourseController::class, 'dashboard']);
-    Route::post('/contents', [ContentController::class, 'store']);
     Route::post('/contents', [ContentController::class, 'store']);
     Route::get('/my-certificates', [CertificateApiController::class, 'index']);
     Route::post('/progress/mark-completed', [ProgressController::class, 'markAsCompleted']);

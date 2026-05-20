@@ -9,35 +9,56 @@ class ContentController extends Controller
 {
     public function index($course_id, Request $request)
     {
-        // 🟢 OPTIMASI: Cek data enrollment dan pastikan statusnya wajib 'success'
-        $enrollment = \App\Models\Enrollment::where('user_id', $request->user()->id)
-            ->where('course_id', $course_id)
-            ->first();
-
-        // Jika belum klik beli sama sekali (data tidak ada)
-        if (!$enrollment)
-        {
-            return response()->json([
-                'success' => false,
-                'message' => 'Kamu harus membeli kursus ini terlebih dahulu untuk melihat materi.'
-            ], 403);
-        }
-
-        if ($enrollment->status === 'pending')
-        {
-            return response()->json([
-                'success' => false,
-                'message' => 'Silahkan selesaikan pembayaran terlebih dahulu untuk mengakses materi.',
-                'payment_url' => $enrollment->payment_url 
-            ], 402);
-        }
-
-        // Jika status lolos ('success'), tampilkan materinya
+        // 1. Ambil semua materi asli dari database berdasarkan id kursus
         $contents = \App\Models\Content::where('course_id', $course_id)->get();
 
+        // 2. Cek apakah user bawa token login (Sanctum)
+        $user = auth('sanctum')->user();
+
+        $isLunas = false;
+
+        if ($user)
+        {
+            // Cek data enrollment milik user ini
+            $enrollment = \App\Models\Enrollment::where('user_id', $user->id)
+                ->where('course_id', $course_id)
+                ->first();
+
+            // Jika ada riwayat transaksi dan statusnya lunas (success)
+            if ($enrollment && $enrollment->status === 'success')
+            {
+                $isLunas = true;
+            }
+        }
+
+        // 3. JIKA BELUM LUNAS / BELUM BELI: Sembunyikan link video sensitifnya, tapi kirim judulnya buat di-gembok
+        if (!$isLunas)
+        {
+            $formattedContents = $contents->map(function ($materi)
+            {
+                return [
+                    'id' => $materi->id,
+                    'course_id' => $materi->course_id,
+                    'title' => $materi->title,
+                    'duration' => $materi->duration ?? '15',
+                    'content_url' => null,
+                    'type' => $materi->type,
+                    'created_at' => $materi->created_at,
+                    'updated_at' => $materi->updated_at,
+                ];
+            });
+
+            return response()->json([
+                'success' => true,
+                'message' => 'Daftar materi (Terkunci, silakan lakukan pembayaran)',
+                'data' => $formattedContents
+            ]);
+        }
+
+        // 4. JIKA SUDAH LUNAS: Kirim semua data utuh beserta link videonya (`content_url`)
         return response()->json([
             'success' => true,
-            'message' => 'Daftar materi kursus',
+            'message' => 'Daftar materi kursus (Akses Penuh)',
             'data' => $contents
         ]);
     }

@@ -14,6 +14,10 @@ class Enrollment extends Model
         'course_id',
         'price_bought',
         'status',
+        'progress',
+        'external_id',
+        'payment_url',
+
     ];
 
     /**
@@ -34,8 +38,9 @@ class Enrollment extends Model
 
     public function calculateProgress()
     {
-        if (!$this->course) {
-        return 0;
+        if (!$this->course)
+        {
+            return 0;
         }
         // 1. Hitung total konten dalam kursus ini
         $totalContents = $this->course->contents()->count();
@@ -44,13 +49,13 @@ class Enrollment extends Model
 
         // 2. Hitung berapa konten yang sudah diselesaikan oleh user ini
         $completedContents = \App\Models\Progress::where('user_id', $this->user_id)
-            ->whereHas('content', function ($query) {
+            ->whereHas('content', function ($query)
+            {
                 $query->where('course_id', $this->course_id);
             })->count();
 
         // 3. Kembalikan dalam persen
         return round(($completedContents / $totalContents) * 100);
     }
-
-    
 }
+    
