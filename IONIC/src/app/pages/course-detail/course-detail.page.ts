@@ -32,7 +32,7 @@ export class CourseDetailPage implements OnInit {
     }
   }
 
-  // 🟢 LIFECYCLE IONIC: Memastikan status di-refresh setiap kali user bolak-balik page
+  // 🟢 LIFECYCLE IONIC: Memastikan status di-refresh murni setiap kali user bolak-balik page
   ionViewWillEnter() {
     const id = this.route.snapshot.paramMap.get('id');
     if (id) {
@@ -49,6 +49,9 @@ export class CourseDetailPage implements OnInit {
         if (res.success) {
           this.course = res.data;
           console.log('Detail Kursus:', this.course);
+
+          // 🔥 SINKRONISASI MANTEP: Jalankan pengecekan wishlist murni pakai ID URL yang udah pasti valid di sini
+          this.cekStatusWishlistUser(targetCourseId);
 
           // Ambal data kurikulum materi pembelajaran
           this.ambilKontenKurikulum(targetCourseId);
@@ -85,8 +88,6 @@ export class CourseDetailPage implements OnInit {
               }
             },
           );
-
-          this.cekStatusWishlistUser();
         }
       },
       (error) => {
@@ -149,16 +150,30 @@ export class CourseDetailPage implements OnInit {
     );
   }
 
-  // 🟢 TAMBAHAN: Fungsi mengecek apakah kursus ini ada di daftar wishlist server
-  cekStatusWishlistUser() {
-    this.courseService.ambilDaftarWishlist().subscribe((res: any) => {
-      if (res.success) {
-        // Cek apakah id kursus ini ada di dalam array wishlist dari database
-        this.isWishlist = res.data.some(
-          (item: any) => item.course_id === this.course.id,
-        );
-      }
-    });
+  // 🔥 PERBAIKAN UTAMA: Terima targetCourseId langsung dari pemanggil agar data sinkron peluru
+  cekStatusWishlistUser(targetCourseId: number) {
+    this.courseService.ambilDaftarWishlist().subscribe(
+      (res: any) => {
+        if (res.success) {
+          const listWishlist = res.data || [];
+
+          // COCOKKAN MENGGUNAKAN ID YANG DI-PASSING SEJAK AWAL SIKLUS DETAIL
+          this.isWishlist = listWishlist.some(
+            (item: any) => Number(item.course_id) === targetCourseId,
+          );
+
+          console.log(
+            '📌 Hasil sinkronisasi akhir jantung detail (ID ' +
+              targetCourseId +
+              '):',
+            this.isWishlist,
+          );
+        }
+      },
+      (err) => {
+        console.error('❌ Gagal sinkronisasi status wishlist di detail:', err);
+      },
+    );
   }
 
   // 🟢 LOGIKA UTAMA TOMBOL DAFTAR (MAKIN KICKASS)
@@ -263,17 +278,44 @@ export class CourseDetailPage implements OnInit {
     this.router.navigate([`/course/${this.course.id}/learning`]);
   }
 
-  // 🟢 TAMBAHAN: Logika klik tombol jantung untuk tambah/lepas wishlist dari server
+  // 🟢 LOGIKA KLIK TOMBOL JANTUNG (SINKRONISASI INSTAN TANPA DELAY)
   toggleWishlist() {
+    console.log(
+      '🔥 TOMBOL WISHLIST BERHASIL DI-KLIK! ID COURSE:',
+      this.course?.id,
+    );
+
+    if (!this.course || !this.course.id) {
+      console.error('❌ Error: Data course belum dimuat sepenuhnya oleh API!');
+      return;
+    }
+
+    // 1. Ubah warna UI lokal secara instan dulu agar user melihat perubahan langsung
+    this.isWishlist = !this.isWishlist;
+    console.log('Ubah warna jantung lokal menjadi:', this.isWishlist);
+
+    // 2. Baru kirim data ke live server Laravel
     this.courseService.toggleWishlistServer(this.course.id).subscribe(
       (res: any) => {
-        if (res.success) {
-          this.isWishlist = !this.isWishlist; // balikkan status warna jantung di UI
-          console.log(res.message);
+        console.log('✅ Response sukses dari Laravel:', res);
+
+        // 📢 BROADCAST REAL-TIME: Tembakkan sinyal ke Katalog Utama biar datanya ter-refresh di background!
+        this.courseService.wishlistChanged$.next(true);
+
+        if (res.success && res.is_wishlist !== undefined) {
+          this.isWishlist = res.is_wishlist;
         }
       },
       (error) => {
-        console.error('Gagal toggle wishlist:', error);
+        console.error(
+          '❌ Gagal kirim ke endpoint Laravel, mengembalikan warna:',
+          error,
+        );
+        // Fallback: Kembalikan warna ke status semula jika server cPanel ternyata error/gagal
+        this.isWishlist = !this.isWishlist;
+
+        // 📢 TETAP BROADCAST: Pastikan katalog tetap sinkron dengan kondisi asli server
+        this.courseService.wishlistChanged$.next(true);
       },
     );
   }

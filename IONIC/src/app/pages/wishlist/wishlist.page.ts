@@ -6,7 +6,7 @@ import { CourseService } from '../../services/course.service';
   selector: 'app-wishlist',
   templateUrl: './wishlist.page.html',
   styleUrls: ['./wishlist.page.scss'],
-  standalone: false
+  standalone: false,
 })
 export class WishlistPage implements OnInit {
   wishlistCourses: any[] = [];
@@ -14,7 +14,7 @@ export class WishlistPage implements OnInit {
 
   constructor(
     private navCtrl: NavController,
-    private courseService: CourseService
+    private courseService: CourseService,
   ) {}
 
   ngOnInit() {
@@ -39,14 +39,14 @@ export class WishlistPage implements OnInit {
       error: (err) => {
         console.error('Gagal memuat data wishlist dari live server:', err);
         this.isLoading = false;
-      }
+      },
     });
   }
 
   // Fungsi untuk membatalkan atau menghapus kursus dari wishlist langsung di tempat
   hapusDariWishlist(event: Event, courseId: number, index: number) {
     event.stopPropagation(); // Mencegah agar tidak malah masuk ke detail page
-    
+
     // Hapus instan dari tampilan UI lokal dulu biar gesit tanpa nunggu server delay
     this.wishlistCourses.splice(index, 1);
 
@@ -56,13 +56,18 @@ export class WishlistPage implements OnInit {
         console.log('Sukses menghapus item wishlist di server');
       },
       error: (err) => {
-        console.error('Gagal sinkronisasi hapus wishlist ke database, memuat ulang...', err);
+        console.error(
+          'Gagal sinkronisasi hapus wishlist ke database, memuat ulang...',
+          err,
+        );
         this.loadWishlistData(); // reload ulang data asli jika koneksi bermasalah
-      }
+      },
     });
   }
 
   goToDetail(id: any) {
-    this.navCtrl.navigateForward(['/course-detail', id]);
+    // Memastikan ID yang dilempar ke URL adalah ID Kursus murni, bukan ID pivot wishlist
+    console.log('Navigasi ke Detail Kursus ID:', id);
+    this.navCtrl.navigateForward([`/course-detail/${id}`]);
   }
 }

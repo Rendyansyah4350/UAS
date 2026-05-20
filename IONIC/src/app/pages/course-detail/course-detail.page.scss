@@ -4,66 +4,205 @@
   width: 100%;
   height: 250px;
   overflow: hidden;
-  img { width: 100%; height: 100%; object-fit: cover; }
+  img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
   .category-badge {
-    position: absolute; top: 15px; right: 15px;
-    background: #fbbf24; color: #000;
-    padding: 5px 12px; border-radius: 8px;
-    font-size: 11px; font-weight: 700; text-transform: uppercase;
+    position: absolute;
+    top: 15px;
+    right: 15px;
+    background: #fbbf24;
+    color: #000;
+    padding: 5px 12px;
+    border-radius: 8px;
+    font-size: 11px;
+    font-weight: 700;
+    text-transform: uppercase;
   }
 }
 
 .main-container {
-  padding: 20px; background: #fff;
+  padding: 20px;
+  background: #fff;
   border-radius: 30px 30px 0 0;
-  margin-top: -30px; position: relative;
+  margin-top: -30px;
+  position: relative;
   min-height: 400px;
-  
-  .course-title { font-size: 22px; font-weight: 800; color: #111827; margin-bottom: 5px; }
+
+  .course-title {
+    font-size: 22px;
+    font-weight: 800;
+    color: #111827;
+    margin-bottom: 5px;
+  }
 }
 
 /* --- Rating & Info --- */
 .rating-row {
-  display: flex; align-items: center; gap: 6px; margin-bottom: 15px;
-  color: #fbbf24; font-weight: 700;
-  .text-muted { color: #94a3b8; font-weight: 400; font-size: 13px; }
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  margin-bottom: 15px;
+  color: #fbbf24;
+  font-weight: 700;
+  .text-muted {
+    color: #94a3b8;
+    font-weight: 400;
+    font-size: 13px;
+  }
 }
 
 .instructor-row {
-  display: flex; align-items: center; margin-bottom: 25px;
-  ion-avatar { width: 40px; height: 40px; margin-right: 12px; }
-  .instructor-text { p { margin: 0; font-size: 12px; color: #6b7280; } strong { font-size: 14px; color: #374151; } }
+  display: flex;
+  align-items: center;
+  margin-bottom: 25px;
+  ion-avatar {
+    width: 40px;
+    height: 40px;
+    margin-right: 12px;
+  }
+  .instructor-text {
+    p {
+      margin: 0;
+      font-size: 12px;
+      color: #6b7280;
+    }
+    strong {
+      font-size: 14px;
+      color: #374151;
+    }
+  }
 }
 
 .stats-card {
-  display: flex; justify-content: space-around;
-  background: #f8fafc; padding: 15px; border-radius: 16px; margin-bottom: 25px;
+  display: flex;
+  justify-content: space-around;
+  background: #f8fafc;
+  padding: 15px;
+  border-radius: 16px;
+  margin-bottom: 25px;
   .stat-item {
-    display: flex; align-items: center; gap: 10px;
-    ion-icon { font-size: 24px; }
-    .stat-info { display: flex; flex-direction: column; span { font-size: 11px; color: #94a3b8; } strong { font-size: 14px; color: #1e293b; } }
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    ion-icon {
+      font-size: 24px;
+    }
+    .stat-info {
+      display: flex;
+      flex-direction: column;
+      span {
+        font-size: 11px;
+        color: #94a3b8;
+      }
+      strong {
+        font-size: 14px;
+        color: #1e293b;
+      }
+    }
   }
 }
 
 /* --- Section Baru (Kurikulum & Req) --- */
-.section { margin-top: 25px; 
-  h3 { font-size: 18px; font-weight: 700; color: #1e293b; margin-bottom: 12px; }
+.section {
+  margin-top: 25px;
+  h3 {
+    font-size: 18px;
+    font-weight: 700;
+    color: #1e293b;
+    margin-bottom: 12px;
+  }
 }
 
 .curriculum-list {
-  border: 1px solid #f1f5f9; border-radius: 16px;
-  ion-item { --background: transparent; }
+  border: 1px solid #f1f5f9;
+  border-radius: 16px;
+  ion-item {
+    --background: transparent;
+  }
 }
 
-.req-list { padding-left: 20px; color: #475569; font-size: 14px; line-height: 1.6; margin: 0; }
+.req-list {
+  padding-left: 20px;
+  color: #475569;
+  font-size: 14px;
+  line-height: 1.6;
+  margin: 0;
+}
 
 /* --- Footer --- */
+/* --- Footer --- */
 ion-footer {
-  padding: 15px 20px env(safe-area-inset-bottom); background: #fff; border-top: 1px solid #f1f5f9;
+  padding: 15px 20px calc(10px + env(safe-area-inset-bottom));
+  background: #fff;
+  border-top: 1px solid #f1f5f9;
+
   .footer-wrapper {
-    display: flex; justify-content: space-between; align-items: center; gap: 10px;
-    .wishlist-btn { width: 50px; height: 48px; --border-radius: 50%; }
-    .price-container { span { font-size: 12px; color: #64748b; } h2 { margin: 0; color: #4f46e5; font-weight: 800; font-size: 20px; } }
-    .enroll-btn { flex: 1; height: 48px; --box-shadow: none; font-weight: 700; }
+    display: flex;
+    align-items: center;
+    gap: 12px; // Jarak presisi antara tombol love dan tombol daftar
+    width: 100%;
+
+    // 🟢 Gaya tombol wishlist (lingkaran ikon love)
+    // 🟢 Gaya tombol wishlist (lingkaran ikon love)
+    .wishlist-btn {
+      width: 48px; // Sesuaikan biar presisi bulat lingkaran (48px x 48px)
+      height: 48px;
+      margin: 0;
+      --border-radius: 50% !important; // Paksa jadi lingkaran utuh
+      --border-width: 1.5px;
+      --border-color: var(
+        --ion-color-primary
+      ); // Pastikan garis bulatnya warna biru utama
+      --padding-start: 0px;
+      --padding-end: 0px;
+
+      ion-icon {
+        font-size: 22px; // Ukuran proporsional untuk ikon jantung di dalam lingkaran
+      }
+    }
+
+    // 🟢 Gaya tombol utama (enroll-btn)
+    .enroll-btn {
+      flex: 1;
+      height: 48px;
+      margin: 0;
+      --box-shadow: none;
+      font-weight: 700;
+
+      // Kondisi khusus: Saat tombol daftar gabung dengan harga (Gambar 2)
+      &.buy-now-btn {
+        --padding-top: 4px;
+        --padding-bottom: 4px;
+
+        .btn-custom-content {
+          display: flex;
+          flex-direction: column; // Teks numpuk atas-bawah
+          align-items: center;
+          justify-content: center;
+          line-height: 1.2;
+
+          .btn-text {
+            font-size: 15px;
+            font-weight: 700;
+            letter-spacing: 0.3px;
+          }
+
+          .btn-price {
+            font-size: 11px;
+            font-weight: 400;
+            opacity: 0.85; // Bikin teks rupiahnya sedikit lebih kalem
+          }
+        }
+      }
+
+      // Kondisi khusus: Saat sukses beli (Gambar 1) melar full 100%
+      &.full-width-btn {
+        flex: 1 1 100%;
+        font-size: 16px;
+      }
+    }
   }
 }

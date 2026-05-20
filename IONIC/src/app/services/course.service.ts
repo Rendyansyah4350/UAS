@@ -2,6 +2,7 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Observable } from 'rxjs';
+import { BehaviorSubject } from 'rxjs';
 
 @Injectable({
   providedIn: 'root',
@@ -11,6 +12,8 @@ export class CourseService {
   private apiUrl = 'https://eduvan.rehalivan.com/api/courses';
 
   private baseApiUrl = 'https://eduvan.rehalivan.com/api';
+
+  public wishlistChanged$ = new BehaviorSubject<boolean>(false);
 
   constructor(private http: HttpClient) {}
 

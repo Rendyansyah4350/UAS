@@ -91,22 +91,19 @@
 
 <ion-footer class="ion-no-border">
   <div class="footer-wrapper">
-    <ion-button
-      fill="outline"
-      shape="round"
-      color="primary"
-      class="wishlist-btn"
-      (click)="toggleWishlist()"
-    >
-      <ion-icon
-        [name]="isWishlist ? 'heart' : 'heart-outline'"
+    <div *ngIf="paymentStatus !== 'success'">
+      <ion-button
+        fill="outline"
+        shape="round"
         [color]="isWishlist ? 'danger' : 'primary'"
-      ></ion-icon>
-    </ion-button>
-
-    <div class="price-container" *ngIf="paymentStatus !== 'success'">
-      <small>Total Investasi</small>
-      <h2>Rp {{ course?.price | number:'1.0-0' }}</h2>
+        class="wishlist-btn"
+        (click)="toggleWishlist()"
+      >
+        <ion-icon
+          slot="icon-only"
+          [name]="isWishlist ? 'heart' : 'heart-outline'"
+        ></ion-icon>
+      </ion-button>
     </div>
 
     <ion-button
@@ -114,7 +111,7 @@
       expand="block"
       shape="round"
       color="primary"
-      class="enroll-btn"
+      class="enroll-btn buy-now-btn"
       (click)="enroll()"
       [disabled]="loadingBeli"
     >
@@ -124,7 +121,11 @@
         color="light"
         class="ion-margin-end"
       ></ion-spinner>
-      <span *ngIf="!loadingBeli">Daftar Sekarang</span>
+
+      <div class="btn-custom-content" *ngIf="!loadingBeli">
+        <span class="btn-text">Daftar Sekarang</span>
+        <span class="btn-price">Rp {{ course?.price | number:'1.0-0' }}</span>
+      </div>
       <span *ngIf="loadingBeli">Membuat Invoice...</span>
     </ion-button>
 
@@ -144,7 +145,7 @@
       expand="block"
       shape="round"
       color="success"
-      class="enroll-btn"
+      class="enroll-btn full-width-btn"
       (click)="masukKelas()"
     >
       Mulai Belajar
