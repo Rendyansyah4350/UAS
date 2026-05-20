@@ -1,73 +1,64 @@
-<ion-content>
-  <div class="header-container">
-    <div class="avatar-section">
-      <div class="image-wrapper">
-        <img [src]="userProfile?.name ? 'https://ui-avatars.com/api/?name=' + userProfile.name + '&background=ffffff&color=1560bd' : 'https://ui-avatars.com/api/?name=User&background=ffffff&color=1560bd'" />
-        <div class="camera-badge">
-          <ion-icon name="camera"></ion-icon>
+<ion-content [fullscreen]="true">
+  <div class="profile-header">
+    <div class="avatar-container">
+      <div class="avatar-ring">
+        <img [src]="selectedAvatar" class="main-avatar" />
+        <div class="edit-badge" (click)="changeAvatar()">
+          <ion-icon name="camera-reverse"></ion-icon>
         </div>
       </div>
     </div>
 
-    <div class="user-details">
-      <h2>{{ userProfile?.name ?? 'Memuat Nama...' }}</h2>
-      <p>Mahasiswa Universitas</p>
-    </div>
-
-    <div class="stat-grid">
-      <div class="stat-item">
-        <h3>{{ userProfile?.total_courses ?? 0 }}</h3>
-        <span>Kursus</span>
-      </div>
-      <div class="stat-divider"></div>
-      
-      <div class="stat-item" (click)="goToCertificate()" style="cursor: pointer;">
-        <h3>{{ userProfile?.total_certificates ?? 0 }}</h3>
-        <span style="color: #1560bd; font-weight: bold;">Sertifikat</span>
-      </div>
+    <div class="user-info">
+      <h1>{{ userProfile?.name ?? 'Memuat Nama...' }}</h1>
+      <p>{{ userProfile?.email ?? 'Memuat Email...' }}</p>
+      <div class="badge-tag">Mahasiswa</div>
     </div>
   </div>
 
-  <div class="menu-section">
+  <div class="stats-card">
+    <div class="stat-box">
+      <span class="stat-value">{{ userProfile?.total_courses ?? 0 }}</span>
+      <span class="stat-label">Kursus</span>
+    </div>
+    <div class="divider"></div>
+    <div class="stat-box" (click)="goToCertificate()">
+      <span class="stat-value">{{ userProfile?.total_certificates ?? 0 }}</span>
+      <span class="stat-label primary">Sertifikat</span>
+    </div>
+  </div>
+
+  <div class="menu-container">
     <ion-list lines="none">
-      <ion-item button (click)="goToEdit()">
-        <div class="icon-box blue" slot="start">
-          <ion-icon name="person-outline"></ion-icon>
-        </div>
+      <ion-item button (click)="goToEdit()" class="menu-item">
+        <div class="icon-wrapper blue" slot="start"><ion-icon name="person"></ion-icon></div>
         <ion-label>Edit Profil</ion-label>
-        <ion-icon name="chevron-forward-outline" slot="end" class="arrow"></ion-icon>
+        <ion-icon name="chevron-forward" slot="end" class="chevron"></ion-icon>
       </ion-item>
 
-      <ion-item button (click)="goToCertificate()">
-        <div class="icon-box orange" slot="start" style="background: #fff7ed; color: #ea580c;">
-          <ion-icon name="ribbon-outline"></ion-icon>
-        </div>
+      <ion-item button (click)="goToCertificate()" class="menu-item">
+        <div class="icon-wrapper orange" slot="start"><ion-icon name="ribbon"></ion-icon></div>
         <ion-label>Sertifikat Saya</ion-label>
-        <ion-icon name="chevron-forward-outline" slot="end" class="arrow"></ion-icon>
+        <ion-icon name="chevron-forward" slot="end" class="chevron"></ion-icon>
       </ion-item>
 
-      <ion-item button (click)="goToHistory()">
-        <div class="icon-box green" slot="start">
-          <ion-icon name="receipt-outline"></ion-icon>
-        </div>
+      <ion-item button (click)="goToHistory()" class="menu-item">
+        <div class="icon-wrapper green" slot="start"><ion-icon name="receipt"></ion-icon></div>
         <ion-label>Riwayat Transaksi</ion-label>
-        <ion-icon name="chevron-forward-outline" slot="end" class="arrow"></ion-icon>
+        <ion-icon name="chevron-forward" slot="end" class="chevron"></ion-icon>
       </ion-item>
 
-      <ion-item button (click)="goToNotif()">
-        <div class="icon-box orange" slot="start">
-          <ion-icon name="notifications-outline"></ion-icon>
-        </div>
+      <ion-item button (click)="goToNotif()" class="menu-item">
+        <div class="icon-wrapper purple" slot="start"><ion-icon name="notifications"></ion-icon></div>
         <ion-label>Notifikasi</ion-label>
-        <ion-icon name="chevron-forward-outline" slot="end" class="arrow"></ion-icon>
+        <ion-icon name="chevron-forward" slot="end" class="chevron"></ion-icon>
       </ion-item>
 
-      <ion-item button (click)="logout()" class="logout-item">
-        <div class="icon-box red" slot="start">
-          <ion-icon name="log-out-outline"></ion-icon>
-        </div>
-        <ion-label color="danger">Keluar</ion-label>
-        <ion-icon name="chevron-forward-outline" slot="end" class="arrow"></ion-icon>
+      <div class="logout-spacer"></div>
+      
+      <ion-item button (click)="logout()" class="menu-item logout">
+        <div class="icon-wrapper red" slot="start"><ion-icon name="log-out"></ion-icon></div>
+        <ion-label>Keluar</ion-label>
       </ion-item>
     </ion-list>
   </div>

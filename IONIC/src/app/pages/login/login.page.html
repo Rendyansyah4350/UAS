@@ -9,9 +9,9 @@
 
   <div class="form-card" [formGroup]="loginForm">
     <h2>SELAMAT DATANG!</h2>
-    <p class="instruction-text">Enter your credentials to continue learning</p>
+    <p class="instruction-text">Masukkan kredensial Anda untuk melanjutkan belajar</p>
 
-    <span class="input-label">EMAIL ADDRESS</span>
+    <span class="input-label">ALAMAT EMAIL</span>
     <ion-item lines="none" class="auth-input-box">
       <ion-icon name="mail-outline" slot="start"></ion-icon>
       <ion-input type="email" placeholder="nama@email.com" formControlName="email"></ion-input>
@@ -31,15 +31,15 @@
     </p>
 
     <div class="forgot-password-link">
-      <span (click)="goToForgotPassword()">Forgot Password?</span>
+      <span (click)="goToForgotPassword()">Lupa Password?</span>
     </div>
 
     <ion-button expand="block" class="auth-btn" (click)="onLogin()">
-      SIGN IN
+      MASUK
     </ion-button>
 
     <div class="footer-links">
-      Don't have an account? <span class="link-bold" (click)="goToRegister()">Join for Free</span>
+      Belum punya akun? <span class="link-bold" (click)="goToRegister()">Daftar Gratis</span>
     </div>
   </div>
 </ion-content>

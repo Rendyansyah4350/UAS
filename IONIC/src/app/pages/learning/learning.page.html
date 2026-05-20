@@ -23,11 +23,11 @@
           
           <div class="actions" *ngIf="activeTab === 'ongoing'">
             <ion-button size="small" (click)="goToPlayer(item.course_id)">LANJUT BELAJAR</ion-button>
-            <ion-button size="small" fill="outline" 
+            <ion-button 
+              size="small" 
+              fill="outline" 
               [color]="item.progress >= 100 ? 'warning' : 'medium'" 
-              [disabled]="item.progress < 100"
-              (click)="openQuiz(item)">
-              {{ item.progress >= 100 ? 'KUIS' : 'TERKUNCI' }}
+              (click)="openQuiz(item)"> {{ item.progress >= 100 ? 'KUIS' : 'TERKUNCI' }}
             </ion-button>
           </div>
           

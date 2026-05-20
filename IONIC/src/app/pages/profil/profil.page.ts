@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
-import { NavController, AlertController, LoadingController } from '@ionic/angular';
-import { AuthService } from '../../services/auth'; // Pastikan jalur benar
+import { NavController, AlertController, ActionSheetController } from '@ionic/angular';
+import { AuthService } from '../../services/auth';
 
 @Component({
   selector: 'app-profil',
@@ -10,48 +10,62 @@ import { AuthService } from '../../services/auth'; // Pastikan jalur benar
 })
 export class ProfilePage implements OnInit {
   userProfile: any = null;
+  selectedAvatar: string = 'assets/icon/avatar-male.png'; 
 
   constructor(
     private navCtrl: NavController, 
     private alertCtrl: AlertController,
-    private loadingCtrl: LoadingController,
-    private authService: AuthService
+    private authService: AuthService,
+    private actionSheetCtrl: ActionSheetController
   ) {}
 
   ngOnInit() {
-    // 🟢 1. LANGSUNG LANGGANAN KE STASIUN RADIO USER_DATA LIVE
-    // Kunci utama biar pas kelar edit, halaman profil ini langsung ganti teks namanya instan!
-    this.authService.currentUser$.subscribe({
-      next: (user: any) => {
-        if (user) {
-          this.userProfile = user;
-          console.log('Halaman Profil dapat siaran update data user:', this.userProfile);
-        }
-      }
+    this.loadSavedAvatar();
+    this.authService.currentUser$.subscribe((user: any) => {
+      if (user) this.userProfile = user;
     });
-
-    // Jalankan penembakan awal ke API saat pertama kali aplikasi dibuka
     this.loadProfileFromAPI();
   }
 
   ionViewWillEnter() {
-    // Dipanggil ulang otomatis tiap kali Ivan balik ke halaman ini untuk memastikan data tetap segar
     this.loadProfileFromAPI();
+  }
+
+  loadSavedAvatar() {
+    const savedAvatar = localStorage.getItem('user_avatar');
+    if (savedAvatar) this.selectedAvatar = savedAvatar;
+  }
+
+async changeAvatar() {
+  const actionSheet = await this.actionSheetCtrl.create({
+    header: 'Pilih Karakter Avatar',
+    buttons: [
+      {
+        text: 'Laki-laki',
+        icon: 'man-outline',
+        handler: () => { this.updateAvatar('assets/icon/avatar-male.png'); } // Ganti icons jadi icon
+      },
+      {
+        text: 'Perempuan',
+        icon: 'woman-outline',
+        handler: () => { this.updateAvatar('assets/icon/avatar-female.png'); } // Ganti icons jadi icon
+      },
+      { text: 'Batal', role: 'cancel', icon: 'close' }
+    ]
+  });
+  await actionSheet.present();
+}
+
+  updateAvatar(path: string) {
+    this.selectedAvatar = path;
+    localStorage.setItem('user_avatar', path);
   }
 
   loadProfileFromAPI() {
     this.authService.getProfileFromServer().subscribe({
-      next: (res: any) => {
-        // Data sukses diambil live dari hosting eduvan.rehalivan.com
-        // Di auth.service.ts data ini sudah otomatis disiarkan ke `.currentUser$` lek!
-        console.log('Data profil live berhasil dimuat ulang:', res);
-      },
-      error: (error) => {
-        console.error('Gagal mengambil profil dari API:', error);
-        
-        // Skenario jika token mati / 401: Tendang ke login agar dapet token baru
-        if (error.status === 401) {
-          console.warn('Token tidak valid atau expired. Mengarahkan kembali ke login...');
+      next: (res: any) => { console.log('Profil dimuat'); },
+      error: (err) => {
+        if (err.status === 401) {
           this.authService.logout();
           this.navCtrl.navigateRoot('/login');
         }
@@ -59,31 +73,22 @@ export class ProfilePage implements OnInit {
     });
   }
 
-  goToEdit() { 
-    this.navCtrl.navigateForward('/edit-profil'); 
-  }
-
-  goToCertificate() { 
-    this.navCtrl.navigateForward('/certificate'); 
-  } 
-
-  goToHistory() { 
-    this.navCtrl.navigateForward('/riwayat-transaksi'); 
-  }
-
-  goToNotif() { 
-    this.navCtrl.navigateForward('/notifications'); 
-  }
+  goToEdit() { this.navCtrl.navigateForward('/edit-profil'); }
+  goToCertificate() { this.navCtrl.navigateForward('/certificate'); } 
+  goToHistory() { this.navCtrl.navigateForward('/riwayat-transaksi'); }
+  goToNotif() { this.navCtrl.navigateForward('/notifications'); }
 
   async logout() {
     const alert = await this.alertCtrl.create({
-      header: 'Keluar',
-      message: 'Apakah Anda yakin ingin keluar dari aplikasi Eduvan?',
+      header: 'Konfirmasi Keluar',
+      message: 'Apakah kamu yakin ingin keluar?',
       buttons: [
         { text: 'Batal', role: 'cancel' },
         {
           text: 'Ya, Keluar',
           handler: () => {
+            // Hapus data avatar saat logout agar tidak tertukar akun lain
+            localStorage.removeItem('user_avatar');
             this.authService.logout(); 
             this.navCtrl.navigateRoot('/login'); 
           }
