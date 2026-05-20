@@ -33,23 +33,80 @@ export class CoursePage implements OnInit {
     this.loadData();
   }
 
+  ionViewWillEnter() {
+    const currentNav = this.router.getCurrentNavigation();
+    if (currentNav?.extras.state && currentNav.extras.state['keyword']) {
+      this.keywordPencarian = currentNav.extras.state['keyword'];
+      this.fungsiCariKursus();
+    }
+  }
+
   loadData() {
     this.isLoading = true;
-    this.courseService.getCourses().subscribe({
-      next: (res: any) => {
-        this.allCourses = res.data || [];
-        this.isLoading = false;
-        
-        // 🟢 FIX: Gunakan setTimeout agar filter berjalan 
-        // setelah data 100% masuk ke variabel allCourses
-        setTimeout(() => {
-          this.fungsiCariKursus();
-        }, 100);
+
+    // 1. Ambil data wishlist dari database localhost/server lek
+    this.courseService.ambilDaftarWishlist().subscribe({
+      next: (wishlistRes: any) => {
+        // Proteksi jika data wishlist kosong, buat jadi array murni
+        const wishlistIds = (wishlistRes && wishlistRes.data ? wishlistRes.data : [])
+                            .map((item: any) => item.course_id);
+
+        // 2. Baru ambil data seluruh katalog kursus
+        this.courseService.getCourses().subscribe({
+          next: (res: any) => {
+            // Jalankan proteksi: cek apakah API Laravel membungkus dalam 'data' atau langsung array polosan
+            const rawCourses = res.data ? res.data : (Array.isArray(res) ? res : []);
+
+            // 🌟 SINKRONISASI DATABASE: Menyuntikkan properti is_wishlist ke array katalog
+            this.allCourses = rawCourses.map((course: any) => {
+              return {
+                ...course,
+                is_wishlist: wishlistIds.includes(course.id)
+              };
+            });
+
+            // 🛠️ PERBAIKAN UTAMA: Langsung set data master ke list utama yang dibaca HTML Ivan
+            this.listCourses = [...this.allCourses];
+            this.isLoading = false;
+            console.log('Data API Katalog & Wishlist Berhasil Disinkronkan Lek:', this.listCourses);
+
+            // Kondisi filter pencarian operan dari Home / searchbar lokal
+            if (this.keywordPencarian && this.keywordPencarian.trim() !== '') {
+              this.fungsiCariKursus();
+            } else if (this.kategoriAktif !== 'Semua') {
+              // Jika user sedang berada di kategori selain 'Semua', jalankan filter kategorinya
+              this.listCourses = this.allCourses.filter((course: any) => {
+                const kategoriDatabase = course.category || '';
+                return kategoriDatabase.toLowerCase() === this.kategoriAktif.toLowerCase();
+              });
+              this.eksekusiFilterSort();
+            } else {
+              // Jika kategorinya 'Semua' dan tidak ada pencarian, jalankan sorting default bawaan Ivan
+              this.eksekusiFilterSort();
+            }
+          },
+          error: (error) => {
+            console.error('Gagal ambil data katalog', error);
+            this.isLoading = false;
+          },
+        });
       },
       error: (error) => {
-        console.error('Gagal ambil data katalog', error);
-        this.isLoading = false;
-      },
+        console.error('Gagal ambil data wishlist untuk sinkronisasi', error);
+        // Keamanan: Jika API wishlist bermasalah/401, katalog harus TETAP tampil (jangan dibikin blank)
+        this.courseService.getCourses().subscribe({
+          next: (res: any) => {
+            this.allCourses = res.data ? res.data : (Array.isArray(res) ? res : []);
+            this.listCourses = [...this.allCourses];
+            this.isLoading = false;
+            this.eksekusiFilterSort();
+          },
+          error: (err) => {
+            this.isLoading = false;
+            console.error('Gagal total memuat katalog:', err);
+          }
+        });
+      }
     });
   }
 
