@@ -8,10 +8,44 @@
 </ion-header>
 
 <ion-content>
-  <div class="video-container">
-    <div class="video-placeholder">
+  <div
+    class="video-container"
+    style="background: #000; width: 100%; height: 220px; position: relative"
+  >
+    <iframe
+      *ngIf="safeVideoUrl"
+      [src]="safeVideoUrl"
+      frameborder="0"
+      allow="
+        accelerometer;
+        autoplay;
+        clipboard-write;
+        encrypted-media;
+        gyroscope;
+        picture-in-picture;
+      "
+      allowfullscreen
+      style="width: 100%; height: 100%; border: none"
+    >
+    </iframe>
+
+    <div
+      class="video-placeholder"
+      *ngIf="!safeVideoUrl"
+      style="
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+      "
+    >
       <ion-icon name="play-circle-outline"></ion-icon>
-      <p>{{ videoAktifUrl ? 'Video Sedang Diputar' : 'Video Pembelajaran' }}</p>
+      <p>Pilih materi di bawah untuk memutar video</p>
     </div>
   </div>
 
