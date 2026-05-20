@@ -1,26 +1,48 @@
 // src/app/services/course.service.ts
 import { Injectable } from '@angular/core';
-import { HttpClient, HttpHeaders } from '@angular/common/http'; // TAMBAHKAN HttpHeaders DI SINI LEK
+import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Observable } from 'rxjs';
 
 @Injectable({
-  providedIn: 'root'
+  providedIn: 'root',
 })
 export class CourseService {
   // Ganti dengan URL API backend marketplace kamu
   private apiUrl = 'https://eduvan.rehalivan.com/api/courses';
 
-  // URL dasar endpoint API Laravel kamu (tanpa embel-embel /courses di buntutnya)
   private baseApiUrl = 'https://eduvan.rehalivan.com/api';
 
-  constructor(private http: HttpClient) { }
-  
+  constructor(private http: HttpClient) {}
+
+  // Fungsi pembantu untuk menyisipkan Token Login JWT/Sanctum Laravel ke Header API
   // Fungsi pembantu untuk menyisipkan Token Login JWT/Sanctum Laravel ke Header API
   private dapatkanHeaderAutentikasi() {
-    const tokenUser = localStorage.getItem('token') || localStorage.getItem('userData');
+    let tokenUser = localStorage.getItem('token');
+
+    // Jika 'token' kosong, coba cek apakah tokennya nyelip di dalam objek 'userData'
+    if (!tokenUser) {
+      const userDataRaw = localStorage.getItem('userData');
+      if (userDataRaw) {
+        try {
+          // Jika isi userData itu berupa JSON string objek, kita bongkar dulu
+          const parsedData = JSON.parse(userDataRaw);
+          tokenUser = parsedData.token || parsedData.access_token || null;
+        } catch (e) {
+          // Jika bukan JSON string (berarti string token murni), langsung ambil
+          tokenUser = userDataRaw;
+        }
+      }
+    }
+
+    // Bersihkan token dari karakter petik ganda gaib yang sering ikut dari JSON string
+    if (tokenUser) {
+      tokenUser = String(tokenUser).replace(/"/g, '').trim();
+    }
+
     return new HttpHeaders({
-      'Authorization': `Bearer ${tokenUser}`,
-      'Content-Type': 'application/json'
+      Authorization: `Bearer ${tokenUser}`,
+      'Content-Type': 'application/json',
+      Accept: 'application/json', // 🟢 WAJIB: Memaksa server merespon format JSON, bukan halaman redirect HTML!
     });
   }
 
@@ -29,26 +51,45 @@ export class CourseService {
   }
 
   getCourseById(id: string): Observable<any> {
-    // Pastikan pakai backticks (``) bukan petik biasa ('')
-    return this.http.get(`${this.apiUrl}/${id}`); 
+    return this.http.get(`${this.apiUrl}/${id}`);
+  }
+
+  // 1. Fungsi untuk membeli kursus (Mendapatkan link Invoice Xendit)
+  buyCourse(courseId: number): Observable<any> {
+    const payload = { course_id: courseId };
+    return this.http.post(`${this.baseApiUrl}/enrollments`, payload, {
+      headers: this.dapatkanHeaderAutentikasi(),
+    });
+  }
+
+  // 2. Fungsi untuk mengambil isi materi/video berdasarkan ID Kursus (Gembok Akses)
+  getCourseContents(courseId: number): Observable<any> {
+    return this.http.get(`${this.apiUrl}/${courseId}/contents`, {
+      headers: this.dapatkanHeaderAutentikasi(),
+    });
+  }
+
+  // 3. Fungsi untuk melihat riwayat pembelian / daftar kursus saya (My Learning)
+  getMyEnrollments(): Observable<any> {
+    return this.http.get(`${this.baseApiUrl}/enrollments`, {
+      headers: this.dapatkanHeaderAutentikasi(),
+    });
   }
 
   // =========================================================================
   // 🟢 LOGIKA WISHLIST ASLI (KONEKSI LIVE SERVERS CPANEL)
   // =========================================================================
 
-  // 1. Fungsi mengambil daftar semua kursus yang di-wishlist oleh user yang sedang login
   ambilDaftarWishlist(): Observable<any> {
-    return this.http.get(`${this.baseApiUrl}/wishlist`, { 
-      headers: this.dapatkanHeaderAutentikasi() 
+    return this.http.get(`${this.baseApiUrl}/wishlist`, {
+      headers: this.dapatkanHeaderAutentikasi(),
     });
   }
 
-  // 2. Fungsi untuk pasang/lepas status wishlist (Toggle klik ikon hati)
   toggleWishlistServer(courseId: number): Observable<any> {
     const payload = { course_id: courseId };
-    return this.http.post(`${this.baseApiUrl}/wishlist/toggle`, payload, { 
-      headers: this.dapatkanHeaderAutentikasi() 
+    return this.http.post(`${this.baseApiUrl}/wishlist/toggle`, payload, {
+      headers: this.dapatkanHeaderAutentikasi(),
     });
   }
 }

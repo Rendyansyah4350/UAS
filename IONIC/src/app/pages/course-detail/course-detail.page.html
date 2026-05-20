@@ -1,7 +1,11 @@
 <ion-header [translucent]="true" class="ion-no-border">
   <ion-toolbar>
     <ion-buttons slot="start">
-      <ion-back-button defaultHref="/course" text="" color="dark"></ion-back-button>
+      <ion-back-button
+        defaultHref="/course"
+        text=""
+        color="dark"
+      ></ion-back-button>
     </ion-buttons>
     <ion-title>Detail Kursus</ion-title>
   </ion-toolbar>
@@ -23,7 +27,9 @@
 
     <div class="instructor-row">
       <ion-avatar>
-        <img src="https://ui-avatars.com/api/?name=Admin&background=4f46e5&color=fff" />
+        <img
+          src="https://ui-avatars.com/api/?name=Admin&background=4f46e5&color=fff"
+        />
       </ion-avatar>
       <div class="instructor-text">
         <p>Pengajar</p>
@@ -32,53 +38,116 @@
     </div>
 
     <div class="stats-card">
-      <div class="stat-item"><ion-icon name="podium-outline" color="primary"></ion-icon><span>Pemula</span></div>
-      <div class="stat-item"><ion-icon name="time-outline" color="primary"></ion-icon><span>12 Jam</span></div>
-      <div class="stat-item"><ion-icon name="people-outline" color="primary"></ion-icon><span>3.5k Siswa</span></div>
+      <div class="stat-item">
+        <ion-icon name="podium-outline" color="primary"></ion-icon>
+        <span>Pemula</span>
+      </div>
+      <div class="stat-item">
+        <ion-icon name="time-outline" color="primary"></ion-icon>
+        <span>12 Jam</span>
+      </div>
+      <div class="stat-item">
+        <ion-icon name="people-outline" color="primary"></ion-icon>
+        <span>3.5k Siswa</span>
+      </div>
     </div>
 
     <div class="section">
-      <h3>Tentang Kursus</h3>
-      <p>{{ course?.description || 'Pelajari materi ini secara mendalam...' }}</p>
+      <h3>Deskripsi Course</h3>
+      <p>
+        {{ course?.description || 'Pelajari materi ini secara mendalam...' }}
+      </p>
     </div>
 
     <div class="section">
-      <h3>Kurikulum Kursus</h3>
+      <h3>Video Pembelajaran</h3>
       <ion-list lines="full" class="curriculum-list">
-        <ion-item *ngFor="let i of [1,2,3,4]">
-          <ion-icon name="play-circle-outline" slot="start" color="medium"></ion-icon>
+        <ion-item
+          *ngFor="let materi of contents"
+          (click)="klikMateri(materi.id)"
+          button
+        >
+          <ion-icon
+            [name]="paymentStatus === 'success' ? 'play-circle-outline' : 'lock-closed-outline'"
+            slot="start"
+            [color]="paymentStatus === 'success' ? 'primary' : 'medium'"
+          ></ion-icon>
+
           <ion-label>
-            <h2>Bagian {{i}}: Modul Pembelajaran</h2>
-            <p>Durasi: 15 Menit</p>
+            <h2>{{ materi.title }}</h2>
+            <p>Durasi: {{ materi.duration || '15' }} Menit</p>
           </ion-label>
         </ion-item>
-      </ion-list>
-    </div>
 
-    <div class="section">
-      <h3>Persyaratan</h3>
-      <ul class="req-list">
-        <li>Memiliki akses internet dan laptop.</li>
-        <li>Dasar pemrograman PHP atau Laravel.</li>
-        <li>Kemauan belajar yang tinggi.</li>
-      </ul>
+        <ion-item *ngIf="contents.length === 0">
+          <ion-label class="text-muted"
+            >Belum ada modul pembelajaran tersedia.</ion-label
+          >
+        </ion-item>
+      </ion-list>
     </div>
   </div>
 </ion-content>
 
 <ion-footer class="ion-no-border">
   <div class="footer-wrapper">
-    <ion-button fill="outline" shape="round" color="primary" class="wishlist-btn">
-      <ion-icon name="heart-outline"></ion-icon>
+    <ion-button
+      fill="outline"
+      shape="round"
+      color="primary"
+      class="wishlist-btn"
+      (click)="toggleWishlist()"
+    >
+      <ion-icon
+        [name]="isWishlist ? 'heart' : 'heart-outline'"
+        [color]="isWishlist ? 'danger' : 'primary'"
+      ></ion-icon>
     </ion-button>
-    
-    <div class="price-container">
+
+    <div class="price-container" *ngIf="paymentStatus !== 'success'">
       <small>Total Investasi</small>
       <h2>Rp {{ course?.price | number:'1.0-0' }}</h2>
     </div>
-    
-    <ion-button expand="block" shape="round" color="primary" class="enroll-btn" (click)="enroll()">
-      Daftar Sekarang
+
+    <ion-button
+      *ngIf="paymentStatus === 'none' || !paymentStatus"
+      expand="block"
+      shape="round"
+      color="primary"
+      class="enroll-btn"
+      (click)="enroll()"
+      [disabled]="loadingBeli"
+    >
+      <ion-spinner
+        name="crescent"
+        *ngIf="loadingBeli"
+        color="light"
+        class="ion-margin-end"
+      ></ion-spinner>
+      <span *ngIf="!loadingBeli">Daftar Sekarang</span>
+      <span *ngIf="loadingBeli">Membuat Invoice...</span>
+    </ion-button>
+
+    <ion-button
+      *ngIf="paymentStatus === 'pending'"
+      expand="block"
+      shape="round"
+      color="warning"
+      class="enroll-btn"
+      (click)="bukaInvoiceXendit()"
+    >
+      Bayar Sekarang
+    </ion-button>
+
+    <ion-button
+      *ngIf="paymentStatus === 'success'"
+      expand="block"
+      shape="round"
+      color="success"
+      class="enroll-btn"
+      (click)="masukKelas()"
+    >
+      Mulai Belajar
     </ion-button>
   </div>
 </ion-footer>
