@@ -50,7 +50,7 @@
   </div>
 
   <div class="content-wrapper">
-    <h2>{{ courseDetail?.title || 'Memuat Nama Kursus...' }}</h2>
+    <h2>{{ courseDetail?.title || 'Memuat Name Kursus...' }}</h2>
     <p class="instructor">
       Oleh: {{ courseDetail?.instructor || 'EduVan Instructor' }}
     </p>
@@ -80,10 +80,20 @@
           *ngFor="let materi of contents; let i = index"
           (click)="putarMateri(materi)"
         >
-          <ion-icon slot="start" name="play-circle" color="primary"></ion-icon>
+          <ion-icon
+            slot="start"
+            [name]="materi.is_completed === 1 ? 'checkmark-circle' : 'play-circle'"
+            [color]="materi.is_completed === 1 ? 'success' : 'primary'"
+          >
+          </ion-icon>
+
           <ion-label>
-            <h2>{{ i + 1 }}. {{ materi.title }}</h2>
-            <p>{{ materi.duration || '10:00' }} menit</p>
+            <h2
+              [style.color]="materi.is_completed === 1 ? 'var(--ion-color-success)' : 'inherit'"
+              [style.font-weight]="materi.is_completed === 1 ? '500' : 'normal'"
+            >
+              {{ i + 1 }}. {{ materi.title }}
+            </h2>
           </ion-label>
         </ion-item>
       </ion-list>

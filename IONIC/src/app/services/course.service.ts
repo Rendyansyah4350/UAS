@@ -18,7 +18,6 @@ export class CourseService {
   constructor(private http: HttpClient) {}
 
   // Fungsi pembantu untuk menyisipkan Token Login JWT/Sanctum Laravel ke Header API
-  // Fungsi pembantu untuk menyisipkan Token Login JWT/Sanctum Laravel ke Header API
   private dapatkanHeaderAutentikasi() {
     let tokenUser = localStorage.getItem('token');
 
@@ -77,6 +76,21 @@ export class CourseService {
     return this.http.get(`${this.baseApiUrl}/enrollments`, {
       headers: this.dapatkanHeaderAutentikasi(),
     });
+  }
+
+  // 🟢 TAMBAHAN BARU: Fungsi untuk menyimpan progress video ("Tandai Selesai") ke database Laravel
+  saveProgress(courseId: number, contentId: number): Observable<any> {
+    const payload = {
+      course_id: courseId,
+      content_id: contentId,
+    };
+    return this.http.post(
+      `${this.baseApiUrl}/contents/mark-complete`,
+      payload,
+      {
+        headers: this.dapatkanHeaderAutentikasi(),
+      },
+    );
   }
 
   // =========================================================================

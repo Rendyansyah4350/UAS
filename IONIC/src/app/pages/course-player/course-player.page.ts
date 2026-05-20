@@ -22,6 +22,9 @@ export class CoursePlayerPage implements OnInit {
   safeVideoUrl: SafeResourceUrl | null = null;
   loading: boolean = false;
 
+  // 🟢 TAMBAHAN BARU: Untuk melacak ID materi mana yang sedang diputar/aktif oleh student
+  activeContentId: number | null = null;
+
   constructor(
     private route: ActivatedRoute,
     private toastCtrl: ToastController,
@@ -71,6 +74,10 @@ export class CoursePlayerPage implements OnInit {
     console.log('--- DEBUG MATERI YANG DIKLIK ---');
     console.log(materi);
 
+    // 🟢 SAKTI: Ambil ID materi yang aktif dan cocokkan status is_completed dari backend Laravel (1 = Selesai, 0 = Belum)
+    this.activeContentId = materi.id;
+    this.isCompleted = materi.is_completed === 1;
+
     // 🟢 FIX: Tambahin materi.content_url di sini biar kebaca sama Angular
     this.videoAktifUrl =
       materi.content_url || materi.video_url || materi.video || '';
@@ -99,13 +106,34 @@ export class CoursePlayerPage implements OnInit {
     }
   }
 
+  // 🟢 SINKRONISASI LIVE DATABASE: Mengirim data progress asli ke Laravel
   async markAsComplete() {
-    this.isCompleted = true;
-    const toast = await this.toastCtrl.create({
-      message: 'Materi berhasil diselesaikan!',
-      duration: 2000,
-      color: 'success',
-    });
-    await toast.present();
+    if (!this.courseId || !this.activeContentId) {
+      console.warn('ID Kursus atau ID Materi kosong, gagal memproses mbut!');
+      return;
+    }
+
+    this.courseService
+      .saveProgress(Number(this.courseId), this.activeContentId)
+      .subscribe(
+        async (res: any) => {
+          if (res.success) {
+            this.isCompleted = true; // Kunci tombol di UI jadi "SELESAI"
+
+            const toast = await this.toastCtrl.create({
+              message: 'Materi berhasil diselesaikan!',
+              duration: 2000,
+              color: 'success',
+            });
+            await toast.present();
+
+            // 🟢 AUTOMATIS REFRESH: Memuat ulang kurikulum biar icon centang hijaunya langsung muncul di list samping tanpa perlu reload halaman manual
+            this.muatDataKelasAsli(this.courseId!);
+          }
+        },
+        (err) => {
+          console.error('Gagal menyimpan progress ke server Laravel:', err);
+        },
+      );
   }
 }
