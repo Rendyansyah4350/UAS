@@ -1,4 +1,4 @@
-<ion-header>
+<ion-header mode="ios" class="ion-no-border">
   <ion-toolbar color="primary">
     <ion-buttons slot="start">
       <ion-back-button defaultHref="/tabs/learning"></ion-back-button>
@@ -11,47 +11,57 @@
   <div class="video-container">
     <div class="video-placeholder">
       <ion-icon name="play-circle-outline"></ion-icon>
-      <p>Video Pembelajaran</p>
+      <p>{{ videoAktifUrl ? 'Video Sedang Diputar' : 'Video Pembelajaran' }}</p>
     </div>
   </div>
 
   <div class="content-wrapper">
-    <h2>Menguasai Ionic & Angular</h2>
-    <p class="instructor">Oleh: EduVan Instructor</p>
+    <h2>{{ courseDetail?.title || 'Memuat Nama Kursus...' }}</h2>
+    <p class="instructor">
+      Oleh: {{ courseDetail?.instructor || 'EduVan Instructor' }}
+    </p>
 
     <div class="curriculum-section">
       <h3>Kurikulum</h3>
-      <ion-list lines="full">
-        <ion-item button>
-          <ion-icon slot="start" name="play-circle"></ion-icon>
+
+      <div *ngIf="loading" class="ion-text-center ion-padding">
+        <ion-spinner name="crescent" color="primary"></ion-spinner>
+      </div>
+
+      <p
+        *ngIf="!loading && contents.length === 0"
+        style="
+          color: #a0aec0;
+          font-size: 14px;
+          text-align: center;
+          margin: 20px 0;
+        "
+      >
+        Belum ada materi video yang diunggah untuk kelas ini.
+      </p>
+
+      <ion-list lines="full" *ngIf="!loading && contents.length > 0">
+        <ion-item
+          button
+          *ngFor="let materi of contents; let i = index"
+          (click)="putarMateri(materi)"
+        >
+          <ion-icon slot="start" name="play-circle" color="primary"></ion-icon>
           <ion-label>
-            <h2>1. Pengenalan Ionic</h2>
-            <p>10:00 menit</p>
-          </ion-label>
-        </ion-item>
-        <ion-item button>
-          <ion-icon slot="start" name="play-circle-outline"></ion-icon>
-          <ion-label>
-            <h2>2. Setup Environment</h2>
-            <p>15:30 menit</p>
-          </ion-label>
-        </ion-item>
-        <ion-item button>
-          <ion-icon slot="start" name="lock-closed-outline"></ion-icon>
-          <ion-label>
-            <h2>3. Komponen Dasar</h2>
-            <p>Locked</p>
+            <h2>{{ i + 1 }}. {{ materi.title }}</h2>
+            <p>{{ materi.duration || '10:00' }} menit</p>
           </ion-label>
         </ion-item>
       </ion-list>
     </div>
 
-<ion-button 
-  expand="block" 
-  class="finish-btn" 
-  (click)="markAsComplete()" 
-  [disabled]="isCompleted">
-  {{ isCompleted ? 'SELESAI' : 'TANDAI SELESAI' }}
-</ion-button>
+    <ion-button
+      expand="block"
+      class="finish-btn"
+      (click)="markAsComplete()"
+      [disabled]="isCompleted"
+    >
+      {{ isCompleted ? 'SELESAI' : 'TANDAI SELESAI' }}
+    </ion-button>
   </div>
 </ion-content>

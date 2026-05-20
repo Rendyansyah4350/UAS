@@ -12,27 +12,80 @@
     </ion-segment>
   </div>
 
-  <div class="course-list ion-padding">
+  <div *ngIf="loading" class="ion-text-center ion-padding">
+    <ion-spinner name="crescent" color="primary"></ion-spinner>
+    <p style="color: #a0aec0; font-size: 14px">Memuat kelas kamu...</p>
+  </div>
+
+  <div
+    *ngIf="!loading && filteredEnrollments.length === 0"
+    class="ion-text-center ion-padding"
+    style="margin-top: 40px"
+  >
+    <ion-icon
+      name="book-outline"
+      style="font-size: 64px; color: #cbd5e0"
+    ></ion-icon>
+    <p style="color: #718096; margin-top: 10px">
+      Tidak ada kursus yang ditemukan di tab ini.
+    </p>
+  </div>
+
+  <div
+    class="course-list ion-padding"
+    *ngIf="!loading && filteredEnrollments.length > 0"
+  >
     <ion-card *ngFor="let item of filteredEnrollments" class="course-card">
       <div class="card-content">
-        <div class="img-box"></div>
+        <div
+          class="img-box"
+          style="
+            width: 90px;
+            height: 90px;
+            padding: 0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            overflow: hidden;
+            border-radius: 8px;
+            flex-shrink: 0;
+          "
+        >
+          <img
+            [src]="item.course?.image || 'https://via.placeholder.com/150'"
+            (error)="$any($event.target).src = 'https://via.placeholder.com/150'"
+            alt="Foto Course"
+            style="width: 100%; height: 100%; object-fit: cover"
+          />
+        </div>
+
         <div class="info">
-          <h3>{{ item.course.title }}</h3>
-          <p class="progress-text">{{ item.progress }}% Selesai</p>
-          <ion-progress-bar [value]="item.progress / 100" class="custom-progress"></ion-progress-bar>
-          
+          <h3>{{ item.course?.title || 'Memuat Nama Kursus...' }}</h3>
+
+          <p class="progress-text">{{ item.progress || 0 }}% Selesai</p>
+          <ion-progress-bar
+            [value]="(item.progress || 0) / 100"
+            class="custom-progress"
+          ></ion-progress-bar>
+
           <div class="actions" *ngIf="activeTab === 'ongoing'">
-            <ion-button size="small" (click)="goToPlayer(item.course_id)">LANJUT BELAJAR</ion-button>
-            <ion-button 
-              size="small" 
-              fill="outline" 
-              [color]="item.progress >= 100 ? 'warning' : 'medium'" 
-              (click)="openQuiz(item)"> {{ item.progress >= 100 ? 'KUIS' : 'TERKUNCI' }}
+            <ion-button size="small" (click)="goToPlayer(item.course_id)"
+              >LANJUT BELAJAR</ion-button
+            >
+            <ion-button
+              size="small"
+              fill="outline"
+              [color]="(item.progress || 0) >= 100 ? 'warning' : 'medium'"
+              (click)="openQuiz(item)"
+            >
+              {{ (item.progress || 0) >= 100 ? 'KUIS' : 'TERKUNCI' }}
             </ion-button>
           </div>
-          
+
           <div class="actions" *ngIf="activeTab === 'completed'">
-            <ion-button expand="block" fill="outline" color="success">LIHAT SERTIFIKAT</ion-button>
+            <ion-button expand="block" fill="outline" color="success"
+              >LIHAT SERTIFIKAT</ion-button
+            >
           </div>
         </div>
       </div>
