@@ -114,19 +114,7 @@ export class CourseService {
       headers: this.dapatkanHeaderAutentikasi(),
     });
   }
-  // Notifikasi 
-  ambilDaftarNotifikasi(): Observable<any> {
-    // 1. Ambil token bearer login mahasiswa yang tersimpan di memori hp/browser
-    const token = localStorage.getItem('token'); 
-    
-    // 2. Pasang headers wajib agar lolos dari barikade middleware auth:sanctum
-    const headers = {
-      'Authorization': `Bearer ${token}`,
-      'Accept': 'application/json'
-    };
 
-    // 3. Tembak endpoint API-nya! 
-    return this.http.get(`${this.baseApiUrl}/notifications`, { headers });
   // =========================================================================
   // LOGIKA KUIS ASLI (KONEKSI LIVE SERVERS CPANEL)
   // =========================================================================

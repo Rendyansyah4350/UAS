@@ -109,14 +109,6 @@
                     <input type="number" name="price" value="{{ $course->price }}" required
                         class="mt-1 block w-full border rounded-md p-2 bg-gray-50">
                 </div>
-                <div>
-                    
-                    <label class="block text-sm font-medium text-gray-700">Diskon (%) <span
-                            class="text-xs text-gray-400 font-normal">(Isi 0 jika normal)</span></label>
-                    <input type="number" name="discount" value="{{ $course->discount ?? 0 }}" min="0"
-                        max="100" required class="mt-1 block w-full border rounded-md p-2 bg-gray-50"
-                        placeholder="Contoh: 10 atau 50">
-                </div>
 
                 <div>
                     <label class="block text-sm font-medium text-gray-700 mb-1">Ganti Cover (Opsional)</label>

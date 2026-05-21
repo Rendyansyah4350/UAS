@@ -8,40 +8,33 @@
 </ion-header>
 
 <ion-content>
-  
-  <div *ngIf="isLoading" style="text-align: center; padding: 30px;">
-    <ion-spinner name="crescent" color="primary"></ion-spinner>
-    <p style="color: #64748b; font-size: 14px; margin-top: 8px;">Memuat pemberitahuan...</p>
-  </div>
-
-  <div class="notification-container" *ngIf="!isLoading && listNotifikasi.length > 0">
+  <div class="notification-container">
     
-    <div class="notif-card" 
-         *ngFor="let notif of listNotifikasi" 
-         [ngClass]="notif.data?.type || 'info'">
-      
+    <div class="notif-card promo">
       <div class="icon-wrapper">
-        <ion-icon [name]="notif.data?.type === 'promo' ? 'megaphone-outline' : 
-                         (notif.data?.type === 'success' ? 'checkmark-circle-outline' : 
-                         (notif.data?.type === 'alert' ? 'alert-circle-outline' : 'information-circle-outline'))">
-        </ion-icon>
+        <ion-icon name="megaphone-outline"></ion-icon>
       </div>
-
       <div class="notif-content">
         <div class="notif-header">
-          <h3>{{ notif.data?.title }}</h3>
-          <span class="time-badge">{{ notif.data?.tanggal }}</span>
+          <h3>Promo Ramadhan!</h3>
+          <span class="time-badge">2 jam lalu</span>
         </div>
-        <p>{{ notif.data?.message }}</p>
+        <p>Diskon 50% untuk kursus UI/UX Design khusus minggu ini. Jangan sampai kelewatan lek!</p>
       </div>
+    </div>
 
+    <div class="notif-card success">
+      <div class="icon-wrapper">
+        <ion-icon name="checkmark-circle-outline"></ion-icon>
+      </div>
+      <div class="notif-content">
+        <div class="notif-header">
+          <h3>Pembayaran Berhasil</h3>
+          <span class="time-badge">1 hari lalu</span>
+        </div>
+        <p>Kursus "Coding Hero" Anda sudah aktif dan bisa diakses sekarang. Selamat belajar!</p>
+      </div>
     </div>
 
   </div>
-
-  <div *ngIf="!isLoading && listNotifikasi.length === 0" style="text-align: center; padding: 60px 20px; color: #94a3b8;">
-    <ion-icon name="notifications-off-outline" style="font-size: 50px; color: #cbd5e1;"></ion-icon>
-    <p style="margin-top: 10px; font-size: 14px; font-weight: 600; color: #64748b;">Belum ada pemberitahuan baru.</p>
-  </div>
-
 </ion-content>
