@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { ToastController } from '@ionic/angular';
 import { CourseService } from '../../services/course.service';
-import { DomSanitizer, SafeResourceUrl } from '@angular/platform-browser'; // 🟢 WAJIB IMPORT INI MBUT
+import { DomSanitizer, SafeResourceUrl } from '@angular/platform-browser'; // WAJIB IMPORT INI MBUT
 
 @Component({
   selector: 'app-course-player',
@@ -18,18 +18,18 @@ export class CoursePlayerPage implements OnInit {
   contents: any[] = [];
   videoAktifUrl: string = '';
 
-  // 🟢 TAMBAHAN: Variabel khusus untuk menampung URL YouTube yang sudah lolos sensor security Angular
+  //TAMBAHAN: Variabel khusus untuk menampung URL YouTube yang sudah lolos sensor security Angular
   safeVideoUrl: SafeResourceUrl | null = null;
   loading: boolean = false;
 
-  // 🟢 TAMBAHAN BARU: Untuk melacak ID materi mana yang sedang diputar/aktif oleh student
+  //TAMBAHAN BARU: Untuk melacak ID materi mana yang sedang diputar/aktif oleh student
   activeContentId: number | null = null;
 
   constructor(
     private route: ActivatedRoute,
     private toastCtrl: ToastController,
     private courseService: CourseService,
-    private sanitizer: DomSanitizer, // 🟢 INJECT SANITIZER DI SINI TOT
+    private sanitizer: DomSanitizer,
   ) {}
 
   ngOnInit() {
@@ -101,7 +101,7 @@ export class CoursePlayerPage implements OnInit {
       this.safeVideoUrl =
         this.sanitizer.bypassSecurityTrustResourceUrl(embedUrl);
     } else {
-      console.warn('Waduh mbut, field url videonya masih kosong nih!');
+      console.warn('field url videonya masih kosong nih!');
       this.safeVideoUrl = null;
     }
   }
@@ -109,7 +109,7 @@ export class CoursePlayerPage implements OnInit {
   // 🟢 SINKRONISASI LIVE DATABASE: Mengirim data progress asli ke Laravel
   async markAsComplete() {
     if (!this.courseId || !this.activeContentId) {
-      console.warn('ID Kursus atau ID Materi kosong, gagal memproses mbut!');
+      console.warn('ID Kursus atau ID Materi kosong!');
       return;
     }
 

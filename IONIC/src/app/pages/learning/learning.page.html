@@ -69,7 +69,9 @@
           ></ion-progress-bar>
 
           <div class="actions" *ngIf="activeTab === 'ongoing'">
-            <ion-button size="small" (click)="goToPlayer(item.course_id)"
+            <ion-button
+              size="small"
+              (click)="goToPlayer(item.course_id || item.course?.id)"
               >LANJUT BELAJAR</ion-button
             >
 
@@ -78,7 +80,7 @@
               fill="outline"
               [color]="item.is_quiz_unlocked ? 'warning' : 'medium'"
               [disabled]="!item.is_quiz_unlocked"
-              (click)="openQuiz(item)"
+              (click)="openQuiz({ course_id: item.course_id || item.course?.id || item.id })"
             >
               <ion-icon
                 name="lock-closed-outline"
