@@ -1,12 +1,12 @@
 :root {
-  /** primary - Warna Biru Baru (#093c5d) **/
+  /** Primary - Warna Biru Baru (#093c5d) **/
   --ion-color-primary: #093c5d;
   --ion-color-primary-rgb: 9, 60, 93;
   --ion-color-primary-contrast: #ffffff;
-  --ion-color-primary-contrast-rgb: 255, 255, 255;
   --ion-color-primary-shade: #083552;
   --ion-color-primary-tint: #22506d;
 
-  /** Update juga warna background agar kontrasnya enak **/
+  /** Background & Font Global **/
   --ion-background-color: #f8fafc;
+  --ion-font-family: 'Poppins', sans-serif; /* Font Utama */
 }

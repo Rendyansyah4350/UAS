@@ -4,33 +4,20 @@ import { AuthGuard } from './guards/auth-guard';
 
 const routes: Routes = [
   { path: '', redirectTo: 'login', pathMatch: 'full' },
-
-  // ==========================================
-  // RUTE OTENTIKASI
-  // ==========================================
   { path: 'login', loadChildren: () => import('./pages/login/login.module').then(m => m.LoginPageModule) },
   { path: 'register', loadChildren: () => import('./pages/register/register.module').then(m => m.RegisterPageModule) },
   { path: 'verify-otp', loadChildren: () => import('./pages/verify-otp/verify-otp.module').then(m => m.VerifyOtpPageModule) },
   { path: 'forgot-password', loadChildren: () => import('./pages/forgot-password/forgot-password.module').then(m => m.ForgotPasswordPageModule) },
   { path: 'reset-password', loadChildren: () => import('./pages/reset-password/reset-password.module').then(m => m.ResetPasswordPageModule) },
 
-  // ==========================================
-  // RUTE UTAMA APLIKASI
-  // ==========================================
+  // Rute Utama
   { path: 'tabs', loadChildren: () => import('./pages/tabs/tabs.module').then(m => m.TabsPageModule) },
-  { path: 'course', loadChildren: () => import('./pages/course/course.module').then(m => m.CoursePageModule) },
+
+  // Rute Detail (di luar tabs)
   { path: 'course-player/:id', loadChildren: () => import('./pages/course-player/course-player.module').then(m => m.CoursePlayerPageModule) },
   { path: 'course-detail/:id', loadChildren: () => import('./pages/course-detail/course-detail.module').then(m => m.CourseDetailPageModule)},
   { path: 'quiz/:id', loadChildren: () => import('./pages/quiz/quiz.module').then(m => m.QuizPageModule) },
-  { path: 'wishlist', canActivate: [AuthGuard], loadChildren: () => import('./pages/wishlist/wishlist.module').then(m => m.WishlistPageModule) },
-  { path: 'edit-profil', loadChildren: () => import('./pages/edit-profil/edit-profil.module').then(m => m.EditProfilPageModule) },
-  { path: 'certificate', loadChildren: () => import('./pages/certificate/certificate.module').then(m => m.CertificatePageModule) },
-  { path: 'notifications', loadChildren: () => import('./pages/notifications/notifications.module').then(m => m.NotificationsPageModule) },
-  { path: 'riwayat-transaksi', loadChildren: () => import('./pages/riwayat-transaksi/riwayat-transaksi.module').then(m => m.RiwayatTransaksiPageModule) },
 
-  // ==========================================
-  // WILDCARD ROUTE (HARUS PALING BAWAH)
-  // ==========================================
   { path: '**', redirectTo: 'tabs' }
 ];
 

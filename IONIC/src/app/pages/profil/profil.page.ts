@@ -24,7 +24,6 @@ export class ProfilePage implements OnInit {
     this.authService.currentUser$.subscribe((user: any) => {
       if (user) this.userProfile = user;
     });
-    this.loadProfileFromAPI();
   }
 
   ionViewWillEnter() {
@@ -36,25 +35,30 @@ export class ProfilePage implements OnInit {
     if (savedAvatar) this.selectedAvatar = savedAvatar;
   }
 
-async changeAvatar() {
-  const actionSheet = await this.actionSheetCtrl.create({
-    header: 'Pilih Karakter Avatar',
-    buttons: [
-      {
-        text: 'Laki-laki',
-        icon: 'man-outline',
-        handler: () => { this.updateAvatar('assets/icon/avatar-male.png'); } // Ganti icons jadi icon
-      },
-      {
-        text: 'Perempuan',
-        icon: 'woman-outline',
-        handler: () => { this.updateAvatar('assets/icon/avatar-female.png'); } // Ganti icons jadi icon
-      },
-      { text: 'Batal', role: 'cancel', icon: 'close' }
-    ]
-  });
-  await actionSheet.present();
-}
+  async changeAvatar() {
+    const actionSheet = await this.actionSheetCtrl.create({
+      header: 'Pilih Karakter Avatar',
+      cssClass: 'premium-avatar-sheet', // Menghubungkan ke class di global.scss
+      buttons: [
+        {
+          text: 'Laki-laki',
+          icon: 'man-outline',
+          handler: () => { this.updateAvatar('assets/icon/avatar-male.png'); }
+        },
+        {
+          text: 'Perempuan',
+          icon: 'woman-outline',
+          handler: () => { this.updateAvatar('assets/icon/avatar-female.png'); }
+        },
+        { 
+          text: 'Batal', 
+          role: 'cancel', 
+          icon: 'close' 
+        }
+      ]
+    });
+    await actionSheet.present();
+  }
 
   updateAvatar(path: string) {
     this.selectedAvatar = path;
@@ -63,8 +67,11 @@ async changeAvatar() {
 
   loadProfileFromAPI() {
     this.authService.getProfileFromServer().subscribe({
-      next: (res: any) => { console.log('Profil dimuat'); },
+      next: (res: any) => { 
+        if (res) this.userProfile = res;
+      },
       error: (err) => {
+        console.error('Error saat load profile:', err);
         if (err.status === 401) {
           this.authService.logout();
           this.navCtrl.navigateRoot('/login');
@@ -87,7 +94,6 @@ async changeAvatar() {
         {
           text: 'Ya, Keluar',
           handler: () => {
-            // Hapus data avatar saat logout agar tidak tertukar akun lain
             localStorage.removeItem('user_avatar');
             this.authService.logout(); 
             this.navCtrl.navigateRoot('/login'); 
