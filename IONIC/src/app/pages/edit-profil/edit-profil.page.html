@@ -1,7 +1,7 @@
 <ion-header class="ion-no-border">
   <ion-toolbar>
     <ion-buttons slot="start">
-      <ion-back-button defaultHref="/tabs/profile" text="" color="dark"></ion-back-button>
+      <ion-back-button defaultHref="/tabs/profil" text="" color="dark"></ion-back-button>
     </ion-buttons>
     <ion-title>Ubah Profil</ion-title>
   </ion-toolbar>
@@ -9,39 +9,12 @@
 
 <ion-content>
   <div class="edit-profile-container">
-    
     <div class="form-container">
       
       <div class="input-group">
         <label>Nama Lengkap</label>
         <ion-item lines="none" class="custom-input-item">
-          <ion-input 
-            type="text" 
-            [(ngModel)]="formData.name" 
-            placeholder="Masukkan nama lengkap">
-          </ion-input>
-        </ion-item>
-      </div>
-
-      <div class="input-group">
-        <label>Email</label>
-        <ion-item lines="none" class="custom-input-item">
-          <ion-input 
-            type="email" 
-            [(ngModel)]="formData.email" 
-            placeholder="Masukkan alamat email">
-          </ion-input>
-        </ion-item>
-      </div>
-
-      <div class="input-group">
-        <label>Universitas / Instansi</label>
-        <ion-item lines="none" class="custom-input-item">
-          <ion-input 
-            type="text" 
-            [(ngModel)]="formData.instansi" 
-            placeholder="Masukkan nama instansi">
-          </ion-input>
+          <ion-input type="text" [(ngModel)]="formData.name" placeholder="Masukkan nama lengkap"></ion-input>
         </ion-item>
       </div>
 
@@ -52,6 +25,5 @@
         SIMPAN PERUBAHAN
       </ion-button>
     </div>
-
   </div>
 </ion-content>
