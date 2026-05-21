@@ -17,7 +17,7 @@
   >
     <ion-spinner name="crescent" color="warning"></ion-spinner>
     <p style="color: #a0aec0; font-size: 14px; margin-top: 10px">
-      Mengamankan hak akses kuis lu mbut...
+      Memuat data kuis...
     </p>
   </div>
 
@@ -32,78 +32,57 @@
     </div>
 
     <div class="question-card">
-      <h3>
-        {{ questions[currentQuestionIndex]?.question_text ||
-        questions[currentQuestionIndex]?.question }}
+      <h3
+        style="
+          color: #1a202c;
+          font-weight: 600;
+          font-size: 18px;
+          line-height: 1.5;
+        "
+      >
+        {{ questions[currentQuestionIndex]['question'] }}
       </h3>
     </div>
-
-    <ion-radio-group
-      (ionChange)="selectAnswer($event.detail.value)"
-      [value]="selectedAnswer"
-    >
+    <ion-radio-group [value]="selectedAnswer">
       <ion-item
-        *ngIf="questions[currentQuestionIndex]?.option_a || questions[currentQuestionIndex]?.a"
+        *ngIf="questions[currentQuestionIndex]['option_a']"
         class="option-item"
+        [class.item-radio-checked]="selectedAnswer === 'a'"
         lines="none"
+        button="true"
+        (click)="selectAnswer('a')"
       >
-        <ion-radio
-          slot="start"
-          [value]="questions[currentQuestionIndex]?.option_a || questions[currentQuestionIndex]?.a"
-        ></ion-radio>
-        <ion-label>
-          {{ questions[currentQuestionIndex]?.option_a ||
-          questions[currentQuestionIndex]?.a }}
+        <ion-radio slot="start" value="a"></ion-radio>
+        <ion-label
+          class="ion-text-wrap"
+          style="color: #2d3748; margin-left: 10px"
+        >
+          A. {{ questions[currentQuestionIndex]['option_a'] }}
         </ion-label>
       </ion-item>
 
       <ion-item
-        *ngIf="questions[currentQuestionIndex]?.option_b || questions[currentQuestionIndex]?.b"
+        *ngIf="questions[currentQuestionIndex]['option_b']"
         class="option-item"
+        [class.item-radio-checked]="selectedAnswer === 'b'"
         lines="none"
+        button="true"
+        (click)="selectAnswer('b')"
       >
-        <ion-radio
-          slot="start"
-          [value]="questions[currentQuestionIndex]?.option_b || questions[currentQuestionIndex]?.b"
-        ></ion-radio>
-        <ion-label>
-          {{ questions[currentQuestionIndex]?.option_b ||
-          questions[currentQuestionIndex]?.b }}
-        </ion-label>
-      </ion-item>
-
-      <ion-item
-        *ngIf="questions[currentQuestionIndex]?.option_c || questions[currentQuestionIndex]?.c"
-        class="option-item"
-        lines="none"
-      >
-        <ion-radio
-          slot="start"
-          [value]="questions[currentQuestionIndex]?.option_c || questions[currentQuestionIndex]?.c"
-        ></ion-radio>
-        <ion-label>
-          {{ questions[currentQuestionIndex]?.option_c ||
-          questions[currentQuestionIndex]?.c }}
-        </ion-label>
-      </ion-item>
-
-      <ion-item
-        *ngIf="questions[currentQuestionIndex]?.option_d || questions[currentQuestionIndex]?.d"
-        class="option-item"
-        lines="none"
-      >
-        <ion-radio
-          slot="start"
-          [value]="questions[currentQuestionIndex]?.option_d || questions[currentQuestionIndex]?.d"
-        ></ion-radio>
-        <ion-label>
-          {{ questions[currentQuestionIndex]?.option_d ||
-          questions[currentQuestionIndex]?.d }}
+        <ion-radio slot="start" value="b"></ion-radio>
+        <ion-label
+          class="ion-text-wrap"
+          style="color: #2d3748; margin-left: 10px"
+        >
+          B. {{ questions[currentQuestionIndex]['option_b'] }}
         </ion-label>
       </ion-item>
     </ion-radio-group>
 
-    <div class="nav-buttons">
+    <div
+      class="nav-buttons"
+      style="margin-top: 20px; display: flex; justify-content: space-between"
+    >
       <ion-button
         fill="clear"
         (click)="prevQuestion()"
@@ -132,9 +111,9 @@
           color="success"
           style="font-size: 64px"
         ></ion-icon>
-        <h2 style="color: #2dd36f; font-weight: bold">Selamat, Lu Lulus! 🎉</h2>
+        <h2 style="color: #2dd36f; font-weight: bold">Selamat, Anda Lulus!</h2>
         <p style="font-size: 14px; color: #a0aec0">
-          Kelas EduVan ini sekarang dinyatakan selesai 100%.
+          Kelas ini sekarang dinyatakan selesai 100%.
         </p>
       </div>
 
@@ -144,9 +123,7 @@
           color="danger"
           style="font-size: 64px"
         ></ion-icon>
-        <h2 style="color: #eb445a; font-weight: bold">
-          Skor Belum Cukup, tot! 😭
-        </h2>
+        <h2 style="color: #eb445a; font-weight: bold">Skor Belum Mencukupi</h2>
         <p style="font-size: 14px; color: #a0aec0">
           Silakan pelajari materi lagi dan coba kuis kembali.
         </p>
@@ -173,29 +150,5 @@
         }}
       </ion-button>
     </div>
-  </div>
-
-  <div
-    *ngIf="!loading && questions.length === 0 && !isFinished"
-    class="ion-text-center"
-    style="margin-top: 60px"
-  >
-    <ion-icon
-      name="alert-circle-outline"
-      color="warning"
-      style="font-size: 64px"
-    ></ion-icon>
-    <p style="color: #a0aec0; margin-top: 10px; font-size: 14px">
-      Kuiz ini belum tersedia
-    </p>
-    <ion-button
-      fill="outline"
-      color="warning"
-      size="small"
-      style="margin-top: 15px"
-      (click)="goBack()"
-    >
-      Kembali ke My Learning
-    </ion-button>
   </div>
 </ion-content>
