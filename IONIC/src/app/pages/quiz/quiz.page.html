@@ -10,36 +10,192 @@
 </ion-header>
 
 <ion-content class="ion-padding">
-  <div class="quiz-progress" *ngIf="!isFinished">
-    <p>Soal {{ currentQuestionIndex + 1 }} dari {{ questions.length }}</p>
-    <ion-progress-bar [value]="(currentQuestionIndex + 1) / questions.length" mode="ios"></ion-progress-bar>
+  <div
+    *ngIf="loading"
+    class="ion-text-center ion-padding"
+    style="margin-top: 60px"
+  >
+    <ion-spinner name="crescent" color="warning"></ion-spinner>
+    <p style="color: #a0aec0; font-size: 14px; margin-top: 10px">
+      Mengamankan hak akses kuis lu mbut...
+    </p>
   </div>
 
-  <div class="question-card" *ngIf="!isFinished">
-    <h3>{{ questions[currentQuestionIndex].question }}</h3>
+  <div *ngIf="!loading && !isFinished && questions.length > 0">
+    <div class="quiz-progress">
+      <p>Soal {{ currentQuestionIndex + 1 }} dari {{ questions.length }}</p>
+      <ion-progress-bar
+        [value]="(currentQuestionIndex + 1) / questions.length"
+        mode="ios"
+        color="warning"
+      ></ion-progress-bar>
+    </div>
+
+    <div class="question-card">
+      <h3>
+        {{ questions[currentQuestionIndex]?.question_text ||
+        questions[currentQuestionIndex]?.question }}
+      </h3>
+    </div>
+
+    <ion-radio-group
+      (ionChange)="selectAnswer($event.detail.value)"
+      [value]="selectedAnswer"
+    >
+      <ion-item
+        *ngIf="questions[currentQuestionIndex]?.option_a || questions[currentQuestionIndex]?.a"
+        class="option-item"
+        lines="none"
+      >
+        <ion-radio
+          slot="start"
+          [value]="questions[currentQuestionIndex]?.option_a || questions[currentQuestionIndex]?.a"
+        ></ion-radio>
+        <ion-label>
+          {{ questions[currentQuestionIndex]?.option_a ||
+          questions[currentQuestionIndex]?.a }}
+        </ion-label>
+      </ion-item>
+
+      <ion-item
+        *ngIf="questions[currentQuestionIndex]?.option_b || questions[currentQuestionIndex]?.b"
+        class="option-item"
+        lines="none"
+      >
+        <ion-radio
+          slot="start"
+          [value]="questions[currentQuestionIndex]?.option_b || questions[currentQuestionIndex]?.b"
+        ></ion-radio>
+        <ion-label>
+          {{ questions[currentQuestionIndex]?.option_b ||
+          questions[currentQuestionIndex]?.b }}
+        </ion-label>
+      </ion-item>
+
+      <ion-item
+        *ngIf="questions[currentQuestionIndex]?.option_c || questions[currentQuestionIndex]?.c"
+        class="option-item"
+        lines="none"
+      >
+        <ion-radio
+          slot="start"
+          [value]="questions[currentQuestionIndex]?.option_c || questions[currentQuestionIndex]?.c"
+        ></ion-radio>
+        <ion-label>
+          {{ questions[currentQuestionIndex]?.option_c ||
+          questions[currentQuestionIndex]?.c }}
+        </ion-label>
+      </ion-item>
+
+      <ion-item
+        *ngIf="questions[currentQuestionIndex]?.option_d || questions[currentQuestionIndex]?.d"
+        class="option-item"
+        lines="none"
+      >
+        <ion-radio
+          slot="start"
+          [value]="questions[currentQuestionIndex]?.option_d || questions[currentQuestionIndex]?.d"
+        ></ion-radio>
+        <ion-label>
+          {{ questions[currentQuestionIndex]?.option_d ||
+          questions[currentQuestionIndex]?.d }}
+        </ion-label>
+      </ion-item>
+    </ion-radio-group>
+
+    <div class="nav-buttons">
+      <ion-button
+        fill="clear"
+        (click)="prevQuestion()"
+        [disabled]="currentQuestionIndex === 0"
+        >SEBELUMNYA</ion-button
+      >
+      <ion-button
+        *ngIf="currentQuestionIndex < questions.length - 1"
+        (click)="nextQuestion()"
+        >SELANJUTNYA</ion-button
+      >
+      <ion-button
+        *ngIf="currentQuestionIndex === questions.length - 1"
+        (click)="submitQuiz()"
+        color="success"
+        >KIRIM JAWABAN</ion-button
+      >
+    </div>
   </div>
 
-  <ion-radio-group (ionChange)="selectAnswer($event.detail.value)" *ngIf="!isFinished" [value]="selectedAnswer">
-    <ion-item *ngFor="let option of questions[currentQuestionIndex].options" class="option-item" lines="none">
-      <ion-radio slot="start" [value]="option"></ion-radio>
-      <ion-label>{{ option }}</ion-label>
-    </ion-item>
-  </ion-radio-group>
-
-  <div class="nav-buttons" *ngIf="!isFinished">
-    <ion-button fill="clear" (click)="prevQuestion()" [disabled]="currentQuestionIndex === 0">SEBELUMNYA</ion-button>
-    <ion-button *ngIf="currentQuestionIndex < questions.length - 1" (click)="nextQuestion()">SELANJUTNYA</ion-button>
-    <ion-button *ngIf="currentQuestionIndex === questions.length - 1" (click)="submitQuiz()" color="success">SELESAI</ion-button>
-  </div>
-
-  <div *ngIf="isFinished" class="result-container ion-text-center">
+  <div *ngIf="!loading && isFinished" class="result-container ion-text-center">
     <div class="result-card">
-      <h2>Kuis Selesai!</h2>
-      <p>Skor Akhir Anda</p>
-      <h1 class="score-display">{{ score }}</h1>
-      <ion-button expand="block" shape="round" (click)="finishQuiz()" class="finish-btn">
-        Kembali ke Kursus
+      <div *ngIf="quizStatus === 'passed'">
+        <ion-icon
+          name="checkmark-circle-outline"
+          color="success"
+          style="font-size: 64px"
+        ></ion-icon>
+        <h2 style="color: #2dd36f; font-weight: bold">Selamat, Lu Lulus! 🎉</h2>
+        <p style="font-size: 14px; color: #a0aec0">
+          Kelas EduVan ini sekarang dinyatakan selesai 100%.
+        </p>
+      </div>
+
+      <div *ngIf="quizStatus !== 'passed'">
+        <ion-icon
+          name="close-circle-outline"
+          color="danger"
+          style="font-size: 64px"
+        ></ion-icon>
+        <h2 style="color: #eb445a; font-weight: bold">
+          Skor Belum Cukup, tot! 😭
+        </h2>
+        <p style="font-size: 14px; color: #a0aec0">
+          Silakan pelajari materi lagi dan coba kuis kembali.
+        </p>
+      </div>
+
+      <p style="margin-top: 20px; margin-bottom: 5px; color: #718096">
+        Skor Akhir Anda
+      </p>
+      <h1
+        class="score-display"
+        [style.color]="quizStatus === 'passed' ? '#2dd36f' : '#eb445a'"
+      >
+        {{ quizScore }}
+      </h1>
+
+      <ion-button
+        expand="block"
+        shape="round"
+        (click)="finishQuiz()"
+        [color]="quizStatus === 'passed' ? 'success' : 'danger'"
+        class="finish-btn"
+      >
+        {{ quizStatus === 'passed' ? 'Kembali ke My Learning' : 'Coba Kuis Lagi'
+        }}
       </ion-button>
     </div>
+  </div>
+
+  <div
+    *ngIf="!loading && questions.length === 0 && !isFinished"
+    class="ion-text-center"
+    style="margin-top: 60px"
+  >
+    <ion-icon
+      name="alert-circle-outline"
+      color="warning"
+      style="font-size: 64px"
+    ></ion-icon>
+    <p style="color: #a0aec0; margin-top: 10px; font-size: 14px">
+      Kuiz ini belum tersedia
+    </p>
+    <ion-button
+      fill="outline"
+      color="warning"
+      size="small"
+      style="margin-top: 15px"
+      (click)="goBack()"
+    >
+      Kembali ke My Learning
+    </ion-button>
   </div>
 </ion-content>

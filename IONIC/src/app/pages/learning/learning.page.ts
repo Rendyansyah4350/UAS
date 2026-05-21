@@ -75,21 +75,45 @@ export class LearningPage implements OnInit {
   }
 
   filterData() {
-    // Memisahkan progress: ongoing (< 100%) vs completed (=== 100%)
-    // Kalau di DB Laravel lu belum ada field 'progress', default-kan ke 0 biar aman ga crash
-    this.filteredEnrollments = this.allEnrollments.filter((item) => {
-      const progressKursus = item.progress ? Number(item.progress) : 0;
-      return this.activeTab === 'ongoing'
-        ? progressKursus < 100
-        : progressKursus === 100;
-    });
+    if (this.activeTab === 'ongoing') {
+      // 🟢 KURSUS SAYA (Ongoing)
+      this.filteredEnrollments = this.allEnrollments.filter((item) => {
+        // Ambil nilai progress secara dinamis (cek field progress_percent dulu, kalau gada baru pake progress)
+        const nilaiProgress =
+          item.progress_percent !== undefined
+            ? item.progress_percent
+            : item.progress;
+
+        // Ambil status kuis dari API Laravel lu
+        const statusKuis = item.quiz_status || item.status_quiz;
+        const kuisLulus =
+          item.quiz_passed === 1 ||
+          item.quiz_passed === true ||
+          statusKuis === 'passed';
+
+        // Tampilkan di tab ongoing jika progress belum 100%, ATAU sudah di ujung materi (99%/100% materi) tapi BELUM lulus kuis asli
+        return nilaiProgress < 100 || !kuisLulus;
+      });
+    } else if (this.activeTab === 'completed') {
+      // 🟢 SELESAI (Completed)
+      this.filteredEnrollments = this.allEnrollments.filter((item) => {
+        const statusKuis = item.quiz_status || item.status_quiz;
+        const kuisLulus =
+          item.quiz_passed === 1 ||
+          item.quiz_passed === true ||
+          statusKuis === 'passed';
+
+        // Baru boleh masuk tab selesai kalau kuisnya benar-benar dinyatakan lulus murni dari backend
+        return kuisLulus;
+      });
+    }
   }
 
   // Mengarahkan student ke ruang nonton video materi pembelajaran
   // Mengarahkan student ke ruang nonton video materi pembelajaran (course-player)
   goToPlayer(courseId: any) {
     if (!courseId) {
-      console.error('ID Kursus tidak ditemukan mbut!');
+      console.error('ID Kursus tidak ditemukan!');
       return;
     }
 
@@ -98,7 +122,16 @@ export class LearningPage implements OnInit {
   }
 
   async openQuiz(item: any) {
-    // Langsung navigasi ke menu kuis berdasarkan course_id asli server
-    this.navCtrl.navigateForward(['/quiz', item.course_id]);
+    // Ambil ID dengan aman, jika item.course_id kosong ambil dari dalam objek course
+    const targetId =
+      item.course_id || (item.course ? item.course.id : null) || item.id;
+
+    console.log('Mengirim student ke kuis untuk ID Kursus:', targetId);
+
+    if (targetId) {
+      this.navCtrl.navigateForward(['/quiz', targetId]);
+    } else {
+      console.error('Gagal navigasi, ID kursus murni kosong melompong!');
+    }
   }
 }

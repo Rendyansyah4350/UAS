@@ -45,7 +45,7 @@ export class CourseService {
     return new HttpHeaders({
       Authorization: `Bearer ${tokenUser}`,
       'Content-Type': 'application/json',
-      Accept: 'application/json', // 🟢 WAJIB: Memaksa server merespon format JSON, bukan halaman redirect HTML!
+      Accept: 'application/json',
     });
   }
 
@@ -79,7 +79,6 @@ export class CourseService {
     });
   }
 
-  // 🟢 SEKARANG BISA TERIMA STATUS: 1 untuk tandai selesai, 0 untuk cancel progress
   saveProgress(
     courseId: number,
     contentId: number,
@@ -88,7 +87,7 @@ export class CourseService {
     const payload = {
       course_id: courseId,
       content_id: contentId,
-      is_completed: isCompleted, 
+      is_completed: isCompleted,
     };
     return this.http.post(
       `${this.baseApiUrl}/contents/mark-complete`,
@@ -100,7 +99,7 @@ export class CourseService {
   }
 
   // =========================================================================
-  // 🟢 LOGIKA WISHLIST ASLI (KONEKSI LIVE SERVERS CPANEL)
+  // LOGIKA WISHLIST ASLI (KONEKSI LIVE SERVERS CPANEL)
   // =========================================================================
 
   ambilDaftarWishlist(): Observable<any> {
@@ -115,7 +114,6 @@ export class CourseService {
       headers: this.dapatkanHeaderAutentikasi(),
     });
   }
-
   // Notifikasi 
   ambilDaftarNotifikasi(): Observable<any> {
     // 1. Ambil token bearer login mahasiswa yang tersimpan di memori hp/browser
@@ -129,5 +127,26 @@ export class CourseService {
 
     // 3. Tembak endpoint API-nya! 
     return this.http.get(`${this.baseApiUrl}/notifications`, { headers });
+  // =========================================================================
+  // LOGIKA KUIS ASLI (KONEKSI LIVE SERVERS CPANEL)
+  // =========================================================================
+
+  // 1. Ambil semua soal kuis berdasarkan ID Kursus dari Laravel
+  getQuizQuestions(courseId: number): Observable<any> {
+    // 🟢 FIX SAKTI: Mengubah dari apiUrl menjadi baseApiUrl agar mengarah ke endpoint Laravel yang benar (/api/quiz/{id})
+    return this.http.get(`${this.baseApiUrl}/quiz/${courseId}`, {
+      headers: this.dapatkanHeaderAutentikasi(),
+    });
+  }
+
+  // 2. Kirim lembar jawaban kuis ke server Laravel untuk dikoreksi otomatis
+  submitQuizAnswers(courseId: number, answers: any[]): Observable<any> {
+    const payload = {
+      course_id: courseId,
+      answers: answers,
+    };
+    return this.http.post(`${this.baseApiUrl}/quiz/submit`, payload, {
+      headers: this.dapatkanHeaderAutentikasi(),
+    });
   }
 }
