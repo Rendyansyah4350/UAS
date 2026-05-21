@@ -10,7 +10,6 @@ import { BehaviorSubject } from 'rxjs';
 export class CourseService {
   // Ganti dengan URL API backend marketplace kamu
   private apiUrl = 'https://eduvan.rehalivan.com/api/courses';
-
   private baseApiUrl = 'https://eduvan.rehalivan.com/api';
 
   public wishlistChanged$ = new BehaviorSubject<boolean>(false);
@@ -82,12 +81,12 @@ export class CourseService {
   saveProgress(
     courseId: number,
     contentId: number,
-    isCompleted: number,
+    isCompleted?: number,
   ): Observable<any> {
     const payload = {
       course_id: courseId,
       content_id: contentId,
-      is_completed: isCompleted,
+      is_completed: isCompleted ?? 1,
     };
     return this.http.post(
       `${this.baseApiUrl}/contents/mark-complete`,
@@ -114,27 +113,20 @@ export class CourseService {
       headers: this.dapatkanHeaderAutentikasi(),
     });
   }
-  ambilDaftarNotifikasi(): Observable<any> {
-    // 1. Ambil token bearer login mahasiswa yang tersimpan di memori hp/browser
-    const token = localStorage.getItem('token'); 
-    
-    // 2. Pasang headers wajib agar lolos dari barikade middleware auth:sanctum
-    const headers = {
-      'Authorization': `Bearer ${token}`,
-      'Accept': 'application/json'
-    };
 
-    // 3. Tembak endpoint API-nya! 
-    // (Jika ngetes di localhost, pastikan this.baseApiUrl bernilai http://127.0.0.1:8000/api)
-    return this.http.get(`${this.baseApiUrl}/notifications`, { headers });
+  // =========================================================================
+  // LOGIKA KUIS ASLI (KONEKSI LIVE SERVERS CPANEL)
+  // =========================================================================
+
+  // 1. Ambil semua soal kuis berdasarkan ID Kursus dari Laravel
   // =========================================================================
   // LOGIKA KUIS ASLI (KONEKSI LIVE SERVERS CPANEL)
   // =========================================================================
 
   // 1. Ambil semua soal kuis berdasarkan ID Kursus dari Laravel
   getQuizQuestions(courseId: number): Observable<any> {
-    // 🟢 FIX SAKTI: Mengubah dari apiUrl menjadi baseApiUrl agar mengarah ke endpoint Laravel yang benar (/api/quiz/{id})
-    return this.http.get(`${this.baseApiUrl}/quiz/${courseId}`, {
+    // Mengubah /quiz/{id} menjadi /courses/{id}/quizzes sesuai api.php Laravel
+    return this.http.get(`${this.baseApiUrl}/courses/${courseId}/quizzes`, {
       headers: this.dapatkanHeaderAutentikasi(),
     });
   }
@@ -150,25 +142,18 @@ export class CourseService {
     });
   }
 
-  // =========================================================================
-  // LOGIKA KUIS ASLI (KONEKSI LIVE SERVERS CPANEL)
-  // =========================================================================
-
-  // 1. Ambil semua soal kuis berdasarkan ID Kursus dari Laravel
-  getQuizQuestions(courseId: number): Observable<any> {
-    // 🟢 FIX SAKTI: Mengubah dari apiUrl menjadi baseApiUrl agar mengarah ke endpoint Laravel yang benar (/api/quiz/{id})
-    return this.http.get(`${this.baseApiUrl}/quiz/${courseId}`, {
-      headers: this.dapatkanHeaderAutentikasi(),
-    });
-  }
-
-  // 2. Kirim lembar jawaban kuis ke server Laravel untuk dikoreksi otomatis
-  submitQuizAnswers(courseId: number, answers: any[]): Observable<any> {
+  // TAMBAHKAN FUNGSI INI DI PALING BAWAH (JANGAN HAPUS KODE DI ATASNYA)
+  updateQuizProgress(courseId: number, score: number): Observable<any> {
     const payload = {
       course_id: courseId,
-      answers: answers,
+      score: score,
     };
-    return this.http.post(`${this.baseApiUrl}/quiz/submit`, payload, {
+
+    // Memicu RxJS BehaviorSubject agar halaman My Learning tahu ada progress baru yang selesai
+    this.progressChanged$.next(true);
+
+    // DIUBAH: Menembak endpoint progress kuis yang valid sesuai isi api.php Laravel kamu
+    return this.http.post(`${this.baseApiUrl}/progress/submit-quiz`, payload, {
       headers: this.dapatkanHeaderAutentikasi(),
     });
   }
