@@ -1,7 +1,7 @@
-import { Component, OnInit, OnDestroy } from '@angular/core'; // Tambah OnDestroy
+import { Component, OnInit, OnDestroy } from '@angular/core';
 import { NavController, AlertController } from '@ionic/angular';
 import { CourseService } from '../../services/course.service';
-import { Subscription } from 'rxjs'; // Import Subscription
+import { Subscription } from 'rxjs';
 
 @Component({
   selector: 'app-learning',
@@ -10,13 +10,11 @@ import { Subscription } from 'rxjs'; // Import Subscription
   standalone: false,
 })
 export class LearningPage implements OnInit, OnDestroy {
-  // Implement OnDestroy
   activeTab: string = 'ongoing';
   allEnrollments: any[] = [];
   filteredEnrollments: any[] = [];
   loading: boolean = false;
 
-  // DEKLARASI PROPERTI YANG HILANG
   private progressSub: Subscription = new Subscription();
 
   constructor(
@@ -25,6 +23,25 @@ export class LearningPage implements OnInit, OnDestroy {
     private courseService: CourseService,
   ) {}
 
+  // --- FUNGSI TAMBAHAN UNTUK GAMBAR ---
+  // --- FUNGSI LOGO DINAMIS BERDASARKAN KATEGORI ---
+  getCategoryLogo(category: string): string {
+    // Pastikan kategori tidak null/undefined
+    const cat = (category || '').toLowerCase();
+
+    // Logika deteksi kategori
+    if (cat.includes('computer science')) {
+      return 'assets/icon/computer-science.jpeg';
+    } else if (cat.includes('microsoft office')) {
+      return 'assets/icon/microsoft-office.jpeg';
+    } else {
+      // Fallback jika kategori tidak dikenal atau kosong
+      return 'assets/icon/favicon.png';
+    }
+  }
+  // -------------------------------------------------
+  // ------------------------------------
+
   ngOnInit() {
     this.loadData();
 
@@ -32,9 +49,6 @@ export class LearningPage implements OnInit, OnDestroy {
       (berubah) => {
         if (berubah) {
           console.log('Sinyal diterima, menunggu sinkronisasi database...');
-
-          // 🟢 Tambahkan jeda 1 detik (1000ms) untuk memberi waktu
-          // server Laravel menyelesaikan penulisan data ke database
           setTimeout(() => {
             console.log('Menarik data segar setelah jeda...');
             this.loadData();
@@ -44,7 +58,6 @@ export class LearningPage implements OnInit, OnDestroy {
     );
   }
 
-  // TAMBAHAN: Bersihkan memory agar aplikasi tidak berat
   ngOnDestroy() {
     if (this.progressSub) {
       this.progressSub.unsubscribe();
@@ -67,7 +80,6 @@ export class LearningPage implements OnInit, OnDestroy {
           this.allEnrollments = res.data.filter(
             (item: any) => String(item.status).toLowerCase() === 'success',
           );
-
           console.log(
             'Data Riwayat Belajar Asli Student:',
             this.allEnrollments,
@@ -89,22 +101,14 @@ export class LearningPage implements OnInit, OnDestroy {
 
   filterData() {
     this.filteredEnrollments = this.allEnrollments.filter((item) => {
-      // Memastikan nilai progres adalah angka murni
       const nilaiProgress = parseInt(item.progress, 10) || 0;
-
-      // Ambil status kuis sebagai string aman
       const statusKuis = (item.quiz_status || item.status_quiz || '')
         .toString()
         .toLowerCase();
 
-      // Kuis lulus jika status 'passed' atau progres sudah 100%
-      const kuisLulus = statusKuis === 'passed' || nilaiProgress >= 100;
-
       if (this.activeTab === 'ongoing') {
-        // Tampilkan di Ongoing jika progress belum 100%
         return nilaiProgress < 100;
       } else {
-        // Tampilkan di Completed jika progress sudah 100%
         return nilaiProgress >= 100;
       }
     });
@@ -121,9 +125,6 @@ export class LearningPage implements OnInit, OnDestroy {
   async openQuiz(item: any) {
     const targetId =
       item.course_id || (item.course ? item.course.id : null) || item.id;
-
-    console.log('Mengirim student ke kuis untuk ID Kursus:', targetId);
-
     if (targetId) {
       this.navCtrl.navigateForward(['/quiz', targetId]);
     } else {

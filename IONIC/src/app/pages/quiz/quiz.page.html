@@ -43,39 +43,55 @@
         {{ questions[currentQuestionIndex]['question'] }}
       </h3>
     </div>
-    <ion-radio-group [value]="selectedAnswer">
+    <ion-radio-group [(ngModel)]="selectedAnswer">
       <ion-item
-        *ngIf="questions[currentQuestionIndex]['option_a']"
         class="option-item"
         [class.item-radio-checked]="selectedAnswer === 'a'"
-        lines="none"
-        button="true"
+        button
         (click)="selectAnswer('a')"
       >
         <ion-radio slot="start" value="a"></ion-radio>
-        <ion-label
-          class="ion-text-wrap"
-          style="color: #2d3748; margin-left: 10px"
+        <ion-label class="ion-text-wrap"
+          >A. {{ questions[currentQuestionIndex].option_a }}</ion-label
         >
-          A. {{ questions[currentQuestionIndex]['option_a'] }}
-        </ion-label>
       </ion-item>
 
       <ion-item
-        *ngIf="questions[currentQuestionIndex]['option_b']"
         class="option-item"
         [class.item-radio-checked]="selectedAnswer === 'b'"
-        lines="none"
-        button="true"
+        button
         (click)="selectAnswer('b')"
       >
         <ion-radio slot="start" value="b"></ion-radio>
-        <ion-label
-          class="ion-text-wrap"
-          style="color: #2d3748; margin-left: 10px"
+        <ion-label class="ion-text-wrap"
+          >B. {{ questions[currentQuestionIndex].option_b }}</ion-label
         >
-          B. {{ questions[currentQuestionIndex]['option_b'] }}
-        </ion-label>
+      </ion-item>
+
+      <ion-item
+        *ngIf="questions[currentQuestionIndex].option_c"
+        class="option-item"
+        [class.item-radio-checked]="selectedAnswer === 'c'"
+        button
+        (click)="selectAnswer('c')"
+      >
+        <ion-radio slot="start" value="c"></ion-radio>
+        <ion-label class="ion-text-wrap"
+          >C. {{ questions[currentQuestionIndex].option_c }}</ion-label
+        >
+      </ion-item>
+
+      <ion-item
+        *ngIf="questions[currentQuestionIndex].option_d"
+        class="option-item"
+        [class.item-radio-checked]="selectedAnswer === 'd'"
+        button
+        (click)="selectAnswer('d')"
+      >
+        <ion-radio slot="start" value="d"></ion-radio>
+        <ion-label class="ion-text-wrap"
+          >D. {{ questions[currentQuestionIndex].option_d }}</ion-label
+        >
       </ion-item>
     </ion-radio-group>
 
