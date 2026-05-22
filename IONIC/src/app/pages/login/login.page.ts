@@ -75,7 +75,7 @@ export class LoginPage implements OnInit {
 
           this.presentToast('Selamat datang kembali!', 'success');
           this.zone.run(() => {
-            this.navCtrl.navigateRoot('/tabs');
+            this.navCtrl.navigateRoot('/tabs/beranda');
           });
         },
         error: async (err) => {

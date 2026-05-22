@@ -17,6 +17,7 @@ const routes: Routes = [
   { path: 'course-player/:id', loadChildren: () => import('./pages/course-player/course-player.module').then(m => m.CoursePlayerPageModule) },
   { path: 'course-detail/:id', loadChildren: () => import('./pages/course-detail/course-detail.module').then(m => m.CourseDetailPageModule)},
   { path: 'quiz/:id', loadChildren: () => import('./pages/quiz/quiz.module').then(m => m.QuizPageModule) },
+  { path: 'notifications', loadChildren: () => import('./pages/notifications/notifications.module').then(m => m.NotificationsPageModule) },
 
   { path: '**', redirectTo: 'tabs' }
 ];
