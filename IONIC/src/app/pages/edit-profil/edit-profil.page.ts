@@ -33,7 +33,7 @@ export class EditProfilPage implements OnInit {
           // Masukkan data lama ke dalam form biar user tinggal edit teksnya lek
           this.formData.name = user.name || user.nama || '';
           this.formData.email = user.email || '';
-          this.formData.instansi = user.instansi || user.university || 'Mahasiswa Universitas';
+          this.formData.instansi = user.instansi || user.university || '';
         }
       }
     });
@@ -42,7 +42,7 @@ export class EditProfilPage implements OnInit {
   simpanPerubahan() {
     // Validasi super simpel biar gak kosong
     if (!this.formData.name || !this.formData.email) {
-      this.tampilkanToast('Nama dan Email tidak boleh kosong lek!', 'danger');
+      this.tampilkanToast('Nama dan Email tidak boleh kosong!', 'danger');
       return;
     }
 
@@ -52,7 +52,7 @@ export class EditProfilPage implements OnInit {
     this.authService.updateProfile(this.formData).subscribe({
       next: (res: any) => {
         this.isLoading = false;
-        this.tampilkanToast('Profil kamu berhasil diperbarui lek!', 'success');
+        this.tampilkanToast('Profil kamu berhasil diperbarui!', 'success');
         
         // Kembalikan user ke halaman profil utama (Home & Profil otomatis berubah live!)
         this.navCtrl.back();
