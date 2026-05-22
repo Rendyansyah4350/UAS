@@ -172,4 +172,11 @@ export class CourseService {
       headers: this.dapatkanHeaderAutentikasi(),
     });
   }
+
+  //certificate
+  getMyCertificates(): Observable<any> {
+    return this.http.get(`${this.baseApiUrl}/my-certificates`, {
+      headers: this.dapatkanHeaderAutentikasi(),
+    });
+  }
 }

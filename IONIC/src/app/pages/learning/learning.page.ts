@@ -1,5 +1,6 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
 import { NavController, AlertController } from '@ionic/angular';
+import { Router } from '@angular/router';
 import { CourseService } from '../../services/course.service';
 import { Subscription } from 'rxjs';
 
@@ -20,6 +21,7 @@ export class LearningPage implements OnInit, OnDestroy {
   constructor(
     private navCtrl: NavController,
     private alertCtrl: AlertController,
+    private router: Router,
     private courseService: CourseService,
   ) {}
 
@@ -130,5 +132,13 @@ export class LearningPage implements OnInit, OnDestroy {
     } else {
       console.error('Gagal navigasi, ID kursus murni kosong!');
     }
+  }
+  goToSertifikat() {
+    // Jalur resmi jika halaman sertifikat kalian terdaftar di dalam menu tabs:
+    this.router.navigate(['/tabs/certificate']);
+    
+    // 💡 Tips Tambahan Ivan:
+    // Jika halaman sertifikatnya bersarang di dalam submenu profil (misal tabs -> profil -> sertifikat),
+    // jalurnya diganti menjadi: this.router.navigate(['/tabs/profil/certificate']);
   }
 }
