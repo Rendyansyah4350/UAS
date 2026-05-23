@@ -17,12 +17,12 @@
 
   <div class="stats-card">
     <div class="stat-box">
-      <span class="stat-value">{{ userProfile?.total_courses ?? 0 }}</span>
+      <span class="stat-value">{{ angkaKursus }}</span>
       <span class="stat-label">Kursus</span>
     </div>
     <div class="divider"></div>
     <div class="stat-box" (click)="goToCertificate()">
-      <span class="stat-value">{{ userProfile?.total_certificates ?? 0 }}</span>
+      <span class="stat-value">{{ angkaSertifikat }}</span>
       <span class="stat-label primary">Sertifikat</span>
     </div>
   </div>

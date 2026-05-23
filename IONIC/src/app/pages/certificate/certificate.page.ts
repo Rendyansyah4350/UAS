@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { CourseService } from 'src/app/services/course.service';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
 
 @Component({
   selector: 'app-certificate',
@@ -12,7 +13,7 @@ export class CertificatePage implements OnInit {
   listSertifikat: any[] = [];
   isLoading: boolean = false;
 
-  constructor(private courseService: CourseService) { }
+  constructor(private courseService: CourseService, private http: HttpClient) { }
 
   ngOnInit() {
     this.muatDaftarSertifikat();
@@ -41,8 +42,33 @@ export class CertificatePage implements OnInit {
 
   // Fungsi untuk mengunduh berkas PDF sertifikat langsung dari server cPanel
   downloadPdf(idSertifikat: number, namaKursus: string) {
-    // Menembak langsung rute download PDF yang ada di web.php Laravel kamu lek
-    const urlDownload = `https://eduvan.rehalivan.com/admin/certificates/download/${idSertifikat}`;
-    window.open(urlDownload, '_system'); 
+    // 1. Ambil token bearer milik student dari local storage lewat fungsi pembantu Ivan
+    let tokenUser = localStorage.getItem('token');
+    if (tokenUser) {
+      tokenUser = String(tokenUser).replace(/"/g, '').trim();
+    }
+
+    const headers = new HttpHeaders({
+      'Authorization': `Bearer ${tokenUser}`
+    });
+
+    // 2. Tembak rute API download baru yang sudah kita buat di api.php
+    const urlApiDownload = `https://eduvan.rehalivan.com/api/certificates/${idSertifikat}/download`;
+
+    // 3. Tarik data file PDF-nya sebagai Blob (Binary Large Object) langsung di dalam HP
+    this.http.get(urlApiDownload, { headers, responseType: 'blob' }).subscribe({
+      next: (blobData: Blob) => {
+        // 4. Ubah berkas biner blob menjadi link unduhan lokal instan di sistem HP student
+        const linkLokal = document.createElement('a');
+        linkLokal.href = window.URL.createObjectURL(blobData);
+        linkLokal.download = `Sertifikat-${namaKursus.replace(/\s+/g, '_')}.pdf`;
+        linkLokal.click();
+        console.log('Sertifikat resmi berhasil terunduh');
+      },
+      error: (err) => {
+        console.error('Gagal memproses unduhan sertifikat via API:', err);
+        alert('Gagal mendownload sertifikat, pastikan jaringan aman.');
+      }
+    });
   }
 }

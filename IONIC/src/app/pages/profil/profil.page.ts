@@ -1,6 +1,7 @@
 import { Component, OnInit, ChangeDetectorRef } from '@angular/core';
 import { NavController, AlertController, ActionSheetController } from '@ionic/angular';
 import { AuthService } from '../../services/auth';
+import { CourseService } from '../../services/course.service'; // 🚨 1. IMPORT COURSESERVICE LEK!
 
 @Component({
   selector: 'app-profil',
@@ -12,17 +13,20 @@ export class ProfilePage implements OnInit {
   userProfile: any = null;
   selectedAvatar: string = 'assets/icon/avatar-male.png'; 
 
+  angkaKursus: number = 0;
+  angkaSertifikat: number = 0;
+
   constructor(
     private navCtrl: NavController, 
     private alertCtrl: AlertController,
     private authService: AuthService,
     private actionSheetCtrl: ActionSheetController,
-    private cdr: ChangeDetectorRef // 1. Tambahkan ini untuk memaksa update tampilan
+    private cdr: ChangeDetectorRef,
+    private courseService: CourseService // 🟢 2. SUNTIKKAN COURSESERVICE DI CONSTRUCTOR LEK
   ) {}
 
   ngOnInit() {
     this.loadSavedAvatar();
-    // Memantau perubahan data user secara real-time (jika ada)
     this.authService.currentUser$.subscribe((user: any) => {
       if (user) {
         this.userProfile = user;
@@ -33,6 +37,7 @@ export class ProfilePage implements OnInit {
 
   ionViewWillEnter() {
     this.loadProfileFromAPI();
+    this.hitungStatistikMandiri();
   }
 
   loadSavedAvatar() {
@@ -69,28 +74,76 @@ export class ProfilePage implements OnInit {
     this.selectedAvatar = path;
     localStorage.setItem('user_avatar', path);
   }
+  
+  hitungStatistikMandiri() {
+    // A. Hitung Jumlah Kursus Aktif Langsung Tanpa Nunggu API Profil
+    this.courseService.getMyEnrollments().subscribe({
+      next: (enrollRes: any) => {
+        console.log('Jalur Bypass Enrollments Sukses:', enrollRes);
+        const dataKursus = enrollRes.data ? enrollRes.data : enrollRes;
+        if (Array.isArray(dataKursus)) {
+          this.angkaKursus = dataKursus.length;
+          this.cdr.detectChanges(); // Paksa angka kursus langsung berubah di HTML lek!
+        }
+      },
+      error: (err) => console.error('Bypass Kursus Gagal:', err)
+    });
+
+    // B. Hitung Jumlah Sertifikat Langsung Tanpa Nunggu API Profil
+    this.courseService.getMyCertificates().subscribe({
+      next: (certRes: any) => {
+        console.log('Jalur Bypass Certificates Sukses:', certRes);
+        const dataSertifikat = certRes.data ? certRes.data : certRes;
+        if (Array.isArray(dataSertifikat)) {
+          this.angkaSertifikat = dataSertifikat.length;
+          this.cdr.detectChanges(); // Paksa angka sertifikat langsung berubah di HTML lek!
+        }
+      },
+      error: (err) => console.error('Bypass Sertifikat Gagal:', err)
+    });
+  }
 
   loadProfileFromAPI() {
     this.authService.getProfileFromServer().subscribe({
       next: (res: any) => { 
         if (res) {
-          this.userProfile = res;
-          // 3. 🔥 PENTING: Deteksi perubahan agar HTML terupdate
+          this.userProfile = res.data ? res.data : res;
+
+          // ==========================================================================
+          // 🟢 HITUNG KURSUS & MASUKKAN KE VARIABEL MANDIRI
+          // ==========================================================================
+          this.courseService.getMyEnrollments().subscribe({
+            next: (enrollRes: any) => {
+              const dataKursus = enrollRes.data ? enrollRes.data : enrollRes;
+              if (Array.isArray(dataKursus)) {
+                this.angkaKursus = dataKursus.length; // <-- Masuk ke variabel mandiri lek
+                this.cdr.detectChanges(); 
+              }
+            }
+          });
+
+          // ==========================================================================
+          // 🟢 HITUNG SERTIFIKAT & MASUKKAN KE VARIABEL MANDIRI
+          // ==========================================================================
+          this.courseService.getMyCertificates().subscribe({
+            next: (certRes: any) => {
+              const dataSertifikat = certRes.data ? certRes.data : certRes;
+              if (Array.isArray(dataSertifikat)) {
+                this.angkaSertifikat = dataSertifikat.length; // <-- Masuk ke variabel mandiri lek
+                this.cdr.detectChanges(); 
+              }
+            }
+          });
+
           this.cdr.detectChanges(); 
-          console.log("Data profil terbaru berhasil dimuat:", this.userProfile);
         }
       },
       error: (err) => {
         console.error('Error saat load profile:', err);
-        if (err.status === 401) {
-          this.authService.logout();
-          this.navCtrl.navigateRoot('/login');
-        }
       }
     });
   }
 
-  // Navigasi menggunakan array agar masuk ke rute Tabs
   goToEdit() { this.navCtrl.navigateForward(['/tabs/edit-profil']); }
   goToCertificate() { this.navCtrl.navigateForward(['/tabs/certificate']); } 
   goToHistory() { this.navCtrl.navigateForward(['/tabs/riwayat-transaksi']); }
