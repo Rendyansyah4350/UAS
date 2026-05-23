@@ -5,7 +5,8 @@ namespace App\Http\Controllers\Api;
 use App\Http\Controllers\Controller;
 use App\Models\Progress;
 use App\Models\Content;
-use App\Models\Enrollment; // 🟢 Tambahkan model Enrollment untuk update otomatis
+use App\Models\QuizResult;
+use App\Models\Enrollment; // Ã°Å¸Å¸Â¢ Tambahkan model Enrollment untuk update otomatis
 use Illuminate\Http\Request;
 
 class ProgressController extends Controller
@@ -39,7 +40,7 @@ class ProgressController extends Controller
             ], 403);
         }
 
-        // 4. Jika lolos validasi, simpan progres quiz
+        // 4. Jika lolos validasi, simpan progres quiz ke tabel progress (Jalur Ionic Ivan)
         $progress = Progress::updateOrCreate(
             [
                 'user_id' => $user_id,
@@ -52,12 +53,24 @@ class ProgressController extends Controller
             ]
         );
 
-        // 🟢 OTOMATISASI: Hitung ulang dan update kolom progress di tabel enrollments
+        // ==========================================================================
+        // ðŸŒŸ KUNCI FIX SAKTI: SIMPAN JURUS KEDUA KE TABEL QUIZ_RESULTS (Jalur Admin)
+        // ==========================================================================
+        QuizResult::updateOrCreate(
+            [
+                'user_id'   => $user_id,
+                'course_id' => $course_id,
+            ],
+            [
+                'score'     => $request->score,
+            ]
+        );
+
         $this->calculateAndSaveEnrollmentProgress($user_id, $course_id);
 
         return response()->json([
             'success' => true,
-            'message' => 'Quiz berhasil disubmit!',
+            'message' => 'Quiz berhasil disubmit dan disinkronkan ke Admin lek!',
             'data' => $progress
         ]);
     }
@@ -85,7 +98,7 @@ class ProgressController extends Controller
             ]
         );
 
-        // 🟢 OTOMATISASI: Hitung ulang dan update kolom progress di tabel enrollments
+        // Ã°Å¸Å¸Â¢ OTOMATISASI: Hitung ulang dan update kolom progress di tabel enrollments
         $this->calculateAndSaveEnrollmentProgress($user_id, $course_id);
 
         return response()->json([
@@ -149,8 +162,12 @@ class ProgressController extends Controller
     }
 
     /**
-     * 🟢 FUNGSI OTOMATIS: Menghitung akumulasi progress materi + quiz,
+     * Ã°Å¸Å¸Â¢ FUNGSI OTOMATIS: Menghitung akumulasi progress materi + quiz,
      * lalu menyimpannya langsung ke kolom 'progress' milik tabel enrollments.
+     */
+/**
+     * ðŸŸ¢ PERBAIKAN SAKTI: Menghitung akumulasi progress materi + quiz secara presisi,
+     * memastikan tidak ada kebocoran data ganda antar course di database MySQL.
      */
     private function calculateAndSaveEnrollmentProgress($user_id, $course_id)
     {
@@ -158,11 +175,14 @@ class ProgressController extends Controller
         $totalMateri = Content::where('course_id', $course_id)->count();
         $totalItemWajib = $totalMateri + 1; // Ditambah 1 karena ada Quiz di akhir course
 
-        // 2. Hitung berapa video yang sudah beres ditonton user
+        // 2. KUNCI QUERY: Hitung materi selesai dengan memastikan content_id benar-owned oleh course ini
         $materiSelesai = Progress::where('user_id', $user_id)
             ->where('course_id', $course_id)
             ->whereNotNull('content_id')
             ->where('is_completed', true)
+            ->whereHas('content', function ($query) use ($course_id) {
+                $query->where('course_id', $course_id);
+            })
             ->count();
 
         // 3. Cek apakah user sudah menyelesaikan Quiz (content_id bernilai null di tabel progress)
@@ -172,18 +192,22 @@ class ProgressController extends Controller
             ->where('is_completed', true)
             ->count();
 
+        // Amankan nilai quizSelesai maksimal 1 agar tidak duplikat jika user submit berkali-kali
+        if ($quizSelesai > 1) {
+            $quizSelesai = 1;
+        }
+
         $totalSelesai = $materiSelesai + $quizSelesai;
 
         // 4. Hitung persentase murni angka bulat (0 - 100)
-        $finalPercentage = $totalItemWajib > 0 ? round(($totalSelesai / $totalItemWajib) * 100) : 0;
+        $finalPercentage = $totalItemWajib > 0 ? (int) round(($totalSelesai / $totalItemWajib) * 100) : 0;
 
-        // Batasi angka maksimal 100% biar tidak luber jika ada anomali data
-        if ($finalPercentage > 100)
-        {
+        // Paksa potong di angka maksimal 100% jika kalkulasi database meluber
+        if ($finalPercentage > 100) {
             $finalPercentage = 100;
         }
 
-        // 5. Eksekusi update langsung ke tabel enrollments database cPanel kamu
+        // 5. Eksekusi update langsung ke tabel enrollments database cPanel
         Enrollment::where('user_id', $user_id)
             ->where('course_id', $course_id)
             ->update([

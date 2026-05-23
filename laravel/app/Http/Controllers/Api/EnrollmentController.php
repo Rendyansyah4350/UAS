@@ -59,7 +59,7 @@ class EnrollmentController extends Controller
             $externalId = 'eduvan-' . $user->id . '-' . $course->id . '-' . time();
             $invoiceUrl = null;
 
-            // 🟢 TEMBAK RAW API KE XENDIT (ANTI RIBET, GAK BUTUH VENDOR COMPOSER)
+            // Ã°Å¸Å¸Â¢ TEMBAK RAW API KE XENDIT (ANTI RIBET, GAK BUTUH VENDOR COMPOSER)
             if ($price > 0)
             {
                 $secretKey = env('XENDIT_SECRET_KEY');
@@ -122,53 +122,52 @@ class EnrollmentController extends Controller
     {
         $userId = $request->user()->id;
 
-        $histori = Enrollment::with(['course', 'user.quizResults'])
+        $histori = Enrollment::with(['course']) // Disederhanakan tanpa mapping ganda yang berat
             ->where('user_id', $userId)
             ->get()
             ->map(function ($item) use ($userId)
             {
-                // Cari hasil kuis untuk kursus ini
-                $quizResult = $item->user->quizResults
-                    ->where('course_id', $item->course_id)
-                    ->first();
-
-                // Tambahkan data kuis ke dalam objek kursus
-                $item->quiz_status = $quizResult ? $quizResult->status : null;
-                $item->quiz_score = $quizResult ? $quizResult->score : null;
-
-                // 🟢 TAMBAHAN SAKTI: Hitung ulang total progress secara live & dinamis agar singkron saat admin nambah video baru
+                // 1. Hitung total materi video asli di kursus ini
                 $totalMateri = \Illuminate\Support\Facades\DB::table('contents')
                     ->where('course_id', $item->course_id)
                     ->count();
 
+                // 2. KUNCI UTAMA: Hitung materi video yang selesai (Wajib ada content_id)
                 $materiSelesai = \Illuminate\Support\Facades\DB::table('progress')
                     ->where('user_id', $userId)
                     ->where('course_id', $item->course_id)
+                    ->whereNotNull('content_id') // Memastikan baris kuis tidak ikut terhitung di sini
                     ->where('is_completed', 1)
                     ->count();
 
-                // 🟢 GERBANG 1: Tentukan status gembok akses kuis (Hanya true jika semua video sudah ditonton)
+                // 3. Cek apakah kuis sudah pernah dikerjakan (content_id bernilai NULL di tabel progress)
+                $isQuizSelesai = \Illuminate\Support\Facades\DB::table('progress')
+                    ->where('user_id', $userId)
+                    ->where('course_id', $item->course_id)
+                    ->whereNull('content_id')
+                    ->where('is_completed', 1)
+                    ->exists();
+
+                // ðŸŸ¢ GERBANG 1: Gembok akses kuis (Bisa diakses jika semua video sudah ditonton)
                 $item->is_quiz_unlocked = ($totalMateri > 0 && $materiSelesai === $totalMateri);
 
-                // 🟢 GERBANG 2: Hitung persentase progress dan amankan angka 100% sebelum kuis lulus
-                if ($totalMateri > 0)
-                {
-                    $persentaseVideo = round(($materiSelesai / $totalMateri) * 100);
+                // ðŸŸ¢ GERBANG 2: Kalkulasi progres akumulatif murni (Materi + Kuis)
+                $totalItemWajib = $totalMateri + 1; // Video + Kuis
+                $totalItemSelesai = $materiSelesai + ($isQuizSelesai ? 1 : 0);
 
-                    // Jika semua materi video udah kelar ditonton, tapi status kuis belum 'passed', tahan di 99%
-                    if ($persentaseVideo === 100 && $item->quiz_status !== 'passed')
-                    {
-                        $item->progress = 99;
-                    }
-                    else
-                    {
-                        // Jika belum tonton semua, atau kuisnya emang udah sukses lulus, biarkan pake nilai aslinya
-                        $item->progress = $persentaseVideo;
-                    }
+                if ($totalItemWajib > 0)
+                {
+                    $item->progress = (int) round(($totalItemSelesai / $totalItemWajib) * 100);
                 }
                 else
                 {
                     $item->progress = 0;
+                }
+
+                // Amankan nilai maksimal jika ada anomali database
+                if ($item->progress > 100)
+                {
+                    $item->progress = 100;
                 }
 
                 return $item;
@@ -233,7 +232,7 @@ class EnrollmentController extends Controller
     // Jalur Webhook penangkap konfirmasi pelunasan dari Xendit
     public function handleCallback(Request $request)
     {
-        // 🟢 Bikin log mandiri khusus callback biar ketahuan isi kiriman Xendit
+        // Ã°Å¸Å¸Â¢ Bikin log mandiri khusus callback biar ketahuan isi kiriman Xendit
         $logFile = storage_path('logs/callback_xendit.txt');
         file_put_contents($logFile, "[" . date('Y-m-d H:i:s') . "] Webhook Masuk: " . json_encode($request->all()) . "\n", FILE_APPEND);
 
@@ -246,7 +245,7 @@ class EnrollmentController extends Controller
             // 2. Cari data pendaftaran berdasarkan external_id di DB lokal
             $enrollment = Enrollment::where('external_id', $externalId)->first();
 
-            // 💡 TRICK UNTUK BUTTON "TES DAN SIMPAN" XENDIT:
+            // Ã°Å¸â€™Â¡ TRICK UNTUK BUTTON "TES DAN SIMPAN" XENDIT:
             // Jika ini cuma data dummy simulasi, external_id pasti ga ketemu di DB.
             // Kita langsung respon sukses 200 ke Xendit biar tombolnya ijo tanpa ngerusak DB.
             if (!$enrollment)

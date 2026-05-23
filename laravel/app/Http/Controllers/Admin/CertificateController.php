@@ -17,35 +17,43 @@ class CertificateController extends Controller
 {
     public function index()
     {
-        // 1. Ambil semua kursus beserta student-nya, progress, DAN quizResults sekaligus (Eager Loading)
-        $courses = Course::with(['users.progress', 'users.quizResults', 'contents'])->get();
+        // 1. Ambil semua kursus beserta konten materi dan user yang terdaftar via enrollments
+        $courses = Course::with(['users', 'contents'])->get();
 
         $pendingCertificates = collect();
 
         foreach ($courses as $course)
         {
+            // Hitung total materi yang ada di dalam kursus ini
             $totalMateri = $course->contents->count();
 
             if ($totalMateri === 0) continue;
 
             foreach ($course->users as $user)
             {
-                // Hitung materi yang selesai
-                $userCompleted = $user->progress
+                // ==========================================================================
+                // ðŸŸ¢ FIX SAKTI: Tembak Langsung ke Model Progress Berdasarkan ID User & Course
+                // ==========================================================================
+                $userProgress = Progress::where('user_id', $user->id)
                     ->where('course_id', $course->id)
+                    ->get();
+
+                // Hitung jumlah materi video yang berstatus selesai (content_id TIDAK NULL)
+                $userCompleted = $userProgress
                     ->where('is_completed', true)
                     ->whereNotNull('content_id')
                     ->count();
 
-                // 2. TAMBAHAN: Cek apakah user sudah mengerjakan kuis (status passed/failed gak masalah)
-                $isQuizDone = $user->quizResults
-                    ->where('course_id', $course->id)
+                // Cek status kuis dari tabel progress (content_id NYA NULL)
+                $isQuizDone = $userProgress
+                    ->where('is_completed', true)
+                    ->whereNull('content_id')
                     ->isNotEmpty();
 
-                // Syarat: Materi Selesai DAN Kuis Sudah Dikerjakan
+                // Syarat mutlak kelulusan: Video ditonton semua DAN kuis sudah selesai dikerjakan
                 if ($userCompleted >= $totalMateri && $isQuizDone)
                 {
-                    // Cek apakah sertifikat sudah ada
+                    // Cek apakah sertifikat sudah pernah diterbitkan sebelumnya
                     $user->already_has_certificate = Certificate::where('user_id', $user->id)
                         ->where('course_id', $course->id)
                         ->exists();
@@ -60,7 +68,7 @@ class CertificateController extends Controller
             }
         }
 
-        // Menggunakan unique untuk memastikan satu student-satu kursus tidak muncul dobel
+        // Memastikan satu student di satu kelas tidak muncul dobel di tabel admin
         $pendingCertificates = $pendingCertificates->unique(function ($item)
         {
             return $item->user_id . $item->course_id;
