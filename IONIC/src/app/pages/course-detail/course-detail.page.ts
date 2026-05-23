@@ -274,9 +274,11 @@ export class CourseDetailPage implements OnInit {
 
   // 🟢 TAMBAHAN: Fungsi tombol "Mulai Belajar" jika status sudah sukses lunas
   masukKelas() {
-    console.log('User masuk ke ruang belajar kursus:', this.course.id);
-    this.router.navigate([`/course/${this.course.id}/learning`]);
-  }
+      console.log('User masuk ke ruang belajar kursus:', this.course.id);
+      
+      // Melempar student langsung ke halaman My Learning resmi di tabs
+      this.router.navigate(['/tabs/my-learning']);
+    }
 
   // 🟢 LOGIKA KLIK TOMBOL JANTUNG (SINKRONISASI INSTAN TANPA DELAY)
   toggleWishlist() {
