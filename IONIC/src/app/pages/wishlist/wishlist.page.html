@@ -12,7 +12,9 @@
 
   <ng-container *ngIf="!isLoading">
     <div *ngIf="wishlistCourses.length === 0" class="empty-wishlist-box">
-      <ion-icon name="heart-dislike-outline"></ion-icon>
+      <div class="empty-icon-circle">
+        <ion-icon name="heart-dislike-outline"></ion-icon>
+      </div>
       <h3>Belum Ada Wishlist</h3>
       <p>
         Kursus yang kamu sukai di katalog nanti akan muncul berkumpul di sini.
@@ -21,18 +23,28 @@
 
     <ion-grid
       *ngIf="wishlistCourses.length > 0"
-      class="wishlist-grid-container"
+      class="wishlist-grid-container ion-no-padding"
     >
-      <ion-row>
-        <ion-col size="6" *ngFor="let item of wishlistCourses; let i = index">
-          <ion-card (click)="goToDetail(item.course?.id || item.course_id)">
+      <ion-row class="ion-padding-horizontal ion-padding-vertical">
+        <ion-col
+          size="6"
+          *ngFor="let item of wishlistCourses; let i = index"
+          class="wishlist-col"
+        >
+          <div
+            class="premium-grid-card"
+            (click)="goToDetail(item.course?.id || item.course_id)"
+          >
             <div class="img-container">
               <img
-                [src]="item.course?.image || 'assets/imgs/course-coding.jpg'"
+                [src]="(item.course?.image && item.course.image.trim() !== '') ? item.course.image : getCategoryLogo(item.course?.category)"
+                alt="Thumbnail Kursus"
+                #wishlistImg
+                (error)="wishlistImg.src = getCategoryLogo(item.course?.category); wishlistImg.onerror = null;"
               />
 
               <div
-                class="wishlist-heart-btn"
+                class="wishlist-heart-floating-btn"
                 (click)="hapusDariWishlist($event, item.course?.id || item.course_id, i)"
               >
                 <ion-icon name="heart" class="hati-aktif"></ion-icon>
@@ -40,28 +52,33 @@
             </div>
 
             <div class="card-content">
-              <span class="category-tag"
-                >{{ item.course?.category ?? 'General' }}</span
-              >
-
-              <ion-card-title
-                >{{ item.course?.title || 'Judul Kursus' }}</ion-card-title
-              >
-
-              <div class="rating">
-                <ion-icon name="star" color="warning"></ion-icon>
-                <span
-                  >{{ item.course?.rating ? (item.course?.rating |
-                  number:'1.1-1') : '5.0' }} | Live</span
+              <div class="meta-tag-row">
+                <span class="category-tag"
+                  >{{ item.course?.category ?? 'General' }}</span
                 >
+                <span class="live-badge-dot">Live</span>
               </div>
 
-              <h2 class="price">
-                {{ item.course?.price == 0 || item.course?.price == '0' ?
-                'Gratis' : 'Rp ' + (item.course?.price | number) }}
-              </h2>
+              <h3 class="course-title-text">
+                {{ item.course?.title || 'Judul Kursus' }}
+              </h3>
+
+              <div class="rating-row-micro">
+                <ion-icon name="star"></ion-icon>
+                <span class="rating-val">
+                  {{ item.course?.rating ? (item.course?.rating |
+                  number:'1.1-1') : '5.0' }}
+                </span>
+              </div>
+
+              <div class="price-zone">
+                <h2 class="price-text">
+                  {{ item.course?.price == 0 || item.course?.price == '0' ?
+                  'Gratis' : 'Rp ' + (item.course?.price | number) }}
+                </h2>
+              </div>
             </div>
-          </ion-card>
+          </div>
         </ion-col>
       </ion-row>
     </ion-grid>

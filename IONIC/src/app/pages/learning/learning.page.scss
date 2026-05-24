@@ -1,45 +1,241 @@
-$navy-color: #093C5D;
+$navy-color: #093c5d;
+$navy-light-surface: #f0f6fa;
+$navy-border-tint: #e2edf5;
 
-// Header Navy seragam (70px)
+* {
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif !important;
+}
+
+// HEADER NAVY THEME INTEGRATION
 .header-navy {
   background: $navy-color;
-  height: 70px;
-  border-bottom-left-radius: 20px;
-  border-bottom-right-radius: 20px;
+  height: 72px;
+  border-bottom-left-radius: 24px;
+  border-bottom-right-radius: 24px;
   display: flex;
   align-items: center;
-  justify-content: center; // Judul ke tengah
+  justify-content: center;
   padding: 0 20px;
-  
-  ion-title { 
-    color: #ffffff; 
-    font-weight: 700; 
-    font-size: 1.2rem; 
-    text-align: center; // Memastikan teks di tengah
+  box-shadow: 0 4px 14px rgba(9, 60, 93, 0.2);
+
+  ion-title {
+    color: #ffffff;
+    font-weight: 800;
+    font-size: 1.25rem;
+    letter-spacing: -0.3px;
+    text-align: center;
     padding: 0;
   }
 }
 
-// Segment
-.segment-container { padding: 15px; }
+// PREMIUM SEGMENT CONTROL OVERRIDE
+.segment-container {
+  padding: 20px 16px 12px 16px;
 
-// Course Card
-.course-card {
-  margin: 0 0 16px 0; border-radius: 16px; box-shadow: 0 4px 12px rgba(0,0,0,0.05);
-  .card-content { display: flex; padding: 12px; gap: 12px; }
-  .img-box { width: 80px; height: 80px; background: #eee; border-radius: 12px; flex-shrink: 0; }
-  .info { flex: 1; }
-  h3 { margin: 0 0 5px 0; font-size: 14px; font-weight: 700; }
-  .progress-text { font-size: 11px; color: #666; margin: 0 0 5px 0; }
+  ion-segment {
+    background: #edf2f7;
+    border-radius: 12px;
+    padding: 3px;
+
+    ion-segment-button {
+      --background-checked: #ffffff;
+      --color-checked: #093c5d;
+      --color: #718096;
+      font-weight: 700;
+      font-size: 13px;
+      margin: 0;
+      border-radius: 10px;
+      min-height: 36px;
+      letter-spacing: -0.1px;
+    }
+  }
 }
 
-.custom-progress { 
-  height: 6px; border-radius: 3px; 
-  --progress-background: $navy-color; 
-  margin-bottom: 10px;
+// WRAPPER UTAMA LIST KURSUS
+.course-container {
+  padding: 8px 16px 32px 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
 }
 
-.actions { display: flex; gap: 8px; }
+// PREMIUM MODERN DESIGN FOR CARDS
+.premium-course-card {
+  background: #ffffff;
+  border: 1px solid $navy-border-tint;
+  border-radius: 20px;
+  padding: 16px;
+  box-shadow: 0 6px 16px rgba(9, 60, 93, 0.03);
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  box-sizing: border-box;
+  width: 100%;
 
-// Tombol seragam
-ion-button { --border-radius: 8px; font-weight: 700; }
+  // Baris Atas: Profil Image & Judul Kelas
+  .card-main-body {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    width: 100%;
+
+    .img-category-box {
+      width: 68px;
+      height: 68px;
+      background: $navy-light-surface;
+      border: 1px solid $navy-border-tint;
+      border-radius: 14px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+      overflow: hidden;
+
+      img {
+        width: 100%;
+        height: 100%;
+        object-fit: contain;
+        padding: 8px;
+      }
+    }
+
+    .metadata-info-box {
+      flex: 1;
+      overflow: hidden;
+
+      .category-badge-meta {
+        font-size: 9.5px;
+        font-weight: 700;
+        text-transform: uppercase;
+        color: #5a738e;
+        letter-spacing: 0.6px;
+        display: inline-block;
+        margin-bottom: 3px;
+      }
+
+      .course-title-text {
+        margin: 0;
+        font-size: 14px;
+        font-weight: 800;
+        color: $navy-color;
+        line-height: 1.4;
+        text-overflow: ellipsis;
+        display: -webkit-box;
+        -webkit-line-clamp: 2;
+        -webkit-box-orient: vertical;
+        overflow: hidden;
+      }
+    }
+  }
+
+  // Baris Tengah: Komponen Progress
+  .card-progress-zone {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    width: 100%;
+
+    .progress-meta-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+
+      .lbl-prog { font-size: 11px; color: #64748b; font-weight: 500; }
+      .val-prog { font-size: 11.5px; color: $navy-color; font-weight: 700; }
+    }
+
+    .custom-progress {
+      height: 6px;
+      border-radius: 4px;
+      --progress-background: #093c5d;
+      --background: #e2edf5;
+    }
+  }
+
+  // Baris Bawah: Tombol Kontrol
+  .card-action-footer {
+    width: 100%;
+    margin-top: 2px;
+
+    .action-grid-buttons {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      width: 100%;
+
+      ion-button {
+        margin: 0;
+        height: 38px;
+        font-size: 12.5px;
+        font-weight: 700;
+        --border-radius: 10px;
+        --box-shadow: none;
+      }
+
+      // Tombol Lanjut Belajar Dominan Navy
+      .btn-action-main {
+        flex: 1.3;
+        --background: #093c5d;
+        --color: #ffffff;
+
+        ion-icon { font-size: 14px; margin-left: 2px; }
+      }
+
+      // Tombol Kuis / Locked Outline
+      .btn-action-sub {
+        flex: 0.9;
+        font-size: 12px;
+        --border-width: 1.5px;
+
+        ion-icon { font-size: 14px; }
+      }
+
+      // Tombol Sukses Sertifikat Full Width
+      .btn-action-success {
+        width: 100%;
+        font-size: 13px;
+        --border-width: 1.5px;
+
+        ion-icon { font-size: 15px; margin-right: 4px; }
+      }
+    }
+  }
+}
+
+// UNIVERSAL EMPTY & LOADING STATE BOX
+.empty-state-box {
+  padding: 60px 24px;
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+
+  ion-spinner {
+    --color: #093c5d;
+    width: 32px;
+    height: 32px;
+  }
+
+  .empty-icon-circle {
+    width: 64px;
+    height: 64px;
+    border-radius: 50%;
+    background: #f1f5f9;
+    color: #94a3b8;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 28px;
+    margin-bottom: 4px;
+  }
+
+  p {
+    margin: 0;
+    font-size: 13.5px;
+    color: #64748b;
+    font-weight: 500;
+    line-height: 1.4;
+  }
+}

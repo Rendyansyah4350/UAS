@@ -12,98 +12,101 @@
     </ion-segment>
   </div>
 
-  <div *ngIf="loading" class="ion-text-center ion-padding">
-    <ion-spinner name="crescent" color="primary"></ion-spinner>
-    <p style="color: #a0aec0; font-size: 14px">Memuat kelas kamu...</p>
+  <div *ngIf="loading" class="empty-state-box">
+    <ion-spinner name="crescent"></ion-spinner>
+    <p>Memuat kelas kamu...</p>
   </div>
 
   <div
     *ngIf="!loading && filteredEnrollments.length === 0"
-    class="ion-text-center ion-padding"
-    style="margin-top: 40px"
+    class="empty-state-box"
   >
-    <ion-icon
-      name="book-outline"
-      style="font-size: 64px; color: #cbd5e0"
-    ></ion-icon>
-    <p style="color: #718096; margin-top: 10px">
-      Tidak ada kursus yang ditemukan di tab ini.
-    </p>
+    <div class="empty-icon-circle">
+      <ion-icon name="book-outline"></ion-icon>
+    </div>
+    <p>Tidak ada kursus yang ditemukan di tab ini.</p>
   </div>
 
   <div
-    class="course-list ion-padding"
+    class="course-container"
     *ngIf="!loading && filteredEnrollments.length > 0"
   >
-    <ion-card *ngFor="let item of filteredEnrollments" class="course-card">
-      <div class="card-content">
-        <div
-          class="img-box"
-          style="
-            width: 90px;
-            height: 90px;
-            padding: 0;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            overflow: hidden;
-            border-radius: 8px;
-            flex-shrink: 0;
-          "
-        >
+    <div *ngFor="let item of filteredEnrollments" class="premium-course-card">
+      <div class="card-main-body">
+        <div class="img-category-box">
           <img
-            [src]="getCategoryLogo(item.course?.category)"
-            alt="Logo Kategori"
-            style="
-              width: 100%;
-              height: 100%;
-              object-fit: contain;
-              padding: 10px;
-            "
+            [src]="item.course?.image ? item.course.image : getCategoryLogo(item.course?.category)"
+            alt="Thumbnail Kursus"
+            (error)="$any($event.target).src = getCategoryLogo(item.course?.category)"
           />
         </div>
 
-        <div class="info">
-          <h3>{{ item.course?.title || 'Memuat Nama Kursus...' }}</h3>
-
-          <p class="progress-text">{{ item.progress || 0 }}% Selesai</p>
-          <ion-progress-bar
-            [value]="(item.progress || 0) / 100"
-            class="custom-progress"
-          ></ion-progress-bar>
-
-          <div class="actions" *ngIf="activeTab === 'ongoing'">
-            <ion-button
-              size="small"
-              (click)="goToPlayer(item.course_id || item.course?.id)"
-            >
-              LANJUT BELAJAR
-            </ion-button>
-
-            <ion-button
-              size="small"
-              fill="outline"
-              [color]="item.is_quiz_unlocked ? 'warning' : 'medium'"
-              [disabled]="!item.is_quiz_unlocked"
-              (click)="openQuiz({ course_id: item.course_id || item.course?.id || item.id })"
-            >
-              <ion-icon
-                name="lock-closed-outline"
-                slot="start"
-                *ngIf="!item.is_quiz_unlocked"
-                style="font-size: 14px; margin-right: 2px"
-              ></ion-icon>
-              {{ item.is_quiz_unlocked ? 'KUIS' : 'TERKUNCI' }}
-            </ion-button>
-          </div>
-
-          <div class="actions" *ngIf="activeTab === 'completed'">
-            <ion-button expand="block" fill="outline" color="success" (click)="goToSertifikat()">
-              LIHAT SERTIFIKAT
-            </ion-button>
-          </div>
+        <div class="metadata-info-box">
+          <span class="category-badge-meta"
+            >{{ item.course?.category || 'General' }}</span
+          >
+          <h3 class="course-title-text">
+            {{ item.course?.title || 'Memuat Nama Kursus...' }}
+          </h3>
         </div>
       </div>
-    </ion-card>
+
+      <div class="card-progress-zone">
+        <div class="progress-meta-row">
+          <span class="lbl-prog">Progress Belajar</span>
+          <span class="val-prog">{{ item.progress || 0 }}% Selesai</span>
+        </div>
+        <ion-progress-bar
+          [value]="(item.progress || 0) / 100"
+          class="custom-progress"
+        ></ion-progress-bar>
+      </div>
+
+      <div class="card-action-footer">
+        <div class="action-grid-buttons" *ngIf="activeTab === 'ongoing'">
+          <ion-button
+            class="btn-action-main"
+            expand="block"
+            (click)="goToPlayer(item.course_id || item.course?.id)"
+          >
+            Lanjut Belajar
+            <ion-icon name="arrow-forward-outline" slot="end"></ion-icon>
+          </ion-button>
+
+          <ion-button
+            class="btn-action-sub"
+            fill="outline"
+            [color]="item.is_quiz_unlocked ? 'warning' : 'medium'"
+            [disabled]="!item.is_quiz_unlocked"
+            (click)="openQuiz({ course_id: item.course_id || item.course?.id || item.id })"
+          >
+            <ion-icon
+              name="lock-closed-outline"
+              slot="start"
+              *ngIf="!item.is_quiz_unlocked"
+            ></ion-icon>
+            <ion-icon
+              name="trophy-outline"
+              slot="start"
+              *ngIf="item.is_quiz_unlocked"
+            ></ion-icon>
+            {{ item.is_quiz_unlocked ? 'Kuis' : 'Terkunci' }}
+          </ion-button>
+        </div>
+
+        <div class="action-grid-buttons" *ngIf="activeTab === 'completed'">
+          <ion-button
+            class="btn-action-success"
+            expand="block"
+            fill="outline"
+            color="success"
+            (click)="goToSertifikat()"
+          >
+            <ion-icon name="ribbon-outline" slot="start"></ion-icon>
+            Lihat Sertifikat Kelulusan
+          </ion-button>
+        </div>
+      </div>
+    </div>
   </div>
 </ion-content>

@@ -75,27 +75,30 @@
       </p>
 
       <ion-list lines="full" *ngIf="!loading && contents.length > 0">
-        <ion-item
-          button
-          *ngFor="let materi of contents; let i = index"
-          (click)="putarMateri(materi)"
-        >
-          <ion-icon
-            slot="start"
-            [name]="materi.is_completed === 1 ? 'checkmark-circle' : 'play-circle'"
-            [color]="materi.is_completed === 1 ? 'success' : 'primary'"
+        <div #aktif style="display: contents">
+          <ion-item
+            button
+            *ngFor="let materi of contents; let i = index"
+            (click)="putarMateri(materi); aktif.className = i.toString()"
+            [style.--background]="aktif.className === i.toString() ? '#e2e8f0' : 'transparent'"
           >
-          </ion-icon>
-
-          <ion-label>
-            <h2
-              [style.color]="materi.is_completed === 1 ? 'var(--ion-color-success)' : 'inherit'"
-              [style.font-weight]="materi.is_completed === 1 ? '500' : 'normal'"
+            <ion-icon
+              slot="start"
+              [name]="materi.is_completed === 1 ? 'checkmark-circle' : 'play-circle'"
+              [color]="materi.is_completed === 1 ? 'success' : 'primary'"
             >
-              {{ i + 1 }}. {{ materi.title }}
-            </h2>
-          </ion-label>
-        </ion-item>
+            </ion-icon>
+
+            <ion-label>
+              <h2
+                [style.color]="materi.is_completed === 1 ? 'var(--ion-color-success)' : 'inherit'"
+                [style.font-weight]="materi.is_completed === 1 || aktif.className === i.toString() ? '700' : 'normal'"
+              >
+                {{ i + 1 }}. {{ materi.title }}
+              </h2>
+            </ion-label>
+          </ion-item>
+        </div>
       </ion-list>
     </div>
 

@@ -1,29 +1,119 @@
-.video-container {
-  width: 100%;
-  height: 220px;
-  background: #000;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  .video-placeholder { text-align: center; color: white; ion-icon { font-size: 50px; } }
+// 1. HEADER & TOOLBAR (Tetap Kotak Flat Sesuai Warna Primary Asli)
+ion-header {
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
 }
 
+ion-toolbar {
+  --border-width: 0 !important;
+
+  ion-title {
+    font-weight: 700;
+    font-size: 1.1rem;
+    letter-spacing: -0.2px;
+  }
+}
+
+// 2. VIDEO CONTAINER (Fix Sizing & Theater Mode)
+.video-container {
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+
+  .video-placeholder {
+    background: #0f172a !important; // Warna gelap modern slate
+
+    ion-icon {
+      font-size: 48px;
+      color: var(--ion-color-primary, #38bdf8);
+      margin-bottom: 8px;
+    }
+
+    p {
+      font-size: 13px;
+      color: #94a3b8;
+      margin: 0;
+      font-weight: 500;
+    }
+  }
+}
+
+// 3. CONTENT WRAPPER LAYOUT
 .content-wrapper {
-  padding: 16px;
-  h2 { margin-top: 0; font-weight: 700; }
-  .instructor { color: #666; font-size: 0.9rem; margin-bottom: 20px; }
-  
+  padding: 20px 16px 32px 16px; // Tambah padding bawah biar tombol gak tenggelam
+
+  h2 {
+    margin-top: 0;
+    font-size: 1.3rem;
+    font-weight: 800;
+    color: #1e293b;
+    line-height: 1.3;
+  }
+
+  .instructor {
+    color: #64748b;
+    font-size: 0.85rem;
+    margin-top: 4px;
+    margin-bottom: 24px;
+    font-weight: 500;
+  }
+
+  // 4. CURRICULUM SECTION (Bikin List Bersih & Gak Kaku)
   .curriculum-section {
     margin-top: 20px;
-    h3 { font-size: 1.2rem; font-weight: 600; margin-bottom: 10px; }
-    
+
+    h3 {
+      font-size: 0.9rem;
+      font-weight: 700;
+      color: #475569;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      margin-bottom: 12px;
+    }
+
+    // Reset total border list kaku bawaan browser/ionic
     ion-list {
-      border: 1px solid #ddd;
-      border-radius: 8px;
-      overflow: hidden; // Agar border radius terlihat
-      ion-item { --padding-start: 10px; }
+      border: 1px solid #e2e8f0;
+      border-radius: 12px;
+      overflow: hidden;
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.02);
+      background: #ffffff;
+      padding: 0 !important;
+
+      // Styling baris item didalam list
+      ion-item {
+        --padding-start: 12px;
+        --padding-end: 12px;
+        --min-height: 50px;
+        --border-color: #f1f5f9;
+        margin: 0;
+
+        // Custom icon play / check bulat di kiri
+        ion-icon {
+          font-size: 20px;
+          margin-inline-end: 12px;
+        }
+
+        // Custom teks didalam label agar presisi tingginya
+        ion-label {
+          margin: 0;
+
+          h2 {
+            margin: 0;
+            font-size: 13.5px !important;
+            line-height: 1.4;
+          }
+        }
+      }
     }
   }
 
-  .finish-btn { margin-top: 25px; --border-radius: 8px; height: 50px; }
+  // 5. FINISH BUTTON (Tombol Aksi Bawah)
+  .finish-btn {
+    margin-top: 24px;
+    margin-bottom: 12px;
+    height: 46px;
+    font-size: 13.5px;
+    font-weight: 700;
+    letter-spacing: 0.3px;
+    --border-radius: 10px;
+    --box-shadow: none;
+  }
 }

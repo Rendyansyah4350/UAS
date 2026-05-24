@@ -70,4 +70,24 @@ export class WishlistPage implements OnInit {
     console.log('Navigasi ke Detail Kursus ID:', id);
     this.navCtrl.navigateForward([`/course-detail/${id}`]);
   }
+
+  // Tambahkan fungsi ini di dalam class WishlistPage lu
+  getCategoryLogo(category: string | undefined): string {
+    if (!category) {
+      return 'assets/icon/computer-science.jpeg';
+    }
+
+    const cat = category.toLowerCase().trim();
+
+    if (
+      cat.includes('microsoft') ||
+      cat.includes('office') ||
+      cat.includes('word')
+    ) {
+      return 'assets/icon/microsoft-office.jpeg';
+    }
+
+    // Default fallback jika kategori lainnya (Computer Science, dll)
+    return 'assets/icon/computer-science.jpeg';
+  }
 }
