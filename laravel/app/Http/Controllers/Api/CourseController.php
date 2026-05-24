@@ -21,22 +21,21 @@ class CourseController extends Controller
     }
     public function show($id)
     {
-        // 1. Cari data kursus berdasarkan ID
-        $course = Course::find($id);
+        // ðŸŸ¢ 1. Cari data kursus SEKALIGUS hitung jumlah relasi user yang mendaftar (withCount)
+        $course = Course::withCount('users')->find($id);
 
         // 2. Jika kursus tidak ditemukan, kirim respon error 404
-        if (!$course)
-        {
+        if (!$course) {
             return response()->json([
                 'success' => false,
-                'message' => 'Kursus tidak ditemukan'
+                'message' => 'Kursus tidak ditemukan lek!'
             ], 404);
         }
 
-        // 3. Jika ditemukan, kirim datanya
+        // 3. Jika ditemukan, kirim datanya (sekarang di dalam $course sudah ada field 'users_count')
         return response()->json([
             'success' => true,
-            'message' => 'Detail Data Kursus',
+            'message' => 'Detail Data Kursus Berhasil Dimuat',
             'data'    => $course
         ]);
     }
@@ -57,8 +56,7 @@ class CourseController extends Controller
             ->where('status', 'success')
             ->exists();
 
-        if (!$hasEnrolled)
-        {
+        if (!$hasEnrolled) {
             return response()->json([
                 'success' => false,
                 'message' => 'Lu belum beli atau melunasi kursus ini mbut, ga bisa ngasih rating!'
@@ -88,7 +86,7 @@ class CourseController extends Controller
 
         return response()->json([
             'success' => true,
-            'message' => 'Terima kasih atas rating bintang ' . $request->rating . ' nya tot!',
+            'message' => 'Terima kasih atas rating bintang ' . $request->rating . ' yang Anda berikan.',
             'current_average' => $course->rating
         ]);
     }
