@@ -17,7 +17,7 @@ class Enrollment extends Model
         'progress',
         'external_id',
         'payment_url',
-
+        'proof_of_payment',
     ];
 
     /**
@@ -58,4 +58,3 @@ class Enrollment extends Model
         return round(($completedContents / $totalContents) * 100);
     }
 }
-    

@@ -17,10 +17,11 @@ return new class extends Migration
             $table->foreignId('user_id')->constrained()->onDelete('cascade');
             $table->foreignId('course_id')->constrained()->onDelete('cascade');
             $table->integer('price_bought');
-            $table->enum('status', ['pending', 'success'])->default('success');
+            $table->string('status', 50)->default('Checking Admin');
             $table->string('external_id', 255)->nullable();
+            $table->text('payment_url')->nullable();
+            $table->string('proof_of_payment', 255)->nullable();
             $table->integer('progress')->default(0);
-            $table->text('payment_url')->nullable(); // 🟢 Sudah aman menggunakan TEXT & nullable sesuai phpMyAdmin cPanel
             $table->timestamps();
         });
     }

@@ -8,9 +8,9 @@ use App\Models\Course;
 use Illuminate\Http\Request;
 use App\Models\QuizResult;
 use Illuminate\Support\Facades\Log;
-use Xendit\Configuration;
-use Xendit\Invoice\InvoiceApi;
-use Xendit\Invoice\CreateInvoiceRequest;
+use Illuminate\Support\Facades\Storage;
+use PHPMailer\PHPMailer\PHPMailer;
+use PHPMailer\PHPMailer\Exception;
 
 class EnrollmentController extends Controller
 {
@@ -18,8 +18,10 @@ class EnrollmentController extends Controller
     {
         try
         {
+            // 1. VALIDASI: Wajib course_id dan file proof_of_payment (harus gambar)
             $request->validate([
-                'course_id' => 'required|exists:courses,id',
+                'course_id'        => 'required|exists:courses,id',
+                'proof_of_payment' => 'required|image|mimes:jpg,jpeg,png|max:2048',
             ]);
 
             $user = $request->user();
@@ -28,7 +30,7 @@ class EnrollmentController extends Controller
                 return response()->json(['message' => 'Unauthorized'], 401);
             }
 
-            // Cek riwayat pembelian biar ga dobel
+            // 2. CEK RIWAYAT PEMBELIAN: Menyesuaikan dengan status baru 'Checking Admin'
             $alreadyEnrolled = Enrollment::where('user_id', $user->id)
                 ->where('course_id', $request->course_id)
                 ->first();
@@ -39,13 +41,13 @@ class EnrollmentController extends Controller
                 {
                     return response()->json(['message' => 'Kamu sudah memiliki kursus ini'], 400);
                 }
-                if ($alreadyEnrolled->status === 'pending')
+                if ($alreadyEnrolled->status === 'Checking Admin')
                 {
                     return response()->json([
-                        'success' => true,
-                        'message' => 'Silahkan selesaikan pembayaran kursus ini',
+                        'success' => false,
+                        'message' => 'Pembayaran kamu sedang diperiksa oleh Admin. Mohon tunggu konfirmasi.',
                         'data' => $alreadyEnrolled
-                    ]);
+                    ], 400);
                 }
             }
 
@@ -56,57 +58,39 @@ class EnrollmentController extends Controller
             }
 
             $price = $course->price ?? 0;
-            $externalId = 'eduvan-' . $user->id . '-' . $course->id . '-' . time();
-            $invoiceUrl = null;
+            $fileName = null;
 
-            // Ã°Å¸Å¸Â¢ TEMBAK RAW API KE XENDIT (ANTI RIBET, GAK BUTUH VENDOR COMPOSER)
-            if ($price > 0)
+            // 3. PROSES SIMPAN FILE BUKTI PEMBAYARAN KE STORAGE
+            if ($request->hasFile('proof_of_payment'))
             {
-                $secretKey = env('XENDIT_SECRET_KEY');
+                $file = $request->file('proof_of_payment');
 
-                // Menggunakan HTTP Client bawaan Laravel untuk nembak endpoint v2 Xendit
-                $response = \Illuminate\Support\Facades\Http::withHeaders([
-                    'Authorization' => 'Basic ' . base64_encode($secretKey . ':'),
-                    'Content-Type' => 'application/json'
-                ])->post('https://api.xendit.co/v2/invoices', [
-                    'external_id' => $externalId,
-                    'amount' => (int) $price,
-                    'description' => 'Pembelian Kursus: ' . $course->title,
-                    'invoice_duration' => 86400,
-                    'customer' => [
-                        'given_names' => $user->name,
-                        'email' => $user->email,
-                    ],
-                    'success_redirect_url' => 'http://localhost:8100/my-learning',
-                ]);
+                // Penamaan unik file bukti transfer
+                $fileName = 'bukti_' . $user->id . '_' . $course->id . '_' . time() . '.' . $file->getClientOriginalExtension();
 
-                if ($response->failed())
-                {
-                    return response()->json([
-                        'success' => false,
-                        'message' => 'Gagal terhubung ke Xendit: ' . $response->body()
-                    ], 400);
-                }
-
-                $responseData = $response->json();
-                $invoiceUrl = $responseData['invoice_url'] ?? null;
+                // Disimpan ke direktori: storage/app/public/payment_proofs/
+                $file->storeAs('public/payment_proofs', $fileName);
             }
 
-            // Simpan data pendaftaran ke Database lokal cPanel lu
+            // 4. SIMPAN DATA TRANSAKSI BARU (Status diset 'Checking Admin')
             $enrollment = Enrollment::create([
-                'user_id' => $user->id,
-                'course_id' => $request->course_id,
-                'price_bought' => $price,
-                'status' => $price > 0 ? 'pending' : 'success',
-                'progress' => 0,
-                'payment_url' => $invoiceUrl,
-                'external_id' => $price > 0 ? $externalId : null
+                'user_id'          => $user->id,
+                'course_id'        => $request->course_id,
+                'price_bought'     => $price,
+                'status'           => 'Checking Admin',
+                'progress'         => 0,
+                'proof_of_payment' => $fileName,
+                'payment_url'      => null,
+                'external_id'      => null
             ]);
+
+            // 5. TRIGGER NOTIFIKASI EMAIL MENGGUNAKAN PHPMAILER KE ADMIN
+            $this->sendEmailNotificationToAdmin($user, $course);
 
             return response()->json([
                 'success' => true,
-                'message' => $price > 0 ? 'Invoice berhasil dibuat, silahkan lakukan pembayaran' : 'Berhasil membeli kursus gratis',
-                'data' => $enrollment
+                'message' => 'Bukti pembayaran berhasil dikirim. Menunggu konfirmasi status oleh Admin.',
+                'data'    => $enrollment
             ]);
         }
         catch (\Throwable $e)
@@ -118,29 +102,79 @@ class EnrollmentController extends Controller
         }
     }
 
+    /**
+     * Fungsi Helper PHPMailer untuk mengirim notifikasi ke Email Admin
+     */
+    private function sendEmailNotificationToAdmin($user, $course)
+    {
+        $mail = new PHPMailer(true);
+
+        try
+        {
+            // Konfigurasi SMTP Server (Menarik nilai dari file .env)
+            $mail->isSMTP();
+            $mail->Host       = env('MAIL_HOST', 'smtp.gmail.com');
+            $mail->SMTPAuth   = true;
+            $mail->Username   = env('MAIL_USERNAME');
+            $mail->Password   = env('MAIL_PASSWORD');
+            $mail->SMTPSecure = env('MAIL_ENCRYPTION', 'tls');
+            $mail->Port       = env('MAIL_PORT', 587);
+
+            // Pengirim & Alamat Email Admin Penerima Notifikasi
+            $mail->setFrom(env('MAIL_FROM_ADDRESS', 'noreply@eduvan.rehalivan.com'), 'EduVan Platform');
+            $mail->addAddress('admin@eduvan.rehalivan.com'); // Silakan sesuaikan dengan email admin utama kamu
+
+            // Konten Pesan Email Notifikasi (Format HTML)
+            $mail->isHTML(true);
+            $mail->Subject = 'NOTIFIKASI PEMBAYARAN MANUAL BARU - EduVan';
+
+            $mail->Body    = "
+                <h3>Halo Admin EduVan,</h3>
+                <p>Ada pembeli baru saja mengirimkan form dan mengunggah bukti pembayaran manual. Berikut detail datanya:</p>
+                <hr>
+                <ul>
+                    <li><strong>Nama Pembeli:</strong> {$user->name}</li>
+                    <li><strong>Email Pembeli:</strong> {$user->email}</li>
+                    <li><strong>Kursus yang Dibeli:</strong> {$course->title}</li>
+                    <li><strong>Harga Kursus:</strong> Rp " . number_format($course->price, 0, ',', '.') . "</li>
+                    <li><strong>Status Transaksi:</strong> <span style='color: #e67e22; font-weight: bold;'>Checking Admin</span></li>
+                </ul>
+                <hr>
+                <p>Silakan segera login ke halaman <strong>Dashboard Admin Web</strong> untuk memeriksa validitas berkas foto bukti transfer dan melakukan konfirmasi status (Success / Fail).</p>
+                <br>
+                <p>Salam,<br>Sistem Otomatis EduVan</p>
+            ";
+
+            $mail->send();
+            Log::info("Email notifikasi pembayaran manual Kursus ID {$course->id} berhasil dikirim ke Admin.");
+        }
+        catch (Exception $e)
+        {
+            // Dicatat ke log jika gagal agar alur response transaksi user di aplikasi tidak ikut terputus
+            Log::error("Gagal memicu email notifikasi via PHPMailer. Error: {$mail->ErrorInfo}");
+        }
+    }
+
     public function index(Request $request)
     {
         $userId = $request->user()->id;
 
-        $histori = Enrollment::with(['course']) // Disederhanakan tanpa mapping ganda yang berat
+        $histori = Enrollment::with(['course'])
             ->where('user_id', $userId)
             ->get()
             ->map(function ($item) use ($userId)
             {
-                // 1. Hitung total materi video asli di kursus ini
                 $totalMateri = \Illuminate\Support\Facades\DB::table('contents')
                     ->where('course_id', $item->course_id)
                     ->count();
 
-                // 2. KUNCI UTAMA: Hitung materi video yang selesai (Wajib ada content_id)
                 $materiSelesai = \Illuminate\Support\Facades\DB::table('progress')
                     ->where('user_id', $userId)
                     ->where('course_id', $item->course_id)
-                    ->whereNotNull('content_id') // Memastikan baris kuis tidak ikut terhitung di sini
+                    ->whereNotNull('content_id')
                     ->where('is_completed', 1)
                     ->count();
 
-                // 3. Cek apakah kuis sudah pernah dikerjakan (content_id bernilai NULL di tabel progress)
                 $isQuizSelesai = \Illuminate\Support\Facades\DB::table('progress')
                     ->where('user_id', $userId)
                     ->where('course_id', $item->course_id)
@@ -148,11 +182,9 @@ class EnrollmentController extends Controller
                     ->where('is_completed', 1)
                     ->exists();
 
-                // ðŸŸ¢ GERBANG 1: Gembok akses kuis (Bisa diakses jika semua video sudah ditonton)
                 $item->is_quiz_unlocked = ($totalMateri > 0 && $materiSelesai === $totalMateri);
 
-                // ðŸŸ¢ GERBANG 2: Kalkulasi progres akumulatif murni (Materi + Kuis)
-                $totalItemWajib = $totalMateri + 1; // Video + Kuis
+                $totalItemWajib = $totalMateri + 1;
                 $totalItemSelesai = $materiSelesai + ($isQuizSelesai ? 1 : 0);
 
                 if ($totalItemWajib > 0)
@@ -164,7 +196,6 @@ class EnrollmentController extends Controller
                     $item->progress = 0;
                 }
 
-                // Amankan nilai maksimal jika ada anomali database
                 if ($item->progress > 100)
                 {
                     $item->progress = 100;
@@ -184,12 +215,10 @@ class EnrollmentController extends Controller
     {
         $user = $request->user();
 
-        // 1. Cek progress 100%
         $enrollment = Enrollment::where('user_id', $user->id)
             ->where('course_id', $course_id)
             ->first();
 
-        // 2. Cek apakah ada record di QuizResult dengan status 'passed'
         $hasPassedQuiz = QuizResult::where('user_id', $user->id)
             ->where('course_id', $course_id)
             ->where('status', 'passed')
@@ -229,53 +258,9 @@ class EnrollmentController extends Controller
         ]);
     }
 
-    // Jalur Webhook penangkap konfirmasi pelunasan dari Xendit
+    // Fungsi callback Xendit dimatikan fungsinya karena beralih ke alur verifikasi manual admin
     public function handleCallback(Request $request)
     {
-        // Ã°Å¸Å¸Â¢ Bikin log mandiri khusus callback biar ketahuan isi kiriman Xendit
-        $logFile = storage_path('logs/callback_xendit.txt');
-        file_put_contents($logFile, "[" . date('Y-m-d H:i:s') . "] Webhook Masuk: " . json_encode($request->all()) . "\n", FILE_APPEND);
-
-        try
-        {
-            // 1. Ambil data penting dari payload Xendit
-            $externalId = $request->input('external_id');
-            $xenditStatus = strtoupper($request->input('status')); // PASTIKAN PAKAI HURUF BESAR
-
-            // 2. Cari data pendaftaran berdasarkan external_id di DB lokal
-            $enrollment = Enrollment::where('external_id', $externalId)->first();
-
-            // Ã°Å¸â€™Â¡ TRICK UNTUK BUTTON "TES DAN SIMPAN" XENDIT:
-            // Jika ini cuma data dummy simulasi, external_id pasti ga ketemu di DB.
-            // Kita langsung respon sukses 200 ke Xendit biar tombolnya ijo tanpa ngerusak DB.
-            if (!$enrollment)
-            {
-                file_put_contents($logFile, "[" . date('Y-m-d H:i:s') . "] Peringatan: external_id '{$externalId}' tidak ada di DB (Abaikan jika ini tombol Tes Xendit).\n", FILE_APPEND);
-                return response()->json(['message' => 'Simulasi / Data tidak ditemukan, tapi callback diterima'], 200);
-            }
-
-            // 3. Jika data pendaftaran asli ketemu, cek statusnya
-            if ($xenditStatus === 'PAID' || $xenditStatus === 'SETTLED')
-            {
-                $enrollment->update([
-                    'status' => 'success' // Ubah pending jadi success di DB lu
-                ]);
-                file_put_contents($logFile, "[" . date('Y-m-d H:i:s') . "] SUKSES: Enrollment ID {$enrollment->id} berhasil diubah ke 'success'.\n", FILE_APPEND);
-            }
-            elseif ($xenditStatus === 'EXPIRED')
-            {
-                $enrollment->update([
-                    'status' => 'failed'
-                ]);
-                file_put_contents($logFile, "[" . date('Y-m-d H:i:s') . "] INFO: Invoice {$externalId} expired.\n", FILE_APPEND);
-            }
-
-            return response()->json(['message' => 'Callback processed successfully'], 200);
-        }
-        catch (\Throwable $e)
-        {
-            file_put_contents($logFile, "[" . date('Y-m-d H:i:s') . "] ERROR CALLBACK: " . $e->getMessage() . "\n", FILE_APPEND);
-            return response()->json(['message' => 'Internal Server Error'], 500);
-        }
+        return response()->json(['message' => 'Xendit integration is disabled'], 200);
     }
 }

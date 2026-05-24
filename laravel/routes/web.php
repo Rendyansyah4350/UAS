@@ -26,6 +26,12 @@ Route::post('admin/login', [AdminAuthController::class, 'login']);
 Route::post('admin/logout', [AdminAuthController::class, 'logout'])->name('admin.logout');
 
 
+/*
+|--------------------------------------------------------------------------
+| Jalur Khusus Admin (DIKUNCI TOTAL via Middleware Auth & Admin)
+|--------------------------------------------------------------------------
+| Hanya user yang SUDAH LOGIN dan memiliki ROLE 'admin' yang bisa masuk ke sini.
+*/
 Route::middleware(['auth', 'admin'])->prefix('admin')->group(function ()
 {
     Route::get('/dashboard', [DashboardController::class, 'index'])->name('admin.dashboard');
@@ -50,8 +56,10 @@ Route::middleware(['auth', 'admin'])->prefix('admin')->group(function ()
 
     // Manajemen Pembelian / Transaksi
     Route::get('/pembelian', [TransactionController::class, 'index'])->name('admin.pembelian.index');
-    Route::get('/admin/pembelian/download/{id}', [TransactionController::class, 'downloadReport'])->name('admin.pembelian.download');
-    Route::get('/admin/pembelian/course-pdf/{id}', [App\Http\Controllers\Admin\TransactionController::class, 'downloadCourseReport'])->name('admin.pembelian.course_pdf');
+    Route::get('/pembelian/download/{id}', [TransactionController::class, 'downloadReport'])->name('admin.pembelian.download');
+    Route::get('/pembelian/course-pdf/{id}', [TransactionController::class, 'downloadCourseReport'])->name('admin.pembelian.course_pdf');
+    Route::get('/pembelian/pdf', [TransactionController::class, 'exportPdf'])->name('admin.pembelian.pdf');
+    Route::put('/pembelian/{id}/update-status', [TransactionController::class, 'updateStatus'])->name('admin.pembelian.updateStatus');
 
     // Manajemen Quiz & Progress
     Route::get('/quiz-progress', [QuizProgressController::class, 'index'])->name('admin.quiz.index');
@@ -67,9 +75,8 @@ Route::middleware(['auth', 'admin'])->prefix('admin')->group(function ()
     Route::post('/certificates/issue/{userId}/{courseId}', [CertificateController::class, 'issue'])->name('admin.certificates.issue');
     Route::get('/certificates/preview/{id}', [CertificateController::class, 'preview'])->name('admin.certificates.preview');
     Route::get('/certificates/download/{id}', [CertificateController::class, 'download'])->name('admin.certificates.download');
-    Route::get('/admin/pembelian/pdf', [TransactionController::class, 'exportPdf'])->name('admin.pembelian.pdf');
 
-    //Notifikasi
+    // Notifikasi
     Route::get('/notifications', [NotificationController::class, 'index'])->name('admin.notifications.index');
     Route::post('/notifications/send', [NotificationController::class, 'store'])->name('admin.notifications.send');
 });

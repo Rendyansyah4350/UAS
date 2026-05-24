@@ -14,8 +14,6 @@ class TransactionController extends Controller
 {
     public function index()
     {
-        // 1. Mengambil ringkasan per materi
-        // Kita hitung jumlah terjual DAN total uang dari kolom price_bought
         $courseReports = Course::withCount(['enrollments as total_sold' => function ($query)
         {
             $query->where('status', 'success');
@@ -23,26 +21,55 @@ class TransactionController extends Controller
             ->withSum(['enrollments as total_revenue' => function ($query)
             {
                 $query->where('status', 'success');
-            }], 'price_bought') // Mengambil total dari kolom price_bought di tabel enrollments
+            }], 'price_bought')
             ->get();
 
-        // 2. Mengambil detail transaksi terbaru untuk tabel bawah
         $transactionDetails = Enrollment::with(['user', 'course'])
             ->where('status', 'success')
             ->latest()
             ->get();
 
-        // 3. Menghitung Grand Total seluruh pendapatan
+        $pendingVerifications = Enrollment::with(['user', 'course'])
+            ->where('status', 'Checking Admin')
+            ->latest()
+            ->get();
+
         $grandTotal = $transactionDetails->sum('price_bought');
 
-        return view('admin.pembelian.index', compact('courseReports', 'transactionDetails', 'grandTotal'));
+        return view('admin.pembelian.index', compact('courseReports', 'transactionDetails', 'pendingVerifications', 'grandTotal'));
+    }
+
+    public function updateStatus(Request $request, $id)
+    {
+        $request->validate([
+            'status' => 'required|in:success,Fail'
+        ]);
+
+        try
+        {
+            $enrollment = Enrollment::findOrFail($id);
+
+            $enrollment->update([
+                'status' => $request->status
+            ]);
+
+            $msg = $request->status === 'success'
+                ? 'Pembayaran berhasil dikonfirmasi! Akses kursus mahasiswa telah aktif.'
+                : 'Pembayaran ditolak!';
+
+            return redirect()->back()->with('success', $msg);
+        }
+        catch (\Exception $e)
+        {
+            return redirect()->back()->with('error', 'Gagal memproses konfirmasi: ' . $e->getMessage());
+        }
     }
 
     public function exportPdf()
     {
-        // Ambil semua data transaksi (sama seperti di halaman index)
-        $transactions = Enrollment::with(['user', 'course'])->latest()->get();
-        $totalRevenue = Enrollment::sum('price_bought');
+        // Ambil semua data transaksi yang sukses untuk dicetak ke laporan PDF
+        $transactions = Enrollment::with(['user', 'course'])->where('status', 'success')->latest()->get();
+        $totalRevenue = Enrollment::where('status', 'success')->sum('price_bought');
 
         // Load view khusus untuk PDF
         $pdf = Pdf::loadView('admin.pembelian.pdf', compact('transactions', 'totalRevenue'));
