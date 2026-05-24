@@ -1,11 +1,7 @@
 <ion-header mode="ios" class="ion-no-border">
   <ion-toolbar>
     <ion-buttons slot="start">
-      <ion-back-button
-        defaultHref="/course"
-        text=""
-        color="light"
-      ></ion-back-button>
+      <ion-back-button defaultHref="/course" text="" color="dark"></ion-back-button>
     </ion-buttons>
     <ion-title>Detail Kursus</ion-title>
   </ion-toolbar>
@@ -37,19 +33,14 @@
     <div class="rating-row">
       <div class="rating-badge-box">
         <ion-icon name="star"></ion-icon>
-        <strong
-          >{{ course?.rating ? (course?.rating | number:'1.1-1') : '0.0'
-          }}</strong
-        >
+        <strong>{{ course?.rating ? (course?.rating | number:'1.1-1') : '0.0' }}</strong>
       </div>
       <span class="text-muted">/ 5.0 Rating Kelas</span>
     </div>
 
     <div class="instructor-row">
       <ion-avatar>
-        <img
-          src="https://ui-avatars.com/api/?name=Admin&background=4f46e5&color=fff"
-        />
+        <img src="https://ui-avatars.com/api/?name=Admin&background=4f46e5&color=fff" />
       </ion-avatar>
       <div class="instructor-text">
         <p>Pengajar</p>
@@ -76,32 +67,28 @@
           <span class="stat-val">12 Jam</span>
         </div>
       </div>
-        <div class="stat-item border-green">
-            <div class="icon-circle bg-green">
-              <ion-icon name="people-outline"></ion-icon>
-            </div>
-            <div class="stat-texts">
-              <span class="stat-lbl">Siswa</span>
-              <span class="stat-val">{{ course?.users_count ?? 0 }}</span>
-            </div>
-          </div>
+      <div class="stat-item border-green">
+        <div class="icon-circle bg-green">
+          <ion-icon name="people-outline"></ion-icon>
+        </div>
+        <div class="stat-texts">
+          <span class="stat-lbl">Siswa</span>
+          <span class="stat-val">{{ course?.users_count ?? 0 }}</span>
+        </div>
+      </div>
     </div>
 
     <div class="section">
       <h3>Deskripsi Course</h3>
       <p class="description-body">
-        {{ course?.description || 'Pelajari materi ini secara mendalam bersama
-        mentor berpengalaman untuk membangun portofolio riil yang
-        terstandarisasi industri.' }}
+        {{ course?.description || 'Pelajari materi ini secara mendalam bersama mentor berpengalaman untuk membangun portofolio riil yang terstandarisasi industri.' }}
       </p>
     </div>
 
     <div class="section section-playlist">
       <div class="playlist-title-row">
         <h3>Video Pembelajaran</h3>
-        <span class="badge-count" *ngIf="contents.length > 0"
-          >{{ contents.length }} Modul</span
-        >
+        <span class="badge-count" *ngIf="contents.length > 0">{{ contents.length }} Modul</span>
       </div>
 
       <div class="modern-video-wrapper">
@@ -113,19 +100,14 @@
         >
           <div class="video-item-left">
             <div class="play-indicator-circle">
-              <ion-icon
-                [name]="paymentStatus === 'success' ? 'play' : 'lock-closed'"
-              ></ion-icon>
+              <ion-icon [name]="paymentStatus === 'success' ? 'play' : 'lock-closed'"></ion-icon>
             </div>
             <div class="video-meta-detail">
               <h4>{{ materi.title }}</h4>
               <p>Durasi: {{ materi.duration || '15' }} Menit</p>
             </div>
           </div>
-          <span
-            class="status-video-badge"
-            [class.badge-success-color]="paymentStatus === 'success'"
-          >
+          <span class="status-video-badge" [class.badge-success-color]="paymentStatus === 'success'">
             {{ paymentStatus === 'success' ? 'Akses' : 'Terkunci' }}
           </span>
         </div>
@@ -142,7 +124,7 @@
 <ion-footer class="ion-no-border premium-action-footer">
   <div class="footer-wrapper">
     <div *ngIf="paymentStatus === 'success'" class="rating-trigger-full">
-      <div class="rating-zone-box" (click)="bukaPopUpRating()">
+      <div class="rating-zone-box" (click)="isModalRatingOpen = true">
         <div class="zone-left">
           <ion-icon name="star-outline" class="star-pulse"></ion-icon>
           <div class="zone-texts">
@@ -150,10 +132,7 @@
             <p>Berikan ulasan dan rating bintang untuk kelas ini</p>
           </div>
         </div>
-        <ion-icon
-          name="chevron-forward-outline"
-          class="arrow-forward"
-        ></ion-icon>
+        <ion-icon name="chevron-forward-outline" class="arrow-forward"></ion-icon>
       </div>
     </div>
 
@@ -165,39 +144,24 @@
           [class.is-fav]="isWishlist"
           (click)="toggleWishlist()"
         >
-          <ion-icon
-            slot="icon-only"
-            [name]="isWishlist ? 'heart' : 'heart-outline'"
-          ></ion-icon>
+          <ion-icon slot="icon-only" [name]="isWishlist ? 'heart' : 'heart-outline'"></ion-icon>
         </ion-button>
       </div>
 
-      <div
-        class="button-main-col"
-        *ngIf="paymentStatus === 'none' || !paymentStatus"
-      >
-        <button
-          class="btn-premium-action bg-navy"
-          (click)="enroll()"
-          [disabled]="loadingBeli"
-        >
+      <div class="button-main-col" *ngIf="paymentStatus === 'none' || !paymentStatus">
+        <button class="btn-premium-action bg-navy" (click)="enroll()" [disabled]="loadingBeli">
           <span class="inner-loader" *ngIf="loadingBeli">
             <ion-spinner name="crescent"></ion-spinner> Memproses...
           </span>
           <div class="inner-content-btn" *ngIf="!loadingBeli">
             <span class="lbl-btn">Daftar Sekarang</span>
-            <span class="lbl-price"
-              >Rp {{ course?.price | number:'1.0-0' }}</span
-            >
+            <span class="lbl-price">Rp {{ course?.price | number:'1.0-0' }}</span>
           </div>
         </button>
       </div>
 
       <div class="button-main-col" *ngIf="paymentStatus === 'pending'">
-        <button
-          class="btn-premium-action bg-orange-gradient"
-          (click)="bukaInvoiceXendit()"
-        >
+        <button class="btn-premium-action bg-orange-gradient" (click)="bukaInvoiceXendit()">
           Selesaikan Pembayaran (Xendit)
           <ion-icon name="arrow-forward-outline"></ion-icon>
         </button>
@@ -212,3 +176,41 @@
     </div>
   </div>
 </ion-footer>
+
+<ion-modal #modalRating [isOpen]="isModalRatingOpen" (didDismiss)="isModalRatingOpen = false" class="premium-rating-modal">
+  <ng-template>
+    <ion-header class="ion-no-border">
+      <ion-toolbar>
+        <ion-title>Beri Rating Kelas</ion-title>
+        <ion-buttons slot="end">
+          <ion-button (click)="isModalRatingOpen = false" color="medium">Batal</ion-button>
+        </ion-buttons>
+      </ion-toolbar>
+    </ion-header>
+
+    <div class="rating-modal-body">
+      <p class="rating-instruction">Pilih bintang mendatar dan berikan ulasan terbaikmu lek!</p>
+      
+      <div class="stars-row-interactive">
+        <ion-icon 
+          *ngFor="let star of [1, 2, 3, 4, 5]" 
+          [name]="star <= ratingInput ? 'star' : 'star-outline'" 
+          (click)="setRatingBintang(star)"
+          [class.active-star]="star <= ratingInput">
+        </ion-icon>
+      </div>
+
+      <div class="rating-text-status">
+        <span *ngIf="ratingInput === 1">Sangat Kecewa</span>
+        <span *ngIf="ratingInput === 2">Kurang Memuaskan</span>
+        <span *ngIf="ratingInput === 3">Cukup Baik</span>
+        <span *ngIf="ratingInput === 4">Sangat Bagus</span>
+        <span *ngIf="ratingInput === 5">Sempurna Sekali!</span>
+      </div>
+
+      <ion-button expand="block" shape="round" color="primary" style="width: 100%; font-weight: 700;" (click)="kirimUlasanRatingLive()">
+        KIRIM BINTANG
+      </ion-button>
+    </div>
+  </ng-template>
+</ion-modal>

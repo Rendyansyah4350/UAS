@@ -75,36 +75,94 @@ ion-toolbar {
 }
 
 /* --- Baris Rating --- */
-.rating-row {
-  display: flex;
+/* Gaya Desain Premium Modal Rating */
+.premium-rating-modal {
+  --height: auto;
+  --border-radius: 24px;
+  --box-shadow: 0 10px 30px rgba(0, 0, 0, 0.12);
   align-items: center;
-  gap: 8px;
-  margin-bottom: 22px;
 
-  .rating-badge-box {
+  ion-toolbar {
+    --background: #ffffff;
+    --color: #093C5D;
+    padding: 8px;
+    
+    ion-title {
+      font-weight: 700;
+      font-size: 16px;
+    }
+  }
+}
+
+.rating-modal-body {
+  padding: 20px 24px 32px 24px;
+  background: #ffffff;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+
+  .rating-instruction {
+    font-size: 13px;
+    color: #64748b;
+    text-align: center;
+    margin: 0 0 20px 0;
+    line-height: 1.5;
+  }
+
+  /* Baris Bintang Horizontal Interaktif */
+  .stars-row-interactive {
     display: flex;
-    align-items: center;
-    gap: 4px;
-    background: #fffdf5;
-    border: 1px solid #fef08a;
-    padding: 3px 8px;
-    border-radius: 8px;
+    justify-content: center;
+    gap: 12px;
+    margin-bottom: 8px;
 
     ion-icon {
-      color: #eab308;
-      font-size: 14px;
-    }
-    strong {
-      font-size: 12px;
-      font-weight: 700;
-      color: #854d0e;
+      font-size: 38px;
+      color: #cbd5e1; /* Warna abu jika kosong */
+      transition: transform 0.15s ease, color 0.15s ease;
+      cursor: pointer;
+
+      &:hover, &.active-star {
+        color: #eab308; /* Kuning emas menyala */
+      }
+
+      &:active {
+        transform: scale(0.85);
+      }
     }
   }
 
-  .text-muted {
-    color: #718096;
-    font-weight: 500;
+  .rating-text-status {
     font-size: 12px;
+    font-weight: 700;
+    color: #854d0e;
+    margin-bottom: 24px;
+    height: 18px;
+  }
+
+  /* Kotak Textarea Kustom */
+  .review-textarea-box {
+    width: 100%;
+    margin-bottom: 24px;
+
+    ion-textarea {
+      --background: #f8fafc;
+      --padding-top: 14px;
+      --padding-bottom: 14px;
+      --padding-start: 16px;
+      --padding-end: 16px;
+      border: 1px solid #e2e8f0;
+      border-radius: 16px;
+      font-size: 13px;
+      color: #1e293b;
+    }
+  }
+
+  .btn-kirif-rating {
+    width: 100%;
+    font-weight: 700;
+    letter-spacing: 0.5px;
+    margin: 0;
   }
 }
 

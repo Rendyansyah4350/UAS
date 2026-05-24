@@ -1,3 +1,5 @@
+/* 🔴 HAPUS ion-content { --background: ... } yang lama kalau ada lek */
+
 ion-toolbar {
   --background: #F4F7FA;
   --color: #1A202C;
@@ -8,68 +10,80 @@ ion-toolbar {
   }
 }
 
-ion-content {
-  --background: #F4F7FA; /* Background abu-abu lembut agar card terlihat kontras */
-}
-
+/* 🟢 FIX UTAMA: KITA PADDING MANUAL DI SINI LEK KARNA ION-PADDING DI HTML DIHAPUS */
 .notification-container {
-  padding: 16px;
+  padding: 20px 16px !important; /* Tambah padding atas/bawah 20px, kiri/kanan 16px */
   display: flex;
   flex-direction: column;
-  gap: 12px; /* Jarak antar card */
+  gap: 14px; /* Jarak antar card agak renggang dikit lek */
+  background: #F4F7FA; /* Pindahkan background content ke sini biar fluid */
+  min-height: 100%; /* Pastikan background-nya full sampai bawah */
 }
 
-/* Desain Dasar Card Notifikasi */
+/* Desain Dasar Card Notifikasi yang Sudah Di-Fix Lek */
 .notif-card {
   background: #ffffff;
-  border-radius: 16px;
+  border-radius: 18px; /* Agak melengkung premium dikit lek */
   padding: 16px;
   display: flex;
-  align-items: flex-start;
-  gap: 14px;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.03);
-  border-left: 4px solid transparent; /* Garis vertikal pemanis di kiri */
-  transition: transform 0.2s ease;
+  align-items: center; /* 🟢 FIX: Jaga semua elemen tegak lurus di tengah */
+  gap: 16px;
+  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.03); /* Bayangan soft premium lek */
+  border-left: 5px solid transparent; /* Garis vertikal di kiri lek */
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+  overflow: hidden; /* Jaga biar ga overlap lek */
 
   &:active {
-    transform: scale(0.98);
+    transform: scale(0.97);
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.02);
   }
 
-  /* Lingkaran pembungkus ikon */
+  /* 🟢 FIX: Pembungkus Ikon Dipastikan Flexbox Biar Ga Melayang Gaib */
   .icon-wrapper {
-    width: 42px;
-    height: 42px;
-    border-radius: 12px;
+    width: 44px;
+    height: 44px;
+    border-radius: 14px;
     display: flex;
     align-items: center;
     justify-content: center;
     flex-shrink: 0;
+    margin: 0; /* Pastikan ga ada margin aneh lek */
 
     ion-icon {
-      font-size: 22px;
+      font-size: 24px;
+      margin: 0; /* Jaga ikon tetep di tengah lek */
     }
   }
 
+  /* 🟢 FIX: Konten Teks Dipastikan Flex 1 Biar Pake Sisa Ruang */
   .notif-content {
     flex: 1;
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+    overflow: hidden; /* Jaga teks ga nabrak time-badge lek */
 
     .notif-header {
       display: flex;
       justify-content: space-between;
       align-items: center;
-      margin-bottom: 4px;
+      gap: 8px; /* Jarak antara judul dan tanggal lek */
 
       h3 {
         margin: 0;
         font-size: 14px;
         font-weight: 700;
         color: #1A202C;
+        white-space: nowrap; /* Jaga judul ga bungkus ke bawah lek */
+        overflow: hidden;
+        text-overflow: ellipsis; /* Pake titik-titik kalau kepanjangan lek */
       }
 
       .time-badge {
         font-size: 11px;
         color: #a0aec0;
         font-weight: 500;
+        flex-shrink: 0; /* Jaga tanggal ga kegencet lek */
       }
     }
 
@@ -78,26 +92,35 @@ ion-content {
       font-size: 12px;
       color: #718096;
       line-height: 1.5;
+      /* Jaga deskripsi ga overlap aneh lek */
+      display: -webkit-box;
+      -webkit-line-clamp: 2; /* Maksimal 2 baris teks lek */
+      -webkit-box-orient: vertical;
+      overflow: hidden;
     }
   }
 
-  /* Variasi Tipe 1: Promo (Tema Biru EduVan) */
+  /* ==========================================================================
+     🟢 FIX VARIASI WARNA: BIAR MENYALA DAN KONTRAS LEK!
+     ========================================================================== */
+
+  /* Variasi Tipe 1: Promo (Tema Biru Tua EduVan) */
   &.promo {
-    border-left-color: #093C5D;
+    border-left-color: #093C5D !important; /* Biru Tua EduVan */
     
     .icon-wrapper {
-      background: rgba(9, 60, 93, 0.1);
-      color: #093C5D;
+      background: rgba(9, 60, 93, 0.12) !important;
+      color: #093C5D !important;
     }
   }
 
-  /* Variasi Tipe 2: Success (Tema Hijau) */
+  /* Variasi Tipe 2: Success / Umum (Tema Hijau Emerald Segar) */
   &.success {
-    border-left-color: #10B981;
+    border-left-color: #10B981 !important; /* Hijau Emerald Segar */
     
     .icon-wrapper {
-      background: rgba(16, 185, 129, 0.1);
-      color: #10B981;
+      background: rgba(16, 185, 129, 0.12) !important;
+      color: #10B981 !important;
     }
   }
 }

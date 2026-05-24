@@ -117,24 +117,27 @@ ion-content {
   .cert-action {
     flex-shrink: 0;
 
-    .btn-download {
-      --padding-top: 0;
-      --padding-bottom: 0;
-      --padding-start: 0;
-      --padding-end: 0;
-      width: 38px;
-      height: 38px;
-      margin: 0;
-      background: #F4F7FA;
-      border-radius: 50%;
-      display: flex;
-      align-items: center;
-      justify-content: center;
+.btn-download {
+        width: 38px;
+        height: 38px;
+        margin: 0;
+        background: #F4F7FA;
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        border: none; /* 🟢 TAMBAHKAN INI: Biar garis luar button hilang */
+        outline: none; /* 🟢 TAMBAHKAN INI: Biar ga ada kotak biru pas diklik */
+        cursor: pointer;
 
-      ion-icon {
-        font-size: 18px;
-        color: #093C5D; /* Warna Biru EduVan */
+        ion-icon {
+          font-size: 18px;
+          color: #093C5D; /* Warna Biru EduVan */
+        }
+        
+        &:active {
+          background: #e2e8f0; /* Efek gelap sedikit pas dipencet */
+        }
       }
-    }
   }
 }

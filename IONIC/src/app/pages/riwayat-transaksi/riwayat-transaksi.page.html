@@ -1,16 +1,67 @@
 <ion-header class="ion-no-border">
-  <ion-toolbar>
+  <ion-toolbar style="--background: #F4F7FA; --color: #1A202C;">
     <ion-buttons slot="start">
-      <ion-back-button defaultHref="/profil" color="dark"></ion-back-button>
+      <ion-back-button defaultHref="/tabs/profil" text="" color="dark"></ion-back-button>
     </ion-buttons>
-    <ion-title>Riwayat Transaksi</ion-title>
+    <ion-title style="font-weight: 700; font-size: 18px;">Riwayat Transaksi</ion-title>
   </ion-toolbar>
 </ion-header>
 
-<ion-content class="ion-padding">
-  <div class="empty-state" style="text-align: center; margin-top: 50px;">
-    <ion-icon name="receipt-outline" style="font-size: 80px; color: #ccc;"></ion-icon>
-    <h3 style="color: #666;">Belum Ada Transaksi</h3>
-    <p style="color: #999;">Semua riwayat pembelian kursus Anda akan muncul di sini.</p>
+<ion-content style="--background: #F4F7FA;">
+
+  <div *ngIf="isLoading" style="text-align: center; padding-top: 50px;">
+    <ion-spinner name="crescent" color="primary"></ion-spinner>
+    <p style="color: #64748b; font-size: 14px; margin-top: 8px;">Memeriksa invoice transaksi...</p>
   </div>
+
+  <div class="transaksi-container" *ngIf="!isLoading && listTransaksi.length > 0" style="padding: 16px; display: flex; flex-direction: column; gap: 12px;">
+    
+    <div class="trx-card" *ngFor="let trx of listTransaksi" 
+         style="background: #ffffff; border-radius: 16px; padding: 16px; display: flex; flex-direction: column; gap: 12px; box-shadow: 0 4px 12px rgba(0, 0, 0, 0.02); border: 1px solid rgba(0,0,0,0.02);">
+      
+      <div style="display: flex; justify-content: space-between; align-items: flex-start; border-bottom: 1px dashed #edf2f7; padding-bottom: 10px;">
+          <div style="display: flex; flex-direction: column; gap: 2px;">
+            <span style="font-size: 10px; font-weight: 700; color: #a0aec0; letter-spacing: 0.5px;">INVOICE ID</span>
+            <strong style="font-size: 12px; color: #4a5568;">#EVN-{{ trx.id || trx.course_id }}{{ trx.user_id }}</strong>
+            
+            <span style="font-size: 11px; color: #718096; font-weight: 500; margin-top: 4px;">
+              <ion-icon name="calendar-outline" style="font-size: 12px; vertical-align: middle; margin-right: 4px;"></ion-icon>
+              {{ (trx.created_at || trx.updated_at) | date:'dd MMM yyyy, HH:mm' }} WIB
+            </span>
+          </div>
+          
+          <span [style.background]="trx.status === 'success' ? 'rgba(16, 185, 129, 0.1)' : 'rgba(249, 115, 22, 0.1)'"
+                [style.color]="trx.status === 'success' ? '#10B981' : '#f97316'"
+                style="font-size: 11px; font-weight: 700; padding: 4px 10px; border-radius: 8px; text-transform: uppercase;">
+            {{ trx.status === 'success' ? 'Lunas' : 'Pending' }}
+          </span>
+        </div>
+
+      <div style="display: flex; align-items: center; gap: 12px;">
+        <div style="width: 44px; height: 44px; background: #093C5D; color: #ffffff; border-radius: 12px; display: flex; align-items: center; justify-content: center; flex-shrink: 0;">
+          <ion-icon name="book-outline" style="font-size: 22px;"></ion-icon>
+        </div>
+        <div style="flex: 1; display: flex; flex-direction: column; gap: 2px;">
+          <h3 style="margin: 0; font-size: 14px; font-weight: 700; color: #093C5D;">{{ trx.course?.title || 'Kelas Pembelajaran EduVan' }}</h3>
+          <p style="margin: 0; font-size: 11px; color: #718096; font-weight: 500;">Metode: Gateway Pembayaran Otomatis</p>
+        </div>
+      </div>
+
+      <div style="display: flex; justify-content: space-between; align-items: center; background: #f8fafc; padding: 10px 12px; border-radius: 12px; margin-top: 2px;">
+        <span style="font-size: 12px; color: #64748b; font-weight: 500;">Total Pembayaran:</span>
+        <strong style="font-size: 14px; color: #1a202c; font-weight: 700;">Rp {{ (trx.course?.price || 0) | number:'1.0-0' }}</strong>
+      </div>
+
+    </div>
+
+  </div>
+
+  <div *ngIf="!isLoading && listTransaksi.length === 0" style="text-align: center; padding: 80px 20px; color: #94a3b8;">
+    <img src="assets/icon/receipt-empty.png" onerror="this.src='https://cdn-icons-png.flaticon.com/512/6134/6134065.png'" style="width: 80px; height: 80px; opacity: 0.3; margin-bottom: 16px;" />
+    <h3 style="font-size: 16px; font-weight: 700; color: #475569; margin: 0;">Belum Ada Transaksi</h3>
+    <p style="font-size: 13px; color: #64748b; line-height: 1.5; margin-top: 8px; padding: 0 20px;">
+      Semua riwayat pembelian kursus Anda akan muncul di sini lek.
+    </p>
+  </div>
+
 </ion-content>

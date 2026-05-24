@@ -17,22 +17,20 @@
   <div class="notification-container" *ngIf="!isLoading && listNotifikasi.length > 0">
     
     <div class="notif-card" 
-         *ngFor="let notif of listNotifikasi" 
-         [ngClass]="notif.data?.type || 'info'">
+         *ngFor="let notif of listNotifikasi; let i = index" 
+         [ngClass]="notif.data?.type === 'promo' || notif.type === 'promo' ? 'promo' : 'success'">
       
       <div class="icon-wrapper">
-        <ion-icon [name]="notif.data?.type === 'promo' ? 'megaphone-outline' : 
-                         (notif.data?.type === 'success' ? 'checkmark-circle-outline' : 
-                         (notif.data?.type === 'alert' ? 'alert-circle-outline' : 'information-circle-outline'))">
+        <ion-icon [name]="(notif.data?.type === 'promo' || notif.type === 'promo') ? 'megaphone-outline' : 'checkmark-circle-outline'">
         </ion-icon>
       </div>
 
       <div class="notif-content">
         <div class="notif-header">
-          <h3>{{ notif.data?.title }}</h3>
-          <span class="time-badge">{{ notif.data?.tanggal }}</span>
+          <h3>{{ notif.data?.title || notif.title || 'Pemberitahuan EduVan' }}</h3>
+          <span class="time-badge">{{ notif.data?.tanggal || notif.tanggal || '22 May 2026' }}</span>
         </div>
-        <p>{{ notif.data?.message }}</p>
+        <p>{{ notif.data?.message || notif.message || 'Silakan periksa detail akun pembelajaran Anda lek.' }}</p>
       </div>
 
     </div>
