@@ -1,7 +1,11 @@
 <ion-header mode="ios" class="ion-no-border">
   <ion-toolbar>
     <ion-buttons slot="start">
-      <ion-back-button defaultHref="/course" text="" color="dark"></ion-back-button>
+      <ion-back-button
+        defaultHref="/course"
+        text=""
+        color="light"
+      ></ion-back-button>
     </ion-buttons>
     <ion-title>Detail Kursus</ion-title>
   </ion-toolbar>
@@ -30,17 +34,30 @@
     <span class="category-tag-meta">{{ course?.category ?? 'General' }}</span>
     <h1 class="course-title">{{ course?.title }}</h1>
 
-    <div class="rating-row">
-      <div class="rating-badge-box">
+    <div class="meta-info-row">
+      <div class="meta-item rating-box">
         <ion-icon name="star"></ion-icon>
-        <strong>{{ course?.rating ? (course?.rating | number:'1.1-1') : '0.0' }}</strong>
+        <strong
+          >{{ course?.rating ? (course?.rating | number:'1.1-1') : '0.0'
+          }}</strong
+        >
+        <span class="text-muted">Rating Kelas</span>
       </div>
-      <span class="text-muted">/ 5.0 Rating Kelas</span>
+
+      <div class="meta-divider"></div>
+
+      <div class="meta-item student-box">
+        <ion-icon name="people-outline"></ion-icon>
+        <strong>{{ course?.users_count ?? 0 }}</strong>
+        <span class="text-muted">Siswa Terdaftar</span>
+      </div>
     </div>
 
     <div class="instructor-row">
       <ion-avatar>
-        <img src="https://ui-avatars.com/api/?name=Admin&background=4f46e5&color=fff" />
+        <img
+          src="https://ui-avatars.com/api/?name=Admin&background=4f46e5&color=fff"
+        />
       </ion-avatar>
       <div class="instructor-text">
         <p>Pengajar</p>
@@ -48,47 +65,21 @@
       </div>
     </div>
 
-    <div class="stats-card">
-      <div class="stat-item border-blue">
-        <div class="icon-circle bg-blue">
-          <ion-icon name="podium-outline"></ion-icon>
-        </div>
-        <div class="stat-texts">
-          <span class="stat-lbl">Level</span>
-          <span class="stat-val">Pemula</span>
-        </div>
-      </div>
-      <div class="stat-item border-orange">
-        <div class="icon-circle bg-orange">
-          <ion-icon name="time-outline"></ion-icon>
-        </div>
-        <div class="stat-texts">
-          <span class="stat-lbl">Durasi</span>
-          <span class="stat-val">12 Jam</span>
-        </div>
-      </div>
-      <div class="stat-item border-green">
-        <div class="icon-circle bg-green">
-          <ion-icon name="people-outline"></ion-icon>
-        </div>
-        <div class="stat-texts">
-          <span class="stat-lbl">Siswa</span>
-          <span class="stat-val">{{ course?.users_count ?? 0 }}</span>
-        </div>
-      </div>
-    </div>
-
     <div class="section">
       <h3>Deskripsi Course</h3>
       <p class="description-body">
-        {{ course?.description || 'Pelajari materi ini secara mendalam bersama mentor berpengalaman untuk membangun portofolio riil yang terstandarisasi industri.' }}
+        {{ course?.description || 'Pelajari materi ini secara mendalam bersama
+        mentor berpengalaman untuk membangun portofolio riil yang
+        terstandarisasi industri.' }}
       </p>
     </div>
 
     <div class="section section-playlist">
       <div class="playlist-title-row">
         <h3>Video Pembelajaran</h3>
-        <span class="badge-count" *ngIf="contents.length > 0">{{ contents.length }} Modul</span>
+        <span class="badge-count" *ngIf="contents.length > 0"
+          >{{ contents.length }} Modul</span
+        >
       </div>
 
       <div class="modern-video-wrapper">
@@ -100,14 +91,19 @@
         >
           <div class="video-item-left">
             <div class="play-indicator-circle">
-              <ion-icon [name]="paymentStatus === 'success' ? 'play' : 'lock-closed'"></ion-icon>
+              <ion-icon
+                [name]="paymentStatus === 'success' ? 'play' : 'lock-closed'"
+              ></ion-icon>
             </div>
             <div class="video-meta-detail">
               <h4>{{ materi.title }}</h4>
               <p>Durasi: {{ materi.duration || '15' }} Menit</p>
             </div>
           </div>
-          <span class="status-video-badge" [class.badge-success-color]="paymentStatus === 'success'">
+          <span
+            class="status-video-badge"
+            [class.badge-success-color]="paymentStatus === 'success'"
+          >
             {{ paymentStatus === 'success' ? 'Akses' : 'Terkunci' }}
           </span>
         </div>
@@ -132,36 +128,40 @@
             <p>Berikan ulasan dan rating bintang untuk kelas ini</p>
           </div>
         </div>
-        <ion-icon name="chevron-forward-outline" class="arrow-forward"></ion-icon>
+        <ion-icon
+          name="chevron-forward-outline"
+          class="arrow-forward"
+        ></ion-icon>
       </div>
     </div>
 
     <div class="action-buttons-row">
-      <div class="wishlist-col" *ngIf="paymentStatus !== 'success'">
-        <ion-button
-          fill="clear"
-          class="modern-wishlist-circle-btn"
-          [class.is-fav]="isWishlist"
-          (click)="toggleWishlist()"
+      <div
+        class="button-main-col"
+        *ngIf="paymentStatus === 'none' || !paymentStatus"
+      >
+        <button
+          class="btn-premium-action bg-navy"
+          (click)="enroll()"
+          [disabled]="loadingBeli"
         >
-          <ion-icon slot="icon-only" [name]="isWishlist ? 'heart' : 'heart-outline'"></ion-icon>
-        </ion-button>
-      </div>
-
-      <div class="button-main-col" *ngIf="paymentStatus === 'none' || !paymentStatus">
-        <button class="btn-premium-action bg-navy" (click)="enroll()" [disabled]="loadingBeli">
           <span class="inner-loader" *ngIf="loadingBeli">
             <ion-spinner name="crescent"></ion-spinner> Memproses...
           </span>
           <div class="inner-content-btn" *ngIf="!loadingBeli">
             <span class="lbl-btn">Daftar Sekarang</span>
-            <span class="lbl-price">Rp {{ course?.price | number:'1.0-0' }}</span>
+            <span class="lbl-price"
+              >Rp {{ course?.price | number:'1.0-0' }}</span
+            >
           </div>
         </button>
       </div>
 
       <div class="button-main-col" *ngIf="paymentStatus === 'pending'">
-        <button class="btn-premium-action bg-orange-gradient" (click)="bukaInvoiceXendit()">
+        <button
+          class="btn-premium-action bg-orange-gradient"
+          (click)="bukaInvoiceXendit()"
+        >
           Selesaikan Pembayaran (Xendit)
           <ion-icon name="arrow-forward-outline"></ion-icon>
         </button>
@@ -177,26 +177,34 @@
   </div>
 </ion-footer>
 
-<ion-modal #modalRating [isOpen]="isModalRatingOpen" (didDismiss)="isModalRatingOpen = false" class="premium-rating-modal">
+<ion-modal
+  #modalRating
+  [isOpen]="isModalRatingOpen"
+  (didDismiss)="isModalRatingOpen = false"
+  class="premium-rating-modal"
+>
   <ng-template>
     <ion-header class="ion-no-border">
       <ion-toolbar>
         <ion-title>Beri Rating Kelas</ion-title>
         <ion-buttons slot="end">
-          <ion-button (click)="isModalRatingOpen = false" color="medium">Batal</ion-button>
+          <ion-button (click)="isModalRatingOpen = false" color="medium"
+            >Batal</ion-button
+          >
         </ion-buttons>
       </ion-toolbar>
     </ion-header>
 
     <div class="rating-modal-body">
-      <p class="rating-instruction">Pilih bintang mendatar dan berikan ulasan terbaikmu lek!</p>
-      
+      <p class="rating-instruction">Pilih bintang sesuai kepuasanmu</p>
+
       <div class="stars-row-interactive">
-        <ion-icon 
-          *ngFor="let star of [1, 2, 3, 4, 5]" 
-          [name]="star <= ratingInput ? 'star' : 'star-outline'" 
+        <ion-icon
+          *ngFor="let star of [1, 2, 3, 4, 5]"
+          [name]="star <= ratingInput ? 'star' : 'star-outline'"
           (click)="setRatingBintang(star)"
-          [class.active-star]="star <= ratingInput">
+          [class.active-star]="star <= ratingInput"
+        >
         </ion-icon>
       </div>
 
@@ -208,7 +216,13 @@
         <span *ngIf="ratingInput === 5">Sempurna Sekali!</span>
       </div>
 
-      <ion-button expand="block" shape="round" color="primary" style="width: 100%; font-weight: 700;" (click)="kirimUlasanRatingLive()">
+      <ion-button
+        expand="block"
+        shape="round"
+        color="primary"
+        style="width: 100%; font-weight: 700"
+        (click)="kirimUlasanRatingLive()"
+      >
         KIRIM BINTANG
       </ion-button>
     </div>

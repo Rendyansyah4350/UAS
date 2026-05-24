@@ -1,7 +1,7 @@
 import { Component, OnInit, ChangeDetectorRef } from '@angular/core';
-import { ActivatedRoute, Router } from '@angular/router'; 
+import { ActivatedRoute, Router } from '@angular/router';
 import { CourseService } from '../../services/course.service';
-import { Browser } from '@capacitor/browser'; 
+import { Browser } from '@capacitor/browser';
 
 @Component({
   selector: 'app-course-detail',
@@ -11,12 +11,12 @@ import { Browser } from '@capacitor/browser';
 })
 export class CourseDetailPage implements OnInit {
   course: any = {};
-  contents: any[] = []; 
+  contents: any[] = [];
 
-  paymentStatus: string = 'none'; 
-  paymentUrl: string = ''; 
-  isWishlist: boolean = false; 
-  loadingBeli: boolean = false; 
+  paymentStatus: string = 'none';
+  paymentUrl: string = '';
+  isWishlist: boolean = false;
+  loadingBeli: boolean = false;
 
   // 🟢 VARIABEL BARU UNTUK KONTROL MODAL RATING PREMIUM LEK
   isModalRatingOpen: boolean = false;
@@ -24,9 +24,9 @@ export class CourseDetailPage implements OnInit {
 
   constructor(
     private route: ActivatedRoute,
-    private router: Router, 
+    private router: Router,
     private courseService: CourseService,
-    private cdr: ChangeDetectorRef 
+    private cdr: ChangeDetectorRef
   ) {}
 
   ngOnInit() {
@@ -104,7 +104,7 @@ export class CourseDetailPage implements OnInit {
           // 🟢 FIX FRONTLINE: Pastikan balikan pesan dari server diutamakan, atau pakai fallback formal lek!
           alert(res.message || 'Terima kasih, rating bintang berhasil disimpan.');
           this.isModalRatingOpen = false;
-          this.getDetail(String(this.course.id)); 
+          this.getDetail(String(this.course.id));
         },
         (error: any) => {
           console.error('Gagal kirim rating:', error);

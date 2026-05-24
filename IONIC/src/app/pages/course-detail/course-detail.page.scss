@@ -9,22 +9,17 @@ $navy-color: #093c5d;
 
 // HEADER & TOOLBAR (THEMED PREMIUM BACKGROUND)
 ion-toolbar {
-  // 🟢 Menggunakan warna tema utama lu untuk background atas
   --background: #093c5d;
   background: #093c5d;
-
-  // 🟢 Mengubah teks judul menjadi putih bersih biar kontrasnya dapet
   --color: #ffffff;
   color: #ffffff;
-
-  // Hilangkan border bawah bawaan agar menyatu clean
   border-bottom: none;
 
   ion-title {
     font-weight: 800;
     font-size: 1.15rem;
     letter-spacing: -0.3px;
-    color: #ffffff; // Paksa teks judul warna putih
+    color: #ffffff;
   }
 }
 
@@ -32,7 +27,7 @@ ion-toolbar {
 .image-header {
   position: relative;
   width: 100%;
-  height: 230px; // Tinggi dioptimalkan agar pas di layar hp
+  height: 230px;
   overflow: hidden;
   background: #f1f5f9;
 
@@ -48,7 +43,6 @@ ion-toolbar {
   padding: 24px 16px 40px 16px;
   background: #ffffff;
   border-radius: 24px 24px 0 0;
-
   margin-top: -30px;
   position: relative;
   z-index: 10;
@@ -74,95 +68,54 @@ ion-toolbar {
   }
 }
 
-/* --- Baris Rating --- */
-/* Gaya Desain Premium Modal Rating */
-.premium-rating-modal {
-  --height: auto;
-  --border-radius: 24px;
-  --box-shadow: 0 10px 30px rgba(0, 0, 0, 0.12);
-  align-items: center;
-
-  ion-toolbar {
-    --background: #ffffff;
-    --color: #093C5D;
-    padding: 8px;
-    
-    ion-title {
-      font-weight: 700;
-      font-size: 16px;
-    }
-  }
-}
-
-.rating-modal-body {
-  padding: 20px 24px 32px 24px;
-  background: #ffffff;
+/* --- NEW: WRAPPER BARIS RATING & SISWA SEJAJAR (ROW INLINE) --- */
+.meta-info-row {
   display: flex;
-  flex-direction: column;
   align-items: center;
+  background: #ffffff;
+  border: 1px solid #e2e8f0;
+  border-radius: 12px;
+  padding: 10px 14px;
+  margin: 14px 0 18px 0;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.01);
 
-  .rating-instruction {
-    font-size: 13px;
-    color: #64748b;
-    text-align: center;
-    margin: 0 0 20px 0;
-    line-height: 1.5;
-  }
-
-  /* Baris Bintang Horizontal Interaktif */
-  .stars-row-interactive {
+  .meta-item {
     display: flex;
-    justify-content: center;
-    gap: 12px;
-    margin-bottom: 8px;
+    align-items: center;
+    gap: 6px;
+    font-size: 13px;
 
     ion-icon {
-      font-size: 38px;
-      color: #cbd5e1; /* Warna abu jika kosong */
-      transition: transform 0.15s ease, color 0.15s ease;
-      cursor: pointer;
-
-      &:hover, &.active-star {
-        color: #eab308; /* Kuning emas menyala */
-      }
-
-      &:active {
-        transform: scale(0.85);
-      }
+      font-size: 16px;
     }
-  }
 
-  .rating-text-status {
-    font-size: 12px;
-    font-weight: 700;
-    color: #854d0e;
-    margin-bottom: 24px;
-    height: 18px;
-  }
-
-  /* Kotak Textarea Kustom */
-  .review-textarea-box {
-    width: 100%;
-    margin-bottom: 24px;
-
-    ion-textarea {
-      --background: #f8fafc;
-      --padding-top: 14px;
-      --padding-bottom: 14px;
-      --padding-start: 16px;
-      --padding-end: 16px;
-      border: 1px solid #e2e8f0;
-      border-radius: 16px;
-      font-size: 13px;
+    strong {
       color: #1e293b;
+      font-weight: 700;
+    }
+
+    .text-muted {
+      color: #64748b;
+      font-size: 12px;
+    }
+
+    // Aksen warna khusus icon star
+    &.rating-box ion-icon {
+      color: #eab308;
+    }
+
+    // Aksen warna khusus icon siswa
+    &.student-box ion-icon {
+      color: #10b981;
     }
   }
 
-  .btn-kirif-rating {
-    width: 100%;
-    font-weight: 700;
-    letter-spacing: 0.5px;
-    margin: 0;
+  // Garis pembatas vertikal tipis di tengah antara rating & siswa
+  .meta-divider {
+    width: 1px;
+    height: 16px;
+    background: #e2e8f0;
+    margin: 0 16px;
   }
 }
 
@@ -200,68 +153,87 @@ ion-toolbar {
   }
 }
 
-/* --- Grid Meta Info Premium --- */
-.stats-card {
-  display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  gap: 10px;
-  background: transparent;
-  padding: 0;
-  margin-bottom: 26px;
+/* --- Gaya Desain Premium Modal Rating --- */
+.premium-rating-modal {
+  --height: auto;
+  --border-radius: 24px;
+  --box-shadow: 0 10px 30px rgba(0, 0, 0, 0.12);
+  align-items: center;
 
-  .stat-item {
-    background: #ffffff;
-    border: 1px solid #f1f5f9;
-    border-radius: 14px;
-    padding: 12px 6px;
-    display: flex;
-    align-items: center;
-    gap: 8px;
-    justify-content: flex-start;
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.01);
+  ion-toolbar {
+    --background: #ffffff;
+    --color: #093c5d;
+    padding: 8px;
 
-    .icon-circle {
-      width: 32px;
-      height: 32px;
-      border-radius: 10px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
+    ion-title {
+      font-weight: 700;
       font-size: 16px;
-      flex-shrink: 0;
+    }
+  }
+}
 
-      &.bg-blue {
-        background: #eff6ff;
-        color: #3b82f6;
+.rating-modal-body {
+  padding: 20px 24px 32px 24px;
+  background: #ffffff;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+
+  .rating-instruction {
+    font-size: 13px;
+    color: #64748b;
+    text-align: center;
+    margin: 0 0 20px 0;
+    line-height: 1.5;
+  }
+
+  .stars-row-interactive {
+    display: flex;
+    justify-content: center;
+    gap: 12px;
+    margin-bottom: 8px;
+
+    ion-icon {
+      font-size: 38px;
+      color: #cbd5e1;
+      transition:
+        transform 0.15s ease,
+        color 0.15s ease;
+      cursor: pointer;
+
+      &:hover,
+      &.active-star {
+        color: #eab308;
       }
-      &.bg-orange {
-        background: #fff7ed;
-        color: #f97316;
-      }
-      &.bg-green {
-        background: #f0fdf4;
-        color: #16a34a;
+
+      &:active {
+        transform: scale(0.85);
       }
     }
+  }
 
-    .stat-texts {
-      display: flex;
-      flex-direction: column;
-      overflow: hidden;
+  .rating-text-status {
+    font-size: 12px;
+    font-weight: 700;
+    color: #854d0e;
+    margin-bottom: 24px;
+    height: 18px;
+  }
 
-      .stat-lbl {
-        font-size: 9.5px;
-        color: #94a3b8;
-        font-weight: 500;
-      }
-      .stat-val {
-        font-size: 12px;
-        font-weight: 700;
-        color: #1a202c;
-        white-space: nowrap;
-        text-overflow: ellipsis;
-        overflow: hidden;
-      }
+  .review-textarea-box {
+    width: 100%;
+    margin-bottom: 24px;
+
+    ion-textarea {
+      --background: #f8fafc;
+      --padding-top: 14px;
+      --padding-bottom: 14px;
+      --padding-start: 16px;
+      --padding-end: 16px;
+      border: 1px solid #e2e8f0;
+      border-radius: 16px;
+      font-size: 13px;
+      color: #1e293b;
     }
   }
 }
@@ -287,7 +259,7 @@ ion-toolbar {
 }
 
 .section-playlist {
-  margin-bottom: 60px !important; // Beri ruang napas ganjal footer fix bawah
+  margin-bottom: 60px !important;
 }
 
 .playlist-title-row {
@@ -388,7 +360,6 @@ ion-toolbar {
       }
     }
 
-    // Gaya khusus ketika status terkunci (Belum beli)
     &.item-locked {
       background: #f8fafc;
       border-color: #f1f5f9;
@@ -426,20 +397,16 @@ ion-toolbar {
   }
 }
 
-/* --- PREMIUM ACTION BOTTOM FOOTER (FIXED ALIGNMENT) --- */
-/* --- PREMIUM ACTION BOTTOM FOOTER (ANTI INTERFERENCE & FULLY RESPONSIVE) --- */
+/* --- PREMIUM ACTION BOTTOM FOOTER --- */
 ion-footer.premium-action-footer {
   --background: #ffffff;
   background: #ffffff;
   border-top: 1px solid #f1f5f9;
-
-  // 🟢 KUNCI UTAMA: Reset padding internal shadow DOM milik ion-footer bawaan ionic
   --padding-top: 12px;
   --padding-bottom: calc(12px + var(--ion-safe-area-bottom, 0px));
   --padding-start: 16px;
   --padding-end: 16px;
   padding: 12px 16px calc(12px + var(--ion-safe-area-bottom, 0px)) 16px;
-
   box-shadow: 0 -8px 24px rgba(0, 0, 0, 0.04);
   box-sizing: border-box;
   width: 100%;
@@ -452,7 +419,6 @@ ion-footer.premium-action-footer {
     box-sizing: border-box;
   }
 
-  // Baris Tombol Utama
   .action-buttons-row {
     display: flex;
     align-items: center;
@@ -461,7 +427,6 @@ ion-footer.premium-action-footer {
     box-sizing: border-box;
   }
 
-  // 🟢 FIX TOMBOL WISHLIST BULAT SEMPURNA (ION-BUTTON OVERRIDE)
   .wishlist-col {
     flex-shrink: 0;
     display: flex;
@@ -504,7 +469,6 @@ ion-footer.premium-action-footer {
     display: flex;
   }
 
-  // Dasar Tombol Premium Murni HTML Button
   .btn-premium-action {
     width: 100%;
     height: 48px;
@@ -595,54 +559,6 @@ ion-footer.premium-action-footer {
   transition: all 0.2s ease;
   box-sizing: border-box;
   width: 100%;
-
-  .zone-left {
-    display: flex;
-    align-items: center;
-    gap: 10px;
-
-    .star-pulse {
-      font-size: 20px;
-      color: #ca8a04;
-    }
-
-    .zone-texts {
-      h4 {
-        font-size: 12.5px;
-        font-weight: 700;
-        color: #1a202c;
-        margin: 0;
-      }
-      p {
-        font-size: 10.5px;
-        color: #718096;
-        margin: 1px 0 0 0;
-        font-weight: 500;
-      }
-    }
-  }
-
-  .arrow-forward {
-    font-size: 15px;
-    color: #ca8a04;
-  }
-}
-
-/* --- BARIS TRIGGER RATING SEBELUM MULAI BELAJAR --- */
-.rating-trigger-full {
-  width: 100%;
-}
-
-.rating-zone-box {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  padding: 12px 14px;
-  background: #fffdf5;
-  border: 1px solid #fef08a;
-  border-radius: 12px;
-  box-shadow: 0 4px 12px rgba(234, 179, 8, 0.02);
-  transition: all 0.2s ease;
 
   &:active {
     background: #fefcbf;
