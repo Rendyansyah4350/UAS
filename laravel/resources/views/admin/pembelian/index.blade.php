@@ -12,6 +12,22 @@
         </a>
     </div>
 
+    {{-- NOTIFIKASI ALERT BERHASIL / GAGAL --}}
+    @if (session('success'))
+        <div
+            class="mb-6 p-4 bg-emerald-50 border border-emerald-200 text-emerald-800 rounded-xl text-sm font-semibold flex items-center gap-2">
+            <i class="fas fa-check-circle text-emerald-500 text-base"></i>
+            {{ session('success') }}
+        </div>
+    @endif
+    @if (session('error'))
+        <div
+            class="mb-6 p-4 bg-red-50 border border-red-200 text-red-800 rounded-xl text-sm font-semibold flex items-center gap-2">
+            <i class="fas fa-excurtion-circle text-red-500 text-base"></i>
+            {{ session('error') }}
+        </div>
+    @endif
+
     {{-- KONTEN RINGKASAN PENDAPATAN DENGAN FITUR SEARCH BAR RESPONSIF (LAPTOP & HP) --}}
     <div class="bg-white rounded-2xl shadow-sm border border-gray-100 overflow-hidden mb-6">
         <div
@@ -62,7 +78,7 @@
                         </tr>
                     @endforelse
                 </tbody>
-                <tfoot class="bg-gray-50 border-t border-gray-100 font-bold text-gray-800" id="courseTableFoot">
+                <tbody class="bg-gray-50 border-t border-gray-100 font-bold text-gray-800" id="courseTableFoot">
                     <tr>
                         <td colspan="2" class="p-4 text-right uppercase tracking-wider text-xs text-gray-500">Grand Total
                             Pendapatan</td>
@@ -71,7 +87,7 @@
                         </td>
                         <td class="bg-gray-50"></td>
                     </tr>
-                </tfoot>
+                </tbody>
             </table>
         </div>
 
@@ -107,6 +123,156 @@
                 <span class="text-xs font-bold text-emerald-800 tracking-wide uppercase">Grand Total</span>
                 <span class="text-base font-black text-emerald-700">Rp {{ number_format($grandTotal, 0, ',', '.') }}</span>
             </div>
+        </div>
+    </div>
+
+
+    {{-- 🟢 SECTION BARU: ANTREAN VERIFIKASI PEMBAYARAN MANUAL (CHECKING ADMIN) --}}
+    <div class="bg-white rounded-2xl shadow-sm border border-gray-100 overflow-hidden mb-6">
+        <div class="p-5 border-b border-gray-100 bg-amber-50/40">
+            <h4 class="font-bold text-amber-800 flex items-center gap-2">
+                <i class="fas fa-clock text-amber-500"></i> Antrean Verifikasi Pembayaran Manual
+            </h4>
+            <p class="text-gray-500 text-xs mt-1">Daftar pendaftaran kelas mahasiswa yang menunggu konfirmasi bukti transfer
+                transfer.</p>
+        </div>
+
+        {{-- VERIFIKASI: LAPTOP (TABLE) --}}
+        <div class="hidden md:block">
+            <table class="w-full text-left border-collapse">
+                <thead class="bg-gray-50 text-gray-700 text-sm font-semibold">
+                    <tr>
+                        <th class="p-4 border-b">Tanggal Pengajuan</th>
+                        <th class="p-4 border-b">Nama Student</th>
+                        <th class="p-4 border-b">Materi Kursus</th>
+                        <th class="p-4 border-b text-right">Harga Beli</th>
+                        <th class="p-4 border-b text-center">Bukti Transfer</th>
+                        <th class="p-4 border-b text-center">Aksi Konfirmasi</th>
+                    </tr>
+                </thead>
+                <tbody class="text-gray-600 text-sm divide-y divide-gray-100">
+                    @forelse ($pendingVerifications as $verify)
+                        <tr class="hover:bg-amber-50/20 transition-colors">
+                            <td class="p-4 text-gray-500 whitespace-nowrap">{{ $verify->created_at->format('d M Y, H:i') }}
+                            </td>
+                            <td class="p-4 font-semibold text-gray-900">{{ $verify->user->name }}</td>
+                            <td class="p-4 text-gray-700 font-medium">{{ $verify->course->title }}</td>
+                            <td class="p-4 text-right font-semibold text-gray-900">
+                                Rp {{ number_format($verify->price_bought, 0, ',', '.') }}
+                            </td>
+                            <td class="p-4 text-center">
+                                @if ($verify->proof_of_payment)
+                                    <button type="button"
+                                        onclick="openProofModal('{{ asset('storage/' . $verify->proof_of_payment) }}')"
+                                        class="inline-flex items-center px-2.5 py-1 bg-amber-500 hover:bg-amber-600 text-white text-xs font-bold rounded-lg shadow-sm transition-colors gap-1">
+                                        <i class="fas fa-eye text-[10px]"></i> Lihat Bukti
+                                    </button>
+                                @else
+                                    <span class="text-gray-400 italic text-xs">Tidak ada file</span>
+                                @endif
+                            </td>
+                            <td class="p-4 text-center">
+                                <div class="inline-flex items-center justify-center gap-2">
+                                    <form action="{{ route('admin.pembelian.updateStatus', $verify->id) }}" method="POST"
+                                        onsubmit="return confirm('Setujui transaksi ini?')">
+                                        @csrf
+                                        @method('PUT')
+                                        <input type="hidden" name="status" value="success">
+                                        <button type="submit"
+                                            class="px-2.5 py-1.5 bg-emerald-600 hover:bg-emerald-700 text-white text-xs font-bold rounded-lg transition-colors shadow-sm">
+                                            <i class="fas fa-check mr-1"></i> Terima
+                                        </button>
+                                    </form>
+                                    <form action="{{ route('admin.pembelian.updateStatus', $verify->id) }}"
+                                        method="POST" onsubmit="return confirm('Tolak transaksi ini?')">
+                                        @csrf
+                                        @method('PUT')
+                                        <input type="hidden" name="status" value="Fail">
+                                        <button type="submit"
+                                            class="px-2.5 py-1.5 bg-red-600 hover:bg-red-700 text-white text-xs font-bold rounded-lg transition-colors shadow-sm">
+                                            <i class="fas fa-times mr-1"></i> Tolak
+                                        </button>
+                                    </form>
+                                </div>
+                            </td>
+                        </tr>
+                    @empty
+                        <tr>
+                            <td colspan="6" class="p-8 text-center text-gray-400 italic bg-gray-50/30">Tidak ada
+                                antrean verifikasi pembayaran saat ini.</td>
+                        </tr>
+                    @endforelse
+                </tbody>
+            </table>
+        </div>
+
+        {{-- VERIFIKASI: HP (CARDS) --}}
+        <div class="block md:hidden p-4 space-y-3 bg-gray-50/30">
+            @forelse ($pendingVerifications as $verify)
+                <div class="bg-white p-4 rounded-xl border border-amber-100 shadow-sm space-y-3 relative">
+                    <div class="flex justify-between items-start">
+                        <div class="max-w-[70%]">
+                            <h5 class="font-bold text-gray-900 text-sm leading-tight">{{ $verify->user->name }}</h5>
+                            <span
+                                class="text-[10px] text-gray-400 block mt-0.5">{{ $verify->created_at->format('d M Y, H:i') }}</span>
+                        </div>
+                        <span class="px-2 py-0.5 bg-amber-50 text-amber-700 rounded-full font-bold text-[10px]">
+                            Checking Admin
+                        </span>
+                    </div>
+
+                    <div class="pt-2 border-t border-gray-50 space-y-2">
+                        <div class="flex justify-between text-xs">
+                            <span class="text-gray-400">Materi:</span>
+                            <span
+                                class="text-gray-700 font-semibold truncate max-w-[180px]">{{ $verify->course->title }}</span>
+                        </div>
+                        <div class="flex justify-between text-xs">
+                            <span class="text-gray-400">Total Tagihan:</span>
+                            <span class="font-extrabold text-gray-900">Rp
+                                {{ number_format($verify->price_bought, 0, ',', '.') }}</span>
+                        </div>
+                        <div class="flex justify-between items-center pt-1">
+                            <span class="text-gray-400 text-xs">File:</span>
+                            @if ($verify->proof_of_payment)
+                                <button type="button"
+                                    onclick="openProofModal('{{ asset('storage/' . $verify->proof_of_payment) }}')"
+                                    class="px-2 py-1 bg-amber-500 hover:bg-amber-600 text-white text-[10px] font-bold rounded-md transition-colors">
+                                    <i class="fas fa-eye mr-1"></i> Lihat Bukti
+                                </button>
+                            @else
+                                <span class="text-gray-400 italic text-[11px]">Tidak ada</span>
+                            @endif
+                        </div>
+                    </div>
+
+                    <div class="pt-2 border-t border-gray-100 flex gap-2">
+                        <form action="{{ route('admin.pembelian.updateStatus', $verify->id) }}" method="POST"
+                            class="w-1/2" onsubmit="return confirm('Setujui transaksi ini?')">
+                            @csrf
+                            @method('PUT')
+                            <input type="hidden" name="status" value="success">
+                            <button type="submit"
+                                class="w-full py-2 bg-emerald-600 hover:bg-emerald-700 text-white text-xs font-bold rounded-lg text-center shadow-sm">
+                                <i class="fas fa-check mr-1"></i> Terima
+                            </button>
+                        </form>
+                        <form action="{{ route('admin.pembelian.updateStatus', $verify->id) }}" method="POST"
+                            class="w-1/2" onsubmit="return confirm('Tolak transaksi ini?')">
+                            @csrf
+                            @method('PUT')
+                            <input type="hidden" name="status" value="Fail">
+                            <button type="submit"
+                                class="w-full py-2 bg-red-600 hover:bg-red-700 text-white text-xs font-bold rounded-lg text-center shadow-sm">
+                                <i class="fas fa-times mr-1"></i> Tolak
+                            </button>
+                        </form>
+                    </div>
+                </div>
+            @empty
+                <div class="text-center py-6 text-gray-400 text-sm italic bg-white rounded-xl border border-dashed">Tidak
+                    ada antrean verifikasi.</div>
+            @endforelse
         </div>
     </div>
 
@@ -215,8 +381,54 @@
         </div>
     </div>
 
-    {{-- SCRIPT LIVE SEARCH UNTUK RINGKASAN MATERI & DETAIL STUDENT --}}
+
+    {{-- 🟢 MODAL COMPONENT UNTUK PREVIEW BUKTI TRANSFER --}}
+    <div id="proofModal" class="fixed inset-0 z-50 hidden overflow-y-auto" aria-labelledby="modal-title" role="dialog"
+        aria-modal="true">
+        <div class="flex items-center justify-center min-h-screen px-4 pt-4 pb-20 text-center sm:block sm:p-0">
+            <div onclick="closeProofModal()" class="fixed inset-0 bg-gray-900 bg-opacity-60 transition-opacity"
+                aria-hidden="true"></div>
+            <span class="hidden sm:inline-block sm:align-middle sm:h-screen" aria-hidden="true">&#8203;</span>
+
+            <div
+                class="inline-block align-middle bg-white rounded-2xl text-left overflow-hidden shadow-2xl transform transition-all sm:my-8 sm:align-middle sm:max-w-lg sm:w-full border border-gray-100">
+                <div class="bg-gray-50 px-4 py-3 border-b border-gray-100 flex items-center justify-between">
+                    <h3 class="text-sm font-bold text-gray-800" id="modal-title">Bukti Transfer Pembayaran</h3>
+                    <button type="button" onclick="closeProofModal()"
+                        class="text-gray-400 hover:text-gray-600 transition-colors focus:outline-none">
+                        <i class="fas fa-times text-base"></i>
+                    </button>
+                </div>
+                <div class="p-4 bg-white flex justify-center items-center max-h-[70vh] overflow-y-auto">
+                    <img id="modalProofImage" src="" alt="Bukti Transfer Mahasiswa"
+                        class="max-w-full h-auto rounded-xl border shadow-inner">
+                </div>
+                <div class="bg-gray-50 px-4 py-3 border-t border-gray-100 flex justify-end">
+                    <button type="button" onclick="closeProofModal()"
+                        class="px-4 py-2 bg-gray-200 hover:bg-gray-300 text-gray-700 text-xs font-bold rounded-xl transition-colors">
+                        Tutup
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+    {{-- SCRIPT LIVE SEARCH & MODAL CONTROLLER --}}
     <script>
+        // 🟢 FUNGSI BARU: MODAL INTERACTION
+        function openProofModal(imageUrl) {
+            document.getElementById('modalProofImage').src = imageUrl;
+            document.getElementById('proofModal').classList.remove('hidden');
+            document.body.style.overflow = 'hidden'; // Lock scrolling background
+        }
+
+        function closeProofModal() {
+            document.getElementById('proofModal').classList.add('hidden');
+            document.getElementById('modalProofImage').src = '';
+            document.body.style.overflow = ''; // Unlock scrolling background
+        }
+
         document.addEventListener('DOMContentLoaded', function() {
             // ----------------------------------------------------
             // LOGIKA 1: LIVE SEARCH UNTUK RINGKASAN MATERI
