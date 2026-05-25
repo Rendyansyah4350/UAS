@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { AuthService } from '../services/auth';
+import { SearchService } from '../services/search'; // Pastikan path ini benar
 
 @Component({
   selector: 'app-beranda',
@@ -12,13 +13,12 @@ export class HomePage implements OnInit {
   namaUser: string = 'User';
   keywordPencarian: string = '';
   isLoading: boolean = true;
-  
-  // 🟢 KITA KEMBALIKAN NAMA INI AGAR SESUAI DENGAN HTML KAMU
   kursusTersaring: any[] = []; 
 
   constructor(
     private router: Router,
     private authService: AuthService,
+    private searchService: SearchService
   ) {}
 
   ngOnInit() {
@@ -42,7 +42,6 @@ export class HomePage implements OnInit {
     this.authService.getCoursesFromServer().subscribe({
       next: (res: any) => {
         const dataMentah = res.data || [];
-        // 🟢 Kita simpan ke kursusTersaring agar HTML tidak error
         this.kursusTersaring = dataMentah
           .filter((k: any) => Number(k.rating || 0) > 0)
           .sort((a: any, b: any) => Number(b.rating || 0) - Number(a.rating || 0))
@@ -56,7 +55,6 @@ export class HomePage implements OnInit {
     });
   }
 
-  // 🟢 FUNGSI INI WAJIB ADA AGAR ERROR goToDetail() HILANG
   goToDetail(id?: any) {
     if (id) {
       this.router.navigate(['/course-detail', id]);
@@ -65,13 +63,17 @@ export class HomePage implements OnInit {
     }
   }
 
+  // 🔥 FUNGSI UNTUK IKLAN (Menghilangkan error Anda)
+  goToBannerDetail() {
+    this.router.navigate(['/tabs/course']);
+  }
+
   fungsiCariKursus() {
     const keyword = this.keywordPencarian.trim();
-    if (keyword) {
-      this.router.navigate(['/tabs/course'], { state: { keyword: keyword } });
-    } else {
-      this.router.navigate(['/tabs/course']);
-    }
+    // Kirim keyword ke Service
+    this.searchService.changeKeyword(keyword);
+    
+    this.router.navigate(['/tabs/course']);
     this.keywordPencarian = '';
   }
 
