@@ -1,7 +1,6 @@
 import { Component, OnInit, ChangeDetectorRef } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { CourseService } from '../../services/course.service';
-import { Browser } from '@capacitor/browser';
 
 @Component({
   selector: 'app-course-detail',
@@ -18,9 +17,15 @@ export class CourseDetailPage implements OnInit {
   isWishlist: boolean = false;
   loadingBeli: boolean = false;
 
-  // 🟢 VARIABEL BARU UNTUK KONTROL MODAL RATING PREMIUM LEK
+  // Variabel Kontrol Modal Rating Premium Kustom
   isModalRatingOpen: boolean = false;
-  ratingInput: number = 5; // Default bintang 5 mendatar mendatar
+  ratingInput: number = 5;
+
+  // 🟢 VARIABEL BARU UNTUK KONTROL TRANSFER BUKTI MANUAL LEK
+  isModalTransferOpen: boolean = false;
+  fileGambarBukti: File | null = null;
+  namaFileTerpilih: string = '';
+  loadingUpload: boolean = false;
 
   constructor(
     private route: ActivatedRoute,
@@ -43,57 +48,117 @@ export class CourseDetailPage implements OnInit {
     }
   }
 
+  // 🟢 DIUBAH TOTAL: Memisahkan jalur data Kursus & Enrollments agar data kelas TIDAK HILANG lek!
   getDetail(id: string) {
     const targetCourseId = Number(id);
 
-    this.courseService.getCourseById(id).subscribe(
-      (res: any) => {
+    // Jalur Pipa 1: Ambil data detail kursus utama dari API (Gembok detail aman)
+    this.courseService.getCourseById(id).subscribe({
+      next: (res: any) => {
         if (res.success) {
           this.course = res.data;
-          console.log('Detail Kursus:', this.course);
+          console.log('Detail Kursus Sukses Dimuat:', this.course);
           this.cdr.detectChanges();
 
           this.cekStatusWishlistUser(targetCourseId);
           this.ambilKontenKurikulum(targetCourseId);
-
-          this.courseService.getMyEnrollments().subscribe(
-            (enrollRes: any) => {
-              if (enrollRes.success && enrollRes.data) {
-                const riwayatBeli = enrollRes.data.find(
-                  (item: any) => Number(item.course_id) === targetCourseId,
-                );
-
-                if (riwayatBeli) {
-                  this.paymentStatus = String(riwayatBeli.status).trim().toLowerCase();
-                  this.paymentUrl = riwayatBeli.payment_url;
-                } else {
-                  this.paymentStatus = 'none';
-                }
-                this.cdr.detectChanges();
-              }
-            },
-            (enrollError) => {
-              if (enrollError.status === 400) {
-                this.paymentStatus = 'success';
-                this.cdr.detectChanges();
-              }
-            },
-          );
         }
       },
-      (error) => {
+      error: (error) => {
         console.error('Gagal ambil detail:', error);
+      }
+    });
+
+    // Jalur Pipa 2: Cek status pendaftaran student (Independent pipeline)
+    this.courseService.getMyEnrollments().subscribe({
+      next: (enrollRes: any) => {
+        if (enrollRes.success && enrollRes.data) {
+          const riwayatBeli = enrollRes.data.find(
+            (item: any) => Number(item.course_id) === targetCourseId
+          );
+
+          if (riwayatBeli) {
+            // Mengambil status string asli database cPanel ('pending' atau 'success')
+            this.paymentStatus = String(riwayatBeli.status).trim().toLowerCase();
+          } else {
+            this.paymentStatus = 'none';
+          }
+          this.cdr.detectChanges();
+        }
       },
-    );
+      error: (enrollError) => {
+        if (enrollError.status === 400) {
+          this.paymentStatus = 'success';
+          this.cdr.detectChanges();
+        }
+      }
+    });
   }
 
-  // 🟢 METODE BARU: Ubah kuantitas bintang interaktif pas di-tap
+  // =========================================================================
+  // 🟢 LOGIKA BARU: SEKERANJANG FUNGSI TRANSFER MULTIPART MANUAL (NON-XENDIT)
+  // =========================================================================
+  bukaModalUploadTransfer() {
+    this.isModalTransferOpen = true;
+    this.fileGambarBukti = null;
+    this.namaFileTerpilih = '';
+    this.cdr.detectChanges();
+  }
+
+  pilihFileBuktiTransfer(event: any) {
+    const file = event.target.files[0];
+    if (file) {
+      this.fileGambarBukti = file;
+      this.namaFileTerpilih = file.name;
+      this.cdr.detectChanges();
+    }
+  }
+
+kirimBuktiTransferKeServer() {
+    if (!this.fileGambarBukti) {
+      alert('Harap pilih file gambar bukti transfer terlebih dahulu!');
+      return;
+    }
+
+    this.loadingUpload = true;
+    this.cdr.detectChanges();
+
+    // Membungkus parameter ke objek FormData biner lek
+    const formData = new FormData();
+    formData.append('course_id', String(this.course.id));
+    
+    // 🟢 FIX SAKTI: Ubah key dari 'payment_proof' menjadi 'proof_of_payment' biar match sama Laravel Ivan
+    formData.append('proof_of_payment', this.fileGambarBukti);
+
+    // Tembak service multipart kustom kita lek
+    this.courseService.buyCourseManual(formData).subscribe({
+      next: (res: any) => {
+        this.loadingUpload = false;
+        this.isModalTransferOpen = false;
+        alert(res.message || 'Bukti transfer sukses dikirim! Mohon tunggu konfirmasi Admin.');
+        
+        this.paymentStatus = 'pending'; // Tombol otomatis berubah jadi "Menunggu Verifikasi Admin"
+        this.getDetail(String(this.course.id));
+        this.cdr.detectChanges();
+      },
+      error: (err) => {
+        this.loadingUpload = false;
+        console.error('Gagal upload bukti:', err);
+        // Memunculkan pesan error asli dari backend biar gampang di-trace lek
+        alert(err.error?.message || 'Gagal mengirim bukti pembayaran, periksa format file Anda.');
+        this.cdr.detectChanges();
+      }
+    });
+  }
+
+  // =========================================================================
+  // LOGIKA FITUR ULASAN & RATING KUSTOM
+  // =========================================================================
   setRatingBintang(bintang: number) {
     this.ratingInput = bintang;
     this.cdr.detectChanges();
   }
 
-  // 🟢 METODE BARU: Kirim gabungan bintang & teks ke server cPanel
   kirimUlasanRatingLive() {
     console.log(`Mengirim rating bintang ${this.ratingInput} untuk course ID: ${this.course.id}`);
 
@@ -101,7 +166,6 @@ export class CourseDetailPage implements OnInit {
       .kirimRatingCourse(this.course.id, this.ratingInput)
       .subscribe(
         (res: any) => {
-          // 🟢 FIX FRONTLINE: Pastikan balikan pesan dari server diutamakan, atau pakai fallback formal lek!
           alert(res.message || 'Terima kasih, rating bintang berhasil disimpan.');
           this.isModalRatingOpen = false;
           this.getDetail(String(this.course.id));
@@ -127,24 +191,10 @@ export class CourseDetailPage implements OnInit {
     );
   }
 
-  bukaInvoiceXendit() {
-    if (this.paymentUrl) {
-      try {
-        Browser.open({ url: this.paymentUrl, windowName: '_blank' });
-      } catch (e) {
-        window.open(this.paymentUrl, '_blank');
-      }
-    } else {
-      alert('Link pembayaran tidak ditemukan.');
-    }
-  }
-
+  // 🟢 DIUBAH: Validasi gembok video mengarah ke status pending/success manual admin
   klikMateri(contentId: number) {
     if (this.paymentStatus !== 'success') {
-      alert('Materi ini masih terkunci! Silakan selesaikan pembayaran terlebih dahulu.');
-      if (this.paymentStatus === 'pending') {
-        this.bukaInvoiceXendit();
-      }
+      alert('Materi ini masih terkunci! Silakan selesaikan pendaftaran dan tunggu verifikasi Admin lek.');
     } else {
       this.router.navigate([`/course/${this.course.id}/watch/${contentId}`]);
     }
@@ -183,42 +233,6 @@ export class CourseDetailPage implements OnInit {
             (item: any) => Number(item.course_id) === targetCourseId,
           );
           this.cdr.detectChanges();
-        }
-      },
-    );
-  }
-
-  enroll() {
-    this.loadingBeli = true;
-    this.courseService.buyCourse(this.course.id).subscribe(
-      async (res: any) => {
-        this.loadingBeli = false;
-        if (res.success) {
-          if (res.data.payment_url) {
-            this.paymentStatus = 'pending';
-            this.paymentUrl = res.data.payment_url;
-            this.cdr.detectChanges();
-            alert('Invoice Xendit berhasil dibuat, membuka halaman pembayaran...');
-            try {
-              await Browser.open({ url: res.data.payment_url, windowName: '_blank' });
-            } catch (browserError) {
-              window.open(res.data.payment_url, '_blank');
-            }
-            this.getDetail(String(this.course.id));
-          } else {
-            this.paymentStatus = 'success';
-            this.cdr.detectChanges();
-            alert('Berhasil mendaftar kursus gratis!');
-            this.masukKelas();
-          }
-        }
-      },
-      (error) => {
-        this.loadingBeli = false;
-        if (error.status === 400) {
-          this.paymentStatus = 'success';
-          this.cdr.detectChanges();
-          alert('Anda sudah terdaftar di kursus ini. Selamat belajar!');
         }
       },
     );

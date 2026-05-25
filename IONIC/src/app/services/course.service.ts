@@ -184,4 +184,26 @@ export class CourseService {
       },
     );
   }
+  buyCourseManual(formData: FormData): Observable<any> {
+    // 1. Ambil token murni menggunakan logic pembersihan yang sudah kamu buat di atas lek
+    let tokenUser = localStorage.getItem('token');
+    if (!tokenUser) {
+      const userDataRaw = localStorage.getItem('userData');
+      if (userDataRaw) {
+        try { const parsedData = JSON.parse(userDataRaw); tokenUser = parsedData.token || parsedData.access_token || null; } catch (e) { tokenUser = userDataRaw; }
+      }
+    }
+    if (tokenUser) {
+      tokenUser = String(tokenUser).replace(/"/g, '').trim();
+    }
+
+    // 2. KUNCI SAKTI: Cukup bawa Authorization, JANGAN isi Content-Type manual lek!
+    const headers = new HttpHeaders({
+      'Authorization': `Bearer ${tokenUser}`,
+      'Accept': 'application/json'
+    });
+
+    // 3. Tembak FormData murni ke endpoint API enrollments backend Ivan
+    return this.http.post(`${this.baseApiUrl}/enrollments`, formData, { headers });
+  }
 }
