@@ -13,12 +13,12 @@ export class HomePage implements OnInit {
   namaUser: string = 'User';
   keywordPencarian: string = '';
   isLoading: boolean = true;
-  kursusTersaring: any[] = []; 
+  kursusTersaring: any[] = [];
 
   constructor(
     private router: Router,
     private authService: AuthService,
-    private searchService: SearchService
+    private searchService: SearchService,
   ) {}
 
   ngOnInit() {
@@ -44,7 +44,9 @@ export class HomePage implements OnInit {
         const dataMentah = res.data || [];
         this.kursusTersaring = dataMentah
           .filter((k: any) => Number(k.rating || 0) > 0)
-          .sort((a: any, b: any) => Number(b.rating || 0) - Number(a.rating || 0))
+          .sort(
+            (a: any, b: any) => Number(b.rating || 0) - Number(a.rating || 0),
+          )
           .slice(0, 3);
         this.isLoading = false;
       },
@@ -72,11 +74,43 @@ export class HomePage implements OnInit {
     const keyword = this.keywordPencarian.trim();
     // Kirim keyword ke Service
     this.searchService.changeKeyword(keyword);
-    
+
     this.router.navigate(['/tabs/course']);
     this.keywordPencarian = '';
   }
 
-  goToNotif() { this.router.navigate(['/notifications']); }
-  goToCourse() { this.router.navigateByUrl('/tabs/course'); }
+  goToNotif() {
+    this.router.navigate(['/notifications']);
+  }
+  goToCourse() {
+    this.router.navigateByUrl('/tabs/course');
+  }
+
+  // 🔥 FIX UTAMA: Fungsi pembaca gambar default berdasarkan kategori kursus
+  getDefaultImage(category: string): string {
+    if (!category) return 'assets/icon/computer-science.jpeg';
+
+    const kat = category.toLowerCase();
+    if (
+      kat.includes('computer') ||
+      kat.includes('science') ||
+      kat.includes('coding')
+    ) {
+      return 'assets/icon/computer-science.jpeg';
+    } else if (
+      kat.includes('microsoft') ||
+      kat.includes('office') ||
+      kat.includes('excel')
+    ) {
+      return 'assets/icon/microsoft-office.jpeg';
+    }
+
+    // Jika ada kategori lain diluar dua itu, arahkan ke salah satu sebagai default utama
+    return 'assets/icon/computer-science.jpeg';
+  }
+
+  // 🔥 FIX TAMBAHAN: Fungsi penangkap error tag img di HTML
+  handleImageError(event: any, category: string) {
+    event.target.src = this.getDefaultImage(category);
+  }
 }

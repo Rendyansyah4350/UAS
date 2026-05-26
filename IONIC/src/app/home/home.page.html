@@ -2,17 +2,25 @@
   <div class="main-wrapper">
     <div class="header-section">
       <div class="brand">Edu<span>Van</span></div>
-<ion-icon name="notifications-outline" class="icon-notif" (click)="goToNotif()"></ion-icon>
+      <ion-icon
+        name="notifications-outline"
+        class="icon-notif"
+        (click)="goToNotif()"
+      ></ion-icon>
     </div>
 
     <div class="search-container">
       <div class="search-inner">
-        <ion-icon name="search-outline" class="search-click-icon" (click)="fungsiCariKursus()"></ion-icon>
+        <ion-icon
+          name="search-outline"
+          class="search-click-icon"
+          (click)="fungsiCariKursus()"
+        ></ion-icon>
         <input
           type="text"
           [(ngModel)]="keywordPencarian"
           (keyup.enter)="fungsiCariKursus()"
-          placeholder="Cari kursus yang diinginkan" 
+          placeholder="Cari kursus yang diinginkan"
         />
       </div>
     </div>
@@ -26,16 +34,16 @@
       </div>
     </div>
 
-<div class="banner-iklan" (click)="goToBannerDetail()">
-  <div class="banner-text">
-    <h2>Tingkatkan Skill,<br>Wujudkan Masa Depan</h2>
-    <p>Belajar kapan saja, di mana saja bersama EduVan.</p>
-    <div class="banner-button">Jelajahi Kursus</div>
-  </div>
-  <div class="banner-image">
-    <img src="assets/icon/promo.png" alt="Promo">
-  </div>
-</div>
+    <div class="banner-iklan" (click)="goToBannerDetail()">
+      <div class="banner-text">
+        <h2>Tingkatkan Skill,<br />Wujudkan Masa Depan</h2>
+        <p>Belajar kapan saja, di mana saja bersama EduVan.</p>
+        <div class="banner-button">Jelajahi Kursus</div>
+      </div>
+      <div class="banner-image">
+        <img src="assets/icon/promo.png" alt="Promo" />
+      </div>
+    </div>
 
     <div class="category-list">
       <div class="category-item">
@@ -52,7 +60,9 @@
 
     <div class="label-row">
       <h4>Kursus Populer</h4>
-      <span class="see-all" (click)="goToCourse()" style="cursor: pointer">Lihat semua</span>
+      <span class="see-all" (click)="goToCourse()" style="cursor: pointer"
+        >Lihat semua</span
+      >
     </div>
 
     <div class="course-list-vertical">
@@ -67,11 +77,15 @@
         <div
           class="premium-course-card-horizontal"
           *ngFor="let kursus of kursusTersaring"
-          (click)="goToDetail()"
+          (click)="goToDetail(kursus.id)"
           style="cursor: pointer"
         >
           <div class="course-thumb-box">
-            <img [src]="kursus.image || 'assets/imgs/course-coding.jpg'" />
+            <img
+              [src]="kursus.image ? kursus.image : getDefaultImage(kursus.category)"
+              (error)="handleImageError($event, kursus.category)"
+              alt="Course Image"
+            />
             <div class="tag-best">{{ kursus.category || 'Populer' }}</div>
           </div>
 
@@ -86,7 +100,8 @@
             </div>
 
             <div class="course-price">
-              {{ kursus.price == 0 || kursus.price == '0' ? 'Gratis' : 'Rp ' + kursus.price }}
+              {{ kursus.price == 0 || kursus.price == '0' ? 'Gratis' : 'Rp ' +
+              kursus.price }}
             </div>
           </div>
         </div>
@@ -97,7 +112,12 @@
         >
           <ion-icon
             name="star-outline"
-            style="font-size: 40px; color: #cbd5e1; display: block; margin: 0 auto 10px;"
+            style="
+              font-size: 40px;
+              color: #cbd5e1;
+              display: block;
+              margin: 0 auto 10px;
+            "
           ></ion-icon>
           <p>Belum ada kursus populer saat ini</p>
         </div>

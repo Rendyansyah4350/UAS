@@ -77,7 +77,7 @@
     <div class="section section-playlist">
       <div class="playlist-title-row">
         <h3>Video Pembelajaran</h3>
-        <span class="badge-count" *ngIf="contents.length > 0"
+        <span class="badge-count" *ngIf="contents && contents.length > 0"
           >{{ contents.length }} Modul</span
         >
       </div>
@@ -86,7 +86,7 @@
         <div
           class="custom-video-item"
           *ngFor="let materi of contents"
-          (click)="klikMateri(materi.id)"
+          (click)="paymentStatus === 'success' ? klikMateri(materi.id) : null"
           [class.item-locked]="paymentStatus !== 'success'"
         >
           <div class="video-item-left">
@@ -108,7 +108,10 @@
           </span>
         </div>
 
-        <div class="empty-state-card" *ngIf="contents.length === 0">
+        <div
+          class="empty-state-card"
+          *ngIf="!contents || contents.length === 0"
+        >
           <ion-icon name="document-text-outline"></ion-icon>
           <p>Belum ada modul pembelajaran tersedia.</p>
         </div>
@@ -135,28 +138,48 @@
       </div>
     </div>
 
-  <div class="action-buttons-row">
-      <div class="button-main-col" *ngIf="paymentStatus === 'none' || !paymentStatus">
-        <button class="btn-premium-action bg-navy" (click)="bukaModalUploadTransfer()">
+    <div class="action-buttons-row">
+      <div
+        class="button-main-col"
+        *ngIf="paymentStatus === 'none' || !paymentStatus"
+      >
+        <button
+          class="btn-premium-action bg-navy"
+          (click)="bukaModalUploadTransfer()"
+        >
           <div class="inner-content-btn">
             <span class="lbl-btn">Daftar & Kirim Bukti</span>
-            <span class="lbl-price">Rp {{ course?.price | number:'1.0-0' }}</span>
+            <span class="lbl-price"
+              >Rp {{ course?.price | number:'1.0-0' }}</span
+            >
           </div>
         </button>
       </div>
 
       <div class="button-main-col" *ngIf="paymentStatus === 'pending'">
-        <button class="btn-premium-action bg-orange-gradient" style="opacity: 0.9;" disabled>
+        <button
+          class="btn-premium-action bg-orange-gradient"
+          style="opacity: 0.9"
+          disabled
+        >
           Menunggu Verifikasi Admin...
-          <ion-icon name="time-outline" style="margin-left: 6px; font-size: 16px;"></ion-icon>
+          <ion-icon
+            name="time-outline"
+            style="margin-left: 6px; font-size: 16px"
+          ></ion-icon>
         </button>
       </div>
 
       <div class="button-main-col" *ngIf="paymentStatus === 'success'">
-        <button class="btn-premium-action bg-emerald" (click)="masukKelas()">
+        <ion-button
+          expand="block"
+          color="success"
+          class="btn-mulai"
+          (click)="masukKelas(course.id)"
+        >
           Mulai Belajar Sekarang
-          <ion-icon name="arrow-forward-outline"></ion-icon>
-        </button>
+          <ion-icon name="arrow-forward-outline" slot="end"></ion-icon>
+        </ion-button>
       </div>
     </div>
   </div>
@@ -213,45 +236,115 @@
     </div>
   </ng-template>
 </ion-modal>
-<ion-modal [isOpen]="isModalTransferOpen" (didDismiss)="isModalTransferOpen = false">
+
+<ion-modal
+  [isOpen]="isModalTransferOpen"
+  (didDismiss)="isModalTransferOpen = false"
+>
   <ng-template>
     <ion-header class="ion-no-border">
-      <ion-toolbar style="--background: #093C5D; --color: #ffffff;">
+      <ion-toolbar style="--background: #093c5d; --color: #ffffff">
         <ion-title>Transfer Pembayaran</ion-title>
         <ion-buttons slot="end">
-          <ion-button (click)="isModalTransferOpen = false" color="light">Tutup</ion-button>
+          <ion-button (click)="isModalTransferOpen = false" color="light"
+            >Tutup</ion-button
+          >
         </ion-buttons>
       </ion-toolbar>
     </ion-header>
 
-    <div style="padding: 20px; background: #ffffff; height: 100%; display: flex; flex-direction: column; gap: 16px;">
-      
-      <div style="background: #f8fafc; padding: 14px; border-radius: 12px; border: 1px solid #e2e8f0;">
-        <h4 style="margin: 0 0 6px 0; color: #093C5D; font-weight: 700; font-size: 14px;">Rekening Pembayaran EduVan:</h4>
-        <p style="margin: 0; font-size: 13px; color: #475569;">Bank BCA: <strong>1234-5678-90</strong></p>
-        <p style="margin: 2px 0 0 0; font-size: 13px; color: #475569;">A.N: <strong>PT Eduvan Nusantara</strong></p>
+    <div
+      style="
+        padding: 20px;
+        background: #ffffff;
+        height: 100%;
+        display: flex;
+        flex-direction: column;
+        gap: 16px;
+      "
+    >
+      <div
+        style="
+          background: #f8fafc;
+          padding: 14px;
+          border-radius: 12px;
+          border: 1px solid #e2e8f0;
+        "
+      >
+        <h4
+          style="
+            margin: 0 0 6px 0;
+            color: #093c5d;
+            font-weight: 700;
+            font-size: 14px;
+          "
+        >
+          Rekening Pembayaran EduVan:
+        </h4>
+        <p style="margin: 0; font-size: 13px; color: #475569">
+          Bank BCA: <strong>1234-5678-90</strong>
+        </p>
+        <p style="margin: 2px 0 0 0; font-size: 13px; color: #475569">
+          A.N: <strong>PT Eduvan Nusantara</strong>
+        </p>
       </div>
 
-      <p style="font-size: 12px; color: #64748b; margin: 0;">
-        Silakan transfer sesuai nominal harga kelas, kemudian unggah foto bukti transfernya di bawah ini lek:
+      <p style="font-size: 12px; color: #64748b; margin: 0">
+        Silakan transfer sesuai nominal harga kelas, kemudian unggah foto bukti
+        transfernya di bawah ini lek:
       </p>
 
-      <div style="border: 2px dashed #cbd5e1; border-radius: 14px; padding: 20px; text-align: center; background: #f8fafc;">
-        <input type="file" (change)="pilihFileBuktiTransfer($event)" accept="image/*" id="fileInputTransfer" style="display: none;" />
-        <label for="fileInputTransfer" style="cursor: pointer; display: flex; flex-direction: column; align-items: center; gap: 8px;">
-          <ion-icon name="cloud-upload-outline" style="font-size: 36px; color: #093C5D;"></ion-icon>
-          <span style="font-size: 13px; font-weight: 600; color: #475569;">
+      <div
+        style="
+          border: 2px dashed #cbd5e1;
+          border-radius: 14px;
+          padding: 20px;
+          text-align: center;
+          background: #f8fafc;
+        "
+      >
+        <input
+          type="file"
+          (change)="pilihFileBuktiTransfer($event)"
+          accept="image/*"
+          id="fileInputTransfer"
+          style="display: none"
+        />
+        <label
+          for="fileInputTransfer"
+          style="
+            cursor: pointer;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 8px;
+          "
+        >
+          <ion-icon
+            name="cloud-upload-outline"
+            style="font-size: 36px; color: #093c5d"
+          ></ion-icon>
+          <span style="font-size: 13px; font-weight: 600; color: #475569">
             {{ namaFileTerpilih || 'Pilih Gambar Bukti Transfer' }}
           </span>
         </label>
       </div>
 
-      <ion-button expand="block" shape="round" color="primary" style="margin-top: auto; font-weight: 700; margin-bottom: 10px;" 
-                  [disabled]="loadingUpload" (click)="kirimBuktiTransferKeServer()">
-        <ion-spinner name="crescent" slot="start" *ngIf="loadingUpload"></ion-spinner>
+      <ion-button
+        expand="block"
+        shape="round"
+        color="primary"
+        style="margin-top: auto; font-weight: 700; margin-bottom: 10px"
+        [disabled]="loadingUpload"
+        (click)="kirimBuktiTransferKeServer()"
+      >
+        <ion-spinner
+          name="crescent"
+          slot="start"
+          *ngIf="loadingUpload"
+        ></ion-spinner>
         {{ loadingUpload ? 'Mengirim Data...' : 'KIRIM BUKTI PEMBAYARAN' }}
       </ion-button>
-
     </div>
   </ng-template>
 </ion-modal>

@@ -31,7 +31,7 @@ export class CourseDetailPage implements OnInit {
     private route: ActivatedRoute,
     private router: Router,
     private courseService: CourseService,
-    private cdr: ChangeDetectorRef
+    private cdr: ChangeDetectorRef,
   ) {}
 
   ngOnInit() {
@@ -66,7 +66,7 @@ export class CourseDetailPage implements OnInit {
       },
       error: (error) => {
         console.error('Gagal ambil detail:', error);
-      }
+      },
     });
 
     // Jalur Pipa 2: Cek status pendaftaran student (Independent pipeline)
@@ -74,12 +74,14 @@ export class CourseDetailPage implements OnInit {
       next: (enrollRes: any) => {
         if (enrollRes.success && enrollRes.data) {
           const riwayatBeli = enrollRes.data.find(
-            (item: any) => Number(item.course_id) === targetCourseId
+            (item: any) => Number(item.course_id) === targetCourseId,
           );
 
           if (riwayatBeli) {
             // Mengambil status string asli database cPanel ('pending' atau 'success')
-            this.paymentStatus = String(riwayatBeli.status).trim().toLowerCase();
+            this.paymentStatus = String(riwayatBeli.status)
+              .trim()
+              .toLowerCase();
           } else {
             this.paymentStatus = 'none';
           }
@@ -91,7 +93,7 @@ export class CourseDetailPage implements OnInit {
           this.paymentStatus = 'success';
           this.cdr.detectChanges();
         }
-      }
+      },
     });
   }
 
@@ -114,7 +116,7 @@ export class CourseDetailPage implements OnInit {
     }
   }
 
-kirimBuktiTransferKeServer() {
+  kirimBuktiTransferKeServer() {
     if (!this.fileGambarBukti) {
       alert('Harap pilih file gambar bukti transfer terlebih dahulu!');
       return;
@@ -126,7 +128,7 @@ kirimBuktiTransferKeServer() {
     // Membungkus parameter ke objek FormData biner lek
     const formData = new FormData();
     formData.append('course_id', String(this.course.id));
-    
+
     // 🟢 FIX SAKTI: Ubah key dari 'payment_proof' menjadi 'proof_of_payment' biar match sama Laravel Ivan
     formData.append('proof_of_payment', this.fileGambarBukti);
 
@@ -135,8 +137,11 @@ kirimBuktiTransferKeServer() {
       next: (res: any) => {
         this.loadingUpload = false;
         this.isModalTransferOpen = false;
-        alert(res.message || 'Bukti transfer sukses dikirim! Mohon tunggu konfirmasi Admin.');
-        
+        alert(
+          res.message ||
+            'Bukti transfer sukses dikirim! Mohon tunggu konfirmasi Admin.',
+        );
+
         this.paymentStatus = 'pending'; // Tombol otomatis berubah jadi "Menunggu Verifikasi Admin"
         this.getDetail(String(this.course.id));
         this.cdr.detectChanges();
@@ -145,9 +150,12 @@ kirimBuktiTransferKeServer() {
         this.loadingUpload = false;
         console.error('Gagal upload bukti:', err);
         // Memunculkan pesan error asli dari backend biar gampang di-trace lek
-        alert(err.error?.message || 'Gagal mengirim bukti pembayaran, periksa format file Anda.');
+        alert(
+          err.error?.message ||
+            'Gagal mengirim bukti pembayaran, periksa format file Anda.',
+        );
         this.cdr.detectChanges();
-      }
+      },
     });
   }
 
@@ -160,19 +168,26 @@ kirimBuktiTransferKeServer() {
   }
 
   kirimUlasanRatingLive() {
-    console.log(`Mengirim rating bintang ${this.ratingInput} untuk course ID: ${this.course.id}`);
+    console.log(
+      `Mengirim rating bintang ${this.ratingInput} untuk course ID: ${this.course.id}`,
+    );
 
     this.courseService
       .kirimRatingCourse(this.course.id, this.ratingInput)
       .subscribe(
         (res: any) => {
-          alert(res.message || 'Terima kasih, rating bintang berhasil disimpan.');
+          alert(
+            res.message || 'Terima kasih, rating bintang berhasil disimpan.',
+          );
           this.isModalRatingOpen = false;
           this.getDetail(String(this.course.id));
         },
         (error: any) => {
           console.error('Gagal kirim rating:', error);
-          alert(error.error?.message || 'Gagal menyimpan rating, silakan coba lagi.');
+          alert(
+            error.error?.message ||
+              'Gagal menyimpan rating, silakan coba lagi.',
+          );
         },
       );
   }
@@ -191,17 +206,29 @@ kirimBuktiTransferKeServer() {
     );
   }
 
-  // 🟢 DIUBAH: Validasi gembok video mengarah ke status pending/success manual admin
+  // 🟢 FIX TOTAL: Diarahkan langsung masuk ke halaman nonton course-player bawa ID video
   klikMateri(contentId: number) {
     if (this.paymentStatus !== 'success') {
-      alert('Materi ini masih terkunci! Silakan selesaikan pendaftaran dan tunggu verifikasi Admin lek.');
+      alert(
+        'Materi ini masih terkunci! Silakan selesaikan pendaftaran dan tunggu verifikasi Admin lek.',
+      );
     } else {
-      this.router.navigate([`/course/${this.course.id}/watch/${contentId}`]);
+      console.log('Navigasi klikMateri bawa ID Kursus:', this.course.id);
+      // 🔥 FIX: Kirim ID Kursus ke URL player, bukan ID materi mbut!
+      this.router.navigate(['/course-player', this.course.id]);
     }
   }
 
-  masukKelas() {
-    this.router.navigate(['/tabs/my-learning']);
+  masukKelas(courseId: any) {
+    if (this.contents && this.contents.length > 0) {
+      console.log('Navigasi masukKelas bawa ID Kursus:', this.course.id);
+      // 🔥 FIX: Kirim ID Kursus ke URL player agar data header & video tidak tertukar
+      this.router.navigate(['/course-player', this.course.id]);
+    } else {
+      alert(
+        'Kelas ini sudah aktif, namun admin belum mengunggah modul video untuk kelas ini lek.',
+      );
+    }
   }
 
   toggleWishlist() {
@@ -225,16 +252,14 @@ kirimBuktiTransferKeServer() {
   }
 
   cekStatusWishlistUser(targetCourseId: number) {
-    this.courseService.ambilDaftarWishlist().subscribe(
-      (res: any) => {
-        if (res.success) {
-          const listWishlist = res.data || [];
-          this.isWishlist = listWishlist.some(
-            (item: any) => Number(item.course_id) === targetCourseId,
-          );
-          this.cdr.detectChanges();
-        }
-      },
-    );
+    this.courseService.ambilDaftarWishlist().subscribe((res: any) => {
+      if (res.success) {
+        const listWishlist = res.data || [];
+        this.isWishlist = listWishlist.some(
+          (item: any) => Number(item.course_id) === targetCourseId,
+        );
+        this.cdr.detectChanges();
+      }
+    });
   }
 }
