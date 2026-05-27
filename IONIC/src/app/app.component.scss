@@ -1,0 +1,88 @@
+// 📁 Jalur file: src/app/app.component.scss
+
+.lost-connection-modal {
+  --background: rgba(
+    15,
+    23,
+    42,
+    0.75
+  ); // Efek backdrop gelap mewah (glassmorphism vibe)
+  --width: 88%;
+  --height: auto;
+  --max-width: 340px;
+  --border-radius: 24px;
+  --box-shadow: 0 20px 40px rgba(0, 0, 0, 0.4);
+  align-items: center;
+
+  &::part(content) {
+    border-radius: 24px;
+    background: #ffffff; // Card dasar putih bersih mbut
+    overflow: hidden;
+  }
+}
+
+.modal-wrapper {
+  padding: 32px 24px 28px 24px;
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+
+  .icon-container {
+    position: relative;
+    width: 84px;
+    height: 84px;
+    background: #fef2f2; // Lingkaran merah super soft
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 22px;
+    box-shadow: 0 0 20px rgba(239, 68, 68, 0.15); // Efek glow merah tipis di luar lingkaran
+
+    .wifi-icon {
+      font-size: 44px;
+      color: #ef4444; // Warna merah tegas modern
+    }
+
+    .cross-line {
+      position: absolute;
+      width: 54px;
+      height: 4px;
+      background: #ef4444;
+      transform: rotate(-45deg); // Garis coret miring penanda offline
+      border-radius: 4px;
+      border: 2px solid #fef2f2; // Pemisah biar garisnya kelihatan tajam mbut
+    }
+  }
+
+  h2 {
+    font-size: 22px;
+    font-weight: 700;
+    color: #0f172a; // Warna teks gelap pekat
+    margin: 0 0 10px 0;
+    letter-spacing: -0.3px;
+  }
+
+  p {
+    font-size: 14px;
+    color: #64748b; // Warna teks sekunder abu-abu adem
+    line-height: 1.6;
+    margin: 0 0 28px 0;
+    padding: 0 6px;
+  }
+
+  .retry-btn {
+    --background: #1e3a8a; // Warna biru navy gelap khas utama EduVan lu lek!
+    --background-activated: #1d4ed8;
+    --border-radius: 14px;
+    --box-shadow: 0 6px 16px rgba(30, 58, 138, 0.25);
+    font-weight: 600;
+    font-size: 15px;
+    letter-spacing: 0.3px;
+    width: 100%;
+    margin: 0;
+    height: 50px;
+    transition: all 0.2s ease-in-out;
+  }
+}

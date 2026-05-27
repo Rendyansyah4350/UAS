@@ -1,3 +1,25 @@
 <ion-app>
   <ion-router-outlet></ion-router-outlet>
 </ion-app>
+
+<ion-modal [backdropDismiss]="false" class="lost-connection-modal">
+  <ng-template>
+    <div class="modal-wrapper">
+      <div class="icon-container">
+        <ion-icon name="wifi-outline" class="wifi-icon"></ion-icon>
+        <div class="cross-line"></div>
+      </div>
+
+      <h2>Koneksi Terputus</h2>
+      <p>
+        Aplikasi EduVan memerlukan akses internet aktif. Silakan periksa kembali
+        Wi-Fi atau Paket Data Anda lek.
+      </p>
+
+      <ion-button expand="block" (click)="cekKoneksiUlang()" class="retry-btn">
+        <ion-icon name="refresh-outline" slot="start"></ion-icon>
+        Coba Lagi
+      </ion-button>
+    </div>
+  </ng-template>
+</ion-modal>

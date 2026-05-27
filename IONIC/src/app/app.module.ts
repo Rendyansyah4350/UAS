@@ -12,12 +12,12 @@ import { AppRoutingModule } from './app-routing.module';
     AppComponent
   ],
   imports: [
-    BrowserModule, 
+    BrowserModule,
     IonicModule.forRoot({
-      mode: 'md', // Memaksa tampilan Material Design agar konsisten (opsional)
+      mode: 'md',
       rippleEffect: true
-    }), 
-    AppRoutingModule,  // Pastikan ini ada untuk fitur login & reset password
+    }),
+    AppRoutingModule,
   ],
   providers: [
     { provide: RouteReuseStrategy, useClass: IonicRouteStrategy },
