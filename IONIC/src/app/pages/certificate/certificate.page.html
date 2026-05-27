@@ -15,13 +15,13 @@
   </div>
 
   <div *ngIf="!isLoading && listSertifikat.length > 0" class="certificate-container">
-    
+
     <div class="cert-summary">
-      <p>Selamat lek! Berikut adalah daftar sertifikat resmi kamu yang sudah diverifikasi oleh <span>Admin EduVan</span>:</p>
+      <p>Selamat! Berikut adalah daftar sertifikat resmi kamu yang sudah diverifikasi oleh <span>Admin EduVan</span>:</p>
     </div>
 
     <div class="certificate-card" *ngFor="let cert of listSertifikat">
-      
+
       <div class="cert-badge">
         <ion-icon name="ribbon-outline"></ion-icon>
       </div>
@@ -42,7 +42,7 @@
 
   </div>
 
-  <div *ngIf="!isLoading && listSertifikat.length === 0" 
+  <div *ngIf="!isLoading && listSertifikat.length === 0"
        style="text-align: center; padding: 80px 24px; color: #94a3b8;">
     <ion-icon name="shield-checkmark-outline" style="font-size: 64px; color: #e2e8f0;"></ion-icon>
     <h3 style="font-size: 16px; font-weight: 700; color: #475569; margin-top: 16px;">Belum Ada Sertifikat Tersedia</h3>
