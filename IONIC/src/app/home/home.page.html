@@ -100,8 +100,7 @@
             </div>
 
             <div class="course-price">
-              {{ kursus.price == 0 || kursus.price == '0' ? 'Gratis' : 'Rp ' +
-              kursus.price }}
+              {{ kursus.price == 0 || kursus.price == '0' ? 'Gratis' : 'Rp ' + (kursus.price | number:'1.0-0') }}
             </div>
           </div>
         </div>
