@@ -2,8 +2,7 @@ import { Component, OnInit, ViewChild } from '@angular/core';
 import { IonModal } from '@ionic/angular';
 import { Network } from '@capacitor/network';
 import { Capacitor } from '@capacitor/core';
-import { LocalNotifications } from '@capacitor/local-notifications'; // 🔥 Plugin Notifikasi Native
-import { Filesystem } from '@capacitor/filesystem'; // 🔥 Plugin Storage Native
+import { Filesystem } from '@capacitor/filesystem'; 
 
 @Component({
   selector: 'app-root',
@@ -26,7 +25,7 @@ export class AppComponent implements OnInit {
       this.handleStatusKoneksi(status.connected);
     });
 
-    // 3. 🔥 Tembak Popup Perizinan Android Berturut-turut Pas Pertama Kali Dibuka!
+    // 3. 🔥 Tembak Popup Perizinan Android Pas Pertama Kali Dibuka!
     if (Capacitor.getPlatform() === 'android') {
       this.mintaPerizinanAplikasiTembakNative();
     }
@@ -35,13 +34,7 @@ export class AppComponent implements OnInit {
   // 🛠️ Fungsi Sakti Paksa Muncul Popup Izin Native Android (Anti-Manual)
   async mintaPerizinanAplikasiTembakNative() {
     try {
-      // A. Tembak Izin Notifikasi HP dulu mbut
-      const statusNotif = await LocalNotifications.checkPermissions();
-      if (statusNotif.display !== 'granted') {
-        await LocalNotifications.requestPermissions();
-      }
-
-      // B. Tembak Izin Akses File/Storage buat download PDF Sertifikat EduVan
+      // 📄 SEKARANG CUMA MINTA IZIN FILE/STORAGE BUAT DOWNLOAD PDF SERTIFIKAT LEK!
       const statusStorage = await Filesystem.checkPermissions();
       if (statusStorage.publicStorage !== 'granted') {
         await Filesystem.requestPermissions();
