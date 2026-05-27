@@ -16,6 +16,7 @@
             width: 29.7cm;
             height: 21cm;
             overflow: hidden;
+            /* 🟢 FIX JALUR BACKGROUND: Sesuai urutan public/assets/images/certificate/ */
             background-image: url('{{ public_path('assets/images/certificate/certificate-eduvan.png') }}');
             background-size: 100% 100%;
             background-repeat: no-repeat;
@@ -174,14 +175,41 @@
             {{ $certificate->course->title }}
         </div>
 
-        <div class="cert-info-box">
-            <div class="cert-info-group">
-                <img class="footer-logo" src="{{ public_path('assets/images/eduvan.png') }}" alt="Logo EduVan">
-                <div class="meta-text-center">
-                    <span class="footer-label">Nomor Sertifikat</span>
-                    <span class="value-no">{{ $certificate->certificate_number }}</span>
-                </div>
-            </div>
+        <div class="cert-info-box"
+            style="position: absolute; top: 80%; left: 0; right: 0; text-align: center; width: 100%;">
+            <table role="presentation" style="margin: 0 auto; text-align: left; border-collapse: collapse;">
+                <tr>
+                    <td style="vertical-align: middle; padding-right: 10px;">
+                        @php
+                            /* 🟢 FIX JALUR LOGO: Diarahkan langsung ke assets/images/Eduvan.png (Tanpa folder certificate) */
+                            $logoPath = public_path('assets/images/Eduvan.png');
+                            $logoBase64 = '';
+                            if (file_exists($logoPath)) {
+                                $logoType = pathinfo($logoPath, PATHINFO_EXTENSION);
+                                $logoData = file_get_contents($logoPath);
+                                $logoBase64 = 'data:image/' . $logoType . ';base64,' . base64_encode($logoData);
+                            }
+                        @endphp
+
+                        @if ($logoBase64)
+                            <img src="{{ $logoBase64 }}" alt="Logo EduVan"
+                                style="width: 36px; height: 36px; display: block;">
+                        @else
+                            <span style="font-size: 10px; color: red;">[Logo]</span>
+                        @endif
+                    </td>
+                    <td style="vertical-align: middle; line-height: 1;">
+                        <span class="footer-label"
+                            style="font-size: 9px; color: #7f8c8d; text-transform: uppercase; font-weight: bold; display: block; margin-bottom: 2px;">
+                            Nomor Sertifikat
+                        </span>
+                        <span class="value-no"
+                            style="font-size: 13px; font-weight: bold; color: #1c3d5a; font-family: monospace; display: block;">
+                            {{ $certificate->certificate_number }}
+                        </span>
+                    </td>
+                </tr>
+            </table>
         </div>
 
         <div class="absolute-center date-container">

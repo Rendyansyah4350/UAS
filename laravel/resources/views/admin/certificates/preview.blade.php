@@ -61,10 +61,10 @@
                         </h2>
                     </div>
 
-                    {{-- 5. Logo EduVan & Nomor Sertifikat (Dinaikkan agar nangkring pas di bawah garis panjang abu-abu) --}}
+                    {{-- 5. Logo EduVan & Nomor Sertifikat (Sesuai Rute Asli public/assets/images/Eduvan.png) --}}
                     <div class="absolute left-0 right-0 flex justify-center" style="top: 600px;">
                         <div class="flex items-center text-left h-[40px]">
-                            <img src="{{ asset('assets/images/eduvan.png') }}" alt="Logo EduVan"
+                            <img src="{{ asset('assets/images/Eduvan.png') }}" alt="Logo EduVan"
                                 class="w-[36px] h-[36px] object-contain mr-2.5">
                             <div class="flex flex-col justify-center">
                                 <span
