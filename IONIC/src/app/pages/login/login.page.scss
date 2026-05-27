@@ -186,3 +186,26 @@ ion-button.auth-btn {
     &:hover { text-decoration: underline; }
   }
 }
+
+.custom-login-toast {
+  --background: #093C5D; /* Menggunakan warna biru dongker utama kamu */
+  --box-shadow: 0 10px 25px rgba(9, 60, 93, 0.25);
+  --border-radius: 16px; /* Selaras dengan border-radius input box kamu */
+  margin-top: 25px;
+  padding: 6px 12px;
+  font-weight: 700;
+  letter-spacing: 0.5px;
+  font-size: 14px;
+
+  &::part(button) {
+    --color: #ffffff;
+    font-size: 22px;
+    margin-right: 10px;
+    opacity: 1;
+  }
+  
+  &::part(message) {
+    color: #ffffff;
+    padding: 10px 0;
+  }
+}

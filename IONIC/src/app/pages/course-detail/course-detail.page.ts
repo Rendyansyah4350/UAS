@@ -137,7 +137,7 @@ export class CourseDetailPage implements OnInit {
 
       this.cdr.detectChanges();
     } catch (error) {
-      console.log('User membatalkan pemilihan media mbut.', error);
+      console.log('User membatalkan pemilihan media.', error);
     }
   }
 
@@ -235,7 +235,7 @@ export class CourseDetailPage implements OnInit {
   klikMateri(contentId: number) {
     if (this.paymentStatus !== 'success') {
       alert(
-        'Materi ini masih terkunci! Silakan selesaikan pendaftaran dan tunggu verifikasi Admin lek.',
+        'Materi ini masih terkunci! Silakan selesaikan pendaftaran dan tunggu verifikasi Admin.',
       );
     } else {
       console.log('Navigasi klikMateri bawa ID Kursus:', this.course.id);
@@ -251,7 +251,7 @@ export class CourseDetailPage implements OnInit {
       this.router.navigate(['/course-player', this.course.id]);
     } else {
       alert(
-        'Kelas ini sudah aktif, namun admin belum mengunggah modul video untuk kelas ini lek.',
+        'Kelas ini sudah aktif, namun admin belum mengunggah modul video untuk kelas ini.',
       );
     }
   }

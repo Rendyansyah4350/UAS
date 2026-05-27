@@ -1,4 +1,4 @@
-import { Component, OnInit, NgZone } from '@angular/core';
+import { Component, OnInit, NgZone, ViewEncapsulation } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { AuthService } from '../../services/auth';
 import {
@@ -12,6 +12,7 @@ import { Router } from '@angular/router';
   selector: 'app-login',
   templateUrl: './login.page.html',
   styleUrls: ['./login.page.scss'],
+  encapsulation: ViewEncapsulation.None,
   standalone: false,
 })
 export class LoginPage implements OnInit {
@@ -73,7 +74,7 @@ export class LoginPage implements OnInit {
             localStorage.setItem('user', JSON.stringify(res.user));
           }
 
-          this.presentToast('Selamat datang kembali!', 'success');
+          this.presentToast('Selamat datang kembali!', 'primary');
           this.zone.run(() => {
             this.navCtrl.navigateRoot('/tabs/beranda');
           });
@@ -107,9 +108,16 @@ export class LoginPage implements OnInit {
   async presentToast(message: string, color: string) {
     const toast = await this.toastCtrl.create({
       message: message,
-      duration: 3000,
-      color: color,
-      position: 'bottom',
+      duration: 2500,
+      position: 'top', // 🟢 Tetap di atas biar eye-catching dan modern brok
+      cssClass: 'toast-eduvan-new', // 🔑 Kelas kustom khusus untuk styling bentuk
+      buttons: [
+        {
+          side: 'start',
+          icon: color === 'danger' ? 'alert-circle' : 'checkmark-circle', // Ikon otomatis menyesuaikan status
+          role: 'cancel'
+        }
+      ]
     });
     await toast.present();
   }

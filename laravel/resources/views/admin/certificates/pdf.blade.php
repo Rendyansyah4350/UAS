@@ -193,7 +193,7 @@
 
                         @if ($logoBase64)
                             <img src="{{ $logoBase64 }}" alt="Logo EduVan"
-                                style="width: 36px; height: 36px; display: block;">
+                                style="width: 36px; height: auto; object-fit: contain; display: block;">
                         @else
                             <span style="font-size: 10px; color: red;">[Logo]</span>
                         @endif
