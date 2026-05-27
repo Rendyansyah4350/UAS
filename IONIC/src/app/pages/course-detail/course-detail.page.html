@@ -170,14 +170,16 @@
         </button>
       </div>
 
-      <div class="button-main-col" *ngIf="paymentStatus === 'success'">
+      <div class="button-main-col" *ngIf="paymentStatus === 'success'" style="width: 100%;">
         <ion-button
           expand="block"
           color="success"
-          class="btn-mulai"
+          class="btn-premium-action bg-emerald"
           (click)="masukKelas(course.id)"
         >
-          Mulai Belajar Sekarang
+          <div class="inner-content-btn">
+            <span class="lbl-btn">Mulai Belajar Sekarang</span>
+          </div>
           <ion-icon name="arrow-forward-outline" slot="end"></ion-icon>
         </ion-button>
       </div>
