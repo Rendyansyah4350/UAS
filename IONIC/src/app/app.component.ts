@@ -48,7 +48,7 @@ export class AppComponent implements OnInit {
         this.modal.dismiss(); // Internet udah aman, tutup modal!
       }
     } else {
-      console.log('Masih putus lek, internet belum aktif.');
+      console.log('Masih putus dari jaringan, internet belum aktif.');
     }
   }
 }
