@@ -56,22 +56,25 @@ class StudentController extends Controller
         ]);
     }
 
-    public function store(Request $request)
+        public function store(Request $request)
     {
+        // 1. Validasi Inputan dengan Aturan ketat namun aman
         $request->validate([
-            'name' => 'required|string|max:255',
-            'email' => 'required|email|unique:users,email',
+            'name'     => 'required|max:255',
+            'email'    => 'required|email|unique:users,email',
             'password' => 'required|min:8',
         ]);
 
-        User::create([
-            'name' => $request->name,
-            'email' => $request->email,
-            'password' => bcrypt($request->password),
-            'role' => 'student', // Pastikan role diset otomatis
-        ]);
+        // 2. Eksekusi penyimpanan menggunakan metode manual tanpa Mass Assignment untuk bypass proteksi
+        $user = new User();
+        $user->name     = $request->name;
+        $user->email    = $request->email;
+        $user->password = bcrypt($request->password); // Mengunci enkripsi untuk Ionic
+        $user->role     = 'student';                  // Menyesuaikan dengan filter halaman Anda
+        $user->save();                                // Paksa simpan langsung ke database
 
-        return redirect()->route('admin.students.index')->with('success', 'Student berhasil ditambahkan!');
+        // 3. Kembalikan ke halaman indeks mahasiswa dengan aman
+        return redirect()->back()->with('success', 'Student berhasil ditambahkan!');
     }
 
     public function destroy($id)
