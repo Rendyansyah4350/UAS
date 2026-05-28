@@ -166,9 +166,46 @@ class AuthController extends Controller
             $mail->setFrom(env('MAIL_USERNAME'), 'EduVan Team');
             $mail->addAddress($email);
 
+            // Set format email ke HTML agar tag style di bawah bisa merender kotak box
             $mail->isHTML(true);
             $mail->Subject = 'Kode Verifikasi Akun EduVan';
-            $mail->Body    = "Halo! Kode verifikasi Anda adalah: <b>$otp</b>. Kode ini berlaku selama 10 menit.";
+
+            // 🟢 TEMPLATE EMAIL BARU: Mengikuti struktur rapi gambar ke-2 dengan variabel $otp dinamis
+            $mail->Body    = '
+            <!DOCTYPE html>
+            <html>
+            <head>
+                <meta charset="utf-8">
+            </head>
+            <body style="font-family: Arial, sans-serif; background-color: #f3f4f6; padding: 20px; color: #333333; margin: 0;">
+
+                <div style="max-width: 600px; margin: 0 auto; background-color: #ffffff; border-radius: 8px; padding: 30px; box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);">
+
+                    <h2 style="text-align: center; color: #111827; margin-bottom: 25px; font-size: 24px;">Eduvan</h2>
+
+                    <p style="font-size: 16px; line-height: 1.5; margin-bottom: 10px;"><b>Halo!</b></p>
+
+                    <p style="font-size: 16px; line-height: 1.5; color: #4b5563;">Kamu menerima email ini untuk memverifikasi pendaftaran akun EduVan kamu. Berikut adalah kode OTP rahasia kamu:</p>
+
+                    <div style="background-color: #f9fafb; border: 1px solid #e5e7eb; border-radius: 6px; padding: 15px; text-align: center; margin: 25px 0;">
+                        <span style="font-size: 32px; font-weight: bold; letter-spacing: 5px; color: #111827;">' . $otp . '</span>
+                    </div>
+
+                    <p style="font-size: 14px; color: #6b7280; line-height: 1.5;">Kode OTP ini hanya berlaku selama 10 menit ke depan.</p>
+
+                    <p style="font-size: 14px; color: #6b7280; line-height: 1.5; margin-top: 20px;">Jika kamu tidak merasa melakukan permintaan pendaftaran ini, abaikan saja email ini.</p>
+
+                    <hr style="border: 0; border-top: 1px solid #e5e7eb; margin: 30px 0;">
+
+                    <p style="font-size: 14px; color: #9ca3af; text-align: center; margin: 0; line-height: 1.5;">Regards,<br><strong style="color: #4b5563;">Eduvan</strong></p>
+
+                    <p style="font-size: 11px; color: #9ca3af; text-align: center; margin-top: 20px;">&copy; 2026 Eduvan. All rights reserved.</p>
+
+                </div>
+
+            </body>
+            </html>
+            ';
 
             $mail->send();
         } catch (Exception $e) {
