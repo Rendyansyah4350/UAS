@@ -17,8 +17,21 @@ const routes: Routes = [
   { path: 'course-player/:id', loadChildren: () => import('./pages/course-player/course-player.module').then(m => m.CoursePlayerPageModule) },
   { path: 'course-detail/:id', loadChildren: () => import('./pages/course-detail/course-detail.module').then(m => m.CourseDetailPageModule)},
   { path: 'quiz/:id', loadChildren: () => import('./pages/quiz/quiz.module').then(m => m.QuizPageModule) },
-  { path: 'notifications', loadChildren: () => import('./pages/notifications/notifications.module').then(m => m.NotificationsPageModule) },
-
+  {
+    path: 'edit-profil',
+    loadChildren: () => import('./pages/edit-profil/edit-profil.module').then(m => m.EditProfilPageModule)
+  },
+  {
+    path: 'certificate',
+    loadChildren: () => import('./pages/certificate/certificate.module').then(m => m.CertificatePageModule)
+  },
+  {
+    path: 'riwayat-transaksi',
+    loadChildren: () => import('./pages/riwayat-transaksi/riwayat-transaksi.module').then(m => m.RiwayatTransaksiPageModule)
+  },
+  { path: 'notifications', 
+    loadChildren: () => import('./pages/notifications/notifications.module').then(m => m.NotificationsPageModule) 
+  },
   { path: '**', redirectTo: 'tabs' }
 ];
 

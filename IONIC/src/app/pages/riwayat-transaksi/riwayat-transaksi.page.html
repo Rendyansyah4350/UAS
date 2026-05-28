@@ -56,11 +56,16 @@
 
   </div>
 
-  <div *ngIf="!isLoading && listTransaksi.length === 0" style="text-align: center; padding: 80px 20px; color: #94a3b8;">
-    <img src="assets/icon/receipt-empty.png" onerror="this.src='https://cdn-icons-png.flaticon.com/512/6134/6134065.png'" style="width: 80px; height: 80px; opacity: 0.3; margin-bottom: 16px;" />
-    <h3 style="font-size: 16px; font-weight: 700; color: #475569; margin: 0;">Belum Ada Transaksi</h3>
-    <p style="font-size: 13px; color: #64748b; line-height: 1.5; margin-top: 8px; padding: 0 20px;">
-      Semua riwayat pembelian kursus Anda akan muncul di sini.
+  <div *ngIf="!isLoading && listTransaksi.length === 0" 
+       style="display: flex; flex-direction: column; align-items: center; justify-content: center; height: 75vh; padding: 32px; text-align: center;">
+    <ion-icon 
+      name="receipt-outline" 
+      style="font-size: 80px; color: #94a3b8; opacity: 0.5; margin-bottom: 16px;">
+    </ion-icon>
+
+    <h4 style="color: #64748b; font-weight: 600; margin: 0;">Belum Ada Transaksi</h4>
+    <p style="color: #94a3b8; font-size: 14px; text-align: center; margin-top: 8px; max-width: 250px;">
+      Semua riwayat pembelian kelas kamu akan muncul di halaman ini.
     </p>
   </div>
 

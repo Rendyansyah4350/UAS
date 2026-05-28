@@ -29,25 +29,25 @@
 
   <div class="menu-container">
     <ion-list lines="none">
-      <ion-item button (click)="goToEdit()" class="menu-item">
+      <ion-item routerLink="/edit-profil" class="menu-item">
         <div class="icon-wrapper blue" slot="start"><ion-icon name="person"></ion-icon></div>
-        <ion-label>Edit Profil</ion-label>
+        <ion-label>Ubah Profil</ion-label>
         <ion-icon name="chevron-forward" slot="end" class="chevron"></ion-icon>
       </ion-item>
 
-      <ion-item button (click)="goToCertificate()" class="menu-item">
+      <ion-item routerLink="/certificate" class="menu-item">
         <div class="icon-wrapper orange" slot="start"><ion-icon name="ribbon"></ion-icon></div>
         <ion-label>Sertifikat Saya</ion-label>
         <ion-icon name="chevron-forward" slot="end" class="chevron"></ion-icon>
       </ion-item>
 
-      <ion-item button (click)="goToHistory()" class="menu-item">
+      <ion-item routerLink="/riwayat-transaksi" class="menu-item">
         <div class="icon-wrapper green" slot="start"><ion-icon name="receipt"></ion-icon></div>
         <ion-label>Riwayat Transaksi</ion-label>
         <ion-icon name="chevron-forward" slot="end" class="chevron"></ion-icon>
       </ion-item>
 
-      <ion-item button (click)="goToNotif()" class="menu-item">
+      <ion-item routerLink="/notifications" class="menu-item">
         <div class="icon-wrapper purple" slot="start"><ion-icon name="notifications"></ion-icon></div>
         <ion-label>Notifikasi</ion-label>
         <ion-icon name="chevron-forward" slot="end" class="chevron"></ion-icon>

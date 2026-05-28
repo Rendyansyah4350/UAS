@@ -13,11 +13,7 @@ const routes: Routes = [
     { path: 'wishlist', loadChildren: () => import('../wishlist/wishlist.module').then(m => m.WishlistPageModule) },
     { path: 'profil', loadChildren: () => import('../profil/profil.module').then(m => m.ProfilPageModule) },
     
-    // Fitur Profil: PASTIKAN PATH-NYA BENAR
-    { path: 'edit-profil', loadChildren: () => import('../edit-profil/edit-profil.module').then(m => m.EditProfilPageModule) },
-    { path: 'certificate', loadChildren: () => import('../certificate/certificate.module').then(m => m.CertificatePageModule) },
-    { path: 'riwayat-transaksi', loadChildren: () => import('../riwayat-transaksi/riwayat-transaksi.module').then(m => m.RiwayatTransaksiPageModule) },
-    { path: 'notifications', loadChildren: () => import('../notifications/notifications.module').then(m => m.NotificationsPageModule) },
+    // 🟢 Hanya menyisakan menu yang emang mau ditempelin tabs bawah lek
     
     { path: '', redirectTo: 'profil', pathMatch: 'full' }
   ]
