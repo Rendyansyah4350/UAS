@@ -12,6 +12,7 @@ use App\Http\Controllers\Api\WishlistController;
 use App\Http\Controllers\Api\CertificateApiController;
 use App\Http\Controllers\Api\ForgotPasswordController;
 use App\Http\Controllers\Admin\NotificationController;
+use App\Http\Controllers\Api\NotificationApiController;
 
 // --- API Publik (Bisa diakses tanpa login) ---
 Route::get('/courses', [CourseController::class, 'index']);
@@ -24,6 +25,7 @@ Route::post('/forgot-password/verify-otp', [ForgotPasswordController::class, 've
 Route::post('/forgot-password/reset', [ForgotPasswordController::class, 'resetPassword']);
 Route::post('/xendit/callback', [EnrollmentController::class, 'handleCallback']);
 Route::get('/courses/{course_id}/contents', [ContentController::class, 'index']);
+Route::get('/certificates/{id}/download', [CertificateApiController::class, 'downloadMobile']);
 
 
 // --- API Privat (Wajib bawa Token / auth:sanctum) ---
@@ -43,7 +45,6 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::get('/instructor/dashboard', [CourseController::class, 'dashboard']);
     Route::post('/contents', [ContentController::class, 'store']);
     Route::get('/my-certificates', [CertificateApiController::class, 'index']);
-    Route::get('/certificates/{id}/download', [CertificateApiController::class, 'downloadMobile']);
     Route::post('/progress/mark-completed', [ProgressController::class, 'markAsCompleted']);
     Route::post('/progress/submit-quiz', [ProgressController::class, 'submitQuiz']);
     Route::get('/progress/course/{course_id}', [ProgressController::class, 'getProgress']);
@@ -54,4 +55,6 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::post('/quiz/submit', [QuizController::class, 'store']);
     Route::get('/notifications', [NotificationController::class, 'getNotifUser']);
     Route::post('/contents/mark-complete', [ContentController::class, 'markComplete']);
+    Route::get('/notifications', [NotificationApiController::class, 'getNotifUser']);
+    Route::post('/notifications/read/{id}', [NotificationApiController::class, 'markAsRead']);
 });
