@@ -49,7 +49,7 @@
       <div class="cert-action">
         <button
           class="btn-download"
-          (click)="downloadPdf(cert.id, cert.course?.title)"
+          (click)="downloadPdfViaBrowser(cert.id)"
           [disabled]="isDownloading"
           style="
             display: flex;
@@ -57,12 +57,15 @@
             justify-content: center;
             min-width: 40px;
             min-height: 40px;
-          ">
+          "
+        >
           <ion-spinner
             *ngIf="isDownloading && activeCertId === cert.id"
             name="crescent"
-            style="width: 20px; height: 20px; --color: #1d4ed8">
+            style="width: 20px; height: 20px; --color: #1d4ed8"
+          >
           </ion-spinner>
+
           <ion-icon
             *ngIf="!(isDownloading && activeCertId === cert.id)"
             name="download-outline"
@@ -88,7 +91,8 @@
         font-weight: 700;
         color: #475569;
         margin-top: 16px;
-      ">
+      "
+    >
       Belum Ada Sertifikat Tersedia
     </h3>
     <p

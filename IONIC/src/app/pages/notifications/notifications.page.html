@@ -28,10 +28,10 @@
       *ngFor="let notif of listNotifikasi; let i = index"
       (click)="bukaPesanNotifikasi(notif.id)"
       [ngClass]="{
-           'promo': notif.data?.type === 'promo' || notif.type === 'promo',
-           'success': notif.data?.type !== 'promo' && notif.type !== 'promo',
-           'is-unread': !notif.read_at
-         }"
+      'promo': notif.data?.type === 'promo' || notif.type === 'promo',
+      'success': notif.data?.type !== 'promo' && notif.type !== 'promo',
+      'is-unread': !notif.read_at
+      }"
       style="cursor: pointer; position: relative"
     >
       <div
