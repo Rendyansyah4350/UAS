@@ -46,9 +46,8 @@ export class AuthService {
     return this.http.post(`${this.apiUrl}/forgot-password/send-otp`, { email });
   }
 
-  // Menggunakan jalur forgot-password untuk menghindari error 404
   sendRegisterOtp(email: string): Observable<any> {
-    return this.http.post(`${this.apiUrl}/forgot-password/send-otp`, { email });
+    return this.http.post(`${this.apiUrl}/resend-otp`, { email });
   }
 
   verifyResetOtp(email: string, otp: string): Observable<any> {

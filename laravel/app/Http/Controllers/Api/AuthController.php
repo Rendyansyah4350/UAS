@@ -20,8 +20,7 @@ class AuthController extends Controller
             'password' => 'required',
         ]);
 
-        if ($validator->fails())
-        {
+        if ($validator->fails()) {
             return response()->json([
                 'success' => false,
                 'message' => 'Format email atau password tidak valid.'
@@ -31,8 +30,7 @@ class AuthController extends Controller
         $user = User::where('email', $request->email)->first();
 
         // 2. Cek user & kecocokan password
-        if (!$user || !Hash::check($request->password, $user->password))
-        {
+        if (!$user || !Hash::check($request->password, $user->password)) {
             return response()->json([
                 'success' => false,
                 'message' => 'Email atau Password salah. Periksa kembali data Anda.'
@@ -41,8 +39,7 @@ class AuthController extends Controller
 
         // 🚨 3. BYPASS / LONGGARKAN STATUS VERIFIKASI UNTUK TESTING DI HP ASLI
         // Jika di cPanel kolom email_verified_at masih NULL, kita auto-verifikasi aja biar gak mampet lek!
-        if (!$user->email_verified_at)
-        {
+        if (!$user->email_verified_at) {
             $user->email_verified_at = now();
             $user->save();
         }
@@ -66,8 +63,7 @@ class AuthController extends Controller
             'password' => 'required|string|min:8', // 💡 Hapus 'confirmed' jika form di HP cuma ada 1 field password biar gak ribet lek
         ]);
 
-        if ($validator->fails())
-        {
+        if ($validator->fails()) {
             return response()->json([
                 'success' => false,
                 'message' => $validator->errors()->first()
@@ -107,8 +103,7 @@ class AuthController extends Controller
             ->where('otp_expiry', '>', now())
             ->first();
 
-        if ($user)
-        {
+        if ($user) {
             $user->email_verified_at = now();
             $user->otp_code = null;
             $user->otp_expiry = null;
@@ -126,11 +121,40 @@ class AuthController extends Controller
         ], 400);
     }
 
+    /**
+     * Fungsi baru untuk mengirim ulang OTP registrasi
+     */
+    public function resendOtp(Request $request)
+    {
+        $request->validate([
+            'email' => 'required|email'
+        ]);
+
+        $user = User::where('email', $request->email)->first();
+
+        if (!$user) {
+            return response()->json(['success' => false, 'message' => 'Email tidak ditemukan.'], 404);
+        }
+
+        // Generate OTP baru
+        $otp = rand(100000, 999999);
+        $user->otp_code = $otp;
+        $user->otp_expiry = now()->addMinutes(10);
+        $user->save();
+
+        // Kirim email menggunakan fungsi pembantu yang sudah ada
+        $this->sendOtpEmail($user->email, $otp);
+
+        return response()->json([
+            'success' => true,
+            'message' => 'Kode OTP baru telah dikirim ke email Anda.'
+        ]);
+    }
+
     private function sendOtpEmail($email, $otp)
     {
         $mail = new PHPMailer(true);
-        try
-        {
+        try {
             $mail->isSMTP();
             $mail->Host       = env('MAIL_HOST');
             $mail->SMTPAuth   = true;
@@ -147,9 +171,7 @@ class AuthController extends Controller
             $mail->Body    = "Halo! Kode verifikasi Anda adalah: <b>$otp</b>. Kode ini berlaku selama 10 menit.";
 
             $mail->send();
-        }
-        catch (Exception $e)
-        {
+        } catch (Exception $e) {
             // Tetap aman jika kirim email gagal
         }
     }
