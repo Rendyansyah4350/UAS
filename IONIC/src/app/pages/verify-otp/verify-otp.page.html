@@ -4,34 +4,34 @@
       <ion-icon name="mail-open-outline"></ion-icon>
     </div>
     <div class="brand-name">Verifikasi Akun</div>
-    <p class="brand-subtitle">Verify the code from your inbox</p>
+    <p class="brand-subtitle">Periksa kode dari email Anda.</p>
   </div>
 
   <div class="form-card">
-    <h2>Verify OTP</h2>
+    <h2>Verifikasi OTP</h2>
     <p class="instruction-text">
-      Enter the 6-digit code sent to <br>
+      Masukan 6-DIGIT Kode OTP dari Email: <br>
       <span>{{ emailForVerify || 'email anda' }}</span>
     </p>
 
-    <span class="input-label">OTP Code</span>
+    <span class="input-label">KODE OTP</span>
     <ion-item lines="none" class="otp-input-box">
       <ion-icon name="lock-closed-outline" slot="start"></ion-icon>
-      <ion-input 
-        type="number" 
-        placeholder="000000" 
-        maxlength="6" 
+      <ion-input
+        type="number"
+        placeholder="000000"
+        maxlength="6"
         [(ngModel)]="otpCode">
       </ion-input>
     </ion-item>
 
     <ion-button expand="block" class="verify-btn" (click)="onVerifyOTP()">
-      VERIFY CODE
+      VERIFIKASI CODE
     </ion-button>
 
     <div class="footer-links">
-      <p>Didn't get code? <span class="link-bold" (click)="resendCode()">Resend Code</span></p>
-      <p class="margin-top-link">Remember password? <span class="link-bold" (click)="kembali()">Back to Sign In</span></p>
+      <p>Tidak mendapatkan Kode OTP? <span class="link-bold" (click)="resendCode()">Kirim Ulang Code</span></p>
+      <p class="margin-top-link">Sudah memiliki Akun? <span class="link-bold" (click)="kembali()">Masuk</span></p>
     </div>
   </div>
 </ion-content>
