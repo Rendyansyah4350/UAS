@@ -142,4 +142,12 @@ export class HomePage implements OnInit {
   handleImageError(event: any, category: string) {
     event.target.src = this.getDefaultImage(category);
   }
+  bukaChatCS() {
+    const pesan = 'Halo Admin EduVan, saya ingin bertanya mengenai kursus...';
+    const nomorWA = '628978665982'; // Ganti dengan nomor CS beneran lek
+    window.open(
+      `https://wa.me/${nomorWA}?text=${encodeURIComponent(pesan)}`,
+      '_blank',
+    );
+  }
 }
