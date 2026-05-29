@@ -2,7 +2,6 @@
 @import url("https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap");
 
 @import "@ionic/angular/css/core.css";
-/* ... (impor css lainnya tetap seperti milik Anda) ... */
 
 :root {
   /* Palette Premium Eduvan */
@@ -264,4 +263,10 @@ ion-button {
       color: #ffffff !important;
     }
   }
+}
+
+ion-app {
+  // Gunakan warna dasar yang match dengan splash screen/login eduvan lu lek
+  --background: #f4f7fa !important;
+  background-color: #f4f7fa !important;
 }

@@ -2,7 +2,8 @@ import { Component, OnInit, ViewChild } from '@angular/core';
 import { IonModal } from '@ionic/angular';
 import { Network } from '@capacitor/network';
 import { Capacitor } from '@capacitor/core';
-import { Filesystem } from '@capacitor/filesystem'; 
+import { Filesystem } from '@capacitor/filesystem';
+import { SplashScreen } from '@capacitor/splash-screen';
 
 @Component({
   selector: 'app-root',
@@ -27,7 +28,17 @@ export class AppComponent implements OnInit {
 
     // 3. 🔥 Tembak Popup Perizinan Android Pas Pertama Kali Dibuka!
     if (Capacitor.getPlatform() === 'android') {
-      this.mintaPerizinanAplikasiTembakNative();
+      await this.mintaPerizinanAplikasiTembakNative();
+    }
+
+    // 🟢 4. SEMBUNYIKAN SPLASH SCREEN SECARA MANUAL SETELAH SEMUA PROSES ASYNC SIAP LEK!
+    try {
+      await SplashScreen.hide();
+    } catch (e) {
+      console.log(
+        'Splash screen sudah tertutup otomatis atau berjalan di browser.',
+        e
+      );
     }
   }
 
@@ -58,4 +69,4 @@ export class AppComponent implements OnInit {
       if (this.modal) this.modal.dismiss();
     }
   }
-}
+}  
