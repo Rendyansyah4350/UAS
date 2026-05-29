@@ -13,9 +13,15 @@ export class AuthService {
   currentUser$ = this.currentUserSubject.asObservable();
 
   constructor(private http: HttpClient) {
+    // 🟢 PERBAIKAN SINKRONISASI AUTO-LOGIN: Cek token & data user sekaligus saat aplikasi pertama dibuka
+    const token = localStorage.getItem('token');
     const savedUser = localStorage.getItem('user_data');
-    if (savedUser) {
+
+    if (token && savedUser) {
       this.currentUserSubject.next(JSON.parse(savedUser));
+    } else {
+      // Jika salah satu tidak ada, bersihkan sekalian agar aman
+      this.clearStorageState();
     }
   }
 
@@ -24,11 +30,19 @@ export class AuthService {
     this.currentUserSubject.next(userData);
   }
 
+  // Fungsi pembantu internal untuk membersihkan state memori
+  private clearStorageState() {
+    localStorage.removeItem('token');
+    localStorage.removeItem('user_data');
+    this.currentUserSubject.next(null);
+  }
+
   login(data: any): Observable<any> {
     return this.http.post(`${this.apiUrl}/login`, data).pipe(
       tap((res: any) => {
         if (res?.access_token) localStorage.setItem('token', res.access_token);
-        if (res?.user || res?.data) this.updateCurrentUserState(res.user || res.data);
+        if (res?.user || res?.data)
+          this.updateCurrentUserState(res.user || res.data);
       })
     );
   }
@@ -36,8 +50,12 @@ export class AuthService {
   verifyOTP(email: string, otp: string): Observable<any> {
     return this.http.post(`${this.apiUrl}/verify-otp`, { email, otp }).pipe(
       tap((res: any) => {
-        if (res?.token) localStorage.setItem('token', res.token);
-        if (res?.user || res?.data) this.updateCurrentUserState(res.user || res.data);
+        // 🟢 DIKONDISIKAN: Menangkap token akses jika backend memberikan token otomatis setelah verifikasi sukses
+        if (res?.access_token || res?.token) {
+          localStorage.setItem('token', res.access_token || res.token);
+        }
+        if (res?.user || res?.data)
+          this.updateCurrentUserState(res.user || res.data);
       })
     );
   }
@@ -51,7 +69,10 @@ export class AuthService {
   }
 
   verifyResetOtp(email: string, otp: string): Observable<any> {
-    return this.http.post(`${this.apiUrl}/forgot-password/verify-otp`, { email, otp });
+    return this.http.post(`${this.apiUrl}/forgot-password/verify-otp`, {
+      email,
+      otp,
+    });
   }
 
   resetPassword(data: any): Observable<any> {
@@ -62,40 +83,43 @@ export class AuthService {
     return this.http.post(`${this.apiUrl}/register`, data);
   }
 
+  // 🟢 CEK STATUS LOGIN: Mengembalikan nilai true hanya jika token fisik benar-benar tersimpan di HP
   isLoggedIn(): boolean {
     return !!localStorage.getItem('token');
   }
 
   logout() {
-    localStorage.removeItem('token');
-    localStorage.removeItem('user_data');
-    this.currentUserSubject.next(null);
+    this.clearStorageState();
   }
 
   getProfileFromServer(): Observable<any> {
     const headers = new HttpHeaders({
       Authorization: `Bearer ${localStorage.getItem('token')}`,
-      Accept: 'application/json'
+      Accept: 'application/json',
     });
     return this.http.get(`${this.apiUrl}/user`, { headers }).pipe(
-      tap((res: any) => { if (res) this.updateCurrentUserState(res.user || res.data || res); })
+      tap((res: any) => {
+        if (res) this.updateCurrentUserState(res.user || res.data || res);
+      })
     );
   }
 
   updateProfile(data: any): Observable<any> {
     const headers = new HttpHeaders({
       Authorization: `Bearer ${localStorage.getItem('token')}`,
-      Accept: 'application/json'
+      Accept: 'application/json',
     });
     return this.http.put(`${this.apiUrl}/user/update`, data, { headers }).pipe(
-      tap((res: any) => { if (res) this.updateCurrentUserState(res.user || res.data || res); })
+      tap((res: any) => {
+        if (res) this.updateCurrentUserState(res.user || res.data || res);
+      })
     );
   }
 
   getCoursesFromServer(): Observable<any> {
     const headers = new HttpHeaders({
       Authorization: `Bearer ${localStorage.getItem('token')}`,
-      Accept: 'application/json'
+      Accept: 'application/json',
     });
     return this.http.get(`${this.apiUrl}/courses`, { headers });
   }
