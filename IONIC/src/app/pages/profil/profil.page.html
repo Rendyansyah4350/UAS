@@ -30,35 +30,58 @@
   <div class="menu-container">
     <ion-list lines="none">
       <ion-item routerLink="/edit-profil" class="menu-item">
-        <div class="icon-wrapper blue" slot="start"><ion-icon name="person"></ion-icon></div>
+        <div class="icon-wrapper blue" slot="start">
+          <ion-icon name="person"></ion-icon>
+        </div>
         <ion-label>Ubah Profil</ion-label>
         <ion-icon name="chevron-forward" slot="end" class="chevron"></ion-icon>
       </ion-item>
 
       <ion-item routerLink="/certificate" class="menu-item">
-        <div class="icon-wrapper orange" slot="start"><ion-icon name="ribbon"></ion-icon></div>
+        <div class="icon-wrapper orange" slot="start">
+          <ion-icon name="ribbon"></ion-icon>
+        </div>
         <ion-label>Sertifikat Saya</ion-label>
         <ion-icon name="chevron-forward" slot="end" class="chevron"></ion-icon>
       </ion-item>
 
       <ion-item routerLink="/riwayat-transaksi" class="menu-item">
-        <div class="icon-wrapper green" slot="start"><ion-icon name="receipt"></ion-icon></div>
+        <div class="icon-wrapper green" slot="start">
+          <ion-icon name="receipt"></ion-icon>
+        </div>
         <ion-label>Riwayat Transaksi</ion-label>
         <ion-icon name="chevron-forward" slot="end" class="chevron"></ion-icon>
       </ion-item>
 
       <ion-item routerLink="/notifications" class="menu-item">
-        <div class="icon-wrapper purple" slot="start"><ion-icon name="notifications"></ion-icon></div>
+        <div class="icon-wrapper purple" slot="start">
+          <ion-icon name="notifications"></ion-icon>
+        </div>
         <ion-label>Notifikasi</ion-label>
         <ion-icon name="chevron-forward" slot="end" class="chevron"></ion-icon>
       </ion-item>
 
       <div class="logout-spacer"></div>
-      
-      <ion-item button (click)="logout()" class="menu-item logout">
-        <div class="icon-wrapper red" slot="start"><ion-icon name="log-out"></ion-icon></div>
+
+      <ion-item
+        button
+        (click)="bukaKonfirmasiKeluar()"
+        class="menu-item logout"
+      >
+        <div class="icon-wrapper red" slot="start">
+          <ion-icon name="log-out"></ion-icon>
+        </div>
         <ion-label>Keluar</ion-label>
       </ion-item>
     </ion-list>
   </div>
+
+  <ion-alert
+    [isOpen]="isLogoutAlertOpen"
+    header="Konfirmasi Keluar"
+    message="Apakah kamu yakin ingin keluar dari aplikasi EduVan?"
+    [buttons]="logoutAlertButtons"
+    class="eduvan-alert-logout"
+    (didDismiss)="isLogoutAlertOpen = false"
+  ></ion-alert>
 </ion-content>

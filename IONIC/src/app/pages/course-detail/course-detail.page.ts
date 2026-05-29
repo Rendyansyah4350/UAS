@@ -1,7 +1,7 @@
 import { Component, OnInit, ChangeDetectorRef } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { CourseService } from '../../services/course.service';
-import { Camera, CameraResultType, CameraSource } from '@capacitor/camera'; 
+import { Camera, CameraResultType, CameraSource } from '@capacitor/camera';
 
 @Component({
   selector: 'app-course-detail',
@@ -12,7 +12,6 @@ import { Camera, CameraResultType, CameraSource } from '@capacitor/camera';
 export class CourseDetailPage implements OnInit {
   course: any = {};
   contents: any[] = [];
-
   paymentStatus: string = 'none';
   paymentUrl: string = '';
   isWishlist: boolean = false;
@@ -21,21 +20,43 @@ export class CourseDetailPage implements OnInit {
   // Variabel Kontrol Modal Rating Premium Kustom
   isModalRatingOpen: boolean = false;
   ratingInput: number = 5;
-
-  // 🟢 VARIABEL BARU UNTUK KONTROL TRANSFER BUKTI MANUAL LEK
   isModalTransferOpen: boolean = false;
   fileGambarBukti: File | null = null;
   namaFileTerpilih: string = '';
   loadingUpload: boolean = false;
-
-  // 🔥 TAMBAHAN BARU: Tampung URL preview foto struk biar bisa nongol di HTML lek
   imagePreviewUrl: string | undefined = undefined;
+
+  // 🟢 VARIABEL BARU UNTUK KONTROL OVERLAY ION-ALERT PREMIUM KUSTOM
+  isSuccessAlertOpen: boolean = false;
+  isErrorAlertOpen: boolean = false;
+  alertMessageCustom: string = '';
+
+  // 🟢 KONFIGURASI HANDLER TOMBOL ALERT AGAR TIDAK ERROR DI HTML PARSER ANGULAR
+  alertSuccessButtons = [
+    {
+      text: 'Selesai',
+      role: 'confirm',
+      handler: () => {
+        this.tutupAlertKustom();
+      },
+    },
+  ];
+
+  alertErrorButtons = [
+    {
+      text: 'Coba Lagi',
+      role: 'cancel',
+      handler: () => {
+        this.tutupAlertKustom();
+      },
+    },
+  ];
 
   constructor(
     private route: ActivatedRoute,
     private router: Router,
     private courseService: CourseService,
-    private cdr: ChangeDetectorRef,
+    private cdr: ChangeDetectorRef
   ) {}
 
   ngOnInit() {
@@ -63,11 +84,11 @@ export class CourseDetailPage implements OnInit {
           this.course = res.data;
           console.log('Detail Kursus Sukses Dimuat:', this.course);
           this.cdr.detectChanges();
-
           this.cekStatusWishlistUser(targetCourseId);
           this.ambilKontenKurikulum(targetCourseId);
         }
       },
+
       error: (error) => {
         console.error('Gagal ambil detail:', error);
       },
@@ -78,7 +99,7 @@ export class CourseDetailPage implements OnInit {
       next: (enrollRes: any) => {
         if (enrollRes.success && enrollRes.data) {
           const riwayatBeli = enrollRes.data.find(
-            (item: any) => Number(item.course_id) === targetCourseId,
+            (item: any) => Number(item.course_id) === targetCourseId
           );
 
           if (riwayatBeli) {
@@ -92,6 +113,7 @@ export class CourseDetailPage implements OnInit {
           this.cdr.detectChanges();
         }
       },
+
       error: (enrollError) => {
         if (enrollError.status === 400) {
           this.paymentStatus = 'success';
@@ -124,17 +146,14 @@ export class CourseDetailPage implements OnInit {
         promptLabelPhoto: 'Ambil dari Galeri',
         promptLabelPicture: 'Gunakan Kamera',
       });
-
       this.imagePreviewUrl = image.webPath;
       this.namaFileTerpilih = `bukti_transfer_${Date.now()}.jpg`;
-
       // Proses konversi aman terkendali:
       const response = await fetch(image.webPath!);
       const blob = await response.blob(); // Sudah diperbaiki mbut!
       this.fileGambarBukti = new File([blob], this.namaFileTerpilih, {
         type: 'image/jpeg',
       });
-
       this.cdr.detectChanges();
     } catch (error) {
       console.log('User membatalkan pemilihan media.', error);
@@ -143,50 +162,58 @@ export class CourseDetailPage implements OnInit {
 
   kirimBuktiTransferKeServer() {
     if (!this.fileGambarBukti) {
-      alert('Harap pilih file gambar bukti transfer terlebih dahulu!');
+      this.alertMessageCustom =
+        'Harap pilih file gambar bukti transfer terlebih dahulu!';
+      this.isErrorAlertOpen = true;
+      this.cdr.detectChanges();
       return;
     }
-
     this.loadingUpload = true;
     this.cdr.detectChanges();
-
     // Membungkus parameter ke objek FormData biner lek
+
     const formData = new FormData();
     formData.append('course_id', String(this.course.id));
-
     // 🟢 FIX SAKTI: Ubah key dari 'payment_proof' menjadi 'proof_of_payment' biar match sama Laravel Ivan
     formData.append('proof_of_payment', this.fileGambarBukti);
-
-    // Tembak service multipart kustom kita lek
     this.courseService.buyCourseManual(formData).subscribe({
       next: (res: any) => {
         this.loadingUpload = false;
         this.isModalTransferOpen = false;
-        alert(
+
+        // Memasukkan response teks kustom asli backend ke overlay kustom baru lek
+        this.alertMessageCustom =
           res.message ||
-            'Bukti transfer sukses dikirim! Mohon tunggu konfirmasi Admin.',
-        );
+          'Bukti transfer sukses dikirim! Mohon tunggu konfirmasi Admin.';
+        this.isSuccessAlertOpen = true;
 
         this.paymentStatus = 'pending'; // Tombol otomatis berubah jadi "Menunggu Verifikasi Admin"
         this.getDetail(String(this.course.id));
         this.cdr.detectChanges();
       },
+
       error: (err) => {
         this.loadingUpload = false;
         console.error('Gagal upload bukti:', err);
-        // Memunculkan pesan error asli dari backend biar gampang di-trace lek
-        alert(
+
+        // Memasukkan response pesan error validasi asli backend ke overlay kustom lek
+        this.alertMessageCustom =
           err.error?.message ||
-            'Gagal mengirim bukti pembayaran, periksa format file Anda.',
-        );
+          'Gagal mengirim bukti pembayaran, periksa format file Anda.';
+        this.isErrorAlertOpen = true;
         this.cdr.detectChanges();
       },
     });
   }
 
-  // =========================================================================
+  // 🟢 FUNGSI DISMISS OVERLAY ALERT UNTUK RESET STATE KUSTOM
+  tutupAlertKustom() {
+    this.isSuccessAlertOpen = false;
+    this.isErrorAlertOpen = false;
+    this.cdr.detectChanges();
+  }
+
   // LOGIKA FITUR ULASAN & RATING KUSTOM
-  // =========================================================================
   setRatingBintang(bintang: number) {
     this.ratingInput = bintang;
     this.cdr.detectChanges();
@@ -194,26 +221,27 @@ export class CourseDetailPage implements OnInit {
 
   kirimUlasanRatingLive() {
     console.log(
-      `Mengirim rating bintang ${this.ratingInput} untuk course ID: ${this.course.id}`,
+      `Mengirim rating bintang ${this.ratingInput} untuk course ID: ${this.course.id}`
     );
-
     this.courseService
       .kirimRatingCourse(this.course.id, this.ratingInput)
       .subscribe(
         (res: any) => {
-          alert(
-            res.message || 'Terima kasih, rating bintang berhasil disimpan.',
-          );
+          this.alertMessageCustom =
+            res.message || 'Terima kasih, rating bintang berhasil disimpan.';
+          this.isSuccessAlertOpen = true;
           this.isModalRatingOpen = false;
           this.getDetail(String(this.course.id));
         },
+
         (error: any) => {
           console.error('Gagal kirim rating:', error);
-          alert(
+          this.alertMessageCustom =
             error.error?.message ||
-              'Gagal menyimpan rating, silakan coba lagi.',
-          );
-        },
+            'Gagal menyimpan rating, silakan coba lagi.';
+          this.isErrorAlertOpen = true;
+          this.cdr.detectChanges();
+        }
       );
   }
 
@@ -227,19 +255,19 @@ export class CourseDetailPage implements OnInit {
       },
       (error) => {
         console.log('Materi dikunci:', error);
-      },
+      }
     );
   }
 
   // 🟢 FIX TOTAL: Diarahkan langsung masuk ke halaman nonton course-player bawa ID video
   klikMateri(contentId: number) {
     if (this.paymentStatus !== 'success') {
-      alert(
-        'Materi ini masih terkunci! Silakan selesaikan pendaftaran dan tunggu verifikasi Admin.',
-      );
+      this.alertMessageCustom =
+        'Materi ini masih terkunci! Silakan selesaikan pendaftaran dan tunggu verifikasi Admin.';
+      this.isErrorAlertOpen = true;
+      this.cdr.detectChanges();
     } else {
       console.log('Navigasi klikMateri bawa ID Kursus:', this.course.id);
-      // 🔥 FIX: Kirim ID Kursus ke URL player, bukan ID materi mbut!
       this.router.navigate(['/course-player', this.course.id]);
     }
   }
@@ -250,15 +278,15 @@ export class CourseDetailPage implements OnInit {
       // 🔥 FIX: Kirim ID Kursus ke URL player agar data header & video tidak tertukar
       this.router.navigate(['/course-player', this.course.id]);
     } else {
-      alert(
-        'Kelas ini sudah aktif, namun admin belum mengunggah modul video untuk kelas ini.',
-      );
+      this.alertMessageCustom =
+        'Kelas ini sudah aktif, namun admin belum mengunggah modul video untuk kelas ini.';
+      this.isErrorAlertOpen = true;
+      this.cdr.detectChanges();
     }
   }
 
   toggleWishlist() {
     if (!this.course || !this.course.id) return;
-
     this.isWishlist = !this.isWishlist;
     this.courseService.toggleWishlistServer(this.course.id).subscribe(
       (res: any) => {
@@ -272,7 +300,7 @@ export class CourseDetailPage implements OnInit {
         this.isWishlist = !this.isWishlist;
         this.courseService.wishlistChanged$.next(true);
         this.cdr.detectChanges();
-      },
+      }
     );
   }
 
@@ -281,7 +309,7 @@ export class CourseDetailPage implements OnInit {
       if (res.success) {
         const listWishlist = res.data || [];
         this.isWishlist = listWishlist.some(
-          (item: any) => Number(item.course_id) === targetCourseId,
+          (item: any) => Number(item.course_id) === targetCourseId
         );
         this.cdr.detectChanges();
       }

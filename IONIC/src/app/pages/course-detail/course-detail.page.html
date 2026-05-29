@@ -382,3 +382,21 @@
     </div>
   </ng-template>
 </ion-modal>
+
+<ion-alert
+  [isOpen]="isSuccessAlertOpen"
+  header="Transaksi Berhasil"
+  [message]="alertMessageCustom"
+  [buttons]="alertSuccessButtons"
+  class="eduvan-alert-success"
+  (didDismiss)="tutupAlertKustom()"
+></ion-alert>
+
+<ion-alert
+  [isOpen]="isErrorAlertOpen"
+  header="Gagal Mengirim"
+  [message]="alertMessageCustom"
+  [buttons]="alertErrorButtons"
+  class="eduvan-alert-error"
+  (didDismiss)="tutupAlertKustom()"
+></ion-alert>

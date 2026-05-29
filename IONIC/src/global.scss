@@ -1,19 +1,20 @@
 /* Impor font dari Google Fonts */
-@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap');
+@import url("https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap");
 
 @import "@ionic/angular/css/core.css";
 /* ... (impor css lainnya tetap seperti milik Anda) ... */
 
 :root {
   /* Palette Premium Eduvan */
-  --edu-accent: #1565C0;
-  --edu-bg: #F4F7FA;
+  --edu-accent: #1565c0;
+  --edu-bg: #f4f7fa;
   --edu-white: #ffffff;
-  --edu-text-main: #1A202C;
+  --edu-text-main: #1a202c;
   --edu-text-muted: #718096;
 
   /* Shadow & Border */
-  --premium-shadow: 0 20px 40px rgba(9, 60, 93, 0.08), 0 5px 15px rgba(0, 0, 0, 0.03);
+  --premium-shadow: 0 20px 40px rgba(9, 60, 93, 0.08),
+    0 5px 15px rgba(0, 0, 0, 0.03);
   --glass-shadow: 0 8px 32px 0 rgba(9, 60, 93, 0.1);
   --soft-border: 1px solid rgba(226, 232, 240, 0.8);
 }
@@ -26,14 +27,23 @@ body {
 }
 
 /* Judul agar konsisten */
-h1, h2, h3, h4, h5, h6 {
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
   font-family: var(--ion-font-family);
   font-weight: 700;
   color: var(--ion-color-primary);
 }
 
 /* Reset elemen form agar mengikuti font */
-ion-button, ion-input, ion-textarea, ion-item, ion-label {
+ion-button,
+ion-input,
+ion-textarea,
+ion-item,
+ion-label {
   font-family: var(--ion-font-family);
 }
 
@@ -52,14 +62,15 @@ ion-button {
 }
 
 .edu-input-item {
-  --background: #F8FAFC;
+  --background: #f8fafc;
   --border-radius: 16px;
-  border: 1.5px solid #E2E8F0;
+  border: 1.5px solid #e2e8f0;
   transition: all 0.3s ease;
 }
+
 .premium-avatar-sheet {
   --background: transparent;
-  
+
   /* Posisi di tengah dan efek melayang */
   .action-sheet-wrapper {
     max-width: 320px;
@@ -78,7 +89,7 @@ ion-button {
     color: var(--edu-text-main);
     border-radius: 16px;
     margin: 4px 8px;
-    
+
     &:hover {
       background: #f8fafc;
     }
@@ -88,5 +99,169 @@ ion-button {
     color: #ef4444;
     font-weight: 700;
     margin-top: 10px;
+  }
+}
+
+// =========================================================================
+// PREMIUM CUSTOM OVERLAY ALERT FOR EDUVAN (MINIMALIST & CLEAN VERSION)
+// =========================================================================
+
+// 🟢 1. Tema Alert Sukses (Minimalist Deep Slate & Soft Green)
+.eduvan-alert-success {
+  --background: #1e293b !important; // Deep Slate solid & bersih
+  --box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.3),
+    0 10px 10px -5px rgba(0, 0, 0, 0.2);
+  --border-radius: 24px; // Jauh lebih smooth dan melengkung alami
+
+  .alert-head {
+    text-align: center;
+    padding: 32px 24px 12px 24px;
+
+    h2.alert-title {
+      color: #34d399; // Hijau emerald pastel lembut (tidak menusuk mata)
+      font-size: 19px;
+      font-weight: 600; // Tidak terlalu tebal kaku
+      letter-spacing: -0.3px;
+    }
+  }
+
+  .alert-message {
+    color: #94a3b8; // Teks abu-abu soft clean
+    text-align: center;
+    font-size: 13.5px;
+    line-height: 1.6;
+    padding: 0 28px 28px 28px;
+  }
+
+  .alert-button-group {
+    padding: 0 24px 24px 24px;
+
+    button.alert-button {
+      background: #4f46e5; // Indigo solid flat clean (gaya iOS premium minimalis)
+      color: #ffffff !important;
+      width: 100%;
+      margin: 0;
+      border-radius: 14px;
+      font-weight: 600;
+      font-size: 14px;
+      height: 44px;
+      box-shadow: none; // Hapus shadow lebay di tombol
+
+      .alert-button-inner {
+        justify-content: center;
+      }
+    }
+  }
+}
+
+// 🔴 2. Tema Alert Gagal (Minimalist Deep Slate & Soft Red)
+.eduvan-alert-error {
+  --background: #1e293b !important;
+  --box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.3),
+    0 10px 10px -5px rgba(0, 0, 0, 0.2);
+  --border-radius: 24px;
+
+  .alert-head {
+    text-align: center;
+    padding: 32px 24px 12px 24px;
+
+    h2.alert-title {
+      color: #f87171; // Merah pastel lembut
+      font-size: 19px;
+      font-weight: 600;
+      letter-spacing: -0.3px;
+    }
+  }
+
+  .alert-message {
+    color: #94a3b8;
+    text-align: center;
+    font-size: 13.5px;
+    line-height: 1.6;
+    padding: 0 28px 28px 28px;
+  }
+
+  .alert-button-group {
+    padding: 0 24px 24px 24px;
+
+    button.alert-button {
+      background: #ef4444; // Red flat clean
+      color: #ffffff !important;
+      width: 100%;
+      margin: 0;
+      border-radius: 14px;
+      font-weight: 600;
+      font-size: 14px;
+      height: 44px;
+      box-shadow: none;
+
+      .alert-button-inner {
+        justify-content: center;
+      }
+    }
+  }
+}
+
+// 👤 3. Tema Alert Konfirmasi Logout Kustom (Clean Slate & Soft White)
+.eduvan-alert-logout {
+  --background: #1e293b !important; // Deep Slate match dengan alert payment
+  --box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.3),
+    0 10px 10px -5px rgba(0, 0, 0, 0.2);
+  --border-radius: 24px; // Smooth corner modern
+
+  .alert-head {
+    text-align: center;
+    padding: 32px 24px 12px 24px;
+
+    h2.alert-title {
+      color: #f1f5f9; // Putih bersih elegan
+      font-size: 19px;
+      font-weight: 600;
+      letter-spacing: -0.3px;
+    }
+  }
+
+  .alert-message {
+    color: #94a3b8; // Abu-abu muted soft
+    text-align: center;
+    font-size: 13.5px;
+    line-height: 1.6;
+    padding: 0 24px 24px 24px;
+  }
+
+  // Pengaturan tata letak tombol berdampingan agar clean
+  .alert-button-group {
+    display: flex !important;
+    flex-direction: row !important;
+    justify-content: space-between !important;
+    padding: 0 24px 24px 24px !important;
+    gap: 12px;
+
+    button.alert-button {
+      flex: 1 !important;
+      width: 50% !important;
+      margin: 0 !important;
+      height: 44px;
+      border-radius: 14px;
+      font-weight: 600;
+      font-size: 14px;
+      text-transform: none;
+
+      .alert-button-inner {
+        justify-content: center;
+      }
+    }
+
+    // Tombol Batal flat transparan
+    button.alert-btn-batal {
+      background: rgba(255, 255, 255, 0.05) !important;
+      color: #94a3b8 !important;
+    }
+
+    // Tombol Keluar tegas tapi soft crimson
+    button.alert-btn-keluar {
+      background: #ef4444 !important;
+      color: #ffffff !important;
+    }
   }
 }
