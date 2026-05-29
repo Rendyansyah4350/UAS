@@ -38,7 +38,12 @@ export class LoginPage implements OnInit {
   }
 
   ngOnInit() {
-    // Bersih dari pengecekan queryParams OTP register
+    // 🟢 KUNCI BYPASS AUTO-LOGIN: Jika terdeteksi token aktif saat membuka app, langsung lempar ke beranda
+    if (this.auth.isLoggedIn()) {
+      this.zone.run(() => {
+        this.navCtrl.navigateRoot('/tabs/beranda');
+      });
+    }
   }
 
   togglePassword() {
