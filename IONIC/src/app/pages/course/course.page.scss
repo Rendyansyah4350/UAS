@@ -7,6 +7,20 @@ $navy-color: #093c5d;
     Arial, sans-serif !important;
 }
 
+.bg-spinner-fixed {
+  width: 100%;
+  display: flex;
+  justify-content: center; /* Memastikan objek di dalam div dipaksa ke sumbu tengah */
+  align-items: center;
+  padding: 20px 0;
+  
+  ion-spinner {
+    width: 32px;
+    height: 32px;
+    --color: #093C5D;
+  }
+}
+
 .header-navy {
   background: $navy-color;
   padding: 16px 16px 24px 16px;
