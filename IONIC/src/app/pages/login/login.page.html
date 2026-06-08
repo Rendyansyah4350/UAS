@@ -27,7 +27,7 @@
       <ion-icon [name]="showPassword ? 'eye-outline' : 'eye-off-outline'" slot="end" class="eye-icon" (click)="togglePassword()"></ion-icon>
     </ion-item>
     <p class="error-msg" *ngIf="loginForm.get('password')?.touched && loginForm.get('password')?.invalid">
-      Password wajib diisi (minimal 8 karakter)
+      Password wajib diisi
     </p>
 
     <div class="forgot-password-link">
@@ -36,11 +36,11 @@
 
 <ion-button expand="block" class="auth-btn" (click)="onLogin()" [disabled]="isLoading">
       <ion-spinner name="crescent" *ngIf="isLoading" style="--color: #04145f; width: 24px; height: 24px;"></ion-spinner>
-      
+
       <span *ngIf="!isLoading">MASUK</span>
     </ion-button>
     <div class="footer-links">
       Belum punya akun? <span class="link-bold" (click)="goToRegister()">Daftar Gratis</span>
     </div>
   </div>
-</ion-content>  
+</ion-content>

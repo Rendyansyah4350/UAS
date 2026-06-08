@@ -16,14 +16,12 @@ import { CourseService } from '../../services/course.service'; // 🚨 1. IMPORT
 export class ProfilePage implements OnInit {
   userProfile: any = null;
   selectedAvatar: string = 'assets/icon/avatar-male.png';
+  isSkModalOpen: boolean = false;
+  isPrivacyModalOpen: boolean = false;
 
   angkaKursus: number = 0;
   angkaSertifikat: number = 0;
-
-  // 🟢 VARIABEL BARU UNTUK KONTROL POPUP LOGOUT KUSTOM LEK
   isLogoutAlertOpen: boolean = false;
-
-  // 🟢 CONFIG TOMBOL FLAT MINIMALIS UNTUK POPUP LOGOUT KUSTOM
   logoutAlertButtons = [
     {
       text: 'Batal',
@@ -40,7 +38,6 @@ export class ProfilePage implements OnInit {
       cssClass: 'alert-btn-keluar',
       handler: () => {
         this.isLogoutAlertOpen = false;
-        // Pindah logika logout asli bawaan lu ke sini lek aman terkendali:
         localStorage.removeItem('user_avatar');
         this.authService.logout();
         this.navCtrl.navigateRoot('/login');
@@ -55,7 +52,7 @@ export class ProfilePage implements OnInit {
     private authService: AuthService,
     private actionSheetCtrl: ActionSheetController,
     private cdr: ChangeDetectorRef,
-    private courseService: CourseService // 🟢 2. SUNTIKKAN COURSESERVICE DI CONSTRUCTOR LEK
+    private courseService: CourseService
   ) {}
 
   ngOnInit() {
@@ -217,5 +214,11 @@ export class ProfilePage implements OnInit {
       ],
     });
     await alert.present();
+  }
+  setSkModal(isOpen: boolean) {
+    this.isSkModalOpen = isOpen;
+  }
+  setPrivacyModal(isOpen: boolean) {
+    this.isPrivacyModalOpen = isOpen;
   }
 }
