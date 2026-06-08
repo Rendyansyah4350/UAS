@@ -12,7 +12,7 @@ import { Router } from '@angular/router';
   selector: 'app-login',
   templateUrl: './login.page.html',
   styleUrls: ['./login.page.scss'],
-  encapsulation: ViewEncapsulation.None, // 🟢 Sudah diganti pakai 'encapsulation' lek!
+  encapsulation: ViewEncapsulation.None,
   standalone: false,
 })
 export class LoginPage implements OnInit {

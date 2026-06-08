@@ -2,7 +2,7 @@ import type { CapacitorConfig } from '@capacitor/cli';
 
 const config: CapacitorConfig = {
   appId: 'com.rehalivan.eduvan',
-  appName: 'Eduvan',
+  appName: 'Eduvan Marketplace',
   webDir: 'www',
   plugins: {
     SplashScreen: {
