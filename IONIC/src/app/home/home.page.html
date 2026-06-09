@@ -1,4 +1,14 @@
 <ion-content [fullscreen]="true">
+  <ion-refresher slot="fixed" (ionRefresh)="handleRefresh($event)">
+    <ion-refresher-content
+      pullingIcon="arrow-down-circle"
+      pullingText="Tarik sedikit lagi..."
+      refreshingSpinner="crescent"
+      refreshingText="Menyelaraskan data EduVan..."
+    >
+    </ion-refresher-content>
+  </ion-refresher>
+  <div class="konten-beranda"></div>
   <div class="main-wrapper">
     <div class="header-section">
       <div class="brand">Edu<span>Van</span></div>

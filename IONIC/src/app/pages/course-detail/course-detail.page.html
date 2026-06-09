@@ -12,6 +12,15 @@
 </ion-header>
 
 <ion-content>
+  <ion-refresher slot="fixed" (ionRefresh)="handleRefresh($event)">
+    <ion-refresher-content
+      pullingIcon="arrow-down-circle"
+      pullingText="Tarik sedikit lagi..."
+      refreshingSpinner="crescent"
+      refreshingText="Menyelaraskan data EduVan..."
+    >
+    </ion-refresher-content>
+  </ion-refresher>
   <div class="image-header">
     <img
       [src]="

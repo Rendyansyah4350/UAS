@@ -1,16 +1,16 @@
-$navy-color: #093C5D; // Warna biru yang kamu inginkan
+$navy-color: #093C5D; // Warna biru utama EduVan
 
 ion-content {
   --background: #f8fafc;
 }
 
 .profile-header {
-  background: $navy-color; // Menggunakan warna biru solid
+  background: $navy-color; // Menggunakan warna biru solid khas EduVan
   padding: 40px 20px;
   text-align: center;
   border-bottom-left-radius: 0;
   border-bottom-right-radius: 0;
-  box-shadow: none; // Menghapus bayangan berlebihan
+  box-shadow: none; 
 
   .avatar-ring {
     position: relative;
@@ -26,6 +26,50 @@ ion-content {
       background: #e2e8f0;
     }
 
+    /* 🟢 SEGMEN PERBAIKAN: SILUET PREMIUM ALA FACEBOOK (MURNI CSS) */
+    .default-avatar-placeholder {
+      width: 100px;
+      height: 100px;
+      border-radius: 50%;
+      border: 3px solid #ffffff;
+      background: #e4e6eb; /* Warna abu-abu background khas FB */
+      display: flex;
+      align-items: flex-end; /* Memaksa potongan pundak nempel di dasar lingkaran */
+      justify-content: center;
+      overflow: hidden;
+      position: relative;
+
+      .fb-siluet-wrapper {
+        position: relative;
+        width: 100%;
+        height: 100%;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: flex-end;
+      }
+
+      /* Kepala Bulat Siluet */
+      .fb-head {
+        width: 32px;
+        height: 32px;
+        background: #bcc0c4; /* Warna abu ikon orang FB */
+        border-radius: 50%;
+        position: absolute;
+        bottom: 38px; /* Menggantung pas di atas pundak */
+      }
+
+      /* Pundak Melengkung Berisi */
+      .fb-shoulder {
+        width: 70px;
+        height: 35px;
+        background: #bcc0c4;
+        border-radius: 35px 35px 0 0; /* Lengkungan pundak anatomi atas */
+        transform: translateY(4px); /* Kompensasi potongan biar rapi di lengkungan frame */
+      }
+    }
+
+    /* TOMBOL BADGE KAMERA */
     .edit-badge {
       position: absolute;
       bottom: 0px;
@@ -39,6 +83,13 @@ ion-content {
       align-items: center;
       justify-content: center;
       border: 1px solid #ddd;
+      z-index: 10; /* Biar lapisannya gak ketutup siluet pundak */
+      cursor: pointer;
+      box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+
+      &:active {
+        transform: scale(0.9); /* Efek feedback mantul pas diklik */
+      }
     }
   }
 
@@ -58,14 +109,15 @@ ion-content {
   }
 }
 
+/* KARTU STATISTIK KURSUS & SERTIFIKAT */
 .stats-card {
   background: #ffffff;
-  margin: -20px 20px 0 20px; // Dibuat sedikit menonjol saja
+  margin: -20px 20px 0 20px; 
   padding: 15px;
   border-radius: 12px;
   display: flex;
   align-items: center;
-  border: 1px solid #e5e7eb; // Border tipis sebagai pengganti shadow
+  border: 1px solid #e5e7eb; 
   box-shadow: 0 2px 4px rgba(0,0,0,0.05);
 
   .stat-box {
@@ -81,6 +133,7 @@ ion-content {
   .divider { width: 1px; height: 30px; background: #e5e7eb; }
 }
 
+/* AREA MENU LIST BAWAH */
 .menu-container {
   padding: 20px;
 

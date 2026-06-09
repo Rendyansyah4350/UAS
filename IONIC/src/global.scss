@@ -131,6 +131,74 @@ ion-button {
     line-height: 1.6;
     padding: 0 28px 28px 28px;
   }
+  ion-refresher {
+  /* Warna Spinner (Lingkaran Sabit) saat berputar */
+  --ion-color-primary: #ffca28; /* Kuning Emas/Gold biar kontras */
+  
+  ion-refresher-content {
+    /* Gaya Teks "Tarik..." dan "Menyelaraskan..." */
+    color: #093C5D !important; /* Warna Utama Navy EduVan */
+    font-weight: 600;
+    font-size: 14px;
+    letter-spacing: 0.3px;
+    
+    /* Gaya Ikon Panah Saat Ditarik */
+    .refresher-pulling-icon {
+      color: #093C5D;
+      font-size: 26px;
+      transition: transform 0.2s ease-in-out;
+    }
+    
+    /* Gaya Spinner Lingkaran */
+    ion-spinner {
+      width: 28px;
+      height: 28px;
+      margin-bottom: 4px;
+    }
+  }
+}
+
+/* Styling Toast Keluar Premium Melayang di Atas Tabs Menu */
+.toast-keluar-premium {
+  /* 1. Pengaturan Posisi Melayang di Atas Tabs */
+  --baseline: 90px; /* Mengangkat posisi dasar toast melayang tepat di atas menu bawah */
+  margin-bottom: 30px; /* Tambahan jarak aman untuk layar HP berponi bawah (gesture bar) */
+  
+  /* 2. Desain Kapsul Minimalis Modern (Glassmorphic) */
+  --background: rgba(25, 35, 50, 0.95); /* Warna navy gelap semi-transparan premium */
+  --color: #ffffff;
+  --border-radius: 24px; /* Sudut melengkung halus modern */
+  --box-shadow: 0 10px 25px rgba(0, 0, 0, 0.35); /* Efek bayangan tegas agar tampak melayang */
+  
+  /* 3. Layout & Jarak Internal */
+  max-width: 85% !important; /* Agar kapsul tidak melebar terlalu penuh ke sisi layar */
+  left: 50% !important;
+  transform: translateX(-50%) !important; /* Memastikan posisi persis di tengah-tengah layar */
+  padding: 4px 16px;
+
+  /* 4. Teks Desain */
+  font-weight: 600;
+  font-size: 13.5px;
+  letter-spacing: 0.5px;
+
+  /* 5. Dekorasi Ikon */
+  ion-icon {
+    color: #ffd54f !important; /* Warna kuning gold cerah */
+    font-size: 19px;
+    margin-right: 8px;
+    animation: bounceIcon 1.2s ease-in-out infinite alternate; /* Efek pantulan lembut */
+  }
+}
+
+/* Animasi Pantulan Lembut Khusus Ikon */
+@keyframes bounceIcon {
+  0% {
+    transform: translateY(0);
+  }
+  100% {
+    transform: translateY(-3px); /* Ikon akan melompat naik-turun secara halus */
+  }
+}
 
   .alert-button-group {
     padding: 0 24px 24px 24px;

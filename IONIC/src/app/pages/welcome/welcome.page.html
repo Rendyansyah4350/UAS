@@ -1,0 +1,390 @@
+<ion-header class="ion-no-border" *ngIf="currentStep > 1">
+  <ion-toolbar class="custom-toolbar">
+    <ion-buttons slot="start">
+      <ion-button (click)="langkahKembali()" class="btn-kembali">
+        <ion-icon slot="start" name="chevron-back-outline"></ion-icon>
+        Kembali
+      </ion-button>
+    </ion-buttons>
+    <ion-title class="toolbar-title">{{ judulToolbarDinamis() }}</ion-title>
+    <ion-buttons slot="end">
+      <ion-button (click)="goToLogin()" class="btn-tutup">Tutup</ion-button>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content [fullscreen]="true" class="welcome-container">
+  <div class="welcome-wrapper">
+    <div class="content-body">
+      <div class="step-box step-centered fade-in" *ngIf="currentStep === 1">
+        <div class="logo-wrapper">
+          <div class="premium-logo-card">
+            <img
+              src="assets/icon/Eduvan.png"
+              alt="EduVan Logo"
+              class="app-logo-play"
+              (error)="handleImageError($event)"
+            />
+          </div>
+          <div class="logo-halo-effect"></div>
+        </div>
+
+        <div class="text-wrapper-center">
+          <h1 class="welcome-heading">Selamat Datang!</h1>
+          <p class="welcome-sub">
+            Halo, selamat datang di EduVan Marketplace. Aplikasi penyedia
+            layanan pembelian kursus digital.
+          </p>
+        </div>
+      </div>
+
+      <div class="step-box step-legal fade-in" *ngIf="currentStep === 2">
+        <div class="legal-scroll-card" (scroll)="cekPosisiScroll($event)">
+          <p>
+            Selamat datang di aplikasi Eduvan. Dengan mengunduh, mendaftarkan
+            akun, dan menggunakan seluruh layanan kami, Anda menyatakan telah
+            membaca, memahami, dan menyetujui seluruh ketentuan layanan di bawah
+            ini:
+          </p>
+
+          <h4 class="legal-sub-title">
+            1. Hak Akses, Keamanan, dan Kewajiban Akun Student
+          </h4>
+          <p>
+            * Setiap pengguna yang ingin mengakses layanan Eduvan diwajibkan
+            untuk melakukan registrasi akun secara mandiri dengan memberikan
+            data identitas yang valid, akurat, dan terbaru, termasuk nama
+            lengkap dan alamat email aktif.
+          </p>
+          <p>
+            * Seluruh kerahasiaan data kredensial akun, seperti kata sandi
+            (password) dan akses log masuk aplikasi, sepenuhnya menjadi tanggung
+            jawab pribadi pengguna (Student).
+          </p>
+          <p>
+            * Eduvan tidak bertanggung jawab atas kerugian atau penyalahgunaan
+            akun yang disebabkan oleh kelalaian pengguna dalam menjaga
+            kerahasiaan data akses tersebut.
+          </p>
+          <p>
+            * Pengguna dilarang keras memindahtangankan, membagikan hak akses,
+            atau memperjualbelikan akun Student miliknya kepada pihak lain
+            dengan alasan apa pun.
+          </p>
+
+          <h4 class="legal-sub-title">
+            2. Mekanisme Pembelian Kursus, Transaksi, dan Harga
+          </h4>
+          <p>
+            * Seluruh transaksi pembelian kursus atau kelas digital di dalam
+            platform Eduvan dilakukan secara resmi menggunakan metode transfer
+            bank ke nomor rekening yang telah ditentukan di dalam aplikasi.
+          </p>
+          <p>
+            * Nominal pembayaran wajib disesuaikan secara presisi hingga digit
+            terakhir sesuai dengan tagihan invoice yang tertera pada sistem saat
+            melakukan checkout.
+          </p>
+          <p>
+            * Eduvan berhak mengubah harga sewaktu-waktu, memberlakukan tarif
+            promo, atau menghentikan penjualan suatu paket kursus tanpa perlu
+            memberikan pemberitahuan terlebih dahulu kepada pengguna.
+          </p>
+
+          <h4 class="legal-sub-title">
+            3. Kebijakan Validasi dan Verifikasi Bukti Pembayaran Manual
+          </h4>
+          <p>
+            * Proses aktivasi materi pembelajaran tidak berjalan secara
+            instan/otomatis, melainkan melalui tahap pemeriksaan berkas dokumen
+            bukti transfer yang dilakukan secara manual oleh pihak Admin melalui
+            sistem dashboard website khusus.
+          </p>
+          <p>
+            * Pengguna wajib mengunggah file bukti transfer resmi (bisa diambil
+            secara langsung melalui fitur kamera internal handphone ataupun
+            memilih berkas gambar dari galeri perangkat) dengan kualitas gambar
+            yang tajam, jelas, dan tidak terpotong.
+          </p>
+          <p>
+            * Tim Admin Eduvan memiliki hak mutlak untuk menolak pengajuan
+            transaksi, membatalkan pesanan, serta mengubah status menjadi
+            'pembayaran tidak valid' apabila ditemukan indikasi manipulasi data,
+            bukti transfer buram/tidak terbaca, atau ketidaksesuaian dana pada
+            mutasi rekening bank kami.
+          </p>
+
+          <h4 class="legal-sub-title">
+            4. Hak Kekayaan Intelektual dan Pembatasan Konten
+          </h4>
+          <p>
+            * Seluruh materi pembelajaran yang tersedia di platform
+            Eduvan—termasuk namun tidak terbatas pada video penjelasan, modul
+            bacaan, source code latihan, desain antarmuka, dokumen panduan, dan
+            aset digital lainnya—merupakan hak milik intelektual sah dari
+            Eduvan.
+          </p>
+          <p>
+            * Pengguna hanya diberikan hak personal untuk mempelajari materi
+            secara mandiri melalui aplikasi mobile dan dilarang keras untuk
+            merekam layar (screen recording), mengunduh secara ilegal,
+            menggandakan, menyebarluaskan, atau mengomersialkan kembali aset
+            materi tersebut.
+          </p>
+          <p>
+            * Pelanggaran terhadap hak kekayaan intelektual ini dapat berakibat
+            pada pemblokiran akun secara permanen tanpa adanya pengembalian dana
+            (refund), serta tuntutan hukum sesuai dengan peraturan
+            perundang-undangan yang berlaku.
+          </p>
+
+          <h4 class="legal-sub-title">
+            5. Batasan Tanggung Jawab dan Pemeliharaan Sistem
+          </h4>
+          <p>
+            * Eduvan selalu berupaya untuk menjaga performa aplikasi. Namun,
+            Eduvan tidak menjamin aplikasi akan selalu bebas dari gangguan
+            teknis, bug, atau pemeliharaan server berkala (maintenance).
+          </p>
+          <p>
+            * Eduvan tidak bertanggung jawab atas kegagalan proses unggah
+            dokumen atau keterlambatan verifikasi yang disebabkan oleh gangguan
+            jaringan internet pada perangkat pengguna atau sistem perbankan
+            pihak ketiga.
+          </p>
+        </div>
+
+        <div
+          class="checkbox-container-play"
+          [class.disabled-lock]="!sudahScrollTerms"
+        >
+          <ion-item lines="none" class="checkbox-item-play">
+            <ion-checkbox
+              slot="start"
+              [(ngModel)]="setujuTerms"
+              [disabled]="!sudahScrollTerms"
+            ></ion-checkbox>
+            <ion-label
+              >Saya menyetujui
+              <span class="eduvan-accent-text"
+                >Syarat &amp; Ketentuan</span
+              ></ion-label
+            >
+          </ion-item>
+        </div>
+        <p class="scroll-warning-text" *ngIf="!sudahScrollTerms">
+          ⚠️ Harap scroll teks box di atas sampai bawah untuk menyetujui
+        </p>
+      </div>
+
+      <div class="step-box step-legal fade-in" *ngIf="currentStep === 3">
+        <div class="legal-scroll-card" (scroll)="cekPosisiScroll($event)">
+          <p>
+            Eduvan Marketplace membangun aplikasi ini sebagai aplikasi
+            Komersial. LAYANAN ini disediakan oleh Eduvan Marketplace dan
+            dimaksudkan untuk digunakan apa adanya.
+          </p>
+          <p>
+            Halaman ini digunakan untuk memberi tahu pengunjung mengenai
+            kebijakan kami tentang pengumpulan, penggunaan, dan pengungkapan
+            Informasi Pribadi jika ada orang yang memutuskan untuk menggunakan
+            Layanan kami.
+          </p>
+          <p>
+            Jika Anda memilih untuk menggunakan Layanan kami, maka Anda
+            menyetujui pengumpulan dan penggunaan informasi yang terkait dengan
+            kebijakan ini. Informasi Pribadi yang kami kumpulkan digunakan untuk
+            menyediakan dan meningkatkan Layanan. Kami tidak akan menggunakan
+            atau membagikan informasi Anda kepada siapa pun kecuali seperti yang
+            dijelaskan dalam Kebijakan Privasi ini.
+          </p>
+          <p>
+            Istilah-istilah yang digunakan dalam Kebijakan Privasi ini memiliki
+            arti yang sama seperti dalam Syarat dan Ketentuan kami, yang dapat
+            diakses di Eduvan Marketplace kecuali ditentukan lain dalam
+            Kebijakan Privasi ini.
+          </p>
+
+          <h4 class="legal-sub-title">
+            1. Pengumpulan dan Penggunaan Informasi
+          </h4>
+          <p>
+            Untuk pengalaman yang lebih baik, saat menggunakan Layanan kami,
+            kami mungkin meminta Anda untuk memberikan informasi identitas
+            pribadi tertentu, termasuk namun tidak terbatas pada Nama, Email,
+            Progres Belajar. Informasi yang kami minta akan kami simpan dan
+            digunakan seperti yang dijelaskan dalam kebijakan privasi ini.
+          </p>
+          <p>
+            Aplikasi ini menggunakan layanan pihak ketiga yang dapat
+            mengumpulkan informasi yang digunakan untuk mengidentifikasi Anda.
+          </p>
+
+          <h4 class="legal-sub-title">2. Data Log (Log Data)</h4>
+          <p>
+            Kami ingin menginformasikan kepada Anda bahwa setiap kali Anda
+            menggunakan Layanan kami, jika terjadi kesalahan (error) di dalam
+            aplikasi, kami mengumpulkan data dan informasi pada ponsel Anda
+            (melalui produk pihak ketiga) yang disebut Data Log. Data Log ini
+            dapat mencakup informasi seperti alamat Protokol Internet ("IP")
+            perangkat Anda, nama perangkat, versi sistem operasi, konfigurasi
+            aplikasi saat menggunakan Layanan kami, waktu dan tanggal penggunaan
+            Layanan oleh Anda, serta statistik lainnya.
+          </p>
+
+          <h4 class="legal-sub-title">3. Cookies</h4>
+          <p>
+            Cookies adalah berkas dengan sejumlah kecil data yang biasanya
+            digunakan sebagai pengidentifikasi unik anonim. Cookies dikirim ke
+            peramban Anda dari situs web yang Anda kunjungi dan disimpan di
+            memori internal perangkat Anda.
+          </p>
+          <p>
+            Layanan ini tidak menggunakan 'cookies' ini secara eksplisit. Namun,
+            aplikasi dapat menggunakan kode dan layanan pihak ketiga yang
+            menggunakan 'cookies' untuk mengumpulkan informasi dan meningkatkan
+            layanan mereka. Anda memiliki pilihan untuk menerima atau menolak
+            cookies ini dan mengetahui kapan cookies dikirim ke perangkat Anda.
+            Jika Anda memilih untuk menolak cookies kami, Anda mungkin tidak
+            dapat menggunakan beberapa bagian dari Layanan ini.
+          </p>
+
+          <h4 class="legal-sub-title">
+            4. Penyedia Layanan (Service Providers)
+          </h4>
+          <p>
+            Kami dapat mempekerjakan perusahaan dan individu pihak ketiga karena
+            alasan berikut: Untuk memfasilitasi Layanan kami; Untuk menyediakan
+            Layanan atas nama kami; Untuk membantu kami dalam menganalisis
+            bagaimana Layanan kami digunakan.
+          </p>
+          <p>
+            Kami ingin menginformasikan kepada pengguna Layanan ini bahwa pihak
+            ketiga ini memiliki akses ke Informasi Pribadi Anda. Alasannya
+            adalah untuk melaksanakan tugas yang diberikan kepada mereka atas
+            nama kami. Namun, mereka berkewajiban untuk tidak membocorkan atau
+            menggunakan informasi tersebut untuk tujuan lain.
+          </p>
+
+          <h4 class="legal-sub-title">5. Keamanan</h4>
+          <p>
+            Kami menghargai kepercayaan Anda dalam memberikan Informasi Pribadi
+            Anda kepada kami, oleh karena itu kami berupaya menggunakan cara
+            yang dapat diterima secara komersial untuk melindunginya. Namun
+            perlu diingat bahwa tidak ada metode transmisi melalui internet,
+            atau metode penyimpanan elektronik yang 100% aman dan andal, dan
+            kami tidak dapat menjamin keamanan mutlaknya.
+          </p>
+
+          <h4 class="legal-sub-title">6. Tautan ke Situs Lain</h4>
+          <p>
+            Layanan ini mungkin berisi tautan ke situs lain. Jika Anda mengklik
+            tautan pihak ketiga, Anda akan diarahkan ke situs tersebut. Harap
+            dicatat bahwa situs eksternal ini tidak dioperasikan oleh kami. Oleh
+            karena itu, kami sangat menyarankan Anda untuk meninjau Kebijakan
+            Privasi situs web tersebut. Kami tidak memiliki kendali atas dan
+            tidak bertanggung jawab atas konten, kebijakan privasi, atau praktik
+            dari situs atau layanan pihak ketiga mana pun.
+          </p>
+
+          <h4 class="legal-sub-title">7. Privasi Anak-Anak</h4>
+          <p>
+            Layanan ini tidak ditujukan kepada siapa pun yang berusia di bawah
+            13 tahun. Kami tidak dengan sengaja mengumpulkan informasi identitas
+            pribadi dari anak-anak di bawah 13 tahun. Jika kami menemukan bahwa
+            seorang anak di bawah 13 tahun telah memberikan informasi pribadi
+            kepada kami, kami akan segera menghapusnya dari server kami. Jika
+            Anda adalah orang tua atau wali dan Anda mengetahui bahwa anak Anda
+            telah memberikan informasi pribadi kepada kami, silakan hubungi kami
+            agar kami dapat melakukan tindakan yang diperlukan.
+          </p>
+
+          <h4 class="legal-sub-title">
+            8. Kebijakan Penghapusan Data dan Penghapusan Akun
+          </h4>
+          <p>
+            Pengguna Eduvan Marketplace dapat mengajukan permintaan penghapusan
+            akun beserta data terkait kapan saja. Untuk meminta penghapusan
+            akun, silakan hubungi kami melalui email di Eduvan@gmail.com
+            menggunakan alamat email Anda yang terdaftar. Setelah menerima
+            permintaan Anda, Nama, Alamat Email, dan Kredensial Akun Anda akan
+            dihapus secara permanen dari database utama kami dalam waktu 30
+            hari.
+          </p>
+
+          <h4 class="legal-sub-title">
+            9. Perubahan pada Kebijakan Privasi Ini
+          </h4>
+          <p>
+            Kami dapat memperbarui Kebijakan Privasi kami dari waktu ke waktu.
+            Oleh karena itu, Anda disarankan untuk meninjau halaman ini secara
+            berkala untuk melihat setiap perubahan. Kami akan memberi tahu Anda
+            tentang perubahan apa pun dengan mengunggah Kebijakan Privasi baru
+            di halaman ini. Perubahan ini efektif segera setelah diunggah di
+            halaman ini.
+          </p>
+
+          <h4 class="legal-sub-title">Hubungi Kami</h4>
+          <p>
+            Jika Anda memiliki pertanyaan atau saran mengenai Kebijakan Privasi
+            kami, jangan ragu untuk menghubungi kami di Eduvan@gmail.com.
+          </p>
+        </div>
+
+        <div
+          class="checkbox-container-play"
+          [class.disabled-lock]="!sudahScrollPrivasi"
+        >
+          <ion-item lines="none" class="checkbox-item-play">
+            <ion-checkbox
+              slot="start"
+              [(ngModel)]="setujuPrivasi"
+              [disabled]="!sudahScrollPrivasi"
+            ></ion-checkbox>
+            <ion-label
+              >Saya menyetujui
+              <span class="eduvan-accent-text"
+                >Kebijakan Privasi</span
+              ></ion-label
+            >
+          </ion-item>
+        </div>
+        <p class="scroll-warning-text" *ngIf="!sudahScrollPrivasi">
+          ⚠️ Harap scroll teks box di atas sampai bawah untuk menyetujui
+        </p>
+      </div>
+    </div>
+
+    <div class="footer-action-box">
+      <div class="dots-wrapper-play">
+        <span class="dot-play" [class.active]="currentStep === 1"></span>
+        <span class="dot-play" [class.active]="currentStep === 2"></span>
+        <span class="dot-play" [class.active]="currentStep === 3"></span>
+      </div>
+
+      <div class="buttons-group">
+        <ng-container *ngIf="currentStep < 3">
+          <ion-button
+            expand="block"
+            class="btn-action-play"
+            (click)="langkahLanjut()"
+            [disabled]="tombolIsDisabled()"
+          >
+            Lanjut
+          </ion-button>
+        </ng-container>
+
+        <ng-container *ngIf="currentStep === 3">
+          <ion-button
+            expand="block"
+            class="btn-action-play"
+            (click)="eksekusiDaftar()"
+            [disabled]="!setujuPrivasi || !sudahScrollPrivasi"
+          >
+            Daftar Sekarang
+          </ion-button>
+        </ng-container>
+      </div>
+    </div>
+  </div>
+</ion-content>

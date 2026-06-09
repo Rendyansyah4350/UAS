@@ -2,7 +2,22 @@
   <div class="profile-header">
     <div class="avatar-container">
       <div class="avatar-ring">
-        <img [src]="selectedAvatar" class="main-avatar" />
+        <div
+          class="default-avatar-placeholder"
+          *ngIf="selectedAvatar === 'assets/icon/avatar-neutral.png' || !selectedAvatar"
+        >
+          <div class="fb-siluet-wrapper">
+            <div class="fb-head"></div>
+            <div class="fb-shoulder"></div>
+          </div>
+        </div>
+
+        <img
+          [src]="selectedAvatar"
+          class="main-avatar"
+          *ngIf="selectedAvatar !== 'assets/icon/avatar-neutral.png' && selectedAvatar"
+        />
+
         <div class="edit-badge" (click)="changeAvatar()">
           <ion-icon name="camera-reverse"></ion-icon>
         </div>

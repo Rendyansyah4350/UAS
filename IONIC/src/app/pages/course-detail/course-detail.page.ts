@@ -133,6 +133,19 @@ export class CourseDetailPage implements OnInit {
     this.imagePreviewUrl = undefined; // Reset preview pas modal dibuka lek
     this.cdr.detectChanges();
   }
+  handleRefresh(event: CustomEvent) {
+    console.log('User melakukan refresh halaman...');
+
+    // Jalankan fungsi load data bawaan halaman Anda
+    this.ngOnInit();
+
+    // 🟢 EFEK TRANSISI HALUS: Beri jeda sedikit sebelum menutup spinner
+    setTimeout(() => {
+      if (event && event.target) {
+        (event.target as any).complete();
+      }
+    }, 800); // Roda berputar akan selesai dengan transisi fade-out yang rapi
+  }
 
   // 🔥 ROMBAK TOTAL: Ganti input file lama jadi pemicu dialog Kamera/Galeri native Android lek!
   async pilihFileBuktiTransfer() {

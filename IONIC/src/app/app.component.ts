@@ -4,6 +4,7 @@ import { Network } from '@capacitor/network';
 import { Capacitor } from '@capacitor/core';
 import { Filesystem } from '@capacitor/filesystem';
 import { SplashScreen } from '@capacitor/splash-screen';
+import { Router } from '@angular/router'; // 🟢 Tambahkan import Router
 
 @Component({
   selector: 'app-root',
@@ -14,7 +15,7 @@ import { SplashScreen } from '@capacitor/splash-screen';
 export class AppComponent implements OnInit {
   @ViewChild(IonModal, { static: false }) modal!: IonModal;
 
-  constructor() {}
+  constructor(private router: Router) {} // 🟢 Inject Router ke dalam constructor
 
   async ngOnInit() {
     // 1. Cek koneksi internet pertama kali pas aplikasi dibuka
@@ -31,7 +32,11 @@ export class AppComponent implements OnInit {
       await this.mintaPerizinanAplikasiTembakNative();
     }
 
-    // 🟢 4. SEMBUNYIKAN SPLASH SCREEN SECARA MANUAL SETELAH SEMUA PROSES ASYNC SIAP LEK!
+    // 🚀 4. FILTER JALUR HALAMAN AWAL (PENGGUNA BARU VS LAMA)
+    // Dijalankan tepat sebelum splash screen ditutup agar transisi perpindahan mulus
+    this.filterHalamanAwal();
+
+    // 🟢 5. SEMBUNYIKAN SPLASH SCREEN SECARA MANUAL SETELAH SEMUA PROSES ASYNC SIAP LEK!
     try {
       await SplashScreen.hide();
     } catch (e) {
@@ -39,6 +44,23 @@ export class AppComponent implements OnInit {
         'Splash screen sudah tertutup otomatis atau berjalan di browser.',
         e
       );
+    }
+  }
+
+  /**
+   * 🟢 FUNGSI SAKTI FILTER NAVIGASI BYPASS
+   * Menentukan halaman pembuka aplikasi secara dinamis tanpa merusak history stack HP
+   */
+  private filterHalamanAwal() {
+    const statusLama = localStorage.getItem('eduvan_user_registered');
+
+    if (statusLama === 'true') {
+      // 🚀 PENGGUNA LAMA: Langsung didorong masuk ke login secara bersih
+      // Tanpa mendaftarkan halaman Welcome ke riwayat, sehingga pas di-back langsung keluar aplikasi!
+      this.router.navigate(['/login'], { replaceUrl: true });
+    } else {
+      // PENGGUNA BARU: Diarahkan masuk ke welcome page untuk disuruh centang syarat ketentuan
+      this.router.navigate(['/welcome'], { replaceUrl: true });
     }
   }
 
@@ -69,4 +91,4 @@ export class AppComponent implements OnInit {
       if (this.modal) this.modal.dismiss();
     }
   }
-}  
+}
