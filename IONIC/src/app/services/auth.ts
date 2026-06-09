@@ -47,6 +47,17 @@ export class AuthService {
     );
   }
 
+  handleGoogleLoginSuccess(res: any): boolean {
+    if (res?.access_token) {
+      localStorage.setItem('token', res.access_token);
+    }
+    if (res?.user) {
+      this.updateCurrentUserState(res.user);
+    }
+    // Kembalikan status true jika token berhasil disuntikkan ke HP
+    return !!localStorage.getItem('token');
+  }
+
   verifyOTP(email: string, otp: string): Observable<any> {
     return this.http.post(`${this.apiUrl}/verify-otp`, { email, otp }).pipe(
       tap((res: any) => {

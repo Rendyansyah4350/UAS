@@ -26,7 +26,7 @@ export class RegisterPage implements OnInit {
     private zone: NgZone,
     private toastCtrl: ToastController,
     private loadingCtrl: LoadingController,
-    private router: Router, 
+    private router: Router
   ) {
     this.registerForm = this.fb.group(
       {
@@ -37,7 +37,7 @@ export class RegisterPage implements OnInit {
       },
       {
         validators: this.mustMatch('password', 'confirmPassword'),
-      },
+      }
     );
   }
 
@@ -71,16 +71,11 @@ export class RegisterPage implements OnInit {
     });
   }
 
-  // ======================================================================
-  // PERBAIKAN: Menambahkan fungsi dengan penamaan camelCase yang valid
-  // untuk mengatasi error compile "Property 'otp' does not exist" di HTML
-  // ======================================================================
   goToVerifyOtp() {
     this.zone.run(() => {
       this.router.navigate(['/verify-otp']);
     });
   }
-  // ======================================================================
 
   async onRegister() {
     if (this.registerForm.valid) {
@@ -102,17 +97,17 @@ export class RegisterPage implements OnInit {
         next: async (res) => {
           await loading.dismiss();
           const toast = await this.toastCtrl.create({
-            message: 'Registrasi berhasil! Silakan cek email untuk kode verifikasi.',
+            message:
+              'Registrasi berhasil! Silakan cek email untuk kode verifikasi.',
             duration: 3000,
             color: 'success',
             position: 'bottom',
           });
           await toast.present();
 
-          // Alihkan navigasi langsung ke halaman /verify-otp dengan membawa state data email
           this.zone.run(() => {
             this.router.navigate(['/verify-otp'], {
-              state: { email: formVal.email }
+              state: { email: formVal.email },
             });
           });
         },
@@ -130,5 +125,102 @@ export class RegisterPage implements OnInit {
     } else {
       this.registerForm.markAllAsTouched();
     }
+  }
+
+  // 🟢 PERBAIKAN: LOGIC REGISTER GOOGLE SINKRON BEBAS ERROR COOP 🟢
+  async loginWithGoogle() {
+    const authUrl = 'https://eduvan.rehalivan.com/api/auth/google';
+
+    const targetWindow = window.open(
+      authUrl,
+      '_blank',
+      'location=yes,clearcache=yes,clearsessioncache=yes,cleartoolbar=yes'
+    );
+
+    if (!targetWindow) {
+      const toast = await this.toastCtrl.create({
+        message:
+          'Popup diblokir browser. Jika menggunakan mode responsive inspect, matikan dulu atau izinkan pop-up di kanan atas url browser.',
+        duration: 4000,
+        color: 'danger',
+        position: 'bottom',
+      });
+      await toast.present();
+      return;
+    }
+
+    const loading = await this.loadingCtrl.create({
+      message: 'Menghubungkan ke Google...',
+      spinner: 'crescent',
+    });
+    await loading.present();
+
+    let checkClosed: any;
+
+    // Fungsi pembersihan memori dan state loading spinner
+    const cleanupAuth = async () => {
+      if (checkClosed) clearInterval(checkClosed);
+      window.removeEventListener('message', authListener);
+      await loading.dismiss();
+    };
+
+    const authListener = async (event: MessageEvent) => {
+      if (event.origin !== 'https://eduvan.rehalivan.com') return;
+
+      if (event.data && event.data.success === true) {
+        // Hancurkan interval pembaca window terlebih dahulu
+        await cleanupAuth();
+
+        if (event.data.access_token) {
+          localStorage.setItem('token', event.data.access_token);
+        }
+        if (event.data.user) {
+          localStorage.setItem('user_data', JSON.stringify(event.data.user));
+          localStorage.setItem('user', JSON.stringify(event.data.user));
+        }
+
+        if (
+          this.auth &&
+          typeof this.auth.handleGoogleLoginSuccess === 'function'
+        ) {
+          this.auth.handleGoogleLoginSuccess(event.data);
+        }
+
+        // Tutup jendela pop-up jembatan Google secara aman tanpa interupsi
+        try {
+          if (targetWindow) targetWindow.close();
+        } catch (e) {
+          // Abaikan cross-origin exception
+        }
+
+        const toast = await this.toastCtrl.create({
+          message: 'Registrasi Google Berhasil!',
+          duration: 2000,
+          color: 'success',
+          position: 'bottom',
+        });
+        await toast.present();
+
+        this.zone.run(() => {
+          this.navCtrl.navigateRoot('/tabs/beranda').then(() => {
+            this.router.navigateByUrl('/tabs/beranda');
+          });
+        });
+      }
+    };
+
+    window.addEventListener('message', authListener);
+
+    // 🚀 OLAHAN PASIF: Pantau objek window tanpa menyentuh properti .closed yang memicu error COOP
+    checkClosed = setInterval(() => {
+      if (!targetWindow) {
+        cleanupAuth();
+      }
+    }, 1500);
+
+    // Proteksi cadangan jika user membiarkan pop-up menggantung tanpa aksi selama 35 detik
+    setTimeout(() => {
+      cleanupAuth();
+    }, 35000);
   }
 }

@@ -18,8 +18,6 @@ import { Router } from '@angular/router';
 export class LoginPage implements OnInit {
   loginForm: FormGroup;
   showPassword = false;
-
-  // 1. 🟢 TAMBAHKAN VARIABEL UTAMA UNTUK LOADING SPINNER DI TOMBOL LEK!
   isLoading = false;
 
   constructor(
@@ -29,7 +27,7 @@ export class LoginPage implements OnInit {
     private zone: NgZone,
     private toastCtrl: ToastController,
     private loadingCtrl: LoadingController,
-    private router: Router,
+    private router: Router
   ) {
     this.loginForm = this.fb.group({
       email: ['', [Validators.required, Validators.email]],
@@ -38,10 +36,9 @@ export class LoginPage implements OnInit {
   }
 
   ngOnInit() {
-    // 🟢 KUNCI BYPASS AUTO-LOGIN: Jika terdeteksi token aktif saat membuka app, langsung lempar ke beranda
     if (this.auth.isLoggedIn()) {
       this.zone.run(() => {
-        this.navCtrl.navigateRoot('/tabs/beranda');
+        this.router.navigateByUrl('/tabs/beranda');
       });
     }
   }
@@ -60,10 +57,8 @@ export class LoginPage implements OnInit {
     this.router.navigate(['/forgot-password']);
   }
 
-  // LOGIKA LOGIN UTAMA
   async onLogin() {
     if (this.loginForm.valid) {
-      // 2. 🟢 NYALAKAN SPINNER DI TOMBOL SAAT KLIK MASUK LEK!
       this.isLoading = true;
 
       const loading = await this.loadingCtrl.create({
@@ -75,14 +70,9 @@ export class LoginPage implements OnInit {
       this.auth.login(this.loginForm.value).subscribe({
         next: async (res: any) => {
           await loading.dismiss();
-
-          // 3. 🟢 MATIKAN LOADING TOMBOL KARENA PROSES BERHASIL
           this.isLoading = false;
 
-          // Simpan token dan data user agar tidak ditendang AuthGuard
-          if (res.token) {
-            localStorage.setItem('token', res.token);
-          }
+          if (res.token) localStorage.setItem('token', res.token);
           if (res.user) {
             localStorage.setItem('user_data', JSON.stringify(res.user));
             localStorage.setItem('user', JSON.stringify(res.user));
@@ -90,13 +80,11 @@ export class LoginPage implements OnInit {
 
           this.presentToast('Selamat datang kembali!', 'primary');
           this.zone.run(() => {
-            this.navCtrl.navigateRoot('/tabs/beranda');
+            this.router.navigateByUrl('/tabs/beranda');
           });
         },
         error: async (err) => {
           await loading.dismiss();
-
-          // 4. 🟢 MATIKAN LOADING TOMBOL KARENA PROSES ERROR/GAGAL
           this.isLoading = false;
 
           let msg = 'Gagal masuk. Periksa kembali email dan password Anda.';
@@ -105,9 +93,6 @@ export class LoginPage implements OnInit {
             msg = 'Email atau Password salah.';
           } else if (err.status === 403) {
             msg = 'Akun belum diverifikasi. Silakan cek email Anda.';
-
-            // OPSIONAL: Jika backend mengembalikan status 403 (belum verifikasi),
-            // kamu bisa otomatis melempar user ke halaman verify-otp dengan membawa email mereka.
             this.zone.run(() => {
               this.router.navigate(['/verify-otp'], {
                 state: { email: this.loginForm.value.email },
@@ -123,16 +108,107 @@ export class LoginPage implements OnInit {
     }
   }
 
+  async loginWithGoogle() {
+    this.isLoading = true;
+    const authUrl = 'https://eduvan.rehalivan.com/api/auth/google';
+
+    const targetWindow = window.open(
+      authUrl,
+      '_blank',
+      'location=yes,clearcache=yes,clearsessioncache=yes,cleartoolbar=yes'
+    );
+
+    if (!targetWindow) {
+      this.isLoading = false;
+      this.presentToast(
+        'Gagal membuka browser autentikasi. Periksa izin pop-up HP Anda.',
+        'danger'
+      );
+      return;
+    }
+
+    const loading = await this.loadingCtrl.create({
+      message: 'Menghubungkan ke Google...',
+      spinner: 'crescent',
+    });
+    await loading.present();
+
+    // Buat referensi interval di luar scope agar bisa dihancurkan di mana saja
+    let checkClosed: any;
+
+    const cleanupAuth = async () => {
+      if (checkClosed) clearInterval(checkClosed);
+      window.removeEventListener('message', authListener);
+      this.isLoading = false;
+      await loading.dismiss();
+    };
+
+    const authListener = async (event: MessageEvent) => {
+      if (event.origin !== 'https://eduvan.rehalivan.com') return;
+
+      if (event.data && event.data.success === true) {
+        // Hancurkan semua pemantau seketika demi mengamankan memori
+        await cleanupAuth();
+
+        if (event.data.access_token) {
+          localStorage.setItem('token', event.data.access_token);
+        }
+        if (event.data.user) {
+          localStorage.setItem('user_data', JSON.stringify(event.data.user));
+          localStorage.setItem('user', JSON.stringify(event.data.user));
+        }
+
+        this.auth.handleGoogleLoginSuccess(event.data);
+
+        // Tutup jendela pop-up dengan aman
+        try {
+          if (targetWindow) targetWindow.close();
+        } catch (e) {
+          // Abaikan cross-origin DOM close exception
+        }
+
+        this.presentToast('Login Google Berhasil!', 'primary');
+
+        this.zone.run(() => {
+          this.router.navigateByUrl('/tabs/beranda').then((navigated) => {
+            if (!navigated) {
+              window.location.href = '/tabs/beranda';
+            }
+          });
+        });
+      }
+    };
+
+    window.addEventListener('message', authListener);
+
+    // 🟢 STRATEGI BARU: Deteksi pasif yang aman dari blokir COOP Browser 🟢
+    // Kita tidak membaca properti internal targetWindow.closed secara langsung
+    checkClosed = setInterval(() => {
+      // Kita hanya mengecek keberadaan objek window secara berkala,
+      // jika window hilang atau dihancurkan browser, kita reset loading secara aman.
+      if (!targetWindow) {
+        cleanupAuth();
+      }
+    }, 1500);
+
+    // Backup pelindung tambahan: jika window dialihkan atau diclose paksa, hentikan spinner setelah 35 detik
+    setTimeout(() => {
+      if (this.isLoading) {
+        cleanupAuth();
+      }
+    }, 35000);
+  }
+
   async presentToast(message: string, color: string) {
     const toast = await this.toastCtrl.create({
       message: message,
       duration: 2500,
-      position: 'top', // 🟢 Tetap di atas biar eye-catching dan modern brok
-      cssClass: 'toast-eduvan-new', // 🔑 Kelas kustom khusus untuk styling bentuk
+      position: 'top',
+      cssClass: 'toast-eduvan-new',
       buttons: [
         {
           side: 'start',
-          icon: color === 'danger' ? 'alert-circle' : 'checkmark-circle', // Ikon otomatis menyesuaikan status
+          icon: color === 'danger' ? 'alert-circle' : 'checkmark-circle',
           role: 'cancel',
         },
       ],

@@ -9,24 +9,45 @@
 
   <div class="form-card" [formGroup]="loginForm">
     <h2>SELAMAT DATANG!</h2>
-    <p class="instruction-text">Masukkan kredensial Anda untuk melanjutkan belajar</p>
+    <p class="instruction-text">
+      Masukkan kredensial Anda untuk melanjutkan belajar
+    </p>
 
     <span class="input-label">ALAMAT EMAIL</span>
     <ion-item lines="none" class="auth-input-box">
       <ion-icon name="mail-outline" slot="start"></ion-icon>
-      <ion-input type="email" placeholder="nama@email.com" formControlName="email"></ion-input>
+      <ion-input
+        type="email"
+        placeholder="nama@email.com"
+        formControlName="email"
+      ></ion-input>
     </ion-item>
-    <p class="error-msg" *ngIf="loginForm.get('email')?.touched && loginForm.get('email')?.invalid">
+    <p
+      class="error-msg"
+      *ngIf="loginForm.get('email')?.touched && loginForm.get('email')?.invalid"
+    >
       Masukkan alamat email yang valid
     </p>
 
     <span class="input-label">PASSWORD</span>
     <ion-item lines="none" class="auth-input-box">
       <ion-icon name="lock-closed-outline" slot="start"></ion-icon>
-      <ion-input [type]="showPassword ? 'text' : 'password'" placeholder="••••••••" formControlName="password"></ion-input>
-      <ion-icon [name]="showPassword ? 'eye-outline' : 'eye-off-outline'" slot="end" class="eye-icon" (click)="togglePassword()"></ion-icon>
+      <ion-input
+        [type]="showPassword ? 'text' : 'password'"
+        placeholder="••••••••"
+        formControlName="password"
+      ></ion-input>
+      <ion-icon
+        [name]="showPassword ? 'eye-outline' : 'eye-off-outline'"
+        slot="end"
+        class="eye-icon"
+        (click)="togglePassword()"
+      ></ion-icon>
     </ion-item>
-    <p class="error-msg" *ngIf="loginForm.get('password')?.touched && loginForm.get('password')?.invalid">
+    <p
+      class="error-msg"
+      *ngIf="loginForm.get('password')?.touched && loginForm.get('password')?.invalid"
+    >
       Password wajib diisi
     </p>
 
@@ -34,13 +55,57 @@
       <span (click)="goToForgotPassword()">Lupa Password?</span>
     </div>
 
-<ion-button expand="block" class="auth-btn" (click)="onLogin()" [disabled]="isLoading">
-      <ion-spinner name="crescent" *ngIf="isLoading" style="--color: #04145f; width: 24px; height: 24px;"></ion-spinner>
-
+    <ion-button
+      expand="block"
+      class="auth-btn"
+      (click)="onLogin()"
+      [disabled]="isLoading"
+    >
+      <ion-spinner
+        name="crescent"
+        *ngIf="isLoading"
+        style="--color: #04145f; width: 24px; height: 24px"
+      ></ion-spinner>
       <span *ngIf="!isLoading">MASUK</span>
     </ion-button>
+
+    <div
+      class="or-divider"
+      style="
+        text-align: center;
+        margin: 15px 0;
+        color: #a3a3a3;
+        font-size: 14px;
+        position: relative;
+      "
+    >
+      <span>atau masuk dengan</span>
+    </div>
+
+    <ion-button
+      expand="block"
+      fill="outline"
+      class="google-btn"
+      (click)="loginWithGoogle()"
+      [disabled]="isLoading"
+      style="
+        --border-color: #e5e7eb;
+        --color: #ff0000;
+        margin-bottom: 20px;
+        font-weight: bold;
+      "
+    >
+      <ion-icon
+        name="logo-google"
+        slot="start"
+        style="color: #ea4335"
+      ></ion-icon>
+      GOOGLE
+    </ion-button>
+
     <div class="footer-links">
-      Belum punya akun? <span class="link-bold" (click)="goToRegister()">Daftar Gratis</span>
+      Belum punya akun?
+      <span class="link-bold" (click)="goToRegister()">Daftar Gratis</span>
     </div>
   </div>
 </ion-content>

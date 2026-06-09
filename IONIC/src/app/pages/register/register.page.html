@@ -8,45 +8,85 @@
   </div>
 
   <div class="form-card" [formGroup]="registerForm">
-    
     <span class="input-label">NAMA LENGKAP</span>
     <ion-item lines="none" class="auth-input-box">
       <ion-icon name="person-outline" slot="start"></ion-icon>
-      <ion-input type="text" placeholder="Nama lengkap Anda" formControlName="name"></ion-input>
+      <ion-input
+        type="text"
+        placeholder="Nama lengkap Anda"
+        formControlName="name"
+      ></ion-input>
     </ion-item>
-    <p class="error-msg" *ngIf="registerForm.get('name')?.touched && registerForm.get('name')?.invalid">
+    <p
+      class="error-msg"
+      *ngIf="registerForm.get('name')?.touched && registerForm.get('name')?.invalid"
+    >
       Nama lengkap wajib diisi
     </p>
 
     <span class="input-label">EMAIL</span>
     <ion-item lines="none" class="auth-input-box">
       <ion-icon name="mail-outline" slot="start"></ion-icon>
-      <ion-input type="email" placeholder="nama@email.com" formControlName="email"></ion-input>
+      <ion-input
+        type="email"
+        placeholder="nama@email.com"
+        formControlName="email"
+      ></ion-input>
     </ion-item>
-    <p class="error-msg" *ngIf="registerForm.get('email')?.touched && registerForm.get('email')?.invalid">
+    <p
+      class="error-msg"
+      *ngIf="registerForm.get('email')?.touched && registerForm.get('email')?.invalid"
+    >
       Masukkan alamat email yang valid
     </p>
 
     <span class="input-label">PASSWORD</span>
     <ion-item lines="none" class="auth-input-box">
       <ion-icon name="lock-closed-outline" slot="start"></ion-icon>
-      <ion-input [type]="showPassword ? 'text' : 'password'" placeholder="••••••••" formControlName="password"></ion-input>
-      <ion-icon [name]="showPassword ? 'eye-outline' : 'eye-off-outline'" slot="end" class="eye-icon" (click)="togglePassword()"></ion-icon>
+      <ion-input
+        [type]="showPassword ? 'text' : 'password'"
+        placeholder="••••••••"
+        formControlName="password"
+      ></ion-input>
+      <ion-icon
+        [name]="showPassword ? 'eye-outline' : 'eye-off-outline'"
+        slot="end"
+        class="eye-icon"
+        (click)="togglePassword()"
+      ></ion-icon>
     </ion-item>
-    <p class="error-msg" *ngIf="registerForm.get('password')?.touched && registerForm.get('password')?.invalid">
+    <p
+      class="error-msg"
+      *ngIf="registerForm.get('password')?.touched && registerForm.get('password')?.invalid"
+    >
       Password minimal berisi 8 karakter
     </p>
 
     <span class="input-label">KONFIRMASI PASSWORD</span>
     <ion-item lines="none" class="auth-input-box">
       <ion-icon name="shield-checkmark-outline" slot="start"></ion-icon>
-      <ion-input [type]="showConfirmPassword ? 'text' : 'password'" placeholder="Ulangi password" formControlName="confirmPassword"></ion-input>
-      <ion-icon [name]="showConfirmPassword ? 'eye-outline' : 'eye-off-outline'" slot="end" class="eye-icon" (click)="toggleConfirmPassword()"></ion-icon>
+      <ion-input
+        [type]="showConfirmPassword ? 'text' : 'password'"
+        placeholder="Ulangi password"
+        formControlName="confirmPassword"
+      ></ion-input>
+      <ion-icon
+        [name]="showConfirmPassword ? 'eye-outline' : 'eye-off-outline'"
+        slot="end"
+        class="eye-icon"
+        (click)="toggleConfirmPassword()"
+      ></ion-icon>
     </ion-item>
-    <p class="error-msg" *ngIf="registerForm.get('confirmPassword')?.touched && registerForm.get('confirmPassword')?.hasError('required')">
+    <p
+      class="error-msg"
+      *ngIf="registerForm.get('confirmPassword')?.touched && registerForm.get('confirmPassword')?.hasError('required')"
+    >
       Konfirmasi password wajib diisi
     </p>
-    <p class="error-msg" *ngIf="registerForm.get('confirmPassword')?.touched && registerForm.get('confirmPassword')?.hasError('mustMatch')">
+    <p
+      class="error-msg"
+      *ngIf="registerForm.get('confirmPassword')?.touched && registerForm.get('confirmPassword')?.hasError('mustMatch')"
+    >
       Konfirmasi password tidak cocok dengan password di atas
     </p>
 
@@ -54,8 +94,42 @@
       BUAT AKUN
     </ion-button>
 
+    <div
+      class="or-divider"
+      style="
+        text-align: center;
+        margin: 15px 0;
+        color: #a3a3a3;
+        font-size: 14px;
+        position: relative;
+      "
+    >
+      <span>atau daftar dengan</span>
+    </div>
+
+    <ion-button
+      expand="block"
+      fill="outline"
+      class="google-btn"
+      (click)="loginWithGoogle()"
+      style="
+        --border-color: #e5e7eb;
+        --color: #ff0000;
+        margin-bottom: 20px;
+        font-weight: bold;
+      "
+    >
+      <ion-icon
+        name="logo-google"
+        slot="start"
+        style="color: #ea4335"
+      ></ion-icon>
+      GOOGLE
+    </ion-button>
+
     <div class="footer-links">
-      Sudah punya akun? <span class="link-bold" (click)="goToLogin()">Masuk</span>
+      Sudah punya akun?
+      <span class="link-bold" (click)="goToLogin()">Masuk</span>
     </div>
   </div>
 </ion-content>
