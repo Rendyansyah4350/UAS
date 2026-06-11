@@ -47,6 +47,11 @@ export class AuthService {
     }
   }
 
+  // 🟢 TAMBAHAN SAKTI: Fungsi pemicu refresh state user secara global murni tanpa merubah kode lama
+  triggerRefreshData(userData: any) {
+    this.currentUserSubject.next(userData);
+  }
+
   updateCurrentUserState(userData: any) {
     localStorage.setItem('user_data', JSON.stringify(userData));
     this.currentUserSubject.next(userData);

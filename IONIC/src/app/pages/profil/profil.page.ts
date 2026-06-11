@@ -64,12 +64,29 @@ export class ProfilePage implements OnInit {
     this.authService.currentUser$.subscribe((user: any) => {
       if (user) {
         this.userProfile = user;
+
+        // 🟢 SINKRONISASI AVATAR GOOGLE: Jika login lewat Google dan punya avatar, langsung pasang otomatis lek!
+        if (user.avatar) {
+          this.selectedAvatar = user.avatar;
+        }
+
         this.cdr.detectChanges();
       }
     });
   }
 
   ionViewWillEnter() {
+    // 🟢 ANTISIPASI DELAY: Ambil data darurat dari localStorage jika state BehaviorSubject sedang kosong pas transisi page
+    const localUserData =
+      localStorage.getItem('user_data') || localStorage.getItem('user');
+    if (!this.userProfile && localUserData) {
+      this.userProfile = JSON.parse(localUserData);
+      if (this.userProfile.avatar) {
+        this.selectedAvatar = this.userProfile.avatar;
+      }
+      this.cdr.detectChanges();
+    }
+
     this.loadProfileFromAPI();
     this.hitungStatistikMandiri();
   }
@@ -163,6 +180,11 @@ export class ProfilePage implements OnInit {
       next: (res: any) => {
         if (res) {
           this.userProfile = res.data ? res.data : res;
+
+          // Jika API server mengembalikan avatar Google, ikuti pasang otomatis
+          if (this.userProfile.avatar) {
+            this.selectedAvatar = this.userProfile.avatar;
+          }
 
           // Hitung Ulang Kursus
           this.courseService.getMyEnrollments().subscribe({
