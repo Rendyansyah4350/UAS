@@ -1,13 +1,16 @@
 import { NgModule } from '@angular/core';
 import { PreloadAllModules, RouterModule, Routes } from '@angular/router';
 import { AuthGuard } from './guards/auth-guard';
+import { WelcomeGuard } from './guards/welcome.guard';
 
 const routes: Routes = [
   // 1. Rute Awal: Langsung arahkan default-nya ke welcome
   {
     path: '',
-    redirectTo: 'welcome',
     pathMatch: 'full',
+    loadChildren: () =>
+      import('./pages/welcome/welcome.module').then((m) => m.WelcomePageModule),
+    canActivate: [WelcomeGuard], // 🔒 Gemboknya ditaruh di sini!
   },
 
   // 2. RUTE HALAMAN LUAR (Dipastikan aman di atas bintang ganda!)

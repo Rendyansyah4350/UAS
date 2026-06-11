@@ -30,19 +30,11 @@ export class AppComponent implements OnInit {
       if (Capacitor.getPlatform() === 'android') {
         await this.mintaPerizinanAplikasiTembakNative();
       }
-    }
 
-    // 🚀 2. JALANKAN FILTER JALUR AWAL DAN TUNGGU SAMPAI SELESAI SAKALIGUS!
-    // Kita simpan status sukses navigasinya ke dalam variabel
-    const navigasiSukses = await this.filterHalamanAwal();
-
-    // 🟢 3. SEKARANG KITA KUNCI: Splash screen HANYA BOLEH menutup jika Angular sudah sukses mendarat di halaman tujuan!
-    if (navigasiSukses && Capacitor.isNativePlatform()) {
+      // 🟢 2. LANGSUNG TUTUP SPLASH SCREEN DI SINI LEK!
+      // Karena rute sudah dihandle dengan aman dan instan oleh WelcomeGuard sebelum halaman muncul
       try {
-        // Kasih jeda super kecil 100 milidetik biar transisi native Android-nya gak kaget
-        setTimeout(async () => {
-          await SplashScreen.hide();
-        }, 100);
+        await SplashScreen.hide();
       } catch (e) {
         console.log('Splash screen ditutup otomatis.', e);
       }
