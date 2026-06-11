@@ -22,14 +22,14 @@ export class WelcomePage {
   constructor(private router: Router, private toastCtrl: ToastController) {}
 
   ionViewWillEnter() {
-    this.cekStatusPengguna();
+    this.cekStatusPengguna(); // 🟢 Hidupkan lagi biar dia nge-cek LocalStorage!
   }
 
   cekStatusPengguna() {
     const statusLama = localStorage.getItem('eduvan_user_registered');
     if (statusLama === 'true') {
       this.isPenggunaBaru = false;
-      this.router.navigate(['/login'], { replaceUrl: true });
+      this.router.navigate(['/login'], { replaceUrl: true }); // 🟢 Jika sudah terdaftar, langsung lempar ke login!
     } else {
       this.isPenggunaBaru = true;
     }
