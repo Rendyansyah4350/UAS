@@ -1,10 +1,12 @@
-import { Component, OnInit, ViewChild } from '@angular/core';
+import { Component, OnInit, ViewChild, NgZone } from '@angular/core';
 import { IonModal } from '@ionic/angular';
 import { Network } from '@capacitor/network';
 import { Capacitor } from '@capacitor/core';
 import { Filesystem } from '@capacitor/filesystem';
 import { SplashScreen } from '@capacitor/splash-screen';
+import { App } from '@capacitor/app';
 import { Router } from '@angular/router';
+import { AuthService } from './services/auth'; // 🟢 Tambahan wajib: sesuaikan path ke service auth lu lek
 
 @Component({
   selector: 'app-root',
@@ -15,56 +17,87 @@ import { Router } from '@angular/router';
 export class AppComponent implements OnInit {
   @ViewChild(IonModal, { static: false }) modal!: IonModal;
 
-  constructor(private router: Router) {}
+  constructor(
+    private router: Router,
+    private zone: NgZone,
+    private auth: AuthService // 🟢 Inject AuthService ke constructor
+  ) {}
 
   async ngOnInit() {
-    // 1. Jalankan fitur native hanya jika berjalan di HP
-    if (Capacitor.isNativePlatform()) {
-      const status = await Network.getStatus();
+    // 1. Cek koneksi internet pertama kali pas aplikasi dibuka
+    const status = await Network.getStatus();
+    this.handleStatusKoneksi(status.connected);
+
+    // 2. Pantau jaringan secara real-time
+    Network.addListener('networkStatusChange', (status) => {
       this.handleStatusKoneksi(status.connected);
+    });
 
-      Network.addListener('networkStatusChange', (status) => {
-        this.handleStatusKoneksi(status.connected);
-      });
+    // 3. 🔥 Tembak Popup Perizinan Android Pas Pertama Kali Dibuka!
+    if (Capacitor.getPlatform() === 'android') {
+      await this.mintaPerizinanAplikasiTembakNative();
+    }
 
-      if (Capacitor.getPlatform() === 'android') {
-        await this.mintaPerizinanAplikasiTembakNative();
-      }
+    // 🟢 4. HANDLER DEEP LINK: Interseptor data login Google dari browser HP
+    this.initDeepLinkGoogle();
 
-      // 🟢 2. LANGSUNG TUTUP SPLASH SCREEN DI SINI LEK!
-      // Karena rute sudah dihandle dengan aman dan instan oleh WelcomeGuard sebelum halaman muncul
-      try {
-        await SplashScreen.hide();
-      } catch (e) {
-        console.log('Splash screen ditutup otomatis.', e);
-      }
+    // 🟢 5. SEMBUNYIKAN SPLASH SCREEN SECARA MANUAL SETELAH SEMUA PROSES ASYNC SIAP LEK!
+    try {
+      await SplashScreen.hide();
+    } catch (e) {
+      console.log(
+        'Splash screen sudah tertutup otomatis atau berjalan di browser.',
+        e
+      );
     }
   }
 
-  /**
-   * 🟢 FUNGSI SAKTI FILTER NAVIGASI BYPASS (DIUBAH JADI ASYNC PROMISE)
-   */
-  private async filterHalamanAwal(): Promise<boolean> {
-    const sudahLogin = localStorage.getItem('user_data');
-    const statusLama = localStorage.getItem('eduvan_user_registered');
+  // 🟢 Fungsi Baru: Penangkap sinyal kembalian dari Laravel Callback
+  initDeepLinkGoogle() {
+    App.addListener('appUrlOpen', (event: any) => {
+      this.zone.run(() => {
+        // Cek apakah url mengandung skema eduvan://google-login
+        if (event.url.includes('eduvan://google-login')) {
+          try {
+            const urlObj = new URL(event.url);
 
-    if (sudahLogin) {
-      // 1. Jika sudah login dan punya token/data, langsung lolos ke dalam beranda
-      return await this.router.navigate(['/tabs/beranda'], {
-        replaceUrl: true,
+            // Ambil query parameter token dan data user dari url
+            const token = urlObj.searchParams.get('token');
+            const userRaw = urlObj.searchParams.get('user');
+
+            if (token) {
+              localStorage.setItem('token', decodeURIComponent(token));
+            }
+
+            if (userRaw) {
+              const decodedUser = decodeURIComponent(userRaw);
+              localStorage.setItem('user_data', decodedUser);
+              localStorage.setItem('user', decodedUser);
+
+              // 🟢 TEMBAK REFRESH STATE: Paksa BehaviorSubject di auth memperbarui data user secara global instan!
+              this.auth.triggerRefreshData(JSON.parse(decodedUser));
+            }
+
+            // Jika token berhasil didapat, paksa pindah halaman ke Beranda
+            if (token) {
+              this.router.navigateByUrl('/tabs/beranda').then((navigated) => {
+                if (!navigated) {
+                  window.location.href = '/tabs/beranda';
+                }
+              });
+            }
+          } catch (err) {
+            console.error('Gagal memproses data deep link Google:', err);
+          }
+        }
       });
-    } else if (statusLama === 'true') {
-      // 2. Jika sudah pernah daftar/buka Welcome tapi belum login, arahkan ke Login
-      return await this.router.navigate(['/login'], { replaceUrl: true });
-    } else {
-      // 3. PENGGUNA BARU GRES: Wajib masuk welcome page dulu!
-      return await this.router.navigate(['/welcome'], { replaceUrl: true });
-    }
+    });
   }
 
-  // Fungsi Sakti Paksa Muncul Popup Izin Native Android
+  // 🛠️ Fungsi Sakti Paksa Muncul Popup Izin Native Android (Anti-Manual)
   async mintaPerizinanAplikasiTembakNative() {
     try {
+      // 📄 SEKARANG CUMA MINTA IZIN FILE/STORAGE BUAT DOWNLOAD PDF SERTIFIKAT LEK!
       const statusStorage = await Filesystem.checkPermissions();
       if (statusStorage.publicStorage !== 'granted') {
         await Filesystem.requestPermissions();

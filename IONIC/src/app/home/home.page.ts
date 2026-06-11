@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ChangeDetectorRef } from '@angular/core';
 import { Router } from '@angular/router';
 import { AuthService } from '../services/auth';
 import { SearchService } from '../services/search';
@@ -21,7 +21,8 @@ export class HomePage implements OnInit {
     private router: Router,
     private authService: AuthService,
     private searchService: SearchService,
-    private courseService: CourseService
+    private courseService: CourseService,
+    private cdr: ChangeDetectorRef // 🟢 Tambahan wajib: inject ChangeDetectorRef biar UI langsung render nama
   ) {}
 
   ngOnInit() {
@@ -37,7 +38,23 @@ export class HomePage implements OnInit {
   }
 
   ionViewWillEnter() {
+    // 🟢 ANTISIPASI TRANSISI DEEP LINK: Ambil nama dari localStorage jika state memori belum sinkron sempurna
+    const localUserData = localStorage.getItem('user_data') || localStorage.getItem('user');
+    if (localUserData) {
+      try {
+        const user = JSON.parse(localUserData);
+        const namaLengkap = user.name || user.nama || user.fullname || 'User';
+        this.namaUser = namaLengkap.split(' ')[0];
+        this.cdr.detectChanges();
+      } catch (e) {
+        console.error('Gagal parse user data di beranda:', e);
+      }
+    }
+
     this.muatJumlahNotifikasi();
+
+    // 🟢 RE-FETCH DATA BERANDA: Pastikan data kursus di-refresh menggunakan token login Google yang baru didapat
+    this.muatDataBerandaTotal();
   }
 
   /**
@@ -80,6 +97,7 @@ export class HomePage implements OnInit {
               (refresherEvent.target as any).complete();
               console.log('Penyegaran data halaman Beranda EduVan Selesai!');
             }
+            this.cdr.detectChanges();
           },
         });
       },
@@ -108,6 +126,7 @@ export class HomePage implements OnInit {
       next: (res: any) => {
         if (res && res.status === 'success') {
           this.unreadCount = res.unread_count;
+          this.cdr.detectChanges();
         }
       },
       error: (err: any) => {
@@ -121,6 +140,7 @@ export class HomePage implements OnInit {
       if (user) {
         const namaLengkap = user.name || user.nama || user.fullname || 'User';
         this.namaUser = namaLengkap.split(' ')[0];
+        this.cdr.detectChanges();
       } else {
         this.namaUser = 'User';
       }
