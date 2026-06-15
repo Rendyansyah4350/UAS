@@ -4,20 +4,26 @@ import { AuthGuard } from './guards/auth-guard';
 import { WelcomeGuard } from './guards/welcome.guard';
 
 const routes: Routes = [
-  // 1. Rute Awal: Langsung arahkan default-nya ke welcome
+  // 🟢 1. RUTE AWAL: Pertama kali app dibuka, WAJIB langsung jalankan Splash Page custom kita!
   {
     path: '',
     pathMatch: 'full',
-    loadChildren: () =>
-      import('./pages/welcome/welcome.module').then((m) => m.WelcomePageModule),
-    canActivate: [WelcomeGuard], // 🔒 Gemboknya ditaruh di sini!
+    redirectTo: 'splash',
   },
 
-  // 2. RUTE HALAMAN LUAR (Dipastikan aman di atas bintang ganda!)
+  // 🟢 2. DAFTARKAN HALAMAN SPLASH DI SINI (Aman di atas halaman luar)
+  {
+    path: 'splash',
+    loadChildren: () =>
+      import('./pages/splash/splash.module').then((m) => m.SplashPageModule),
+  },
+
+  // 3. RUTE HALAMAN LUAR (Tetap aman sesuai kodingan awal kalian)
   {
     path: 'welcome',
     loadChildren: () =>
       import('./pages/welcome/welcome.module').then((m) => m.WelcomePageModule),
+    canActivate: [WelcomeGuard], // 🔒 Gembok WelcomeGuard dipindahkan ke sini biar sinkron!
   },
 
   {
@@ -58,7 +64,7 @@ const routes: Routes = [
       ),
   },
 
-  // 3. Rute Utama & Fitur Aplikasi: Kunci dengan AuthGuard
+  // 4. Rute Utama & Fitur Aplikasi: Kunci dengan AuthGuard (TIDAK ADA YANG DIUBAH)
   {
     path: 'tabs',
     loadChildren: () =>
@@ -66,7 +72,7 @@ const routes: Routes = [
     canActivate: [AuthGuard],
   },
 
-  // 4. Rute Detail Dalam Aplikasi: Kunci dengan AuthGuard
+  // 5. Rute Detail Dalam Aplikasi: Kunci dengan AuthGuard (TIDAK ADA YANG DIUBAH)
   {
     path: 'course-player/:id',
     loadChildren: () =>
@@ -128,8 +134,8 @@ const routes: Routes = [
     canActivate: [AuthGuard],
   },
 
-  // 5. Rute fallback otomatis: WAJIB DI PALING BAWAH DEH LEK!
-  { path: '**', redirectTo: 'welcome' },
+  // 🟢 6. Rute fallback otomatis: WAJIB PALING BAWAH DAN DILEMPAR KE SPLASH!
+  { path: '**', redirectTo: 'splash' },
 ];
 
 @NgModule({
