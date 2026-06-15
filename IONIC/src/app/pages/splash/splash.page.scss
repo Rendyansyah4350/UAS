@@ -32,3 +32,9 @@
     transform: scale(1);
   }
 }
+
+// 🟢 ANIMASI MEMUDARKAN FULL LAYAR SEBELUM PINDAH ROUTING
+.fade-out-screen {
+  transition: opacity 0.5s ease-in-out;
+  opacity: 0 !important;
+}

@@ -4,32 +4,34 @@ import { AuthGuard } from './guards/auth-guard';
 import { WelcomeGuard } from './guards/welcome.guard';
 
 const routes: Routes = [
-  // 🟢 1. RUTE AWAL: Pertama kali app dibuka, WAJIB langsung jalankan Splash Page custom kita!
+  // 🟢 1. RUTE AWAL: Paksa murni langsung lempar ke splash tanpa ada gembok Guard apa pun!
   {
     path: '',
     pathMatch: 'full',
     redirectTo: 'splash',
   },
 
-  // 🟢 2. DAFTARKAN HALAMAN SPLASH DI SINI (Aman di atas halaman luar)
+  // 🟢 2. HALAMAN SPLASH CUSTOM (Pintu gerbang tunggal aplikasi)
   {
     path: 'splash',
     loadChildren: () =>
       import('./pages/splash/splash.module').then((m) => m.SplashPageModule),
+    data: { preload: false }, // Matikan preloading biar gak nyolong start render
   },
 
-  // 3. RUTE HALAMAN LUAR (Tetap aman sesuai kodingan awal kalian)
+  // 🟢 3. RUTE WELCOME & LOGIN: Biarkan Guard dipasang di halamannya masing-masing, bukan di rute awal aplikasi
   {
     path: 'welcome',
     loadChildren: () =>
       import('./pages/welcome/welcome.module').then((m) => m.WelcomePageModule),
-    canActivate: [WelcomeGuard], // 🔒 Gembok WelcomeGuard dipindahkan ke sini biar sinkron!
+    canActivate: [WelcomeGuard], // 🔒 Gembok WelcomeGuard aman di sini
   },
 
   {
     path: 'login',
     loadChildren: () =>
       import('./pages/login/login.module').then((m) => m.LoginPageModule),
+    data: { preload: false },
   },
 
   {
@@ -140,6 +142,7 @@ const routes: Routes = [
 
 @NgModule({
   imports: [
+    // Menggunakan strategi preloading bawaan kalian, namun sudah kita jinakkan lewat 'data' config
     RouterModule.forRoot(routes, { preloadingStrategy: PreloadAllModules }),
   ],
   exports: [RouterModule],

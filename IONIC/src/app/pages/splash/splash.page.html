@@ -1,7 +1,23 @@
-<ion-content [fullscreen]="true" style="--background: #111827">
-  <div class="splash-container">
-    <div class="splash-content">
-      <img src="assets/images/splash.png" alt="EduVan Logo" />
+<ion-content
+  [fullscreen]="true"
+  style="--background: #111827"
+  [class.fade-out-screen]="isFadingOut"
+>
+  <div
+    class="splash-container"
+    style="
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      height: 100%;
+    "
+  >
+    <div class="splash-content" style="text-align: center">
+      <img
+        src="assets/images/splash.png"
+        style="width: 220px; height: auto; object-fit: contain"
+        alt="EduVan Logo"
+      />
     </div>
   </div>
 </ion-content>
