@@ -1,15 +1,11 @@
 <ion-header class="ion-no-border" *ngIf="currentStep > 1">
   <ion-toolbar class="custom-toolbar">
-    <ion-buttons slot="start">
-      <ion-button (click)="langkahKembali()" class="btn-kembali">
-        <ion-icon slot="start" name="chevron-back-outline"></ion-icon>
-        Kembali
-      </ion-button>
-    </ion-buttons>
-    <ion-title class="toolbar-title">{{ judulToolbarDinamis() }}</ion-title>
-    <ion-buttons slot="end">
-      <ion-button (click)="goToLogin()" class="btn-tutup">Tutup</ion-button>
-    </ion-buttons>
+    <ion-title
+      class="toolbar-title"
+      style="text-align: center; font-weight: 700; color: #1e293b"
+    >
+      {{ judulToolbarDinamis() }}
+    </ion-title>
   </ion-toolbar>
 </ion-header>
 

@@ -1,40 +1,37 @@
-<ion-content [fullscreen]="true">
+<ion-content [fullscreen]="true" class="safe-area-padding">
   <ion-refresher slot="fixed" (ionRefresh)="handleRefresh($event)">
     <ion-refresher-content
       pullingIcon="arrow-down-circle"
       pullingText="Tarik sedikit lagi..."
       refreshingSpinner="crescent"
       refreshingText="Menyelaraskan data EduVan..."
-    >
-    </ion-refresher-content>
+    ></ion-refresher-content>
   </ion-refresher>
+
   <div class="konten-beranda"></div>
   <div class="main-wrapper">
     <div class="header-section">
       <div class="brand">Edu<span>Van</span></div>
 
-      <div style="position: relative; display: inline-block">
-        <ion-icon
-          name="notifications-outline"
-          class="icon-notif"
-          (click)="goToNotif()"
-        ></ion-icon>
+      <div class="notif-wrapper" (click)="goToNotif()">
+        <ion-icon name="notifications-outline" class="icon-notif"></ion-icon>
 
         <ion-badge
           color="danger"
           *ngIf="unreadCount > 0"
           style="
             position: absolute;
-            top: -5px;
-            right: -5px;
-            font-size: 10px;
-            min-width: 16px;
-            height: 16px;
+            top: -1px;
+            right: -1px;
+            font-size: 9px; /* Diperkecil tipis biar makin padat minimalis lek */
+            min-width: 15px;
+            height: 15px;
             border-radius: 50%;
             display: flex;
             justify-content: center;
             align-items: center;
             padding: 0;
+            z-index: 10;
           "
         >
           {{ unreadCount }}
@@ -158,7 +155,6 @@
     </div>
   </div>
 
-  <!-- Tombol Floating Chat Customer Service (WhatsApp) -->
   <ion-fab
     vertical="bottom"
     horizontal="end"

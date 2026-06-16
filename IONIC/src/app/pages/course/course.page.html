@@ -1,4 +1,17 @@
-<ion-header mode="ios" class="ion-no-border">
+<ion-header
+  mode="ios"
+  class="ion-no-border"
+  style="
+    position: absolute;
+    width: 100%;
+    z-index: 10;
+    pointer-events: none;
+    background: transparent;
+  "
+>
+</ion-header>
+
+<ion-content [fullscreen]="true">
   <div class="header-navy">
     <ion-title>Katalog Kursus</ion-title>
     <div class="search-box">
@@ -11,9 +24,7 @@
       ></ion-searchbar>
     </div>
   </div>
-</ion-header>
 
-<ion-content>
   <div class="section-label"><h3>Kategori</h3></div>
   <div class="category-scroll">
     <ion-chip
@@ -101,6 +112,7 @@
             <ion-card-title class="clamped-title"
               >{{ course.title }}</ion-card-title
             >
+
             <div class="rating-badge-row">
               <div class="rating-box">
                 <ion-icon name="star" color="warning"></ion-icon>

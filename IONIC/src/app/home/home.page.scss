@@ -7,10 +7,17 @@ ion-content {
   padding-bottom: 32px;
 }
 
-/* 1. HEADER SECTION (Deep Ocean Identity) */
+/* ==========================================================================
+   1. HEADER SECTION (Deep Ocean Identity)
+   🟢 FIX DEWA: Diturunkan posisinya menggunakan kalkulasi Safe Area HP!
+   ========================================================================== */
 .header-section {
   background: #093C5D;
-  padding: 24px 20px 60px 20px;
+  
+  // 🟢 KUNCI SAKTI: Padding atas dihitung otomatis (24px asli + tinggi status bar HP)
+  // Cara ini membuat judul brand dan lonceng otomatis bergeser turun dapet ruang napas rapi!
+  padding: calc(24px + env(safe-area-inset-top)) 20px 60px 20px;
+  
   display: flex;
   justify-content: space-between;
   align-items: center;
@@ -28,6 +35,16 @@ ion-content {
     }
   }
 
+  // 🟢 BUNGKUSAN AREA NOTIFIKASI
+  .notif-wrapper {
+    position: relative; // Kunci agar posisi absolut badge di HTML mengacu pada lonceng ini lek!
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 32px;
+    height: 32px;
+  }
+
   .icon-notif {
     color: #ffffff;
     font-size: 26px;
@@ -39,7 +56,7 @@ ion-content {
   }
 }
 
-/* 2. SEARCH CONTAINER (Sudah Bersih dari Kotak Hitam / Outline Default) */
+/* 2. SEARCH CONTAINER */
 .search-container {
   padding: 0 20px;
   margin-top: -30px;
@@ -55,7 +72,6 @@ ion-content {
     border: 1px solid rgba(226, 232, 240, 0.8);
     transition: all 0.3s ease;
 
-    /* Ketika area box search sedang aktif diketik */
     &:focus-within {
       border-color: #093C5D;
       box-shadow: 0 0 0 3px rgba(9, 60, 93, 0.1);
@@ -74,7 +90,7 @@ ion-content {
 
     input {
       border: none !important;
-      outline: none !important; /* MEMBUANG KOTAK HITAM/GELAP SAAT DIKLIK */
+      outline: none !important; 
       box-shadow: none !important;
       width: 100%;
       height: 42px;
@@ -111,6 +127,7 @@ ion-content {
   }
 }
 
+/* 4. BANNER IKLAN */
 .banner-iklan {
   background: #003366;
   border-radius: 20px;
@@ -124,14 +141,11 @@ ion-content {
   cursor: pointer;
   position: relative;
   box-shadow: 0 8px 20px rgba(0, 51, 102, 0.15); 
-  overflow: visible; /* 🟢 Tetap visible agar efek 3D pop-out gambar jalan */
+  overflow: visible;
 
   .banner-text {
     flex: 1;
     z-index: 2; 
-    
-    /* 🟢 KUNCI ANTI-NIMPA: Batasi lebar teks maksimal 55% sampai 60% saja lek!
-       Sisa ruang 40% di kanan murni dikosongkan agar menjadi zona aman gambar orangnya */
     max-width: 58%; 
     padding-right: 5px; 
 
@@ -162,28 +176,22 @@ ion-content {
     }
   }
 
-.banner-image {
+  .banner-image {
     position: absolute;
-    right: 10px;       /* Jarak aman dari mentok kanan banner */
-    
-    /* 🟢 KUNCI UTAMA 1: Rumus auto-tengah vertikal presisi lek! */
+    right: 10px; 
     top: 50%;
     transform: translateY(-50%); 
-    
-    /* 🟢 KUNCI UTAMA 2: Set tinggi dan lebar proporsional biar badannya FULL */
-    width: 175px;      /* Ukuran lebar pas agar tidak terlalu raksasa menimpa teks */
-    height: 155%;       /* Mengambil 90% dari tinggi banner biar gak kepotong atas bawah */
-    
+    width: 175px; 
+    height: 155%; 
     flex-shrink: 0;
-    z-index: 3;       
+    z-index: 3; 
     display: flex;
-    align-items: center; /* Memastikan isi gambar di dalamnya tegak di tengah */
+    align-items: center; 
     justify-content: center;
       
     img {
       width: 100%;
       height: 100%;
-      /* 🟢 KUNCI UTAMA 3: Pakai contain agar gambarnya utuh kelihatan full tanpa dicrop */
       object-fit: contain; 
       filter: drop-shadow(0 6px 12px rgba(0,0,0,0.15)); 
     }
