@@ -290,17 +290,21 @@ export class ProfilePage implements OnInit {
     });
   }
 
+  // 🟢 KUNCIAN FIX TOTAL: Pakai string murni langsung tanpa kurung siku biar Angular gak salah baca references!
   goToEdit() {
-    this.navCtrl.navigateForward(['/tabs/edit-profil']);
+    this.navCtrl.navigateForward('/edit-profil');
   }
+
   goToCertificate() {
-    this.navCtrl.navigateForward(['/tabs/certificate']);
+    this.navCtrl.navigateForward('/certificate'); // ➔ Dijamin langsung lancar ke halaman sertifikat tanpa crash reload!
   }
+
   goToHistory() {
-    this.navCtrl.navigateForward(['/tabs/riwayat-transaksi']);
+    this.navCtrl.navigateForward('/riwayat-transaksi');
   }
+
   goToNotif() {
-    this.navCtrl.navigateForward(['/tabs/notifications']);
+    this.navCtrl.navigateForward('/notifications');
   }
 
   bukaKonfirmasiKeluar() {

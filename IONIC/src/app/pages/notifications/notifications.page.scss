@@ -20,25 +20,28 @@ ion-toolbar {
   min-height: 100%; /* Pastikan background-nya full sampai bawah */
 }
 
-/* Desain Dasar Card Notifikasi yang Sudah Di-Fix Lek */
+/* Desain Dasar Card Notifikasi yang Sudah Di-Fix Bebas Kepotong */
 .notif-card {
   background: #ffffff;
-  border-radius: 18px; /* Agak melengkung premium dikit lek */
+  border-radius: 18px; 
   padding: 16px;
   display: flex;
-  align-items: center; /* 🟢 FIX: Jaga semua elemen tegak lurus di tengah */
+  
+  // 🟢 FIX POSISI IKON: Ubah dari 'center' ke 'flex-start' 
+  // Biar kalau teks notifikasi admin panjang banget, ikonnya gak melayang ke tengah card lek!
+  align-items: flex-start; 
+  
   gap: 16px;
-  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.03); /* Bayangan soft premium lek */
-  border-left: 5px solid transparent; /* Garis vertikal di kiri lek */
+  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.03); 
+  border-left: 5px solid transparent; 
   transition: transform 0.2s ease, box-shadow 0.2s ease;
-  overflow: hidden; /* Jaga biar ga overlap lek */
+  overflow: hidden; 
 
   &:active {
     transform: scale(0.97);
     box-shadow: 0 2px 6px rgba(0, 0, 0, 0.02);
   }
 
-  /* 🟢 FIX: Pembungkus Ikon Dipastikan Flexbox Biar Ga Melayang Gaib */
   .icon-wrapper {
     width: 44px;
     height: 44px;
@@ -47,58 +50,61 @@ ion-toolbar {
     align-items: center;
     justify-content: center;
     flex-shrink: 0;
-    margin: 0; /* Pastikan ga ada margin aneh lek */
+    margin: 0; 
 
     ion-icon {
       font-size: 24px;
-      margin: 0; /* Jaga ikon tetep di tengah lek */
+      margin: 0; 
     }
   }
 
-  /* 🟢 FIX: Konten Teks Dipastikan Flex 1 Biar Pake Sisa Ruang */
   .notif-content {
     flex: 1;
     display: flex;
     flex-direction: column;
     gap: 2px;
-    overflow: hidden; /* Jaga teks ga nabrak time-badge lek */
+    overflow: hidden; 
 
     .notif-header {
       display: flex;
       justify-content: space-between;
       align-items: center;
-      gap: 8px; /* Jarak antara judul dan tanggal lek */
+      gap: 8px; 
 
       h3 {
         margin: 0;
         font-size: 14px;
         font-weight: 700;
         color: #1A202C;
-        white-space: nowrap; /* Jaga judul ga bungkus ke bawah lek */
+        white-space: nowrap; 
         overflow: hidden;
-        text-overflow: ellipsis; /* Pake titik-titik kalau kepanjangan lek */
+        text-overflow: ellipsis; 
       }
 
       .time-badge {
         font-size: 11px;
         color: #a0aec0;
         font-weight: 500;
-        flex-shrink: 0; /* Jaga tanggal ga kegencet lek */
+        flex-shrink: 0; 
       }
     }
 
+    // 🟢 FIX TEKS PANJANG: Sikat habis pemotong line-clamp bawaan!
     p {
       margin: 0;
       font-size: 12px;
       color: #718096;
       line-height: 1.5;
-      /* Jaga deskripsi ga overlap aneh lek */
-      display: -webkit-box;
-      -webkit-line-clamp: 2; /* Maksimal 2 baris teks lek */
-      -webkit-box-orient: vertical;
-      overflow: hidden;
+      
+      /* Reset total kuncian lama lek */
+      display: block !important; 
+      overflow: visible !important;
+      white-space: normal !important;
+      word-wrap: break-word !important;
     }
   }
+  
+  // ... ke bawah biarkan kode variasi warna promo & success kalian tetap sama ...
 
   /* ==========================================================================
      🟢 FIX VARIASI WARNA: BIAR MENYALA DAN KONTRAS LEK!
