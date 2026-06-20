@@ -19,7 +19,7 @@ ion-content {
 .header-navy {
   background: $navy-color;
   
-  // 🟢 KUNCI UTAMA 1: Hancurkan kuncian 72px lama lu lek! Paksa auto biar dia bisa melar turun ke bawah
+  // 🟢 KUNCI UTAMA 1: Hancurkan kuncian 72px lama Paksa auto biar dia bisa melar turun ke bawah
   height: auto !important; 
   
   // 🟢 KUNCI UTAMA 2: Takaran padding atas diset 46px + safe area HP poni lu. 
@@ -51,7 +51,7 @@ ion-content {
     text-align: center !important;
     width: 100% !important;
     
-    // Pastikan tidak ada margin/padding gaib yang nahan dia di atas lek
+    // Pastikan tidak ada margin/padding gaib yang nahan dia di atas
     margin: 0 !important; 
   }
 }

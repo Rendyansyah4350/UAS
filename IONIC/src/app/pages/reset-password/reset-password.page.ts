@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { AuthService } from '../../services/auth';
-import { ToastController, LoadingController } from '@ionic/angular'; // TAMBAHKAN LoadingController DI SINI LEK
+import { ToastController, LoadingController } from '@ionic/angular'; // TAMBAHKAN LoadingController DI SINI
 
 @Component({
   selector: 'app-reset-password',

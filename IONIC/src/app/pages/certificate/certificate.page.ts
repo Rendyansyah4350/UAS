@@ -36,7 +36,7 @@ export class CertificatePage implements OnInit {
     this.isLoading = true;
     this.courseService.getMyCertificates().subscribe({
       next: (res: any) => {
-        // Menangkap response JSON {'success': true, 'data': [...] } dari cPanel kamu lek
+        // Menangkap response JSON {'success': true, 'data': [...] } dari cPanel kamu
         this.listSertifikat = res.data || [];
         this.isLoading = false;
         console.log('Sertifikat kamu sukses dimuat:', this.listSertifikat);
@@ -51,7 +51,7 @@ export class CertificatePage implements OnInit {
   // Fungsi untuk mengunduh berkas PDF sertifikat langsung dari server cPanel
   // 🟢 Ubah menjadi 'async' agar bisa mengontrol animasi loading Ionic
   async downloadPdf(idSertifikat: number, namaKursus: string) {
-    // Kunci tombol agar tidak di-spam klik lek
+    // Kunci tombol agar tidak di-spam klik
     this.isDownloading = true;
     this.activeCertId = idSertifikat;
 
@@ -132,7 +132,7 @@ export class CertificatePage implements OnInit {
       tokenUser = String(tokenUser).replace(/"/g, '').trim();
     }
 
-    // Buat URL direct download dengan token yang sudah bersih total lek
+    // Buat URL direct download dengan token yang sudah bersih total
     const urlDirectDownload = `https://eduvan.rehalivan.com/api/certificates/${idSertifikat}/download?token=${tokenUser}`;
 
     try {

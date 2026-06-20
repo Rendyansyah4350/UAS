@@ -1,5 +1,5 @@
 import { Component, OnInit, ChangeDetectorRef } from '@angular/core';
-import { CourseService } from '../../services/course.service'; // 🚨 1. PASTIKAN SERVICE DI-IMPORT LEK
+import { CourseService } from '../../services/course.service'; // 🚨 1. PASTIKAN SERVICE DI-IMPORT
 
 @Component({
   selector: 'app-riwayat-transaksi',
@@ -9,7 +9,7 @@ import { CourseService } from '../../services/course.service'; // 🚨 1. PASTIK
 })
 export class RiwayatTransaksiPage implements OnInit {
 
-  // 🟢 2. SIAPKAN VARIABEL KONTROL DATA DAN LOADING UI LEK
+  // 🟢 2. SIAPKAN VARIABEL KONTROL DATA DAN LOADING UI
   listTransaksi: any[] = [];
   isLoading: boolean = false;
 
@@ -39,7 +39,7 @@ export class RiwayatTransaksiPage implements OnInit {
         const dataMentah = res.data ? res.data : res;
 
         if (Array.isArray(dataMentah)) {
-          // Masukkan data pendaftaran kursus ke dalam array lokal lek
+          // Masukkan data pendaftaran kursus ke dalam array lokal
           this.listTransaksi = dataMentah;
         }
         

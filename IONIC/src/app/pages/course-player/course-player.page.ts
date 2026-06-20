@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { ToastController } from '@ionic/angular';
 import { CourseService } from '../../services/course.service';
-import { DomSanitizer, SafeResourceUrl } from '@angular/platform-browser'; // WAJIB IMPORT INI MBUT
+import { DomSanitizer, SafeResourceUrl } from '@angular/platform-browser'; // WAJIB IMPORT INI
 
 @Component({
   selector: 'app-course-player',
@@ -29,7 +29,7 @@ export class CoursePlayerPage implements OnInit {
     private route: ActivatedRoute,
     private toastCtrl: ToastController,
     private courseService: CourseService,
-    private sanitizer: DomSanitizer,
+    private sanitizer: DomSanitizer
   ) {}
 
   ngOnInit() {
@@ -47,7 +47,7 @@ export class CoursePlayerPage implements OnInit {
           this.courseDetail = res.data;
         }
       },
-      (err) => console.error('Gagal memuat info kelas:', err),
+      (err) => console.error('Gagal memuat info kelas:', err)
     );
 
     this.courseService.getCourseContents(Number(id)).subscribe(
@@ -65,7 +65,7 @@ export class CoursePlayerPage implements OnInit {
       (err) => {
         this.loading = false;
         console.error('Materi gagal dimuat:', err);
-      },
+      }
     );
   }
 
@@ -144,7 +144,7 @@ export class CoursePlayerPage implements OnInit {
         },
         (err) => {
           console.error('Gagal menyimpan progress ke server Laravel:', err);
-        },
+        }
       );
   }
 }

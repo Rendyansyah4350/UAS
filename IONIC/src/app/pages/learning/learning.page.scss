@@ -10,7 +10,7 @@ $navy-border-tint: #e2edf5;
 .header-navy {
   background: $navy-color;
   
-  // 🟢 KUNCI UTAMA 1: Hancurkan kuncian 72px lama lu lek! Paksa auto biar dia bisa melar turun ke bawah
+  // 🟢 KUNCI UTAMA 1: Hancurkan kuncian 72px lama lu Paksa auto biar dia bisa melar turun ke bawah
   height: auto !important; 
   
   // 🟢 KUNCI UTAMA 2: Takaran padding atas diset 46px + safe area HP poni lu. 
@@ -42,7 +42,7 @@ $navy-border-tint: #e2edf5;
     text-align: center !important;
     width: 100% !important;
     
-    // Pastikan tidak ada margin/padding gaib yang nahan dia di atas lek
+    // Pastikan tidak ada margin/padding gaib yang nahan dia di atass
     margin: 0 !important; 
   }
 }

@@ -12,10 +12,10 @@ export class NotificationsPage implements OnInit {
   listNotifikasi: any[] = [];
   isLoading: boolean = false;
 
-  // 🟢 SUNTIKKAN ChangeDetectorRef ke dalam constructor lek
+  // 🟢 SUNTIKKAN ChangeDetectorRef ke dalam constructor
   constructor(
     private courseService: CourseService,
-    private cdr: ChangeDetectorRef,
+    private cdr: ChangeDetectorRef
   ) {}
 
   ngOnInit() {
@@ -29,17 +29,17 @@ export class NotificationsPage implements OnInit {
 
   getNotificationData() {
     this.isLoading = true;
-    this.cdr.detectChanges(); // Paksa spinner loading langsung muncul lek
+    this.cdr.detectChanges(); // Paksa spinner loading langsung muncul
     this.courseService.ambilDaftarNotifikasi().subscribe({
       next: (res: any) => {
         this.isLoading = false;
-        console.log('Notifikasi sukses diambil lek:', res);
+        console.log('Notifikasi sukses diambil:', res);
 
         // Mengantisipasi fleksibilitas respons API (res.data atau langsung res)
         const dataMentah = res.data ? res.data : res;
 
         if (Array.isArray(dataMentah)) {
-          // 🟢 KUNCI BARU: Pakai .reverse() agar notifikasi transaksi yang paling baru otomatis nangkring di posisi paling atas lek!
+          // 🟢 KUNCI BARU: Pakai .reverse() agar notifikasi transaksi yang paling baru otomatis nangkring di posisi paling atas
           this.listNotifikasi = dataMentah.reverse();
         } else {
           this.listNotifikasi = [];
@@ -48,7 +48,7 @@ export class NotificationsPage implements OnInit {
         this.cdr.detectChanges(); // Paksa HTML ngerender ulang kartu ijo sukses transaksi terbarumu!
         console.log(
           'Hasil manipulasi array setelah dibalik:',
-          this.listNotifikasi,
+          this.listNotifikasi
         );
       },
       error: (err: any) => {

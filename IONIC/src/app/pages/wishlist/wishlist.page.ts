@@ -31,7 +31,7 @@ export class WishlistPage implements OnInit {
     this.isLoading = true;
     this.courseService.ambilDaftarWishlist().subscribe({
       next: (res: any) => {
-        // Ambil array data wishlist dari API Laravel kamu lek
+        // Ambil array data wishlist dari API Laravel kamu
         this.wishlistCourses = res.data || [];
         this.isLoading = false;
         console.log('Data Wishlist Server Sukses:', this.wishlistCourses);

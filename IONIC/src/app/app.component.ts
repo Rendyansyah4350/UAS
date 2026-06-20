@@ -98,7 +98,7 @@ export class AppComponent implements OnInit {
         await Filesystem.requestPermissions();
       }
     } catch (error) {
-      console.log('User skip popup atau ada eror mbut:', error);
+      console.log('User skip popup atau ada eror', error);
     }
   }
 

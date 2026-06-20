@@ -187,7 +187,7 @@ export class CourseService {
     );
   }
   buyCourseManual(formData: FormData): Observable<any> {
-    // 1. Ambil token murni menggunakan logic pembersihan yang sudah kamu buat di atas lek
+    // 1. Ambil token murni menggunakan logic pembersihan yang sudah kamu buat di atas
     let tokenUser = localStorage.getItem('token');
     if (!tokenUser) {
       const userDataRaw = localStorage.getItem('userData');
@@ -204,7 +204,7 @@ export class CourseService {
       tokenUser = String(tokenUser).replace(/"/g, '').trim();
     }
 
-    // 2. KUNCI SAKTI: Cukup bawa Authorization, JANGAN isi Content-Type manual lek!
+    // 2. KUNCI SAKTI: Cukup bawa Authorization, JANGAN isi Content-Type manual
     const headers = new HttpHeaders({
       Authorization: `Bearer ${tokenUser}`,
       Accept: 'application/json',

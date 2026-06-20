@@ -16,7 +16,7 @@ import { CourseService } from '../../services/course.service';
 export class ProfilePage implements OnInit {
   userProfile: any = null;
 
-  // Default awal ke gambar netral universal lek
+  // Default awal ke gambar netral universal
   selectedAvatar: string = 'assets/icon/avatar-neutral.png';
 
   isSkModalOpen: boolean = false;
@@ -58,7 +58,7 @@ export class ProfilePage implements OnInit {
     private courseService: CourseService
   ) {}
 
-  // 🛠️ FUNGSI PEMBANTU: Biar key avatar unik per email user lek
+  // 🛠️ FUNGSI PEMBANTU: Biar key avatar unik per email user
   private getAvatarKey(): string {
     if (this.userProfile && this.userProfile.email) {
       return `user_avatar_${this.userProfile.email}`;
@@ -175,7 +175,7 @@ export class ProfilePage implements OnInit {
   }
 
   updateAvatar(path: string) {
-    // 🟢 LANGKAH OPTIMIS: Ubah UI secara instan biar user ngerasa responsif lek
+    // 🟢 LANGKAH OPTIMIS: Ubah UI secara instan biar user ngerasa responsif
     this.selectedAvatar = path;
 
     if (this.userProfile) {
@@ -227,7 +227,7 @@ export class ProfilePage implements OnInit {
             localStorage.setItem('user_data', JSON.stringify(dataUserTerbaru));
             localStorage.setItem('user', JSON.stringify(dataUserTerbaru));
 
-            // Update stream pusat agar ngOnInit tidak mendeteksi data lama lek
+            // Update stream pusat agar ngOnInit tidak mendeteksi data lama
             if (typeof this.authService.updateCurrentUserState === 'function') {
               this.authService.updateCurrentUserState(dataUserTerbaru);
             }

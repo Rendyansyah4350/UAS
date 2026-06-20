@@ -1,4 +1,4 @@
-/* 🔴 HAPUS ion-content { --background: ... } yang lama kalau ada lek */
+/* 🔴 HAPUS ion-content { --background: ... } yang lama kalau ada*/
 
 ion-toolbar {
   --background: #F4F7FA;
@@ -10,12 +10,12 @@ ion-toolbar {
   }
 }
 
-/* 🟢 FIX UTAMA: KITA PADDING MANUAL DI SINI LEK KARNA ION-PADDING DI HTML DIHAPUS */
+/* 🟢 FIX UTAMA: KITA PADDING MANUAL DI SINI KARNA ION-PADDING DI HTML DIHAPUS */
 .notification-container {
   padding: 20px 16px !important; /* Tambah padding atas/bawah 20px, kiri/kanan 16px */
   display: flex;
   flex-direction: column;
-  gap: 14px; /* Jarak antar card agak renggang dikit lek */
+  gap: 14px; /* Jarak antar card agak renggang dikit */
   background: #F4F7FA; /* Pindahkan background content ke sini biar fluid */
   min-height: 100%; /* Pastikan background-nya full sampai bawah */
 }
@@ -28,7 +28,7 @@ ion-toolbar {
   display: flex;
   
   // 🟢 FIX POSISI IKON: Ubah dari 'center' ke 'flex-start' 
-  // Biar kalau teks notifikasi admin panjang banget, ikonnya gak melayang ke tengah card lek!
+  // Biar kalau teks notifikasi admin panjang banget, ikonnya gak melayang ke tengah card
   align-items: flex-start; 
   
   gap: 16px;
@@ -96,7 +96,7 @@ ion-toolbar {
       color: #718096;
       line-height: 1.5;
       
-      /* Reset total kuncian lama lek */
+      /* Reset total kuncian lama*/
       display: block !important; 
       overflow: visible !important;
       white-space: normal !important;
@@ -107,7 +107,7 @@ ion-toolbar {
   // ... ke bawah biarkan kode variasi warna promo & success kalian tetap sama ...
 
   /* ==========================================================================
-     🟢 FIX VARIASI WARNA: BIAR MENYALA DAN KONTRAS LEK!
+     🟢 FIX VARIASI WARNA: BIAR MENYALA DAN KONTRAS
      ========================================================================== */
 
   /* Variasi Tipe 1: Promo (Tema Biru Tua EduVan) */

@@ -98,7 +98,7 @@ export class LoginPage implements OnInit {
           }
 
           if (userData) {
-            // 🟢 INTEGRASI FIX: Jika user sukses login baru, simpan avatar bawaan dari DB ke local storage aslinya lek!
+            // 🟢 INTEGRASI FIX: Jika user sukses login baru, simpan avatar bawaan dari DB ke local storage aslinya
             if (userData.avatar) {
               localStorage.setItem('user_avatar', userData.avatar);
             } else {
@@ -142,7 +142,6 @@ export class LoginPage implements OnInit {
     this.isLoading = true;
     const authUrl = 'https://eduvan.rehalivan.com/api/auth/google';
 
-    
     const lastLocalAvatar = localStorage.getItem('user_avatar');
     if (lastLocalAvatar && !lastLocalAvatar.startsWith('http')) {
       sessionStorage.setItem('emergency_avatar_lock', lastLocalAvatar);
@@ -191,7 +190,7 @@ export class LoginPage implements OnInit {
         if (event.data.user) {
           const googleUser = event.data.user;
 
-          // 🟢 INTEGRASI FIX GOOGLE (POPUP): Sinkronisasikan avatar fresh bawaan login Google lek!
+          // 🟢 INTEGRASI FIX GOOGLE (POPUP): Sinkronisasikan avatar fresh bawaan login Google
           if (googleUser.avatar) {
             localStorage.setItem('user_avatar', googleUser.avatar);
           } else {

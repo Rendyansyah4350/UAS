@@ -73,7 +73,7 @@ export class CourseDetailPage implements OnInit {
     }
   }
 
-  // 🟢 DIUBAH TOTAL: Memisahkan jalur data Kursus & Enrollments agar data kelas TIDAK HILANG lek!
+  // 🟢 DIUBAH TOTAL: Memisahkan jalur data Kursus & Enrollments agar data kelas TIDAK HILANG
   getDetail(id: string) {
     const targetCourseId = Number(id);
 
@@ -130,7 +130,7 @@ export class CourseDetailPage implements OnInit {
     this.isModalTransferOpen = true;
     this.fileGambarBukti = null;
     this.namaFileTerpilih = '';
-    this.imagePreviewUrl = undefined; // Reset preview pas modal dibuka lek
+    this.imagePreviewUrl = undefined; // Reset preview pas modal dibuka
     this.cdr.detectChanges();
   }
   handleRefresh(event: CustomEvent) {
@@ -147,7 +147,7 @@ export class CourseDetailPage implements OnInit {
     }, 800); // Roda berputar akan selesai dengan transisi fade-out yang rapi
   }
 
-  // 🔥 ROMBAK TOTAL: Ganti input file lama jadi pemicu dialog Kamera/Galeri native Android lek!
+  // 🔥 ROMBAK TOTAL: Ganti input file lama jadi pemicu dialog Kamera/Galeri native Android
   async pilihFileBuktiTransfer() {
     try {
       const image = await Camera.getPhoto({
@@ -163,7 +163,7 @@ export class CourseDetailPage implements OnInit {
       this.namaFileTerpilih = `bukti_transfer_${Date.now()}.jpg`;
       // Proses konversi aman terkendali:
       const response = await fetch(image.webPath!);
-      const blob = await response.blob(); // Sudah diperbaiki mbut!
+      const blob = await response.blob(); // Sudah diperbaiki
       this.fileGambarBukti = new File([blob], this.namaFileTerpilih, {
         type: 'image/jpeg',
       });
@@ -183,7 +183,7 @@ export class CourseDetailPage implements OnInit {
     }
     this.loadingUpload = true;
     this.cdr.detectChanges();
-    // Membungkus parameter ke objek FormData biner lek
+    // Membungkus parameter ke objek FormData biner
 
     const formData = new FormData();
     formData.append('course_id', String(this.course.id));
@@ -194,7 +194,7 @@ export class CourseDetailPage implements OnInit {
         this.loadingUpload = false;
         this.isModalTransferOpen = false;
 
-        // Memasukkan response teks kustom asli backend ke overlay kustom baru lek
+        // Memasukkan response teks kustom asli backend ke overlay kustom baru
         this.alertMessageCustom =
           res.message ||
           'Bukti transfer sukses dikirim! Mohon tunggu konfirmasi Admin.';
@@ -209,7 +209,7 @@ export class CourseDetailPage implements OnInit {
         this.loadingUpload = false;
         console.error('Gagal upload bukti:', err);
 
-        // Memasukkan response pesan error validasi asli backend ke overlay kustom lek
+        // Memasukkan response pesan error validasi asli backend ke overlay kustom
         this.alertMessageCustom =
           err.error?.message ||
           'Gagal mengirim bukti pembayaran, periksa format file Anda.';

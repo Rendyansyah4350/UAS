@@ -18,7 +18,7 @@ ion-content {
   background: $navy-color;
   
   // ➔ KUNCI RESPONSIVITAS 1: padding atas otomatis ngitung tinggi status bar HP native.
-  // Kalau layarnya flat tanpa poni, dia pakai nilai aman bawaan (16px). Jadi anti-melar kejauhan lek!
+  // Kalau layarnya flat tanpa poni, dia pakai nilai aman bawaan (16px). Jadi anti-melar kejauhan
   padding: calc(16px + env(safe-area-inset-top, 12px)) 20px 60px 20px;
   
   display: flex;
@@ -66,7 +66,7 @@ ion-content {
 .search-container {
   padding: 0 20px;
   
-  // 🟢 KUNCI NAIK: Kita ubah dari -20px menjadi -28px biar dia ketarik naik ke atas sedikit lek!
+  // 🟢 KUNCI NAIK: Kita ubah dari -20px menjadi -28px biar dia ketarik naik ke atas sedikit
   margin-top: -28px !important; 
   margin-bottom: 24px;
   box-sizing: border-box;

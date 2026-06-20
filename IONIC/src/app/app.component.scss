@@ -16,7 +16,7 @@
 
   &::part(content) {
     border-radius: 24px;
-    background: #ffffff; // Card dasar putih bersih mbut
+    background: #ffffff; // Card dasar putih bersih
     overflow: hidden;
   }
 }
@@ -52,7 +52,7 @@
       background: #ef4444;
       transform: rotate(-45deg); // Garis coret miring penanda offline
       border-radius: 4px;
-      border: 2px solid #fef2f2; // Pemisah biar garisnya kelihatan tajam mbut
+      border: 2px solid #fef2f2; // Pemisah biar garisnya kelihatan tajam
     }
   }
 
@@ -73,7 +73,7 @@
   }
 
   .retry-btn {
-    --background: #1e3a8a; // Warna biru navy gelap khas utama EduVan lu lek!
+    --background: #1e3a8a; // Warna biru navy gelap khas utama EduVan
     --background-activated: #1d4ed8;
     --border-radius: 14px;
     --box-shadow: 0 6px 16px rgba(30, 58, 138, 0.25);

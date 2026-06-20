@@ -12,6 +12,6 @@ import { ProfilePage } from './profil.page'; // Perbaikan di sini
     IonicModule,
     ProfilPageRoutingModule
   ],
-  declarations: [ProfilePage] // Perbaikan di sini
+  declarations: [ProfilePage]
 })
 export class ProfilPageModule {}
