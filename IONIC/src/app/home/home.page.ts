@@ -39,7 +39,8 @@ export class HomePage implements OnInit {
 
   ionViewWillEnter() {
     // 🟢 ANTISIPASI TRANSISI DEEP LINK: Ambil nama dari localStorage jika state memori belum sinkron sempurna
-    const localUserData = localStorage.getItem('user_data') || localStorage.getItem('user');
+    const localUserData =
+      localStorage.getItem('user_data') || localStorage.getItem('user');
     if (localUserData) {
       try {
         const user = JSON.parse(localUserData);
@@ -74,7 +75,7 @@ export class HomePage implements OnInit {
           .sort(
             (a: any, b: any) => Number(b.rating || 0) - Number(a.rating || 0)
           )
-          .slice(0, 3);
+          .slice(0, 10); // 🟢 BERSIH & AMAN: Menampilkan tepat 10 data rating tertinggi dari database
       },
       error: (err) => {
         console.error('Gagal memuat kursus dari cPanel:', err);
@@ -92,7 +93,6 @@ export class HomePage implements OnInit {
             console.error('Gagal memuat jumlah notifikasi:', err);
           },
           complete: () => {
-            // Mematikan animasi roda berputar menggunakan target dari CustomEvent
             if (refresherEvent) {
               (refresherEvent.target as any).complete();
               console.log('Penyegaran data halaman Beranda EduVan Selesai!');
