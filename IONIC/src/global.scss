@@ -117,7 +117,7 @@ ion-button {
     padding: 32px 24px 12px 24px;
 
     h2.alert-title {
-      color: #34d399; // Hijau emerald pastel lembut (tidak menusuk mata)
+      color: #22986c;
       font-size: 19px;
       font-weight: 600; // Tidak terlalu tebal kaku
       letter-spacing: -0.3px;
@@ -132,79 +132,88 @@ ion-button {
     padding: 0 28px 28px 28px;
   }
   ion-refresher {
-  /* Warna Spinner (Lingkaran Sabit) saat berputar */
-  --ion-color-primary: #ffca28; /* Kuning Emas/Gold biar kontras */
+    /* Warna Spinner (Lingkaran Sabit) saat berputar */
+    --ion-color-primary: #ffca28; /* Kuning Emas/Gold biar kontras */
 
-  ion-refresher-content {
-    /* Gaya Teks "Tarik..." dan "Menyelaraskan..." */
-    color: #093C5D !important; /* Warna Utama Navy EduVan */
+    ion-refresher-content {
+      /* Gaya Teks "Tarik..." dan "Menyelaraskan..." */
+      color: #093c5d !important; /* Warna Utama Navy EduVan */
+      font-weight: 600;
+      font-size: 14px;
+      letter-spacing: 0.3px;
+
+      /* Gaya Ikon Panah Saat Ditarik */
+      .refresher-pulling-icon {
+        color: #093c5d;
+        font-size: 26px;
+        transition: transform 0.2s ease-in-out;
+      }
+
+      /* Gaya Spinner Lingkaran */
+      ion-spinner {
+        width: 28px;
+        height: 28px;
+        margin-bottom: 4px;
+      }
+    }
+  }
+
+  /* Styling Toast Keluar Premium Melayang di Atas Tabs Menu */
+  .toast-keluar-premium {
+    /* 1. Pengaturan Posisi Melayang di Atas Tabs */
+    --baseline: 90px; /* Mengangkat posisi dasar toast melayang tepat di atas menu bawah */
+    margin-bottom: 30px; /* Tambahan jarak aman untuk layar HP berponi bawah (gesture bar) */
+
+    /* 2. Desain Kapsul Minimalis Modern (Glassmorphic) */
+    --background: rgba(
+      25,
+      35,
+      50,
+      0.95
+    ); /* Warna navy gelap semi-transparan premium */
+    --color: #ffffff;
+    --border-radius: 24px; /* Sudut melengkung halus modern */
+    --box-shadow: 0 10px 25px rgba(0, 0, 0, 0.35); /* Efek bayangan tegas agar tampak melayang */
+
+    /* 3. Layout & Jarak Internal */
+    max-width: 85% !important; /* Agar kapsul tidak melebar terlalu penuh ke sisi layar */
+    left: 50% !important;
+    transform: translateX(
+      -50%
+    ) !important; /* Memastikan posisi persis di tengah-tengah layar */
+    padding: 4px 16px;
+
+    /* 4. Teks Desain */
     font-weight: 600;
-    font-size: 14px;
-    letter-spacing: 0.3px;
+    font-size: 13.5px;
+    letter-spacing: 0.5px;
 
-    /* Gaya Ikon Panah Saat Ditarik */
-    .refresher-pulling-icon {
-      color: #093C5D;
-      font-size: 26px;
-      transition: transform 0.2s ease-in-out;
-    }
-
-    /* Gaya Spinner Lingkaran */
-    ion-spinner {
-      width: 28px;
-      height: 28px;
-      margin-bottom: 4px;
+    /* 5. Dekorasi Ikon */
+    ion-icon {
+      color: #ffd54f !important; /* Warna kuning gold cerah */
+      font-size: 19px;
+      margin-right: 8px;
+      animation: bounceIcon 1.2s ease-in-out infinite alternate; /* Efek pantulan lembut */
     }
   }
-}
 
-/* Styling Toast Keluar Premium Melayang di Atas Tabs Menu */
-.toast-keluar-premium {
-  /* 1. Pengaturan Posisi Melayang di Atas Tabs */
-  --baseline: 90px; /* Mengangkat posisi dasar toast melayang tepat di atas menu bawah */
-  margin-bottom: 30px; /* Tambahan jarak aman untuk layar HP berponi bawah (gesture bar) */
-
-  /* 2. Desain Kapsul Minimalis Modern (Glassmorphic) */
-  --background: rgba(25, 35, 50, 0.95); /* Warna navy gelap semi-transparan premium */
-  --color: #ffffff;
-  --border-radius: 24px; /* Sudut melengkung halus modern */
-  --box-shadow: 0 10px 25px rgba(0, 0, 0, 0.35); /* Efek bayangan tegas agar tampak melayang */
-
-  /* 3. Layout & Jarak Internal */
-  max-width: 85% !important; /* Agar kapsul tidak melebar terlalu penuh ke sisi layar */
-  left: 50% !important;
-  transform: translateX(-50%) !important; /* Memastikan posisi persis di tengah-tengah layar */
-  padding: 4px 16px;
-
-  /* 4. Teks Desain */
-  font-weight: 600;
-  font-size: 13.5px;
-  letter-spacing: 0.5px;
-
-  /* 5. Dekorasi Ikon */
-  ion-icon {
-    color: #ffd54f !important; /* Warna kuning gold cerah */
-    font-size: 19px;
-    margin-right: 8px;
-    animation: bounceIcon 1.2s ease-in-out infinite alternate; /* Efek pantulan lembut */
+  /* Animasi Pantulan Lembut Khusus Ikon */
+  @keyframes bounceIcon {
+    0% {
+      transform: translateY(0);
+    }
+    100% {
+      transform: translateY(
+        -3px
+      ); /* Ikon akan melompat naik-turun secara halus */
+    }
   }
-}
-
-/* Animasi Pantulan Lembut Khusus Ikon */
-@keyframes bounceIcon {
-  0% {
-    transform: translateY(0);
-  }
-  100% {
-    transform: translateY(-3px); /* Ikon akan melompat naik-turun secara halus */
-  }
-}
 
   .alert-button-group {
     padding: 0 24px 24px 24px;
 
     button.alert-button {
-      background: #4f46e5; // Indigo solid flat clean (gaya iOS premium minimalis)
+      background: #22986c; // Indigo solid flat clean (gaya iOS premium minimalis)
       color: #ffffff !important;
       width: 100%;
       margin: 0;
@@ -269,19 +278,17 @@ ion-button {
   }
 }
 
-// 👤 3. Tema Alert Konfirmasi Logout Kustom (Clean Slate & Soft White)
 .eduvan-alert-logout {
-  --background: #1e293b !important; // Deep Slate match dengan alert payment
-  --box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.3),
-    0 10px 10px -5px rgba(0, 0, 0, 0.2);
-  --border-radius: 24px; // Smooth corner modern
+  --background: #0c162e !important; // Biru kegelapan premium (Slate Dark Blue), bukan abu-abu semen lagi
+  --box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
+  --border-radius: 24px; // Sudut melengkung halus & modern
 
   .alert-head {
     text-align: center;
-    padding: 32px 24px 12px 24px;
+    padding: 36px 24px 14px 24px;
 
     h2.alert-title {
-      color: #f1f5f9; // Putih bersih elegan
+      color: #f8fafc; // Putih bersih kontras tinggi, sangat clean
       font-size: 19px;
       font-weight: 600;
       letter-spacing: -0.3px;
@@ -289,46 +296,55 @@ ion-button {
   }
 
   .alert-message {
-    color: #94a3b8; // Abu-abu muted soft
+    color: #94a3b8; // Abu-abu soft murni, kontrasnya pas di latar gelap
     text-align: center;
-    font-size: 13.5px;
+    font-size: 14px;
     line-height: 1.6;
-    padding: 0 24px 24px 24px;
+    padding: 0 24px 28px 24px;
   }
 
-  // Pengaturan tata letak tombol berdampingan agar clean
+  // Tata letak tombol berdampingan ala iOS/Modern App
   .alert-button-group {
     display: flex !important;
     flex-direction: row !important;
     justify-content: space-between !important;
-    padding: 0 24px 24px 24px !important;
+    padding: 0 20px 24px 20px !important;
     gap: 12px;
 
     button.alert-button {
       flex: 1 !important;
       width: 50% !important;
       margin: 0 !important;
-      height: 44px;
-      border-radius: 14px;
-      font-weight: 600;
+      height: 46px; // Sedikit lebih tinggi biar empuk ditekan di HP
+      border-radius: 16px; // Menyesuaikan style border-radius ion-button Eduvan
       font-size: 14px;
-      text-transform: none;
+      font-weight: 600;
+      text-transform: none; // Hapus uppercase kaku bawaan Android
 
       .alert-button-inner {
         justify-content: center;
       }
     }
 
-    // Tombol Batal flat transparan
+    // Tombol Batal: Dibuat semi-transparan murni tanpa border kaku, text biru muda cerah
     button.alert-btn-batal {
-      background: rgba(255, 255, 255, 0.05) !important;
-      color: #94a3b8 !important;
+      background: rgba(255, 255, 255, 0.04) !important;
+      color: #38bdf8 !important; // Akses biru muda cerah agar clean tapi tetap jelas
+
+      &:active {
+        background: rgba(255, 255, 255, 0.08) !important;
+      }
     }
 
-    // Tombol Keluar tegas tapi soft crimson
+    // Tombol Keluar: Menggunakan soft crimson/coral premium, tegas tapi tidak menusuk mata
     button.alert-btn-keluar {
-      background: #ef4444 !important;
+      background: #f43f5e !important; // Rose/Crimson koral modern menggantikan merah solid biasa
       color: #ffffff !important;
+      box-shadow: 0 4px 12px rgba(244, 63, 94, 0.3); // Soft glow efek melayang pada tombol utama
+
+      &:active {
+        background: #e11d48 !important;
+      }
     }
   }
 }
