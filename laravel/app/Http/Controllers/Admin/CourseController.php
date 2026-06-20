@@ -146,7 +146,7 @@ class CourseController extends Controller
 
         $data = [
             'title' => $request->title,
-            'category' => $request->category, // Pastikan nama kolom di DB lo emang 'category' ya mbut, bukan 'category_id'
+            'category' => $request->category, 
             'description' => $request->description,
             'price' => $request->price,
         ];

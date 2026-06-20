@@ -74,7 +74,7 @@
                                     class="text-xs bg-red-100 text-red-600 px-2 py-1 rounded">VIDEO</span></td>
                             <td class="p-4 border-b">
                                 <form action="{{ route('admin.courses.destroyContent', $content->id) }}" method="POST"
-                                    onsubmit="return confirm('Yakin mau menghapus materi ini, mbut?')">
+                                    onsubmit="return confirm('Yakin mau menghapus materi ini?')">
                                     @csrf
                                     @method('DELETE')
                                     <button type="submit" class="text-red-500 hover:text-red-700">
@@ -145,7 +145,7 @@
                                         class="text-xs bg-red-100 text-red-600 px-2 py-0.5 rounded">VIDEO</span></td>
                                 <td class="p-4 border-b">
                                     <form action="{{ route('admin.courses.destroyContent', $content->id) }}" method="POST"
-                                        onsubmit="return confirm('Yakin mau menghapus materi ini, mbut?')">
+                                        onsubmit="return confirm('Yakin mau menghapus materi ini?')">
                                         @csrf
                                         @method('DELETE')
                                         <button type="submit" class="text-red-500 hover:text-red-700">

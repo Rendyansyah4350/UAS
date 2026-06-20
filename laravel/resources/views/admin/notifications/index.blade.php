@@ -49,7 +49,7 @@
                 <div class="mb-6">
                     <label class="block text-gray-700 text-sm font-bold mb-2">Isi Pesan Pemberitahuan</label>
                     <textarea name="message" rows="4" required
-                        placeholder="Tulis rincian pesan pengumuman yang ingin disampaikan ke mahasiswa di sini lek..."
+                        placeholder="Tulis rincian pesan pengumuman yang ingin disampaikan..."
                         class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:border-blue-500"
                         style="border-radius: 10px;"></textarea>
                 </div>

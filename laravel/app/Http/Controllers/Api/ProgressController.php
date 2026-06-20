@@ -70,7 +70,7 @@ class ProgressController extends Controller
 
         return response()->json([
             'success' => true,
-            'message' => 'Quiz berhasil disubmit dan disinkronkan ke Admin lek!',
+            'message' => 'Quiz berhasil disubmit dan disinkronkan ke Admin!',
             'data' => $progress
         ]);
     }

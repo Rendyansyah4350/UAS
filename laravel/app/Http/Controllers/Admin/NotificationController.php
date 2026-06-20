@@ -30,7 +30,7 @@ class NotificationController extends Controller
             $users = User::all();
 
             if ($users->isEmpty()) {
-                return redirect()->back()->with('error', 'Gagal blast, belum ada data student di database lokal kamu lek.');
+                return redirect()->back()->with('error', 'Gagal blast, belum ada data student di database.');
             }
 
             // Kirim massal ke tabel 'notifications'
@@ -40,7 +40,7 @@ class NotificationController extends Controller
                 $request->type
             ));
 
-            return redirect()->back()->with('success', 'Mantap lek! Notifikasi berhasil di-blast di localhost.');
+            return redirect()->back()->with('success', 'Notifikasi berhasil dibuat.');
         } catch (\Exception $e) {
             return redirect()->back()->with('error', 'Terjadi kesalahan: ' . $e->getMessage());
         }
